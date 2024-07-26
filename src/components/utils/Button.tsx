@@ -16,6 +16,7 @@ type Props = {
 		| 'info'
 		| 'danger'
 		| 'white';
+	variant?: 'filled' | 'outlined';
 	onClick?: () => any;
 };
 
@@ -25,10 +26,14 @@ function Button({
 	className,
 	iconClassName,
 	color = 'transparent',
+	variant = 'filled',
 	onClick,
 }: Props) {
+	const baseStyles = 'h-[40px] text-nowrap flex justify-center items-center gap-1 text-sm transition-colors duration-150 py-2.5 rounded-md';
+	const paddingStyles = children ? 'px-4' : 'w-[40px] justify-center';
+
 	const colorsMap = {
-		primary: 'bg-primary hover:bg-accent',
+		primary: 'bg-primary hover:bg-primary-dark text-white',
 		secondary: 'bg-secondary hover:bg-secondary-dark text-text',
 		transparent: 'bg-transparent hover:bg-secondary text-text',
 		success: 'bg-success hover:bg-success-dark',
@@ -38,15 +43,23 @@ function Button({
 		white: 'bg-white text-text hover:bg-secondary',
 	};
 
+	const outlinedColorsMap = {
+		primary: 'border border-primary text-primary hover:bg-primary hover:text-white',
+		secondary: 'border border-secondary text-secondary hover:bg-secondary hover:text-white',
+		transparent: 'border border-transparent text-text hover:bg-secondary',
+		success: 'border border-success text-success hover:bg-success hover:text-white',
+		warning: 'border border-warning text-warning hover:bg-warning hover:text-white',
+		info: 'border border-info text-info hover:bg-info hover:text-white',
+		danger: 'border border-danger text-danger hover:bg-danger hover:text-white',
+		white: 'border border-white text-white hover:bg-white hover:text-black',
+	};
+
+	const variantStyles = variant === 'outlined' ? outlinedColorsMap[color] : colorsMap[color];
+
 	return (
 		<button
 			onClick={onClick}
-			className={twMerge(
-				'h-[40px] text-nowrap flex justify-center items-center gap-1 text-sm text-white transition-colors duration-150 py-2.5 rounded-md',
-				children ? 'px-4' : 'w-[40px] justify-center',
-				colorsMap[color],
-				className
-			)}
+			className={twMerge(baseStyles, paddingStyles, variantStyles, className)}
 		>
 			{icon && <Icon name={icon} className={iconClassName} />}
 			{children}

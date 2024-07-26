@@ -18,7 +18,7 @@ export default function Settings() {
 				<Statuses />
 				<CreatePost />
 				<FeedGreetings />
-				<PostFilters />
+				{/* <PostFilters /> */}
 				<PostsFeed />
 			</div>
 

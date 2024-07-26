@@ -18,7 +18,7 @@ export default function Home() {
 				<Statuses />
 				<CreatePost />
 				<FeedGreetings />
-				<PostFilters />
+				{/* <PostFilters /> */}
 				<PostsFeed />
 			</div>
 

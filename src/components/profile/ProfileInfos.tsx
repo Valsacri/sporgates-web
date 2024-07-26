@@ -2,7 +2,11 @@ import { twMerge } from 'tailwind-merge';
 import Card from '../utils/Card';
 import Button from '../utils/Button';
 
-function ProfileInfos() {
+interface Props {
+	type: 'user' | 'page';
+}
+
+function ProfileInfos({ type }: Props) {
 	return (
 		<Card
 			className={twMerge(
@@ -30,8 +34,10 @@ function ProfileInfos() {
 					</div>
 
 					<div>
-						<h1>Oussama Khalfi</h1>
-						<span className='text-sm'>@oussamakhalfi</span>
+						<h1>{type === 'page' ? 'JK Sports' : 'Oussama Khalfi'}</h1>
+						<span className='text-sm'>
+							{type === 'page' ? '@jk_sports' : '@oussamakhalfi'}
+						</span>
 					</div>
 				</div>
 

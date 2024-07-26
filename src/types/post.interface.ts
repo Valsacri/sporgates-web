@@ -1,13 +1,14 @@
-export type PostSubject =
-	| 'new-post'
-	| 'share-post'
-	| 'new-offer'
-	| 'new-product'
-	| 'new-event'
-	| 'donation-request'
-	| 'update-profile-photo';
+import { Offer } from "./business.interface";
 
-export type OfferType = 'amount' | 'percentage';
+export enum PostSubject {
+	NewPost = 'new-post',
+	SharePost = 'share-post',
+	NewOffer = 'new-offer',
+	NewProduct = 'new-product',
+	NewEvent = 'new-event',
+	DonationRequest = 'donation-request',
+	UpdateProfilePhoto = 'update-profile-photo'
+}
 
 export interface IPost {
 	id: string;
@@ -17,10 +18,5 @@ export interface IPost {
 	body: string;
 	isPromoted: boolean;
 	image: string;
-	offer?: {
-		originalPrice: number;
-		discount: number;
-		disountType: OfferType;
-		endDate: string;
-	};
+	offer?: string | Offer
 }
