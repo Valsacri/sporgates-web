@@ -25,7 +25,7 @@ function GroundCard({ ground }: Props) {
 			</div>
 
 			<div className='flex flex-col justify-between px-5 py-3 flex-grow'>
-				<div>
+				<div> 
 					<h3>{ground.name}</h3>
 					<p className='text-text-secondary text-sm mt-1'>
 						{ground.description}

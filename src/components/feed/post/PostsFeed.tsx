@@ -2,7 +2,7 @@ import { IPost } from '@/types/post.interface';
 import Post from './Post';
 
 function PostsFeed() {
-	const posts: IPost[] = [
+	const posts: any[] = [
 		{
 			id: '1',
 			title: 'Post 1',

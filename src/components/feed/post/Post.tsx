@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { twMerge } from 'tailwind-merge';
 
 interface Props {
-	post: IPost;
+	post: any;
 }
 
 function Post({ post }: Props) {
