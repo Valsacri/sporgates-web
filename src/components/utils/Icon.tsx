@@ -7,7 +7,6 @@ interface Props {
 	containerClassName?: string;
 }
 
-
 function Icon({ name, className, containerClassName }: Props) {
 	return (
 		<span className={containerClassName}>

@@ -10,19 +10,20 @@ import NavbarNavigation from './NavbarNavigation';
 function Navbar() {
 	return (
 		<div className='bg-white'>
-			<div className='container mx-auto flex justify-between items-center px-5'>
-				<Dropdown
-					trigger={
-						<Button icon='burger' className='lg:hidden scale-x-[-1]'></Button>
-					}
-					position='left'
-				>
-					<HomeNavigation />
-				</Dropdown>
-
-				<Link className='hidden lg:block' href='/'>
-					<Logo />
-				</Link>
+			<div className='2xl:container mx-auto px-5 lg:px-16 flex justify-between items-center'>
+				<div>
+					<Dropdown
+						trigger={
+							<Button icon='burger' className='lg:hidden scale-x-[-1]'></Button>
+						}
+						position='left'
+					>
+						<HomeNavigation />
+					</Dropdown>
+					<Link className='hidden lg:block' href='/'>
+						<Logo />
+					</Link>
+				</div>
 
 				<div className='flex gap-5'>
 					<div className='flex gap-3 py-3'>

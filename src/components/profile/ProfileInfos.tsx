@@ -19,7 +19,7 @@ function ProfileInfos({ type }: Props) {
 				<Button icon='crop' color='white' className='bg-opacity-80 ' />
 			</div>
 
-			<div className='flex justify-between items-end'>
+			<div className='flex flex-col lg:flex-row justify-between items-end'>
 				<div className='flex items-center gap-5 text-white'>
 					<div
 						className={twMerge(

@@ -13,7 +13,10 @@ export interface Record {
 	deletedBy: string | null;
 }
 
-export interface Address extends Record {
+export type Create<T> = Omit<T, keyof Record> & Partial<Record>;
+export type Update<T> = Partial<Create<T>>;
+
+export interface Address {
 	country: string;
 	city: string;
 	neighborhood: string;

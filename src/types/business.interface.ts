@@ -5,7 +5,9 @@ export interface Ground extends Record {
 	description: string;
 	address: Address;
 	images: string[];
-	price: number;
+	prices: Price[];
+	rating: number;
+	reviews: number;
 }
 
 export enum ItemCategory {
@@ -14,18 +16,32 @@ export enum ItemCategory {
 	SERVICE = 'service',
 }
 
+export enum PricePeriod {
+	ONCE = 'once',
+	HOUR = 'hour',
+	DAY = 'day',
+	WEEK = 'week',
+	MONTH = 'month',
+	YEAR = 'year',
+}
+
+export interface Price {
+	name: string;
+	description: string;
+	features: string[];
+	amount: number;
+	period: PricePeriod;
+	discount: number;
+	isDefault: boolean;
+}
+
 export interface Item extends Record {
 	name: string;
 	description: string;
-	price: number;
+	prices: Price[];
 
 	category: ItemCategory;
 	images: string[];
-}
-
-export enum OfferDiscountType {
-	PERCENTAGE = 'percentage',
-	AMOUNT = 'amount',
 }
 
 export interface Offer extends Record {
@@ -35,31 +51,8 @@ export interface Offer extends Record {
 	items: {
 		quantity: number;
 		item: string | Item;
-		disountType: OfferDiscountType;
-		discount: number;
-	}[];
-	subscriptions: {
-		quantity: number;
-		subscription: string | Subscription;
-		disountType: OfferDiscountType;
+		originalPrice: Price;
 		discount: number;
 	}[];
 	endDate: string;
-}
-
-export enum SubscriptionDurationType {
-	DAY = 'day',
-	WEEK = 'week',
-	MONTH = 'month',
-	YEAR = 'year',
-}
-
-export interface Subscription extends Record {
-	name: string;
-	description: string;
-	price: number;
-	durationType: SubscriptionDurationType;
-	duration: number;
-	images: string[];
-	items: string[] | Item[];
 }

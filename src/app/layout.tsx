@@ -32,7 +32,7 @@ export default function RootLayout({
 			>
 				<ContextProvider>
 					<Navbar />
-					<main className='container mx-auto p-5'>{children}</main>
+					<main className='2xl:container mx-auto px-5 lg:px-16 p-5'>{children}</main>
 					{/* <Footer /> */}
 				</ContextProvider>
 			</body>

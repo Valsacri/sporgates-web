@@ -5,10 +5,11 @@ import { CocoIcon } from '@/config/coco-icons';
 type Props = {
 	children?: React.ReactNode;
 	className?: string;
-	icon?: CocoIcon | null;
+	icon?: CocoIcon | JSX.Element | null;
 	iconClassName?: string;
 	color?:
 		| 'primary'
+		| 'accent'
 		| 'secondary'
 		| 'transparent'
 		| 'success'
@@ -18,6 +19,7 @@ type Props = {
 		| 'white';
 	variant?: 'filled' | 'outlined';
 	onClick?: () => any;
+	type?: 'button' | 'submit' | 'reset';
 };
 
 function Button({
@@ -28,40 +30,54 @@ function Button({
 	color = 'transparent',
 	variant = 'filled',
 	onClick,
+	type = 'button',
 }: Props) {
-	const baseStyles = 'h-[40px] text-nowrap flex justify-center items-center gap-1 text-sm transition-colors duration-150 py-2.5 rounded-md';
+	const baseStyles =
+		'h-[40px] text-nowrap flex justify-center items-center gap-1 text-sm transition-colors duration-150 py-2.5 rounded-md';
 	const paddingStyles = children ? 'px-4' : 'w-[40px] justify-center';
 
 	const colorsMap = {
 		primary: 'bg-primary hover:bg-primary-dark text-white',
-		secondary: 'bg-secondary hover:bg-secondary-dark text-text',
-		transparent: 'bg-transparent hover:bg-secondary text-text',
-		success: 'bg-success hover:bg-success-dark',
+		accent: 'bg-accent hover:bg-accent-dark text-white',
+		secondary: 'bg-secondary hover:bg-secondary-dark',
+		transparent: 'bg-transparent hover:bg-secondary',
+		success: 'bg-success hover:bg-success-dark text-white',
 		warning: 'bg-warning hover:bg-warning-dark',
-		info: 'bg-info hover:bg-info-dark',
-		danger: 'bg-danger hover:bg-danger-dark',
+		info: 'bg-info hover:bg-info-dark text-white',
+		danger: 'bg-danger hover:bg-danger-dark text-white',
 		white: 'bg-white text-text hover:bg-secondary',
 	};
 
 	const outlinedColorsMap = {
-		primary: 'border border-primary text-primary hover:bg-primary hover:text-white',
-		secondary: 'border border-secondary text-secondary hover:bg-secondary hover:text-white',
+		primary:
+			'border border-primary text-primary hover:bg-primary hover:text-white',
+		accent: 'border border-accent text-accent hover:bg-accent hover:text-white',
+		secondary:
+			'border border-secondary text-secondary hover:bg-secondary hover:text-white',
 		transparent: 'border border-transparent text-text hover:bg-secondary',
-		success: 'border border-success text-success hover:bg-success hover:text-white',
-		warning: 'border border-warning text-warning hover:bg-warning hover:text-white',
+		success:
+			'border border-success text-success hover:bg-success hover:text-white',
+		warning:
+			'border border-warning text-warning hover:bg-warning hover:text-white',
 		info: 'border border-info text-info hover:bg-info hover:text-white',
 		danger: 'border border-danger text-danger hover:bg-danger hover:text-white',
 		white: 'border border-white text-white hover:bg-white hover:text-black',
 	};
 
-	const variantStyles = variant === 'outlined' ? outlinedColorsMap[color] : colorsMap[color];
+	const variantStyles =
+		variant === 'outlined' ? outlinedColorsMap[color] : colorsMap[color];
 
 	return (
 		<button
+			type={type}
 			onClick={onClick}
 			className={twMerge(baseStyles, paddingStyles, variantStyles, className)}
 		>
-			{icon && <Icon name={icon} className={iconClassName} />}
+			{typeof icon === 'string' ? (
+				<Icon name={icon} className={iconClassName} />
+			) : (
+				icon
+			)}
 			{children}
 		</button>
 	);

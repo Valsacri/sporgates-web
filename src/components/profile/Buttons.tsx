@@ -40,7 +40,7 @@ function Buttons({
 		<div
 			className={twMerge(
 				'flex',
-				stretch && 'justify-between',
+				stretch && 'lg:justify-between',
 				containerClassName
 			)}
 		>
@@ -51,7 +51,7 @@ function Buttons({
 					color='transparent'
 					className={twMerge(
 						'rounded-full',
-						stretch && 'w-full',
+						stretch && 'lg:w-full',
 						buttonClassName
 					)}
 					onClick={() => handleClick(item)}

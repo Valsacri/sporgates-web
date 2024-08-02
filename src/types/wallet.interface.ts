@@ -16,6 +16,7 @@ export interface OrderItem {
 export interface Order extends Record {
 	items: OrderItem[];
 	status: OrderStatus;
+	subject: 'service' | 'subscription'
 	amount: number;
 	transaction: string | Transaction;
 	
