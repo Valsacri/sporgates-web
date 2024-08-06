@@ -1,6 +1,6 @@
 import PageGrounds from '@/components/ground/PageGrounds';
 
-function page() {
+function Page() {
 	return (
 		<>
 			<PageGrounds />
@@ -8,4 +8,4 @@ function page() {
 	);
 }
 
-export default page;
+export default Page;

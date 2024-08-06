@@ -10,7 +10,7 @@ import { GROUNDS } from '@/data/grounds';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-function page() {
+function Page() {
 	const [selectedTypeIndex, setSelectedTypeIndex] = useState(0);
 
 	const { handleSubmit, register, reset } = useForm({
@@ -102,4 +102,4 @@ function page() {
 	);
 }
 
-export default page;
+export default Page;
