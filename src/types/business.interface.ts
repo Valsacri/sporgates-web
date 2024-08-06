@@ -1,4 +1,26 @@
 import { Address, Record } from './general.interface';
+import { User } from './user.interface';
+
+export interface Review {
+	rating: number;
+	comment: string;
+	user: string | User;
+}
+
+export interface Timeframe {
+	from: number;
+	to: number;
+}
+
+export interface OpeningHours {
+	monday: Timeframe;
+	tuesday: Timeframe;
+	wednesday: Timeframe;
+	thursday: Timeframe;
+	friday: Timeframe;
+	saturday: Timeframe;
+	sunday: Timeframe;
+}
 
 export interface Ground extends Record {
 	name: string;
@@ -6,8 +28,10 @@ export interface Ground extends Record {
 	address: Address;
 	images: string[];
 	prices: Price[];
-	rating: number;
-	reviews: number;
+	openingHours: OpeningHours;
+	minReservationTime: number;
+	avgRating: number;
+	reviews: Review[];
 }
 
 export enum ItemCategory {

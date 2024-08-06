@@ -1,13 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import { UserContext } from '@/contexts/user.context';
 
 interface Props {
 	children: React.ReactNode;
 }
 
 function ContextProvider({ children }: Props) {
-	return <>{children}</>;
+	// const [user, setUser] = userUser();
+	const [user, setUser] = [undefined, () => {}];
+
+	return (
+		<UserContext.Provider value={[user, setUser]}>
+			{children}
+		</UserContext.Provider>
+	);
 }
 
 export default ContextProvider;

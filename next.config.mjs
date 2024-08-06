@@ -14,6 +14,14 @@ const nextConfig = {
 				protocol: 'https',
 				hostname: 'images.squarespace-cdn.com',
 			},
+			{
+				protocol: 'https',
+				hostname: 'www.jagranimages.com',
+			},
+			{
+				protocol: 'https',
+				hostname: 'doers.ma',
+			},
 		],
 	},
 };

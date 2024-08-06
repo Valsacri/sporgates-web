@@ -1,25 +1,18 @@
 import Icon from './Icon';
 import { twMerge } from 'tailwind-merge';
 import { CocoIcon } from '@/config/coco-icons';
+import { Color } from '@/types/general';
 
 type Props = {
 	children?: React.ReactNode;
 	className?: string;
 	icon?: CocoIcon | JSX.Element | null;
 	iconClassName?: string;
-	color?:
-		| 'primary'
-		| 'accent'
-		| 'secondary'
-		| 'transparent'
-		| 'success'
-		| 'warning'
-		| 'info'
-		| 'danger'
-		| 'white';
+	color?: Color;
 	variant?: 'filled' | 'outlined';
 	onClick?: () => any;
 	type?: 'button' | 'submit' | 'reset';
+	disabled?: boolean;
 };
 
 function Button({
@@ -31,6 +24,7 @@ function Button({
 	variant = 'filled',
 	onClick,
 	type = 'button',
+	disabled,
 }: Props) {
 	const baseStyles =
 		'h-[40px] text-nowrap flex justify-center items-center gap-1 text-sm transition-colors duration-150 py-2.5 rounded-md';
@@ -71,7 +65,13 @@ function Button({
 		<button
 			type={type}
 			onClick={onClick}
-			className={twMerge(baseStyles, paddingStyles, variantStyles, className)}
+			className={twMerge(
+				baseStyles,
+				paddingStyles,
+				disabled ? 'opacity-50 cursor-not-allowed' : variantStyles,
+				className
+			)}
+			disabled={disabled}
 		>
 			{typeof icon === 'string' ? (
 				<Icon name={icon} className={iconClassName} />

@@ -1,16 +1,20 @@
 'use client';
 
 import Button from '@/components/utils/Button';
-import Card from '@/components/utils/Card';
 import { CocoIcon } from '@/config/coco-icons';
+import { Color } from '@/types/general';
 import { useRouter } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 
 type Item = {
-	icon: CocoIcon;
 	text: string;
+	icon?: CocoIcon;
 	href?: string;
 	onClick?: () => void;
+	className?: string;
+	disabled?: boolean;
+	color?: Color;
+	selected?: boolean;
 };
 
 interface Props {
@@ -18,6 +22,8 @@ interface Props {
 	buttonClassName?: string;
 	containerClassName?: string;
 	stretch?: boolean;
+	color?: Color;
+	selectedColor?: Color;
 }
 
 function Buttons({
@@ -25,6 +31,8 @@ function Buttons({
 	buttonClassName,
 	containerClassName,
 	stretch,
+	color = 'transparent',
+	selectedColor = 'primary',
 }: Props) {
 	const router = useRouter();
 
@@ -39,7 +47,7 @@ function Buttons({
 	return (
 		<div
 			className={twMerge(
-				'flex',
+				'flex gap-3',
 				stretch && 'lg:justify-between',
 				containerClassName
 			)}
@@ -48,13 +56,15 @@ function Buttons({
 				<Button
 					key={index}
 					icon={item.icon as CocoIcon}
-					color='transparent'
+					color={item.selected ? selectedColor : item.color || color}
 					className={twMerge(
 						'rounded-full',
 						stretch && 'lg:w-full',
-						buttonClassName
+						buttonClassName,
+						item.className
 					)}
 					onClick={() => handleClick(item)}
+					disabled={item.disabled}
 				>
 					{item.text}
 				</Button>

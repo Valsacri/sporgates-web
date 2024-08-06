@@ -2,9 +2,8 @@ import { Ground } from '@/types/business.interface';
 import Card from '../utils/Card';
 import Icon from '../utils/Icon';
 import { twMerge } from 'tailwind-merge';
-import { HiOutlineStar } from 'react-icons/hi';
-import { HiStar } from 'react-icons/hi2';
 import Link from 'next/link';
+import Rating from '../shared/Rating';
 
 interface Props {
 	ground: Ground;
@@ -14,7 +13,7 @@ function GroundCard({ ground }: Props) {
 	const defaultPrice = ground.prices.find((price) => price.isDefault);
 
 	return (
-		<Card className='group lg:min-w-[250px] p-0 flex flex-col hover:bg-primary transition-all duration-200'>
+		<Card className='group lg:min-w-[250px] p-0 flex flex-col hover:bg-primary-dark transition-all duration-200'>
 			<Link href={`/page/grounds/${ground.id}`}>
 				<div
 					className={twMerge(
@@ -41,15 +40,10 @@ function GroundCard({ ground }: Props) {
 					</div>
 
 					<div className='w-max flex items-center gap-1 mt-3 p-2 pr-3 bg-black bg-opacity-50 rounded-tl-lg rounded-tr-3xl'>
-						{Array.from({ length: ground.rating }).map((_, index) => (
-							<HiStar key={index} className='text-yellow-400' />
-						))}
-						{Array.from({ length: 5 - ground.rating }).map((_, index) => (
-							<HiOutlineStar key={index} className='text-yellow-400' />
-						))}
+						<Rating rating={ground.avgRating} />
 						<span className='text-xs font-light text-white'>
 							{' '}
-							| {ground.reviews} reviews
+							| {ground.reviews.length} reviews
 						</span>
 					</div>
 				</div>

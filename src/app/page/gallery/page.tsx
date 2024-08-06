@@ -4,13 +4,12 @@ import Gallery from '@/components/gallery/Gallery';
 import Button from '@/components/utils/Button';
 import { Popup } from '@/components/utils/Popup';
 import { usePopup } from '@/hooks/usePopup';
-import Image from 'next/image';
 import { useState, useCallback } from 'react';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
 import { twMerge } from 'tailwind-merge';
 import Cropper from 'react-easy-crop';
 
-export function getCroppedImg(
+function getCroppedImg(
 	imageSrc: string,
 	pixelCrop: { x: number; y: number; width: number; height: number }
 ): Promise<string> {

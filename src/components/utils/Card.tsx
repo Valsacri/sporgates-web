@@ -3,6 +3,7 @@ import { twMerge } from 'tailwind-merge';
 interface Props {
 	title?: string;
 	titleSuffix?: string;
+	description?: string;
 	children?: React.ReactNode;
 	className?: string;
 	style?: React.CSSProperties;
@@ -13,6 +14,7 @@ function Card({
 	children,
 	title,
 	titleSuffix,
+	description,
 	className,
 	style,
 	onClick,
@@ -29,6 +31,8 @@ function Card({
 					{titleSuffix}
 				</div>
 			)}
+
+			{description && <p className='text-text-secondary mb-3'>{description}</p>}
 
 			{children}
 		</div>

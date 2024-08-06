@@ -37,7 +37,7 @@ function NavbarNavigation() {
 							/>
 						),
 						item: 'Oussama Khalfi',
-						onClick: () => router.push('/profile'),
+						onClick: () => router.push('/page'),
 					},
 					{
 						prefix: <Icon name='shield-check' />,
