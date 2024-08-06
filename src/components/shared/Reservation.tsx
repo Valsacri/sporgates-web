@@ -121,7 +121,7 @@ function Reservation() {
 
 	return (
 		<div>
-			<div className='flex flex-col lg:flex-row justify-around gap-5'>
+			<div className='flex flex-col lg:flex-row gap-5'>
 				<Calendar
 					minDate={new Date()}
 					showFixedNumberOfWeeks
@@ -130,7 +130,7 @@ function Reservation() {
 				/>
 
 				<Buttons
-					containerClassName='grid grid-cols-2 lg:grid-cols-4 gap-2'
+					containerClassName='flex-1 grid grid-cols-2 lg:grid-cols-4 gap-2'
 					color='secondary'
 					items={generateTimeFrames(8, 21, 30).map((timeFrame) => ({
 						text: timeFrame,

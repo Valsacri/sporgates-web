@@ -22,8 +22,6 @@ interface Props {
 function GroundDetails({ params: { id } }: Props) {
 	const ground = GROUNDS.find((ground) => ground.id.toString() === id)!;
 
-
-
 	return (
 		<>
 			<Card className='space-y-6'>
@@ -55,13 +53,6 @@ function GroundDetails({ params: { id } }: Props) {
 				</div>
 			</Card>
 
-			<Card
-				title='Reservation'
-				description='Lorem ipsum dolor sit amet consectetur adipisicing elit.'
-			>
-				<Reservation />
-			</Card>
-
 			<Card title='Images'>
 				<div className='flex overflow-x-auto lg:grid grid-cols-3 gap-2'>
 					{ground.images.map((image, index) => (
@@ -75,6 +66,13 @@ function GroundDetails({ params: { id } }: Props) {
 						/>
 					))}
 				</div>
+			</Card>
+
+			<Card
+				title='Reservation'
+				description='Lorem ipsum dolor sit amet consectetur adipisicing elit.'
+			>
+				<Reservation />
 			</Card>
 
 			<Card title='Pricing'>
