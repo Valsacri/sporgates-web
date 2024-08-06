@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 	description: "Lotrima l'mlih",
 };
 
-const app = initFirebaseApp();
+// const app = initFirebaseApp();
 
 export default function RootLayout({
 	children,
