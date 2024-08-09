@@ -13,6 +13,7 @@ function Navbar() {
 			<div className='2xl:container mx-auto px-5 lg:px-16 flex justify-between items-center'>
 				<div>
 					<Dropdown
+						closeOnClick
 						trigger={
 							<Button icon='burger' className='lg:hidden scale-x-[-1]'></Button>
 						}

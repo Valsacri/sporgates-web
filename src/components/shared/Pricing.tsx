@@ -12,7 +12,7 @@ function Pricing({ price }: Props) {
 	return (
 		<Card
 			className={twMerge(
-				'flex flex-col justify-between gap-5 min-w-full rounded-3xl py-7 shadow-xl shadow-gray-200',
+				'min-w-max flex flex-col justify-between gap-5 rounded-3xl py-7 shadow-xl shadow-gray-200',
 				price.isDefault && 'bg-primary-dark text-white'
 			)}
 		>

@@ -1,36 +1,152 @@
 import { Ground, OpeningHours, PricePeriod } from '@/types/business.interface';
 import { User } from '@/types/user.interface';
 
-export const OPENING_HOURS: OpeningHours = {
+const openingHours: OpeningHours = {
 	monday: {
-		from: 8,
-		to: 22,
+		from: '08:00',
+		to: '22:00',
 	},
 	tuesday: {
-		from: 8,
-		to: 22,
+		from: '08:00',
+		to: '22:00',
 	},
 	wednesday: {
-		from: 8,
-		to: 22,
+		from: '08:00',
+		to: '22:00',
 	},
 	thursday: {
-		from: 8,
-		to: 22,
+		from: '08:00',
+		to: '22:00',
 	},
 	friday: {
-		from: 8,
-		to: 22,
+		from: '08:00',
+		to: '22:00',
 	},
 	saturday: {
-		from: 8,
-		to: 22,
+		from: '08:00',
+		to: '22:00',
 	},
 	sunday: {
-		from: 8,
-		to: 22,
+		from: '08:00',
+		to: '22:00',
 	},
 };
+
+const prices = [
+	{
+		name: 'Basic',
+		description: 'Basic subscription',
+		features: [
+			'Featured member',
+			'See profile visitors',
+			'Show / Hide last seen',
+			'Verified badge',
+			'40 posts Posts promotion',
+			'40 Pages Pages promotion',
+			'60% Discount Discount',
+			'96 MB Max upload size',
+		],
+		amount: 1000,
+		period: PricePeriod.MONTH,
+		discount: 0,
+		isDefault: true,
+	},
+	{
+		name: 'Basic',
+		description: 'Basic subscription',
+		features: [
+			'Featured member',
+			'See profile visitors',
+			'Show / Hide last seen',
+			'Verified badge',
+			'40 posts Posts promotion',
+			'40 Pages Pages promotion',
+			'60% Discount Discount',
+			'96 MB Max upload size',
+		],
+		amount: 1000,
+		period: PricePeriod.MONTH,
+		discount: 0,
+		isDefault: false,
+	},
+	{
+		name: 'Premium',
+		description: 'Premium subscription',
+		features: [
+			'Access to all equipments',
+			'Access to all classes',
+			'Access to all facilities',
+			'Personal trainer',
+		],
+		amount: 2000,
+		period: PricePeriod.MONTH,
+		discount: 20,
+		isDefault: false,
+	},
+	{
+		name: 'Premium',
+		description: 'Premium subscription',
+		features: [
+			'Access to all equipments',
+			'Access to all classes',
+			'Access to all facilities',
+			'Personal trainer',
+		],
+		amount: 2000,
+		period: PricePeriod.MONTH,
+		discount: 20,
+		isDefault: false,
+	},
+	{
+		name: 'Premium',
+		description: 'Premium subscription',
+		features: [
+			'Access to all equipments',
+			'Access to all classes',
+			'Access to all facilities',
+			'Personal trainer',
+		],
+		amount: 2000,
+		period: PricePeriod.MONTH,
+		discount: 20,
+		isDefault: false,
+	},
+	{
+		name: 'Premium',
+		description: 'Premium subscription',
+		features: [
+			'Access to all equipments',
+			'Access to all classes',
+			'Access to all facilities',
+			'Personal trainer',
+		],
+		amount: 2000,
+		period: PricePeriod.MONTH,
+		discount: 20,
+		isDefault: false,
+	},
+];
+
+const reviews = [
+	{
+		rating: 4,
+		comment:
+			'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
+		user: { username: 'Oussama Khalfi' } as User,
+	},
+	{
+		rating: 4,
+		comment:
+			'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
+		user: { username: 'Oussama Khalfi' } as User,
+	},
+	{
+		rating: 4,
+		comment:
+			'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
+		user: { username: 'Oussama Khalfi' } as User,
+	},
+];
 
 export const GROUNDS: Ground[] = [
 	{
@@ -56,63 +172,11 @@ export const GROUNDS: Ground[] = [
 			'https://images.squarespace-cdn.com/content/v1/628c0b6d5d2e1e3ca6023ce5/6382429b-b502-4859-9b9b-ba77f609a252/Header+Image+Gym.jpg',
 			'https://images.squarespace-cdn.com/content/v1/628c0b6d5d2e1e3ca6023ce5/6382429b-b502-4859-9b9b-ba77f609a252/Header+Image+Gym.jpg',
 		],
-		prices: [
-			{
-				name: 'Basic',
-				description: 'Basic subscription',
-				features: [
-					'Featured member',
-					'See profile visitors',
-					'Show / Hide last seen',
-					'Verified badge',
-					'40 posts Posts promotion',
-					'40 Pages Pages promotion',
-					'60% Discount Discount',
-					'96 MB Max upload size',
-				],
-				amount: 1000,
-				period: PricePeriod.MONTH,
-				discount: 0,
-				isDefault: true,
-			},
-			{
-				name: 'Premium',
-				description: 'Premium subscription',
-				features: [
-					'Access to all equipments',
-					'Access to all classes',
-					'Access to all facilities',
-					'Personal trainer',
-				],
-				amount: 2000,
-				period: PricePeriod.MONTH,
-				discount: 20,
-				isDefault: false,
-			},
-		],
-		openingHours: OPENING_HOURS,
+		prices,
+		openingHours,
 		minReservationTime: 30,
 		avgRating: 4,
-		reviews: [
-			{
-				rating: 4,
-				comment:
-					'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
-				user: { username: 'Oussama Khalfi' } as User,
-			},
-			{
-				rating: 4,
-				comment:
-					'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
-				user: { username: 'Oussama Khalfi' } as User,
-			},
-			{
-				rating: 4,
-				comment:
-					'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
-				user: { username: 'Oussama Khalfi' } as User,
-			},
-		],
+		reviews,
 		createdAt: 1629876543,
 		updatedAt: null,
 		deletedAt: null,
@@ -143,63 +207,11 @@ export const GROUNDS: Ground[] = [
 			'https://doers.ma/wp-content/uploads/2022/10/Ouvrir-une-salle-de-sport-un-club-de-gym-fitness-au-Maroc.jpg',
 			'https://doers.ma/wp-content/uploads/2022/10/Ouvrir-une-salle-de-sport-un-club-de-gym-fitness-au-Maroc.jpg',
 		],
-		prices: [
-			{
-				name: 'Basic',
-				description: 'Basic subscription',
-				features: [
-					'Featured member',
-					'See profile visitors',
-					'Show / Hide last seen',
-					'Verified badge',
-					'40 posts Posts promotion',
-					'40 Pages Pages promotion',
-					'60% Discount Discount',
-					'96 MB Max upload size',
-				],
-				amount: 1000,
-				period: PricePeriod.MONTH,
-				discount: 0,
-				isDefault: false,
-			},
-			{
-				name: 'Premium',
-				description: 'Premium subscription',
-				features: [
-					'Access to all equipments',
-					'Access to all classes',
-					'Access to all facilities',
-					'Personal trainer',
-				],
-				amount: 2000,
-				period: PricePeriod.MONTH,
-				discount: 20,
-				isDefault: true,
-			},
-		],
-		openingHours: OPENING_HOURS,
+		prices,
+		openingHours,
 		minReservationTime: 60,
 		avgRating: 4,
-		reviews: [
-			{
-				rating: 4,
-				comment:
-					'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
-				user: { username: 'Oussama Khalfi' } as User,
-			},
-			{
-				rating: 4,
-				comment:
-					'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
-				user: { username: 'Oussama Khalfi' } as User,
-			},
-			{
-				rating: 4,
-				comment:
-					'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
-				user: { username: 'Oussama Khalfi' } as User,
-			},
-		],
+		reviews,
 		createdAt: 1629876543,
 		updatedAt: null,
 		deletedAt: null,
@@ -230,63 +242,11 @@ export const GROUNDS: Ground[] = [
 			'https://www.jagranimages.com/images/newimg/28122022/28_12_2022-dumbbell_set_with_price_23275058.jpg',
 			'https://www.jagranimages.com/images/newimg/28122022/28_12_2022-dumbbell_set_with_price_23275058.jpg',
 		],
-		prices: [
-			{
-				name: 'Basic',
-				description: 'Basic subscription',
-				features: [
-					'Featured member',
-					'See profile visitors',
-					'Show / Hide last seen',
-					'Verified badge',
-					'40 posts Posts promotion',
-					'40 Pages Pages promotion',
-					'60% Discount Discount',
-					'96 MB Max upload size',
-				],
-				amount: 1000,
-				period: PricePeriod.MONTH,
-				discount: 0,
-				isDefault: true,
-			},
-			{
-				name: 'Premium',
-				description: 'Premium subscription',
-				features: [
-					'Access to all equipments',
-					'Access to all classes',
-					'Access to all facilities',
-					'Personal trainer',
-				],
-				amount: 2000,
-				period: PricePeriod.MONTH,
-				discount: 20,
-				isDefault: false,
-			},
-		],
-		openingHours: OPENING_HOURS,
+		prices,
+		openingHours,
 		minReservationTime: 30,
 		avgRating: 4,
-		reviews: [
-			{
-				rating: 4,
-				comment:
-					'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
-				user: { username: 'Oussama Khalfi' } as User,
-			},
-			{
-				rating: 4,
-				comment:
-					'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
-				user: { username: 'Oussama Khalfi' } as User,
-			},
-			{
-				rating: 4,
-				comment:
-					'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
-				user: { username: 'Oussama Khalfi' } as User,
-			},
-		],
+		reviews,
 		createdAt: 1629876543,
 		updatedAt: null,
 		deletedAt: null,
@@ -316,63 +276,11 @@ export const GROUNDS: Ground[] = [
 			'https://images.squarespace-cdn.com/content/v1/628c0b6d5d2e1e3ca6023ce5/6382429b-b502-4859-9b9b-ba77f609a252/Header+Image+Gym.jpg',
 			'https://images.squarespace-cdn.com/content/v1/628c0b6d5d2e1e3ca6023ce5/6382429b-b502-4859-9b9b-ba77f609a252/Header+Image+Gym.jpg',
 		],
-		prices: [
-			{
-				name: 'Basic',
-				description: 'Basic subscription',
-				features: [
-					'Featured member',
-					'See profile visitors',
-					'Show / Hide last seen',
-					'Verified badge',
-					'40 posts Posts promotion',
-					'40 Pages Pages promotion',
-					'60% Discount Discount',
-					'96 MB Max upload size',
-				],
-				amount: 1000,
-				period: PricePeriod.MONTH,
-				discount: 0,
-				isDefault: false,
-			},
-			{
-				name: 'Premium',
-				description: 'Premium subscription',
-				features: [
-					'Access to all equipments',
-					'Access to all classes',
-					'Access to all facilities',
-					'Personal trainer',
-				],
-				amount: 2000,
-				period: PricePeriod.MONTH,
-				discount: 20,
-				isDefault: true,
-			},
-		],
-		openingHours: OPENING_HOURS,
+		prices,
+		openingHours,
 		minReservationTime: 60,
 		avgRating: 4,
-		reviews: [
-			{
-				rating: 4,
-				comment:
-					'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
-				user: { username: 'Oussama Khalfi' } as User,
-			},
-			{
-				rating: 4,
-				comment:
-					'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
-				user: { username: 'Oussama Khalfi' } as User,
-			},
-			{
-				rating: 4,
-				comment:
-					'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
-				user: { username: 'Oussama Khalfi' } as User,
-			},
-		],
+		reviews,
 		createdAt: 1629876543,
 		updatedAt: null,
 		deletedAt: null,
@@ -403,63 +311,11 @@ export const GROUNDS: Ground[] = [
 			'https://doers.ma/wp-content/uploads/2022/10/Ouvrir-une-salle-de-sport-un-club-de-gym-fitness-au-Maroc.jpg',
 			'https://doers.ma/wp-content/uploads/2022/10/Ouvrir-une-salle-de-sport-un-club-de-gym-fitness-au-Maroc.jpg',
 		],
-		prices: [
-			{
-				name: 'Basic',
-				description: 'Basic subscription',
-				features: [
-					'Featured member',
-					'See profile visitors',
-					'Show / Hide last seen',
-					'Verified badge',
-					'40 posts Posts promotion',
-					'40 Pages Pages promotion',
-					'60% Discount Discount',
-					'96 MB Max upload size',
-				],
-				amount: 1000,
-				period: PricePeriod.MONTH,
-				discount: 0,
-				isDefault: true,
-			},
-			{
-				name: 'Premium',
-				description: 'Premium subscription',
-				features: [
-					'Access to all equipments',
-					'Access to all classes',
-					'Access to all facilities',
-					'Personal trainer',
-				],
-				amount: 2000,
-				period: PricePeriod.MONTH,
-				discount: 20,
-				isDefault: false,
-			},
-		],
-		openingHours: OPENING_HOURS,
+		prices,
+		openingHours,
 		minReservationTime: 30,
 		avgRating: 4,
-		reviews: [
-			{
-				rating: 4,
-				comment:
-					'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
-				user: { username: 'Oussama Khalfi' } as User,
-			},
-			{
-				rating: 4,
-				comment:
-					'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
-				user: { username: 'Oussama Khalfi' } as User,
-			},
-			{
-				rating: 4,
-				comment:
-					'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
-				user: { username: 'Oussama Khalfi' } as User,
-			},
-		],
+		reviews,
 		createdAt: 1629876543,
 		updatedAt: null,
 		deletedAt: null,
@@ -490,63 +346,11 @@ export const GROUNDS: Ground[] = [
 			'https://www.jagranimages.com/images/newimg/28122022/28_12_2022-dumbbell_set_with_price_23275058.jpg',
 			'https://www.jagranimages.com/images/newimg/28122022/28_12_2022-dumbbell_set_with_price_23275058.jpg',
 		],
-		prices: [
-			{
-				name: 'Basic',
-				description: 'Basic subscription',
-				features: [
-					'Featured member',
-					'See profile visitors',
-					'Show / Hide last seen',
-					'Verified badge',
-					'40 posts Posts promotion',
-					'40 Pages Pages promotion',
-					'60% Discount Discount',
-					'96 MB Max upload size',
-				],
-				amount: 1000,
-				period: PricePeriod.MONTH,
-				discount: 0,
-				isDefault: false,
-			},
-			{
-				name: 'Premium',
-				description: 'Premium subscription',
-				features: [
-					'Access to all equipments',
-					'Access to all classes',
-					'Access to all facilities',
-					'Personal trainer',
-				],
-				amount: 2000,
-				period: PricePeriod.MONTH,
-				discount: 20,
-				isDefault: true,
-			},
-		],
-		openingHours: OPENING_HOURS,
+		prices,
+		openingHours,
 		minReservationTime: 60,
 		avgRating: 4,
-		reviews: [
-			{
-				rating: 4,
-				comment:
-					'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
-				user: { username: 'Oussama Khalfi' } as User,
-			},
-			{
-				rating: 4,
-				comment:
-					'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
-				user: { username: 'Oussama Khalfi' } as User,
-			},
-			{
-				rating: 4,
-				comment:
-					'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
-				user: { username: 'Oussama Khalfi' } as User,
-			},
-		],
+		reviews,
 		createdAt: 1629876543,
 		updatedAt: null,
 		deletedAt: null,

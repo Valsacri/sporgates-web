@@ -1,9 +1,13 @@
 import Calendar from 'react-calendar';
 import Buttons from '../profile/Buttons';
 import Button from '../utils/Button';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
-const generateTimeFrames = (startHour: number, endHour: number, interval = 60) => {
+const generateTimeFrames = (
+	startHour: number,
+	endHour: number,
+	interval = 60
+) => {
 	const timeFrames = [];
 
 	for (let hour = startHour; hour < endHour; hour++) {
@@ -13,7 +17,9 @@ const generateTimeFrames = (startHour: number, endHour: number, interval = 60) =
 				.padStart(2, '0')}`;
 			const endMinute = minute + interval;
 			const endHourAdjusted = hour + Math.floor(endMinute / 60);
-			const endTime = `${endHourAdjusted.toString().padStart(2, '0')}:${(endMinute % 60)
+			const endTime = `${endHourAdjusted.toString().padStart(2, '0')}:${(
+				endMinute % 60
+			)
 				.toString()
 				.padStart(2, '0')}`;
 			const timeFrame = `${startTime} - ${endTime}`;
@@ -25,10 +31,8 @@ const generateTimeFrames = (startHour: number, endHour: number, interval = 60) =
 };
 
 function Reservation() {
-	const [date, setDate] = useState(new Date());
-	const [selectedTimes, setSelectedTimes] = useState<
-		{ date: string; times: string[] }[]
-	>([]);
+	const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
+	const [view, setView] = useState<'date' | 'hours'>('date');
 
 	const busyDates = [
 		new Date(2024, 7, 12),
@@ -66,90 +70,90 @@ function Reservation() {
 		return null;
 	};
 
-	const handleDateChange = (selectedDate: Date) => {
-		setDate(selectedDate);
+	const handleDateChange = () => {
+		setSelectedTimes([]); // Reset selected times when the date changes
 	};
 
 	const handleTimeClick = (timeFrame: string) => {
-		const dateKey = date.toDateString();
-		setSelectedTimes((prevSelectedTimes) => {
-			const existingEntry = prevSelectedTimes.find(
-				(entry) => entry.date === dateKey
-			);
-
-			if (existingEntry) {
-				const newTimes = existingEntry.times.includes(timeFrame)
-					? existingEntry.times.filter((time) => time !== timeFrame)
-					: [...existingEntry.times, timeFrame];
-				return prevSelectedTimes.map((entry) =>
-					entry.date === dateKey ? { ...entry, times: newTimes } : entry
-				);
-			} else {
-				return [...prevSelectedTimes, { date: dateKey, times: [timeFrame] }];
-			}
-		});
+		setSelectedTimes((prevSelectedTimes) =>
+			prevSelectedTimes.includes(timeFrame)
+				? prevSelectedTimes.filter((time) => time !== timeFrame)
+				: [...prevSelectedTimes, timeFrame]
+		);
 	};
 
-	// Function to calculate the total duration across all selected dates
-	const calculateTotalDuration = () => {
+	// Function to calculate the total duration for the current day
+	const [hours, minutes] = useMemo(() => {
 		let totalMinutes = 0;
 
-		selectedTimes.forEach(({ times }) => {
-			times.forEach((timeFrame) => {
-				const [start, end] = timeFrame.split(' - ');
-				const [startHours, startMinutes] = start.split(':').map(Number);
-				const [endHours, endMinutes] = end.split(':').map(Number);
+		selectedTimes.forEach((timeFrame) => {
+			const [start, end] = timeFrame.split(' - ');
+			const [startHours, startMinutes] = start.split(':').map(Number);
+			const [endHours, endMinutes] = end.split(':').map(Number);
 
-				let duration = (endHours * 60 + endMinutes) - (startHours * 60 + startMinutes);
-				if (duration < 0) {
-					duration += 24 * 60; // handle overflow to the next day
-				}
-				totalMinutes += duration;
-			});
+			let duration =
+				endHours * 60 + endMinutes - (startHours * 60 + startMinutes);
+			if (duration < 0) {
+				duration += 24 * 60; // handle overflow to the next day
+			}
+			totalMinutes += duration;
 		});
 
 		const hours = Math.floor(totalMinutes / 60);
 		const minutes = totalMinutes % 60;
 
-		return { hours, minutes };
+		return [hours, minutes];
+	}, [selectedTimes]);
+
+	const handleSubmit = () => {
+		if (view === 'date') {
+			setView('hours');
+		}
 	};
 
-	const { hours, minutes } = calculateTotalDuration();
+	const handleBack = () => {
+		setView('date');
+	};
 
-	const selectedTimesForDate =
-		selectedTimes.find((entry) => entry.date === date.toDateString())?.times || [];
-
-    
 	return (
 		<div>
 			<div className='flex flex-col lg:flex-row gap-5'>
-				<Calendar
-					minDate={new Date()}
-					showFixedNumberOfWeeks
-					tileClassName={getTileClassName}
-					onChange={(value) => handleDateChange(value as Date)}
-				/>
-
-				<Buttons
-					containerClassName='flex-1 grid grid-cols-2 lg:grid-cols-4 gap-2'
-					color='secondary'
-					items={generateTimeFrames(8, 21, 30).map((timeFrame) => ({
-						text: timeFrame,
-						disabled: busyHours.includes(timeFrame),
-						selected: selectedTimesForDate.includes(timeFrame),
-						color: selectedTimesForDate.includes(timeFrame)
-							? 'primary'
-							: 'secondary',
-						onClick() {
-							handleTimeClick(timeFrame);
-						},
-					}))}
-				/>
+				{view === 'date' ? (
+					<Calendar
+						minDate={new Date()}
+						showFixedNumberOfWeeks
+						tileClassName={getTileClassName}
+						onChange={handleDateChange}
+					/>
+				) : (
+					<Buttons
+						containerClassName='flex-1 grid grid-cols-2 lg:grid-cols-4 gap-2'
+						color='secondary'
+						items={generateTimeFrames(8, 21, 30).map((timeFrame) => ({
+							text: timeFrame,
+							disabled: busyHours.includes(timeFrame),
+							selected: selectedTimes.includes(timeFrame),
+							color: selectedTimes.includes(timeFrame)
+								? 'primary'
+								: 'secondary',
+							onClick() {
+								handleTimeClick(timeFrame);
+							},
+						}))}
+					/>
+				)}
 			</div>
 
-			<Button icon='check' color='primary' className='ml-auto mt-5'>
-				Checkout | {hours} hours {minutes ? `${minutes} min` : ''}
-			</Button>
+			<div className='flex'>
+				{view === 'hours' && (
+					<Button color='primary' className='mt-5' onClick={handleBack}>
+						Back
+					</Button>
+				)}
+				<Button color='primary' className='ml-auto mt-5' onClick={handleSubmit}>
+					{view === 'date' ? 'Select hours' : 'Submit'}
+				</Button>
+			</div>
 		</div>
 	);
 }

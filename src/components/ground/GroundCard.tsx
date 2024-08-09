@@ -14,7 +14,7 @@ function GroundCard({ ground }: Props) {
 
 	return (
 		<Card className='group lg:min-w-[250px] p-0 flex flex-col hover:bg-primary-dark transition-all duration-200'>
-			<Link href={`/page/grounds/${ground.id}`}>
+			<Link href={`/grounds/${ground.id}`}>
 				<div
 					className={twMerge(
 						'h-40 flex flex-col justify-between bg-gray-300 rounded-t-lg bg-cover bg-center'
@@ -30,16 +30,16 @@ function GroundCard({ ground }: Props) {
 						)}
 					>
 						{defaultPrice?.discount && (
-							<h5 className='w-max bg-success text-white rounded-tl-lg rounded-br-3xl px-3 py-1.5'>
+							<h5 className='w-max bg-success text-white rounded-tl-lg rounded-br-2xl px-3 py-1.5'>
 								-{defaultPrice.discount}%
 							</h5>
 						)}
-						<h5 className='w-max bg-primary text-white rounded-tr-lg rounded-bl-3xl pr-3 pl-5 py-1.5'>
+						<h5 className='w-max bg-primary text-white rounded-tr-lg rounded-bl-2xl px-3 py-1.5'>
 							{defaultPrice?.amount} dh/{defaultPrice?.period}
 						</h5>
 					</div>
 
-					<div className='w-max flex items-center gap-1 mt-3 p-2 pr-3 bg-black bg-opacity-50 rounded-tl-lg rounded-tr-3xl'>
+					<div className='w-max flex items-center gap-1 mt-3 p-2 pr-3 bg-black bg-opacity-50 rounded-tl-lg rounded-tr-2xl'>
 						<Rating rating={ground.avgRating} />
 						<span className='text-xs font-light text-white'>
 							{' '}

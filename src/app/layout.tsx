@@ -3,7 +3,6 @@ import { twMerge } from 'tailwind-merge';
 import { poppinsFont } from '@/config/fonts';
 import ContextProvider from '@/components/ContextProvider';
 import Navbar from '@/components/navbar/Navbar';
-import { initFirebaseApp } from '@/config/firebase/firebase-client';
 
 import '../styles/globals.css';
 import '../styles/calendar.css';

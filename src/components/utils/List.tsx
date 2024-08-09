@@ -29,6 +29,8 @@ function List({ items, itemContainerClassName }: Props) {
 			className={twMerge(
 				'py-3 px-6',
 				item && 'hover:bg-secondary cursor-pointer',
+				i === 0 && 'rounded-t-xl',
+				i === items.length - 1 && 'rounded-b-xl',
 				itemContainerClassName
 			)}
 			onClick={(e) => handleClick(e, item?.onClick)}

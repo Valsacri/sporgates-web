@@ -8,8 +8,8 @@ export interface Review {
 }
 
 export interface Timeframe {
-	from: number;
-	to: number;
+	from: string;
+	to: string;
 }
 
 export interface OpeningHours {

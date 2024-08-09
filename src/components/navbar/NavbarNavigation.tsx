@@ -12,8 +12,9 @@ function NavbarNavigation() {
 
 	return (
 		<Dropdown
-			className='h-full'
+			closeOnClick
 			containerClassName='h-full'
+			triggerClassName='h-full'
 			trigger={
 				<Button className='h-full rounded-none space-x-1'>
 					<Avatar
