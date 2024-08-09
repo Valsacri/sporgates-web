@@ -2,6 +2,8 @@ import Calendar from 'react-calendar';
 import Buttons from '../profile/Buttons';
 import Button from '../utils/Button';
 import { useMemo, useState } from 'react';
+import Dropdown from '../utils/Dropdown';
+import Card from '../utils/Card';
 
 const generateTimeFrames = (
 	startHour: number,
@@ -117,42 +119,63 @@ function Reservation() {
 
 	return (
 		<div>
-			<div className='flex flex-col lg:flex-row gap-5'>
-				{view === 'date' ? (
-					<Calendar
-						minDate={new Date()}
-						showFixedNumberOfWeeks
-						tileClassName={getTileClassName}
-						onChange={handleDateChange}
-					/>
-				) : (
-					<Buttons
-						containerClassName='flex-1 grid grid-cols-2 lg:grid-cols-4 gap-2'
-						color='secondary'
-						items={generateTimeFrames(8, 21, 30).map((timeFrame) => ({
-							text: timeFrame,
-							disabled: busyHours.includes(timeFrame),
-							selected: selectedTimes.includes(timeFrame),
-							color: selectedTimes.includes(timeFrame)
-								? 'primary'
-								: 'secondary',
-							onClick() {
-								handleTimeClick(timeFrame);
-							},
-						}))}
-					/>
-				)}
-			</div>
+			<div className='flex border rounded-md'>
+				<Dropdown
+					containerClassName='w-1/2'
+					trigger={
+						<div className='border-r-[0.5px] p-3'>
+							<h6>Date</h6>
+							<p className='text-sm'>12/12/2021</p>
+						</div>
+					}
+				>
+					<Card>
+						<Calendar
+							minDate={new Date()}
+							showFixedNumberOfWeeks
+							tileClassName={getTileClassName}
+							onChange={handleDateChange}
+						/>
+					</Card>
+				</Dropdown>
 
-			<div className='flex'>
-				{view === 'hours' && (
-					<Button color='primary' className='mt-5' onClick={handleBack}>
-						Back
-					</Button>
-				)}
-				<Button color='primary' className='ml-auto mt-5' onClick={handleSubmit}>
-					{view === 'date' ? 'Select hours' : 'Submit'}
-				</Button>
+				<Dropdown
+					containerClassName='w-1/2'
+					trigger={
+						<div className='border-r-[0.5px] p-3'>
+							<h6>Duration</h6>
+							<p className='text-sm'>2 hours 30 min</p>
+						</div>
+					}
+				>
+					<Card>
+						<Buttons
+							containerClassName='flex-1 grid grid-cols-2 lg:grid-cols-4 gap-2'
+							color='secondary'
+							items={generateTimeFrames(8, 21, 30).map((timeFrame) => ({
+								text: timeFrame,
+								disabled: busyHours.includes(timeFrame),
+								selected: selectedTimes.includes(timeFrame),
+								color: selectedTimes.includes(timeFrame)
+									? 'primary'
+									: 'secondary',
+								onClick() {
+									handleTimeClick(timeFrame);
+								},
+							}))}
+						/>
+
+						<div className='flex justify-end mt-3'>
+							<Button
+								color='primary'
+								onClick={handleSubmit}
+								disabled={selectedTimes.length === 0}
+							>
+								Confirm
+							</Button>
+						</div>
+					</Card>
+				</Dropdown>
 			</div>
 		</div>
 	);
