@@ -1,6 +1,6 @@
 'use client';
 
-import { useOutsideClick } from '@/hooks/useOutsideClick';
+import { useOutsideClick } from '@/hooks/utils/useOutsideClick';
 import { useRef } from 'react';
 import { HiX } from 'react-icons/hi';
 import { twMerge } from 'tailwind-merge';
@@ -64,10 +64,7 @@ export const Popup = ({
 					<div className='flex gap-3'>
 						{topRightSection}
 						{showCloseButton && (
-							<HiX
-								className='size-5 cursor-pointer'
-								onClick={onClose}
-							/>
+							<HiX className='size-5 cursor-pointer' onClick={onClose} />
 						)}
 					</div>
 				</div>

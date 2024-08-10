@@ -36,7 +36,7 @@ export default function RootLayout({
 			>
 				<ContextProvider>
 					<Navbar />
-					<main className='2xl:container mx-auto px-5 lg:px-16 p-5'>
+					<main className='2xl:container mx-auto px-2 py-3 lg:px-16'>
 						{children}
 					</main>
 				</ContextProvider>

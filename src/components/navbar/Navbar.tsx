@@ -10,7 +10,7 @@ import NavbarNavigation from './NavbarNavigation';
 function Navbar() {
 	return (
 		<div className='bg-white'>
-			<div className='2xl:container mx-auto px-5 lg:px-16 flex justify-between items-center'>
+			<div className='2xl:container mx-auto px-2 lg:px-16 flex justify-between items-center'>
 				<div>
 					<Dropdown
 						closeOnClick

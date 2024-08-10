@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Popup } from '../utils/Popup';
 import { Input } from '../utils/Input';
 import Button from '../utils/Button';
-import { usePopup } from '@/hooks/usePopup';
+import { usePopup } from '@/hooks/utils/usePopup';
 
 interface Props {
 	children?: React.ReactNode;

@@ -35,7 +35,7 @@ function GroundCard({ ground }: Props) {
 							</h5>
 						)}
 						<h5 className='w-max bg-primary text-white rounded-tr-lg rounded-bl-2xl px-3 py-1.5'>
-							{defaultPrice?.amount} dh/{defaultPrice?.period}
+							{defaultPrice?.amount} dh/{defaultPrice?.period.amount} {defaultPrice?.period.duration}
 						</h5>
 					</div>
 

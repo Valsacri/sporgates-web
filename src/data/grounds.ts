@@ -1,4 +1,9 @@
-import { Ground, OpeningHours, PricePeriod } from '@/types/business.interface';
+import {
+	Ground,
+	OpeningHours,
+	PricePeriod,
+	PricePeriodDuration,
+} from '@/types/business.interface';
 import { User } from '@/types/user.interface';
 
 const openingHours: OpeningHours = {
@@ -47,7 +52,7 @@ const prices = [
 			'96 MB Max upload size',
 		],
 		amount: 1000,
-		period: PricePeriod.MONTH,
+		period: { duration: PricePeriodDuration.MONTH, amount: 1 },
 		discount: 0,
 		isDefault: true,
 	},
@@ -65,7 +70,7 @@ const prices = [
 			'96 MB Max upload size',
 		],
 		amount: 1000,
-		period: PricePeriod.MONTH,
+		period: { duration: PricePeriodDuration.MONTH, amount: 1 },
 		discount: 0,
 		isDefault: false,
 	},
@@ -79,7 +84,7 @@ const prices = [
 			'Personal trainer',
 		],
 		amount: 2000,
-		period: PricePeriod.MONTH,
+		period: { duration: PricePeriodDuration.MONTH, amount: 1 },
 		discount: 20,
 		isDefault: false,
 	},
@@ -93,7 +98,7 @@ const prices = [
 			'Personal trainer',
 		],
 		amount: 2000,
-		period: PricePeriod.MONTH,
+		period: { duration: PricePeriodDuration.MONTH, amount: 1 },
 		discount: 20,
 		isDefault: false,
 	},
@@ -107,7 +112,7 @@ const prices = [
 			'Personal trainer',
 		],
 		amount: 2000,
-		period: PricePeriod.MONTH,
+		period: { duration: PricePeriodDuration.MONTH, amount: 1 },
 		discount: 20,
 		isDefault: false,
 	},
@@ -121,7 +126,7 @@ const prices = [
 			'Personal trainer',
 		],
 		amount: 2000,
-		period: PricePeriod.MONTH,
+		period: { duration: PricePeriodDuration.MONTH, amount: 1 },
 		discount: 20,
 		isDefault: false,
 	},

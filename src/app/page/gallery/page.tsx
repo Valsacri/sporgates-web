@@ -3,7 +3,7 @@
 import Gallery from '@/components/gallery/Gallery';
 import Button from '@/components/utils/Button';
 import { Popup } from '@/components/utils/Popup';
-import { usePopup } from '@/hooks/usePopup';
+import { usePopup } from '@/hooks/utils/usePopup';
 import { useState, useCallback } from 'react';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
 import { twMerge } from 'tailwind-merge';

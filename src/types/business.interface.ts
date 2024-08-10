@@ -25,6 +25,7 @@ export interface OpeningHours {
 export interface Ground extends Record {
 	name: string;
 	description: string;
+	isLimited: boolean;
 	address: Address;
 	images: string[];
 	prices: Price[];
@@ -40,13 +41,18 @@ export enum ItemCategory {
 	SERVICE = 'service',
 }
 
-export enum PricePeriod {
+export enum PricePeriodDuration {
 	ONCE = 'once',
 	HOUR = 'hour',
 	DAY = 'day',
 	WEEK = 'week',
 	MONTH = 'month',
 	YEAR = 'year',
+}
+
+export interface PricePeriod {
+	duration: PricePeriodDuration;
+	amount: number;
 }
 
 export interface Price {

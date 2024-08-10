@@ -1,13 +1,15 @@
 'use client';
 
-import { useOutsideClick } from '@/hooks/useOutsideClick';
+import { useOutsideClick } from '@/hooks/utils/useOutsideClick';
 import React, { useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Card from './Card';
 
 interface Props {
-	children: React.ReactNode;
-	trigger: React.ReactNode;
+	open?: boolean;
+	setOpen?: (open: boolean) => any;
+	children?: React.ReactNode;
+	trigger?: React.ReactNode;
 	position?: 'left' | 'right';
 	closeOnClick?: boolean;
 	className?: string;
@@ -16,6 +18,8 @@ interface Props {
 }
 
 export const Dropdown = ({
+	open: _open,
+	setOpen: _setOpen,
 	children,
 	trigger,
 	position = 'right',
@@ -24,13 +28,16 @@ export const Dropdown = ({
 	containerClassName,
 	triggerClassName,
 }: Props) => {
-	const [open, setOpen] = useState(false);
+	const [__open, __setOpen] = useState(false);
+
+	const open = _open ?? __open;
+	const setOpen = _setOpen ?? __setOpen;
+
 	const ref = useRef(null);
 
 	useOutsideClick(ref, () => setOpen(false));
 
 	const handleClick = () => {
-		console.log('11111111');
 		if (closeOnClick) {
 			setOpen(false);
 		}
@@ -48,7 +55,7 @@ export const Dropdown = ({
 			{open && (
 				<Card
 					className={twMerge(
-						'p-0 z-10 min-w-max text-medium text-left shadow-lg shadow-neutral-200 mt-1 m-0 bg-clip-padding border-none absolute',
+						'p-0 z-10 min-w-max text-medium text-left mt-1 m-0 bg-clip-padding border-none absolute',
 						position === 'left' ? 'left-0' : 'right-0',
 						className
 					)}

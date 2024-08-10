@@ -1,24 +1,20 @@
-import Reservation from '@/components/shared/Reservation';
-import Button from '@/components/utils/Button';
-import Card from '@/components/utils/Card';
+'use client';
+
+import useBreakpoint from '@/hooks/utils/useBreakpoint';
+import GroundReservationMobile from './GroundReservationMobile';
+import GroundReservationDesktop from './GroundReservationDesktop';
 
 function GroundReservation() {
+	const { breakpointsSize, windowWidth } = useBreakpoint();
+
 	return (
-		<Card>
-			<h3 className='mb-3 text-end'>50 DH/h</h3>
-			<Reservation />
-
-			<Button icon='check' color='primary' className='w-full mt-5'>
-				Reserve now
-			</Button>
-
-			<hr className='my-5' />
-
-			<div className='flex justify-between'>
-				<h3>Total</h3>
-				<p className='text-success'>125 DH</p>
-			</div>
-		</Card>
+		<div className='sticky bottom-0 lg:top-0 left-0 w-full h-max pt-5 z-50'>
+			{windowWidth < breakpointsSize.lg ? (
+				<GroundReservationMobile />
+			) : (
+				<GroundReservationDesktop />
+			)}
+		</div>
 	);
 }
 

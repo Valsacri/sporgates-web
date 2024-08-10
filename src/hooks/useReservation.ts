@@ -1,31 +1,25 @@
-'use client';
-
-import Calendar from 'react-calendar';
-import Buttons from '../profile/Buttons';
-import { useMemo, useState } from 'react';
-import Dropdown from '../utils/Dropdown';
-import Card from '../utils/Card';
+import { useState, useMemo } from 'react';
 import { generateTimeFrames } from '@/helpers/datetime';
 
-interface Props {
-	busyDates: Date[];
-	busyHours: string[];
-	handleTimeChange: (timeFrame: string) => void;
+interface ReservationHookProps {
 	selectedDate: Date;
 	setSelectedDate: (date: Date) => void;
 	selectedTimes: string[];
 	setSelectedTimes: (times: string[]) => void;
+	busyDates: Date[];
+	busyHours: string[];
+	handleTimeChange: (timeFrame: string) => void;
 }
 
-function Reservation({
-	busyDates,
-	busyHours,
-	handleTimeChange,
+export function useReservation({
 	selectedDate,
 	setSelectedDate,
 	selectedTimes,
 	setSelectedTimes,
-}: Props) {
+	busyDates,
+	busyHours,
+	handleTimeChange,
+}: ReservationHookProps) {
 	const [openDatePicker, setOpenDatePicker] = useState(false);
 	const [openTimesPicker, setOpenTimesPicker] = useState(false);
 
@@ -89,68 +83,15 @@ function Reservation({
 		});
 	}, [busyHours, selectedTimes]);
 
-	return (
-		<div>
-			<div className='flex border rounded-md'>
-				<Dropdown
-					open={openDatePicker}
-					setOpen={setOpenDatePicker}
-					containerClassName='w-1/2'
-					className='shadow-none'
-					trigger={
-						<div className='border-r-[0.5px] p-3'>
-							<h6>Date</h6>
-							<p className='text-sm'>
-								{selectedDate.toLocaleDateString('fr-FR')}
-							</p>
-						</div>
-					}
-				>
-					<Card className='border'>
-						<Calendar
-							minDate={new Date()}
-							showFixedNumberOfWeeks
-							tileClassName={getTileClassName}
-							onChange={(date) => handleDateChange(date as Date)}
-						/>
-					</Card>
-				</Dropdown>
-
-				<Dropdown
-					open={openTimesPicker}
-					setOpen={setOpenTimesPicker}
-					containerClassName='w-1/2'
-					trigger={
-						<div className='border-r-[0.5px] p-3'>
-							<h6>Duration</h6>
-							<p className='text-sm'>
-								{!hours && !minutes ? '----' : ''}
-								{hours ? `${hours}h` : ''} {minutes ? `${minutes}min` : ''}
-							</p>
-						</div>
-					}
-				>
-					<Card className='border'>
-						<Buttons
-							containerClassName='flex-1 grid grid-cols-2 lg:grid-cols-4 gap-2'
-							color='secondary'
-							items={times}
-						/>
-
-						{/* <div className='flex justify-end mt-3'>
-							<Button
-								color='primary'
-								onClick={handleTimeChange}
-								disabled={selectedTimes.length === 0}
-							>
-								Confirm
-							</Button>
-						</div> */}
-					</Card>
-				</Dropdown>
-			</div>
-		</div>
-	);
+	return {
+		openDatePicker,
+		setOpenDatePicker,
+		openTimesPicker,
+		setOpenTimesPicker,
+		getTileClassName,
+		handleDateChange,
+		hours,
+		minutes,
+		times,
+	};
 }
-
-export default Reservation;

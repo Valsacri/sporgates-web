@@ -21,7 +21,7 @@ function GroundDetails({ params: { id } }: Props) {
 	return (
 		<>
 			<GroundImages images={ground.images} />
-			<div className='grid grid-cols-3 gap-5'>
+			<div className='grid grid-cols-1 lg:grid-cols-3 gap-0 lg:gap-5'>
 				<div className='space-y-5 col-span-2 pt-5'>
 					<GroundInfo ground={ground} />
 					<GroundPricing prices={ground.prices} />
@@ -35,9 +35,7 @@ function GroundDetails({ params: { id } }: Props) {
 					</div>
 				</div>
 
-				<div className='sticky top-0 h-max pt-5'>
-					<GroundReservation />
-				</div>
+				<GroundReservation />
 			</div>
 		</>
 	);

@@ -5,8 +5,8 @@ import { Popup } from '../utils/Popup';
 import { Input } from '../utils/Input';
 import { Select } from '../utils/Select';
 import Button from '../utils/Button';
-import { usePopup } from '@/hooks/usePopup';
-import { useImages } from '@/hooks/useImages';
+import { usePopup } from '@/hooks/utils/usePopup';
+import { useImages } from '@/hooks/utils/useImages';
 import { HiOutlinePlusCircle } from 'react-icons/hi';
 import ManagePriceFeaturePopup from './ManagePriceFeaturePopup';
 import { Table } from '../utils/Table';
@@ -22,7 +22,8 @@ function ManagePricePopup({ children }: Props) {
 			name: '',
 			description: '',
 			price: '',
-			pricePeriod: '',
+			pricePeriodDuration: '',
+			pricePeriodAmount: '',
 			discount: '',
 			discountEndDate: '',
 		},
@@ -56,7 +57,7 @@ function ManagePricePopup({ children }: Props) {
 			>
 				<form onSubmit={handleSubmit(onSubmit)} className='space-y-3'>
 					<div className='space-y-3'>
-						<h3 className='text-lg font-medium text-gray-900'>Infos</h3>
+						<h3>Infos</h3>
 						<div className='grid grid-cols-1 lg:grid-cols-2 gap-3 items-center'>
 							<Input {...register('name')} placeholder='Name' />
 							<Input
@@ -68,19 +69,24 @@ function ManagePricePopup({ children }: Props) {
 					</div>
 
 					<div className='space-y-3'>
-						<h3 className='text-lg font-medium text-gray-900'>Price</h3>
-						<div className='grid grid-cols-1 lg:grid-cols-2 gap-3 items-center'>
+						<h3>Price</h3>
+						<div className='grid grid-cols-1 lg:grid-cols-3 gap-3 items-center'>
 							<Input {...register('price')} placeholder='Price' type='number' />
 							<Select
-								{...register('pricePeriod')}
+								{...register('pricePeriodDuration')}
 								options={pricePeriods}
 								placeholder='Period'
+							/>
+							<Input
+								{...register('pricePeriodAmount')}
+								placeholder='Duration'
+								type='number'
 							/>
 						</div>
 					</div>
 
 					<div className='space-y-3'>
-						<h3 className='text-lg font-medium text-gray-900'>Discount</h3>
+						<h3>Discount</h3>
 						<div className='grid grid-cols-1 lg:grid-cols-2 gap-3 items-center'>
 							<Input
 								{...register('discount')}
@@ -93,7 +99,7 @@ function ManagePricePopup({ children }: Props) {
 
 					<div className='space-y-3'>
 						<div className='flex justify-between items-center'>
-							<h3 className='text-lg font-medium text-gray-900'>Features</h3>
+							<h3>Features</h3>
 							<ManagePriceFeaturePopup>
 								<Button icon={<HiOutlinePlusCircle className='size-5' />} />
 							</ManagePriceFeaturePopup>

@@ -26,7 +26,7 @@ function Pricing({ price }: Props) {
 					>
 						{price.amount}dh
 					</span>{' '}
-					<span>/ {price.period}</span>
+					<span>/ {price.period.amount} {price.period.duration}</span>
 				</div>
 				<div className='space-y-2'>
 					<div
