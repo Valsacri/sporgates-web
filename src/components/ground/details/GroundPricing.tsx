@@ -1,12 +1,17 @@
 import Pricing from '@/components/shared/Pricing';
 import Card from '@/components/utils/Card';
+import { Subscription } from '@/types/business.interface';
 
-function GroundPricing({ prices }: { prices: any[] }) {
+interface Props {
+	subscriptions: Subscription[];
+}
+
+function GroundPricing({ subscriptions }: Props) {
 	return (
 		<Card title='Pricing'>
 			<Card className='flex overflow-x-auto gap-5'>
-				{prices.map((price, index) => (
-					<Pricing key={index} price={price} />
+				{subscriptions.map((subscription, index) => (
+					<Pricing key={index} subscription={subscription} />
 				))}
 			</Card>
 		</Card>

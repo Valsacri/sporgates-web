@@ -11,7 +11,7 @@ import { ImagePicker } from '../utils/ImagePicker';
 import { useImages } from '@/hooks/utils/useImages';
 import { HiOutlinePlusCircle, HiOutlineTrash } from 'react-icons/hi';
 import { Radio } from '../utils/Radio';
-import ManagePricePopup from './ManagePricePopup';
+import ManageSubscriptionPopup from './ManageSubscriptionPopup';
 import { Table } from '../utils/Table';
 
 interface Props {
@@ -120,11 +120,25 @@ function ManageGroundPopup({ children }: Props) {
 					</div>
 
 					<div className='space-y-3'>
+						<h3 className='text-lg font-medium text-gray-900'>Pricing</h3>
+						<div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
+							<Input
+								{...register('price')}
+								placeholder='Minimum reservation time (minutes)'
+								type='number'
+							/>
+							<Input {...register('price')} placeholder='Price' type='number' />
+						</div>
+					</div>
+
+					<div className='space-y-3'>
 						<div className='flex justify-between items-center'>
-							<h3 className='text-lg font-medium text-gray-900'>Pricing</h3>
-							<ManagePricePopup>
+							<h3 className='text-lg font-medium text-gray-900'>
+								Subscriptions
+							</h3>
+							<ManageSubscriptionPopup>
 								<Button icon={<HiOutlinePlusCircle className='size-5' />} />
-							</ManagePricePopup>
+							</ManageSubscriptionPopup>
 						</div>
 
 						<Table

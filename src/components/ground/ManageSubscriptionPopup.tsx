@@ -8,14 +8,14 @@ import Button from '../utils/Button';
 import { usePopup } from '@/hooks/utils/usePopup';
 import { useImages } from '@/hooks/utils/useImages';
 import { HiOutlinePlusCircle } from 'react-icons/hi';
-import ManagePriceFeaturePopup from './ManagePriceFeaturePopup';
+import ManageSubscriptionFeaturePopup from './ManageSubscriptionFeaturePopup';
 import { Table } from '../utils/Table';
 
 interface Props {
 	children?: React.ReactNode;
 }
 
-function ManagePricePopup({ children }: Props) {
+function ManageSubscriptionPopup({ children }: Props) {
 	const [isOpen, toggleOpen] = usePopup();
 	const { handleSubmit, register, reset } = useForm({
 		defaultValues: {
@@ -50,8 +50,8 @@ function ManagePricePopup({ children }: Props) {
 
 			<Popup
 				open={isOpen}
-				title='Add a price'
-				description='Fill in the details to add a new Price.'
+				title='Add a subscription'
+				description='Fill in the details to add a new subscription.'
 				onClose={toggleOpen}
 				className='w-full lg:w-1/3'
 			>
@@ -100,9 +100,9 @@ function ManagePricePopup({ children }: Props) {
 					<div className='space-y-3'>
 						<div className='flex justify-between items-center'>
 							<h3>Features</h3>
-							<ManagePriceFeaturePopup>
+							<ManageSubscriptionFeaturePopup>
 								<Button icon={<HiOutlinePlusCircle className='size-5' />} />
-							</ManagePriceFeaturePopup>
+							</ManageSubscriptionFeaturePopup>
 						</div>
 
 						<Table
@@ -142,4 +142,4 @@ function ManagePricePopup({ children }: Props) {
 	);
 }
 
-export default ManagePricePopup;
+export default ManageSubscriptionPopup;

@@ -10,7 +10,7 @@ interface Props {
 	children?: React.ReactNode;
 }
 
-function ManagePriceFeaturePopup({ children }: Props) {
+function ManageSubscriptionFeaturePopup({ children }: Props) {
 	const [isOpen, toggleOpen] = usePopup();
 	const { handleSubmit, register, reset } = useForm({
 		defaultValues: {
@@ -58,4 +58,4 @@ function ManagePriceFeaturePopup({ children }: Props) {
 	);
 }
 
-export default ManagePriceFeaturePopup;
+export default ManageSubscriptionFeaturePopup;

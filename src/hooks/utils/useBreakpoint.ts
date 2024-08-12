@@ -1,5 +1,3 @@
-'use client';
-
 import { useState, useEffect, useMemo } from 'react';
 
 const breakpointsSize = {
@@ -16,7 +14,7 @@ type Breakpoint = keyof typeof breakpointsSize;
 const breakpoints = Object.keys(breakpointsSize) as Breakpoint[];
 
 const useBreakpoint = () => {
-	const [windowWidth, setWindowWidth] = useState<number>(0);
+	const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
 
 	useEffect(() => {
 		const handleResize = () => {
@@ -30,7 +28,7 @@ const useBreakpoint = () => {
 	}, []);
 
 	const breakpoint = useMemo(() => {
-		for (const breakpoint of breakpoints.toReversed()) {
+		for (const breakpoint of breakpoints.reverse()) {
 			if (windowWidth >= breakpointsSize[breakpoint]) {
 				return breakpoint;
 			}

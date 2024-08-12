@@ -24,7 +24,7 @@ function GroundDetails({ params: { id } }: Props) {
 			<div className='grid grid-cols-1 lg:grid-cols-3 gap-0 lg:gap-5'>
 				<div className='space-y-5 col-span-2 pt-5'>
 					<GroundInfo ground={ground} />
-					<GroundPricing prices={ground.prices} />
+					<GroundPricing subscriptions={ground.subscriptions} />
 					<GroundAddress address={ground.address} />
 					<div className='grid grid-cols-1 lg:grid-cols-2 gap-5'>
 						<GroundReviews
@@ -35,7 +35,7 @@ function GroundDetails({ params: { id } }: Props) {
 					</div>
 				</div>
 
-				<GroundReservation />
+				<GroundReservation ground={ground} />
 			</div>
 		</>
 	);

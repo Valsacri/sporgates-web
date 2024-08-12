@@ -10,8 +10,6 @@ interface Props {
 }
 
 function GroundCard({ ground }: Props) {
-	const defaultPrice = ground.prices.find((price) => price.isDefault);
-
 	return (
 		<Card className='group lg:min-w-[250px] p-0 flex flex-col hover:bg-primary-dark transition-all duration-200'>
 			<Link href={`/grounds/${ground.id}`}>
@@ -25,17 +23,17 @@ function GroundCard({ ground }: Props) {
 				>
 					<div
 						className={twMerge(
-							'flex',
-							defaultPrice?.discount ? 'justify-between' : 'justify-end'
+							'flex'
+							// defaultPrice?.discount ? 'justify-between' : 'justify-end'
 						)}
 					>
-						{defaultPrice?.discount && (
+						{/* {defaultPrice?.discount && (
 							<h5 className='w-max bg-success text-white rounded-tl-lg rounded-br-2xl px-3 py-1.5'>
 								-{defaultPrice.discount}%
 							</h5>
-						)}
-						<h5 className='w-max bg-primary text-white rounded-tr-lg rounded-bl-2xl px-3 py-1.5'>
-							{defaultPrice?.amount} dh/{defaultPrice?.period.amount} {defaultPrice?.period.duration}
+						)} */}
+						<h5 className='w-max bg-primary text-white rounded-tr-lg rounded-bl-2xl px-3 py-1.5 ml-auto'>
+							{ground.price}dh / {ground.minReservationTime}min
 						</h5>
 					</div>
 

@@ -22,17 +22,35 @@ export interface OpeningHours {
 	sunday: Timeframe;
 }
 
-export interface Ground extends Record {
+export interface Item extends Record {
 	name: string;
 	description: string;
-	isLimited: boolean;
 	address: Address;
 	images: string[];
-	prices: Price[];
-	openingHours: OpeningHours;
-	minReservationTime: number;
 	avgRating: number;
 	reviews: Review[];
+	openingHours: OpeningHours;
+}
+
+export interface BusyHours {
+	date: Date;
+	hours: string[];
+}
+
+export interface Ground extends Item {
+	minReservationTime: number;
+	price: number;
+	busyHours: BusyHours[];
+	
+	subscriptions: Subscription[];
+}
+
+export interface Club extends Item {
+	subscriptions: Subscription[];
+}
+
+export interface Product extends Item {
+	price: number;
 }
 
 export enum ItemCategory {
@@ -43,6 +61,7 @@ export enum ItemCategory {
 
 export enum PricePeriodDuration {
 	ONCE = 'once',
+	MINUTE = 'minute',
 	HOUR = 'hour',
 	DAY = 'day',
 	WEEK = 'week',
@@ -50,28 +69,19 @@ export enum PricePeriodDuration {
 	YEAR = 'year',
 }
 
-export interface PricePeriod {
+export interface SubscriptionPeriod {
 	duration: PricePeriodDuration;
 	amount: number;
 }
 
-export interface Price {
+export interface Subscription {
 	name: string;
 	description: string;
 	features: string[];
-	amount: number;
-	period: PricePeriod;
+	price: number;
+	period: SubscriptionPeriod;
 	discount: number;
 	isDefault: boolean;
-}
-
-export interface Item extends Record {
-	name: string;
-	description: string;
-	prices: Price[];
-
-	category: ItemCategory;
-	images: string[];
 }
 
 export interface Offer extends Record {
@@ -81,7 +91,7 @@ export interface Offer extends Record {
 	items: {
 		quantity: number;
 		item: string | Item;
-		originalPrice: Price;
+		originalPrice: Subscription;
 		discount: number;
 	}[];
 	endDate: string;
