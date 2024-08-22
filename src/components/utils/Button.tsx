@@ -1,7 +1,7 @@
 import Icon from './Icon';
 import { twMerge } from 'tailwind-merge';
-import { CocoIcon } from '@/config/coco-icons';
-import { Color } from '@/types/general';
+import { CocoIcon } from '@/client/config/coco-icons';
+import { Color } from '@/client/types/general.types';
 
 type Props = {
 	children?: React.ReactNode;

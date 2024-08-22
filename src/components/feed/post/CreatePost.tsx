@@ -2,7 +2,7 @@ import Buttons from '@/components/profile/Buttons';
 import Avatar from '@/components/utils/Avatar';
 import Button from '@/components/utils/Button';
 import Card from '@/components/utils/Card';
-import { Input } from '@/components/utils/Input';
+import { Input } from '@/components/utils/form/Input';
 
 function CreatePost() {
 	return (
@@ -25,7 +25,7 @@ function CreatePost() {
 				</Button>
 			</div>
 
-			<div className="overflow-x-auto">
+			<div className='overflow-x-auto'>
 				<Buttons
 					items={[
 						{ icon: 'gallery', text: 'Upload image', href: '' },

@@ -2,40 +2,56 @@
 
 import { useForm } from 'react-hook-form';
 import { Popup } from '../utils/Popup';
-import { Input } from '../utils/Input';
-import { Select } from '../utils/Select';
+import { Input } from '../utils/form/Input';
+import { Select } from '../utils/form/Select';
 import Button from '../utils/Button';
-import { usePopup } from '@/hooks/utils/usePopup';
-import { useImages } from '@/hooks/utils/useImages';
 import { HiOutlinePlusCircle } from 'react-icons/hi';
 import ManageSubscriptionFeaturePopup from './ManageSubscriptionFeaturePopup';
-import { Table } from '../utils/Table';
+import { Table } from '../utils/table/Table';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubscriptionDto } from '@/dtos/item/club.dto';
+import { SubscriptionPeriodDuration } from '@/types/item/club.types';
+import { usePopup } from '@/client/hooks/utils/usePopup';
 
 interface Props {
-	children?: React.ReactNode;
+	open: boolean;
+	onClose: () => void;
 }
 
-function ManageSubscriptionPopup({ children }: Props) {
-	const [isOpen, toggleOpen] = usePopup();
-	const { handleSubmit, register, reset } = useForm({
+function ManageSubscriptionPopup({ open, onClose }: Props) {
+	const [openFeaturePopup, toggleFeaturePopup] = usePopup();
+
+	const {
+		handleSubmit,
+		register,
+		reset,
+		formState: { errors },
+	} = useForm({
+		resolver: zodResolver(SubscriptionDto),
 		defaultValues: {
 			name: '',
 			description: '',
-			price: '',
-			pricePeriodDuration: '',
-			pricePeriodAmount: '',
-			discount: '',
-			discountEndDate: '',
+			features: [],
+			price: 0,
+			period: {
+				duration: SubscriptionPeriodDuration.ONCE,
+				amount: 0,
+			},
+			discount: {
+				amount: 0,
+				endDate: '',
+			},
+			isDefault: false,
 		},
 	});
 
 	const onSubmit = (data: any) => {
 		console.log(data);
 		reset();
-		toggleOpen();
+		onClose();
 	};
 
-	const pricePeriods = [
+	const priceDurations = [
 		{ value: 'oneTime', label: 'One time' },
 		{ value: 'hour', label: 'Hour' },
 		{ value: 'day', label: 'Day' },
@@ -45,100 +61,119 @@ function ManageSubscriptionPopup({ children }: Props) {
 	];
 
 	return (
-		<>
-			<div onClick={toggleOpen}>{children}</div>
-
-			<Popup
-				open={isOpen}
-				title='Add a subscription'
-				description='Fill in the details to add a new subscription.'
-				onClose={toggleOpen}
-				className='w-full lg:w-1/3'
-			>
-				<form onSubmit={handleSubmit(onSubmit)} className='space-y-3'>
-					<div className='space-y-3'>
-						<h3>Infos</h3>
-						<div className='grid grid-cols-1 lg:grid-cols-2 gap-3 items-center'>
-							<Input {...register('name')} placeholder='Name' />
-							<Input
-								{...register('description')}
-								placeholder='Description'
-								rows={5}
-							/>
-						</div>
+		<Popup
+			open={open}
+			title='Add a subscription'
+			description='Fill in the details to add a new subscription.'
+			onClose={onClose}
+			className='w-full lg:w-1/2'
+		>
+			<form onSubmit={handleSubmit(onSubmit)} className='space-y-3'>
+				<div className='space-y-3'>
+					<h3>Infos</h3>
+					<div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
+						<Input
+							{...register('name')}
+							label='Name'
+							error={errors.name?.message}
+						/>
+						<Input
+							{...register('description')}
+							label='Description'
+							rows={5}
+							error={errors.description?.message}
+						/>
 					</div>
+				</div>
 
-					<div className='space-y-3'>
-						<h3>Price</h3>
-						<div className='grid grid-cols-1 lg:grid-cols-3 gap-3 items-center'>
-							<Input {...register('price')} placeholder='Price' type='number' />
-							<Select
-								{...register('pricePeriodDuration')}
-								options={pricePeriods}
-								placeholder='Period'
-							/>
-							<Input
-								{...register('pricePeriodAmount')}
-								placeholder='Duration'
-								type='number'
-							/>
-						</div>
+				<div className='space-y-3'>
+					<h3>Price</h3>
+					<div className='grid grid-cols-1 lg:grid-cols-3 gap-3'>
+						<Input
+							{...register('price')}
+							label='Price'
+							type='number'
+							error={errors.price?.message}
+						/>
+						<Select
+							{...register('period.duration')}
+							options={priceDurations}
+							label='Duration'
+							error={errors.period?.duration?.message}
+						/>
+						<Input
+							{...register('period.amount')}
+							label='Amount (in duration)'
+							type='number'
+							error={errors.period?.amount?.message}
+						/>
 					</div>
+				</div>
 
-					<div className='space-y-3'>
-						<h3>Discount</h3>
-						<div className='grid grid-cols-1 lg:grid-cols-2 gap-3 items-center'>
-							<Input
-								{...register('discount')}
-								placeholder='Discount %'
-								type='number'
-							/>
-							<Input {...register('discountEndDate')} placeholder='End date' />
-						</div>
+				<div className='space-y-3'>
+					<h3>Discount</h3>
+					<div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
+						<Input
+							{...register('discount.amount')}
+							label='Discount %'
+							type='number'
+							error={errors.discount?.amount?.message}
+						/>
+						<Input
+							{...register('discount.endDate')}
+							label='End date'
+							error={errors.discount?.endDate?.message}
+						/>
 					</div>
+				</div>
 
-					<div className='space-y-3'>
-						<div className='flex justify-between items-center'>
-							<h3>Features</h3>
-							<ManageSubscriptionFeaturePopup>
-								<Button icon={<HiOutlinePlusCircle className='size-5' />} />
-							</ManageSubscriptionFeaturePopup>
-						</div>
-
-						<Table
-							headers={[{ field: 'description', display: 'Description' }]}
-							data={[
-								{
-									description:
-										'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-								},
-								{
-									description:
-										'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-								},
-							]}
-							actions={[
-								{
-									name: 'Edit',
-								},
-								{
-									name: 'Delete',
-								},
-							]}
+				<div className='space-y-3'>
+					<div className='flex justify-between items-center'>
+						<h3>Features</h3>
+						<Button
+							icon={<HiOutlinePlusCircle className='size-5' />}
+							onClick={toggleFeaturePopup}
 						/>
 					</div>
 
-					<div className='flex justify-end gap-3'>
-						<Button color='secondary' onClick={toggleOpen}>
-							Close
-						</Button>
-						<Button type='submit' color='primary'>
-							Add
-						</Button>
-					</div>
-				</form>
-			</Popup>
-		</>
+					<Table
+						headers={[{ field: 'description', display: 'Description' }]}
+						data={[
+							{
+								description:
+									'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+							},
+							{
+								description:
+									'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+							},
+						]}
+						actions={[
+							{
+								name: 'Edit',
+							},
+							{
+								name: 'Delete',
+							},
+						]}
+					/>
+				</div>
+
+				<div className='flex justify-end gap-3'>
+					<Button color='secondary' onClick={onClose}>
+						Close
+					</Button>
+					<Button color='primary' type='submit'>
+						Add
+					</Button>
+				</div>
+			</form>
+
+			<ManageSubscriptionFeaturePopup
+				open={openFeaturePopup}
+				onClose={toggleFeaturePopup}
+			/>
+		</Popup>
 	);
 }
 

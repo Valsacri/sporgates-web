@@ -6,6 +6,7 @@ import Avatar from '../utils/Avatar';
 import Icon from '../utils/Icon';
 import List from '../utils/List';
 import { useRouter } from 'next/navigation';
+import { getAuth, signOut } from 'firebase/auth';
 
 function NavbarNavigation() {
 	const router = useRouter();
@@ -73,7 +74,11 @@ function NavbarNavigation() {
 						item: 'Admin area',
 					},
 					null,
-					{ prefix: <Icon name='turn-off' />, item: 'Logout' },
+					{
+						prefix: <Icon name='turn-off' />,
+						item: 'Logout',
+						onClick: () => signOut(getAuth()),
+					},
 					null,
 					{
 						item: 'Night mode',

@@ -1,10 +1,10 @@
 'use client';
 
+import { GroundReservationContext } from '@/client/contexts/ground-reservation.context';
 import ReservationPickerMobile from '@/components/shared/ReservationPickerMobile';
 import Button from '@/components/utils/Button';
 import Card from '@/components/utils/Card';
 import { useContext } from 'react';
-import { GroundReservationContext } from './GroundReservation';
 
 function GroundReservationMobile() {
 	const { ground, selectedTimes } = useContext(GroundReservationContext);

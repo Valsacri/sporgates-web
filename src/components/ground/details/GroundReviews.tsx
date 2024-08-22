@@ -1,6 +1,6 @@
 import Rating from '@/components/shared/Rating';
 import Card from '@/components/utils/Card';
-import { User } from '@/types/user.interface';
+import { User } from '@/types/user.types';
 
 function GroundReviews({
 	reviews,

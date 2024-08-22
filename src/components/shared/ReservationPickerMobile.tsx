@@ -4,8 +4,8 @@ import Calendar from 'react-calendar';
 import Buttons from '../profile/Buttons';
 import { useContext } from 'react';
 import { Popup } from '../utils/Popup';
-import { GroundReservationContext } from '../ground/details/GroundReservation';
 import Button from '../utils/Button';
+import { GroundReservationContext } from '@/client/contexts/ground-reservation.context';
 
 function ReservationPickerMobile() {
 	const {

@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge';
 import Button from '../utils/Button';
 import Card from '../utils/Card';
 import { useState } from 'react';
-import { CocoIcon } from '@/config/coco-icons';
+import { CocoIcon } from '@/client/config/coco-icons';
 import Icon from '../utils/Icon';
 
 function ProfileCompletion() {

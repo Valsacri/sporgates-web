@@ -1,6 +1,6 @@
 import { HiCheck } from 'react-icons/hi';
 import { twMerge } from 'tailwind-merge';
-import { Subscription } from '@/types/business.interface';
+import { Subscription } from '@/types/business.types';
 import Card from '../utils/Card';
 import Button from '../utils/Button';
 

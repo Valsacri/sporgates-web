@@ -1,9 +1,9 @@
-import { Ground } from '@/types/business.interface';
 import Card from '../utils/Card';
 import Icon from '../utils/Icon';
 import { twMerge } from 'tailwind-merge';
 import Link from 'next/link';
 import Rating from '../shared/Rating';
+import { Ground } from '@/types/item/ground.types';
 
 interface Props {
 	ground: Ground;
@@ -12,7 +12,7 @@ interface Props {
 function GroundCard({ ground }: Props) {
 	return (
 		<Card className='group lg:min-w-[250px] p-0 flex flex-col hover:bg-primary-dark transition-all duration-200'>
-			<Link href={`/grounds/${ground.id}`}>
+			<Link href={`/grounds/${ground._id}`}>
 				<div
 					className={twMerge(
 						'h-40 flex flex-col justify-between bg-gray-300 rounded-t-lg bg-cover bg-center'

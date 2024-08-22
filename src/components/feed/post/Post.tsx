@@ -1,22 +1,21 @@
 import Avatar from '@/components/utils/Avatar';
 import Button from '@/components/utils/Button';
 import Card from '@/components/utils/Card';
+import { Input } from '@/components/utils/form/Input';
 import Icon from '@/components/utils/Icon';
-import { Input } from '@/components/utils/Input';
-import { IPost } from '@/types/post.interface';
+import { Post } from '@/types/post.types';
 import Image from 'next/image';
-import { twMerge } from 'tailwind-merge';
 
 interface Props {
-	post: any;
+	post: Post;
 }
 
-function Post({ post }: Props) {
+function PostCard({ post }: Props) {
 	const TARGET_FUND = 100;
 	const funds = 50;
 
 	return (
-		<Card key={post.id} className='space-y-5'>
+		<Card key={post._id} className='space-y-5'>
 			<div className='flex justify-between'>
 				<div className='flex gap-5'>
 					<div className='relative'>
@@ -147,4 +146,4 @@ function Post({ post }: Props) {
 	);
 }
 
-export default Post;
+export default PostCard;

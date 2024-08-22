@@ -1,31 +1,50 @@
 'use client';
 
+import { Popup } from '@/components/utils/Popup';
+import { Input } from '@/components/utils/form/Input';
+import Button from '@/components/utils/Button';
+import { usePopup } from '@/client/hooks/utils/usePopup';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Popup } from '../utils/Popup';
-import { Input } from '../utils/Input';
-import { Select } from '../utils/Select';
-import Button from '../utils/Button';
-import { usePopup } from '@/hooks/utils/usePopup';
+import { GroundDto, GroundDtoType } from '@/dtos/item/ground.dto';
+import { Select } from '../utils/form/Select';
 import MapboxMap from '../utils/Map';
-import { ImagePicker } from '../utils/ImagePicker';
-import { useImages } from '@/hooks/utils/useImages';
-import { HiOutlinePlusCircle, HiOutlineTrash } from 'react-icons/hi';
-import { Radio } from '../utils/Radio';
+import { ImagePicker } from '../utils/form/ImagePicker';
+import { useImages } from '@/client/hooks/utils/useImages';
 import ManageSubscriptionPopup from './ManageSubscriptionPopup';
-import { Table } from '../utils/Table';
+import { HiOutlinePlusCircle } from 'react-icons/hi';
+import { Table } from '../utils/table/Table';
+import { count } from 'console';
 
 interface Props {
-	children?: React.ReactNode;
+	children: React.ReactNode;
 }
 
 function ManageGroundPopup({ children }: Props) {
 	const [isOpen, toggleOpen] = usePopup();
-	const { handleSubmit, register, reset } = useForm({
+	const [openSubscriptionPopup, toggleSubscriptionPopup] = usePopup();
+
+	const {
+		handleSubmit,
+		register,
+		reset,
+		formState: { errors },
+	} = useForm({
+		resolver: zodResolver(GroundDto),
 		defaultValues: {
 			name: '',
 			description: '',
+			images: [],
+			openingHours: {
+				monday: { start: '', end: '' },
+				tuesday: { start: '', end: '' },
+				wednesday: { start: '', end: '' },
+				thursday: { start: '', end: '' },
+				friday: { start: '', end: '' },
+				saturday: { start: '', end: '' },
+				sunday: { start: '', end: '' },
+			},
 			address: {
-				id: '',
 				country: '',
 				city: '',
 				neighborhood: '',
@@ -35,14 +54,12 @@ function ManageGroundPopup({ children }: Props) {
 					lat: 0,
 					lng: 0,
 				},
+				isDefault: false,
 			},
-			images: [],
-			price: '',
-			pricePeriod: '',
-			discount: '',
-			isDefault: false,
-			rating: 0,
-			reviews: 0,
+			minReservationTime: 0,
+			price: 0,
+			busyHours: [],
+			subscriptions: [],
 		},
 	});
 
@@ -110,11 +127,18 @@ function ManageGroundPopup({ children }: Props) {
 					<div className='space-y-3'>
 						<h3 className='text-lg font-medium text-gray-900'>Infos</h3>
 						<div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
-							<Input {...register('name')} placeholder='Name' />
 							<Input
+								label='Name'
+								{...register('name')}
+								placeholder='Name'
+								error={errors.name?.message}
+							/>
+							<Input
+								label='Description'
 								{...register('description')}
 								placeholder='Description'
 								rows={5}
+								error={errors.description?.message}
 							/>
 						</div>
 					</div>
@@ -123,11 +147,17 @@ function ManageGroundPopup({ children }: Props) {
 						<h3 className='text-lg font-medium text-gray-900'>Pricing</h3>
 						<div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
 							<Input
-								{...register('price')}
-								placeholder='Minimum reservation time (minutes)'
+								{...register('minReservationTime')}
+								label='Minimum reservation time (minutes)'
 								type='number'
+								error={errors.minReservationTime?.message}
 							/>
-							<Input {...register('price')} placeholder='Price' type='number' />
+							<Input
+								{...register('price')}
+								label='Price'
+								type='number'
+								error={errors.price?.message}
+							/>
 						</div>
 					</div>
 
@@ -136,9 +166,10 @@ function ManageGroundPopup({ children }: Props) {
 							<h3 className='text-lg font-medium text-gray-900'>
 								Subscriptions
 							</h3>
-							<ManageSubscriptionPopup>
-								<Button icon={<HiOutlinePlusCircle className='size-5' />} />
-							</ManageSubscriptionPopup>
+							<Button
+								icon={<HiOutlinePlusCircle className='size-5' />}
+								onClick={toggleSubscriptionPopup}
+							/>
 						</div>
 
 						<Table
@@ -180,11 +211,13 @@ function ManageGroundPopup({ children }: Props) {
 								{...register('address.city')}
 								options={neighborhoods}
 								placeholder='City'
+								error={errors.address?.city?.message}
 							/>
 							<Select
 								{...register('address.neighborhood')}
 								options={neighborhoods}
 								placeholder='Neighborhood'
+								error={errors.address?.neighborhood?.message}
 							/>
 
 							<div className='col-span-2'>
@@ -208,14 +241,17 @@ function ManageGroundPopup({ children }: Props) {
 					</div>
 
 					<div className='flex justify-end gap-3'>
-						<Button color='secondary' onClick={toggleOpen}>
-							Close
-						</Button>
-						<Button type='submit' color='primary'>
+						<Button color='secondary'>Close</Button>
+						<Button color='primary' type='submit'>
 							Create
 						</Button>
 					</div>
 				</form>
+
+				<ManageSubscriptionPopup
+					open={openSubscriptionPopup}
+					onClose={() => toggleSubscriptionPopup()}
+				/>
 			</Popup>
 		</>
 	);

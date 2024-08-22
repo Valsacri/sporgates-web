@@ -1,6 +1,6 @@
 'use client';
 
-import { useOutsideClick } from '@/hooks/utils/useOutsideClick';
+import { useOutsideClick } from '@/client/hooks/utils/useOutsideClick';
 import { useRef, useState } from 'react';
 import { HiX } from 'react-icons/hi';
 import { twMerge } from 'tailwind-merge';

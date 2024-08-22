@@ -5,8 +5,8 @@ import Buttons from '../profile/Buttons';
 import Dropdown from '../utils/Dropdown';
 import Card from '../utils/Card';
 import { useContext } from 'react';
-import { GroundReservationContext } from '../ground/details/GroundReservation';
 import Button from '../utils/Button';
+import { GroundReservationContext } from '@/client/contexts/ground-reservation.context';
 
 function ReservationPickerDesktop() {
 	const {

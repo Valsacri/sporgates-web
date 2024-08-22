@@ -1,19 +1,23 @@
+'use client';
+
 import type { Metadata } from 'next';
 import { twMerge } from 'tailwind-merge';
-import { poppinsFont } from '@/config/fonts';
+import { poppinsFont } from '@/client/config/fonts';
 import ContextProvider from '@/components/ContextProvider';
-import Navbar from '@/components/navbar/Navbar';
 
-import '../styles/globals.css';
-import '../styles/calendar.css';
+import '../client/styles/globals.css';
+import '../client/styles/calendar.css';
 import 'react-calendar/dist/Calendar.css';
+import { initFirebaseApp } from '@/client/config/firebase.config';
+import { useEffect } from 'react';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
-export const metadata: Metadata = {
-	title: 'Sporgates',
-	description: "Lotrima l'mlih",
-};
+// export const metadata: Metadata = {
+// 	title: 'Sporgates',
+// 	description: "Lotrima l'mlih",
+// };
 
-// const app = initFirebaseApp();
+const app = initFirebaseApp();
 
 export default function RootLayout({
 	children,
@@ -34,12 +38,7 @@ export default function RootLayout({
 					poppinsFont.variable
 				)}
 			>
-				<ContextProvider>
-					<Navbar />
-					<main className='2xl:container mx-auto px-2 py-3 lg:px-16'>
-						{children}
-					</main>
-				</ContextProvider>
+				<ContextProvider>{children}</ContextProvider>
 			</body>
 		</html>
 	);

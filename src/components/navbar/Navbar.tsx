@@ -4,8 +4,9 @@ import HomeNavigation from '../home/HomeNavigation';
 import Button from '../utils/Button';
 import Dropdown from '../utils/Dropdown';
 import Icon from '../utils/Icon';
-import { Input } from '../utils/Input';
+import { Input } from '../utils/form/Input';
 import NavbarNavigation from './NavbarNavigation';
+import { DatePicker } from '../utils/form/DatePicker';
 
 function Navbar() {
 	return (
@@ -40,12 +41,16 @@ function Navbar() {
 						<Button icon='menu' color='secondary'></Button>
 					</div>
 
-					<Input
+					{/* <Input
 						name='dfa'
-						label='Search'
 						placeholder='Search for people, pages, groups and #hashtags'
 						suffix={<Icon name='search' />}
 						className='hidden lg:block py-3 w-96'
+					/> */}
+					<DatePicker
+						name='dfa'
+						placeholder='Search for people, pages, groups and #hashtags'
+						suffix={<Icon name='search' />}
 					/>
 
 					<div className='flex gap-0 lg:gap-3'>

@@ -1,44 +1,44 @@
+import { OpeningHours } from '@/types/business.types';
+import { DateTimeframes } from '@/types/general.types';
 import {
-	Ground,
-	OpeningHours,
-	PricePeriodDuration,
-	BusyHours,
-	ItemCategory,
-} from '@/types/business.interface';
-import { User } from '@/types/user.interface';
+	Subscription,
+	SubscriptionPeriodDuration,
+} from '@/types/item/club.types';
+import { Ground } from '@/types/item/ground.types';
+import { User } from '@/types/user.types';
 
 const openingHours: OpeningHours = {
 	monday: {
-		from: '08:00',
-		to: '22:00',
+		from: { hours: 8, minutes: 0 },
+		to: { hours: 22, minutes: 0 },
 	},
 	tuesday: {
-		from: '08:00',
-		to: '22:00',
+		from: { hours: 8, minutes: 0 },
+		to: { hours: 22, minutes: 0 },
 	},
 	wednesday: {
-		from: '08:00',
-		to: '22:00',
+		from: { hours: 8, minutes: 0 },
+		to: { hours: 22, minutes: 0 },
 	},
 	thursday: {
-		from: '08:00',
-		to: '22:00',
+		from: { hours: 8, minutes: 0 },
+		to: { hours: 22, minutes: 0 },
 	},
 	friday: {
-		from: '08:00',
-		to: '22:00',
+		from: { hours: 8, minutes: 0 },
+		to: { hours: 22, minutes: 0 },
 	},
 	saturday: {
-		from: '08:00',
-		to: '22:00',
+		from: { hours: 8, minutes: 0 },
+		to: { hours: 22, minutes: 0 },
 	},
 	sunday: {
-		from: '08:00',
-		to: '22:00',
+		from: { hours: 8, minutes: 0 },
+		to: { hours: 22, minutes: 0 },
 	},
 };
 
-const subscriptions = [
+const subscriptions: Subscription[] = [
 	{
 		name: 'Basic',
 		description: 'Basic subscription',
@@ -53,7 +53,7 @@ const subscriptions = [
 			'96 MB Max upload size',
 		],
 		price: 1000,
-		period: { duration: PricePeriodDuration.MONTH, amount: 1 },
+		period: { duration: SubscriptionPeriodDuration.MONTH, amount: 1 },
 		discount: 0,
 		isDefault: true,
 	},
@@ -71,7 +71,7 @@ const subscriptions = [
 			'96 MB Max upload size',
 		],
 		price: 1000,
-		period: { duration: PricePeriodDuration.MONTH, amount: 1 },
+		period: { duration: SubscriptionPeriodDuration.MONTH, amount: 1 },
 		discount: 0,
 		isDefault: false,
 	},
@@ -85,7 +85,7 @@ const subscriptions = [
 			'Personal trainer',
 		],
 		price: 2000,
-		period: { duration: PricePeriodDuration.MONTH, amount: 1 },
+		period: { duration: SubscriptionPeriodDuration.MONTH, amount: 1 },
 		discount: 20,
 		isDefault: false,
 	},
@@ -99,7 +99,7 @@ const subscriptions = [
 			'Personal trainer',
 		],
 		price: 2000,
-		period: { duration: PricePeriodDuration.MONTH, amount: 1 },
+		period: { duration: SubscriptionPeriodDuration.MONTH, amount: 1 },
 		discount: 20,
 		isDefault: false,
 	},
@@ -113,7 +113,7 @@ const subscriptions = [
 			'Personal trainer',
 		],
 		price: 2000,
-		period: { duration: PricePeriodDuration.MONTH, amount: 1 },
+		period: { duration: SubscriptionPeriodDuration.MONTH, amount: 1 },
 		discount: 20,
 		isDefault: false,
 	},
@@ -127,7 +127,7 @@ const subscriptions = [
 			'Personal trainer',
 		],
 		price: 2000,
-		period: { duration: PricePeriodDuration.MONTH, amount: 1 },
+		period: { duration: SubscriptionPeriodDuration.MONTH, amount: 1 },
 		discount: 20,
 		isDefault: false,
 	},
@@ -154,29 +154,19 @@ const reviews = [
 	},
 ];
 
-const busyHours: BusyHours[] = [
+const busyHours: DateTimeframes[] = [
 	{
 		date: new Date(2024, 7, 12),
 		hours: [
-			'08:00 - 08:30',
-			'08:30 - 09:00',
-			'09:00 - 09:30',
-			'09:30 - 10:00',
-			'14:30 - 15:00',
-			'15:00 - 15:30',
-			'15:30 - 16:00',
-			'16:00 - 16:30',
-			'19:00 - 19:30',
-			'19:30 - 20:00',
-			'20:00 - 20:30',
-			'20:30 - 21:00',
+			{ from: { hours: 8, minutes: 0 }, to: { hours: 10, minutes: 0 } },
+			{ from: { hours: 16, minutes: 0 }, to: { hours: 18, minutes: 0 } },
 		],
 	},
 ];
 
 export const GROUNDS: Ground[] = [
 	{
-		id: '1',
+		_id: '1',
 		name: 'JK Sports 2 mars',
 		description:
 			'Kayn douch blma skhoun o chrajm o lmosi9a o dyask dyal lc waikiki',
@@ -213,7 +203,7 @@ export const GROUNDS: Ground[] = [
 		deletedBy: null,
 	},
 	{
-		id: '2',
+		_id: '2',
 		name: 'JK Sports Bélvedère',
 		description:
 			"L'makn lmla7 o titiz 24h/24 7j/7 o makaynch bouzbal mrhba akhi",
@@ -250,7 +240,7 @@ export const GROUNDS: Ground[] = [
 		deletedBy: null,
 	},
 	{
-		id: '3',
+		_id: '3',
 		name: 'JK Sports Beauséjour',
 		description:
 			'Kitrini 3ndna Habbat o Souhail o Sabiri o Chro9at o Lwa7cha o Mo3tamid',
@@ -287,7 +277,7 @@ export const GROUNDS: Ground[] = [
 		deletedBy: null,
 	},
 	{
-		id: '4',
+		_id: '4',
 		name: 'JK Sports 2 mars',
 		description: 'Kayn douch blma skhoun o chrajm o lmosi9a dyal lc waikiki',
 		address: {
@@ -323,7 +313,7 @@ export const GROUNDS: Ground[] = [
 		deletedBy: null,
 	},
 	{
-		id: '5',
+		_id: '5',
 		name: 'JK Sports Bélvedère',
 		description:
 			"L'makn lmla7 o titiz 24h/24 7j/7 o makaynch bouzbal mrhba akhi",
@@ -360,7 +350,7 @@ export const GROUNDS: Ground[] = [
 		deletedBy: null,
 	},
 	{
-		id: '6',
+		_id: '6',
 		name: 'JK Sports Beauséjour',
 		description:
 			'Kitrini 3ndna Habbat o Souhail o Sabiri o Chro9at o Lwa7cha o Mo3tamid',

@@ -1,6 +1,6 @@
 import Pricing from '@/components/shared/Pricing';
 import Card from '@/components/utils/Card';
-import { Subscription } from '@/types/business.interface';
+import { Subscription } from '@/types/business.types';
 
 interface Props {
 	subscriptions: Subscription[];

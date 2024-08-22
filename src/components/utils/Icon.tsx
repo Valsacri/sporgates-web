@@ -1,4 +1,4 @@
-import { CocoIcon, CocoIcons } from '@/config/coco-icons';
+import { CocoIcon, CocoIcons } from '@/client/config/coco-icons';
 import { twMerge } from 'tailwind-merge';
 
 interface Props {
