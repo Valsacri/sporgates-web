@@ -9,5 +9,5 @@ export const usePopup = (init = false) => {
     setOpen((open) => !open)
   }
 
-  return [open, handleToggle] as const
+  return [open, handleToggle, setOpen] as const
 }

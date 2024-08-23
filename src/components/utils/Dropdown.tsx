@@ -45,17 +45,19 @@ export const Dropdown = ({
 
 	return (
 		<div ref={ref} className={twMerge('relative', containerClassName)}>
-			<div
-				onClick={() => setOpen(!open)}
-				className={twMerge('cursor-pointer', triggerClassName)}
-			>
-				{trigger}
-			</div>
+			{trigger && (
+				<div
+					onClick={() => setOpen(!open)}
+					className={twMerge('cursor-pointer', triggerClassName)}
+				>
+					{trigger}
+				</div>
+			)}
 
 			{open && (
 				<Card
 					className={twMerge(
-						'p-0 z-10 min-w-max text-medium text-left mt-1 m-0 bg-clip-padding border-none absolute',
+						'absolute p-0 z-10 min-w-max text-medium text-left mt-1 m-0 bg-clip-padding border-none',
 						position === 'left' ? 'left-0' : 'right-0',
 						className
 					)}

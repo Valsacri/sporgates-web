@@ -1,7 +1,8 @@
-import React, { createContext, useMemo, useState } from 'react';
+'use client';
+
+import { useEffect, useMemo, useState } from 'react';
 import useBreakpoint from '@/client/hooks/utils/useBreakpoint';
 import GroundReservationMobile from './GroundReservationMobile';
-import GroundReservationDesktop from './GroundReservationDesktop';
 import {
 	compareTimeFrames,
 	generateTimeFrames,
@@ -11,6 +12,7 @@ import {
 import { Ground } from '@/types/item/ground.types';
 import { Timeframe } from '@/types/general.types';
 import { GroundReservationContext } from '@/client/contexts/ground-reservation.context';
+import GroundReservationDesktop from './GroundReservationDesktop';
 
 interface Props {
 	ground: Ground;
@@ -24,6 +26,14 @@ function GroundReservation({ ground }: Props) {
 
 	const [openDatePicker, setOpenDatePicker] = useState(false);
 	const [openTimesPicker, setOpenTimesPicker] = useState(false);
+
+	const [isDesktop, setIsDesktop] = useState(false);
+
+	useEffect(() => {
+		if (windowWidth >= breakpointsSize.lg) {
+			setIsDesktop(true);
+		}
+	}, [windowWidth]);
 
 	const handleDateChange = (date: Date) => {
 		setSelectedDate(date);
@@ -127,11 +137,7 @@ function GroundReservation({ ground }: Props) {
 					times,
 				}}
 			>
-				{windowWidth < breakpointsSize.lg ? (
-					<GroundReservationMobile />
-				) : (
-					<GroundReservationDesktop />
-				)}
+				{isDesktop ? <GroundReservationDesktop /> : <GroundReservationMobile />}
 			</GroundReservationContext.Provider>
 		</div>
 	);

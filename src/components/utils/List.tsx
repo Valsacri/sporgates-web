@@ -6,15 +6,16 @@ export interface ListItem {
 	item: React.ReactNode;
 	prefix?: React.ReactNode;
 	suffix?: React.ReactNode;
+	className?: string;
 	onClick?: () => any;
 }
 
 interface Props {
 	items: (ListItem | null)[];
-	itemContainerClassName?: string;
+	className?: string;
 }
 
-function List({ items, itemContainerClassName }: Props) {
+function List({ items, className }: Props) {
 	const handleClick = (
 		e: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
 		onClick?: () => any
@@ -23,31 +24,35 @@ function List({ items, itemContainerClassName }: Props) {
 		onClick?.();
 	};
 
-	return items.map((item, i) => (
-		<div
-			key={i}
-			className={twMerge(
-				'py-3 px-6',
-				item && 'hover:bg-secondary cursor-pointer',
-				i === 0 && 'rounded-t-xl',
-				i === items.length - 1 && 'rounded-b-xl',
-				itemContainerClassName
-			)}
-			onClick={(e) => handleClick(e, item?.onClick)}
-		>
-			{item?.item ? (
-				<div className='flex items-center justify-between'>
-					<div className='flex items-center gap-3'>
-						{item.prefix}
-						{item.item}
-					</div>
-					{item.suffix}
+	return (
+		<div className={twMerge(className)}>
+			{items.map((item, i) => (
+				<div
+					key={i}
+					className={twMerge(
+						'py-3 px-6',
+						item && 'hover:bg-secondary cursor-pointer',
+						i === 0 && 'rounded-t-xl',
+						i === items.length - 1 && 'rounded-b-xl',
+						item?.className
+					)}
+					onClick={(e) => handleClick(e, item?.onClick)}
+				>
+					{item?.item ? (
+						<div className='flex items-center justify-between'>
+							<div className='flex items-center gap-3'>
+								{item.prefix}
+								{item.item}
+							</div>
+							{item.suffix}
+						</div>
+					) : (
+						<hr />
+					)}
 				</div>
-			) : (
-				<hr />
-			)}
+			))}
 		</div>
-	));
+	);
 }
 
 export default List;

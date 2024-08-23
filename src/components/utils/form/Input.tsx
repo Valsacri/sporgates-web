@@ -120,7 +120,6 @@ export const Input = React.forwardRef<
 							className={twMerge(
 								'w-full rounded-md outline-none placeholder-text-secondary bg-transparent',
 								inputClassName,
-								errorClassName
 							)}
 							rows={rows}
 						/>

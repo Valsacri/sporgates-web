@@ -84,7 +84,7 @@ export const Table = <T,>({
 		>
 			<table className='w-full'>
 				<thead
-					className={twMerge('top-0 sticky z-40', headersClassName)}
+					className={twMerge('top-0 sticky', headersClassName)}
 					style={{ boxShadow: '0px -1px 0px 0px black inset' }}
 				>
 					<tr className=''>

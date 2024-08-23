@@ -1,4 +1,4 @@
-import { Timeframe } from "@/types/general.types";
+import { Timeframe } from '@/types/general.types';
 
 export const generateTimeFrames = (
 	startHour: number,
@@ -30,12 +30,10 @@ export const generateTimeFrames = (
 	return timeFrames;
 };
 
-
 export const timeFrameToMinutes = (timeFrame: Timeframe): number => {
 	const { from, to } = timeFrame;
 
-	let duration =
-		to.hours * 60 + to.minutes - (from.hours * 60 + from.minutes);
+	let duration = to.hours * 60 + to.minutes - (from.hours * 60 + from.minutes);
 
 	if (duration < 0) {
 		duration += 24 * 60; // handle overflow to the next day
@@ -44,7 +42,10 @@ export const timeFrameToMinutes = (timeFrame: Timeframe): number => {
 	return duration;
 };
 
-export const compareTimeFrames = (timeFrame1: Timeframe, timeFrame2: Timeframe): boolean => {
+export const compareTimeFrames = (
+	timeFrame1: Timeframe,
+	timeFrame2: Timeframe
+): boolean => {
 	return (
 		timeFrame1.from.hours === timeFrame2.from.hours &&
 		timeFrame1.from.minutes === timeFrame2.from.minutes &&
@@ -53,11 +54,22 @@ export const compareTimeFrames = (timeFrame1: Timeframe, timeFrame2: Timeframe):
 	);
 };
 
-
-
 export const minutesToDuration = (minutes: number) => {
 	const hours = Math.floor(minutes / 60);
 	const remainingMinutes = minutes % 60;
 
 	return { hours, minutes: remainingMinutes };
+};
+
+export const formatDate = (date: Date) => {
+	return date.toLocaleDateString('fr-FR');
+};
+
+export const parseDate = (date?: string) => {
+	if (!date) {
+		return new Date();
+	}
+
+	const [day, month, year] = date.split('/');
+	return new Date(Number(year), Number(month) - 1, Number(day));
 };

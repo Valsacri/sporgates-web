@@ -1,7 +1,18 @@
-import React, { useState, useRef } from 'react';
+'use client';
+
+import { OpeningHours } from '@/types/business.types';
+import React, { useState, useRef, useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const days = [
+	{ id: 'monday', display: 'Mon' },
+	{ id: 'tuesday', display: 'Tue' },
+	{ id: 'wednesday', display: 'Wed' },
+	{ id: 'thursday', display: 'Thu' },
+	{ id: 'friday', display: 'Fri' },
+	{ id: 'saturday', display: 'Sat' },
+	{ id: 'sunday', display: 'Sun' },
+];
 const hours = Array.from({ length: 24 }, (_, i) => i);
 
 type Cell = {
@@ -11,7 +22,25 @@ type Cell = {
 	highlighted: boolean;
 };
 
-const OpeningHoursSelector: React.FC = () => {
+type OpeningHoursPickerProps = {
+	value?: OpeningHours;
+	onChange?: (openingHours: OpeningHours) => void;
+	readOnly?: boolean;
+};
+
+const OpeningHoursPicker: React.FC<OpeningHoursPickerProps> = ({
+	value = {
+		monday: [],
+		tuesday: [],
+		wednesday: [],
+		thursday: [],
+		friday: [],
+		saturday: [],
+		sunday: [],
+	},
+	onChange,
+	readOnly = false,
+}) => {
 	const [grid, setGrid] = useState<Cell[][]>(
 		Array.from({ length: 24 }, (_, hour) =>
 			Array.from({ length: 7 }, (_, day) => ({
@@ -24,49 +53,68 @@ const OpeningHoursSelector: React.FC = () => {
 	);
 	const [dragging, setDragging] = useState(false);
 	const [startCell, setStartCell] = useState<Cell | null>(null);
+	const [highlightColor, setHighlightColor] = useState('bg-success-dark');
 	const touchMoveRef = useRef<HTMLDivElement>(null);
 
+	useEffect(() => {
+		const newGrid = Array.from({ length: 24 }, (_, hour) =>
+			Array.from({ length: 7 }, (_, day) => ({
+				day,
+				hour,
+				selected: value[days[day].id.toLowerCase() as keyof OpeningHours].some(
+					(timeframe) =>
+						timeframe.from.hours <= hour && timeframe.to.hours > hour
+				),
+				highlighted: false,
+			}))
+		);
+
+		// Check if the grid needs to be updated
+		const gridNeedsUpdate = grid.some((row, hourIndex) =>
+			row.some(
+				(cell, dayIndex) =>
+					cell.selected !== newGrid[hourIndex][dayIndex].selected
+			)
+		);
+
+		if (gridNeedsUpdate) {
+			setGrid(newGrid);
+		}
+	}, [value]);
+
 	const handleStart = (day: number, hour: number) => {
-		setStartCell({
-			day,
-			hour,
-			selected: grid[hour][day].selected,
-			highlighted: false,
-		});
+		if (readOnly) return;
+
+		const cell = grid[hour][day];
+		setStartCell(cell);
+		setHighlightColor(cell.selected ? 'bg-gray-100' : 'bg-success');
 		setDragging(true);
 	};
 
 	const handleEnd = () => {
+		if (readOnly) return;
+
 		setDragging(false);
 		if (startCell) {
-			// Apply selection to all highlighted cells
-			setGrid((prevGrid) =>
-				prevGrid.map((row) =>
-					row.map((cell) =>
-						cell.highlighted
-							? { ...cell, selected: !startCell.selected, highlighted: false }
-							: cell
-					)
+			const updatedGrid = grid.map((row) =>
+				row.map((cell) =>
+					cell.highlighted
+						? { ...cell, selected: !startCell.selected, highlighted: false }
+						: cell
 				)
 			);
+			setGrid(updatedGrid);
+			handleOnChange(updatedGrid);
 		}
 		setStartCell(null);
 	};
 
 	const handleMove = (day: number, hour: number) => {
+		if (readOnly) return;
+
 		if (dragging && startCell) {
 			updateRectangle(startCell, { day, hour });
 		}
-	};
-
-	const toggleCell = (day: number, hour: number) => {
-		setGrid((prevGrid) =>
-			prevGrid.map((row, h) =>
-				row.map((cell, d) =>
-					h === hour && d === day ? { ...cell, selected: !cell.selected } : cell
-				)
-			)
-		);
 	};
 
 	const updateRectangle = (
@@ -90,8 +138,46 @@ const OpeningHoursSelector: React.FC = () => {
 		);
 	};
 
+	const handleOnChange = (updatedGrid: Cell[][]) => {
+		const newOpeningHours: OpeningHours = {
+			monday: [],
+			tuesday: [],
+			wednesday: [],
+			thursday: [],
+			friday: [],
+			saturday: [],
+			sunday: [],
+		};
+
+		updatedGrid.forEach((row, hour) => {
+			row.forEach((cell, day) => {
+				if (cell.selected) {
+					const dayName = days[day].id.toLowerCase() as keyof OpeningHours;
+					const lastTimeframe =
+						newOpeningHours[dayName][newOpeningHours[dayName].length - 1];
+
+					if (
+						lastTimeframe &&
+						lastTimeframe.to.hours === hour &&
+						lastTimeframe.to.minutes === 0
+					) {
+						lastTimeframe.to.hours = hour + 1;
+					} else {
+						newOpeningHours[dayName].push({
+							from: { hours: hour, minutes: 0 },
+							to: { hours: hour + 1, minutes: 0 },
+						});
+					}
+				}
+			});
+		});
+
+		onChange?.(newOpeningHours);
+	};
+
 	const handleTouchMove = (e: React.TouchEvent) => {
-		// Prevent default touch action to avoid scrolling
+		if (readOnly) return;
+
 		e.preventDefault();
 
 		const touch = e.touches[0];
@@ -122,7 +208,7 @@ const OpeningHoursSelector: React.FC = () => {
 								key={index}
 								className='p-2 border border-white w-12 text-center font-normal'
 							>
-								{day}
+								{day.display}
 							</th>
 						))}
 					</tr>
@@ -137,22 +223,15 @@ const OpeningHoursSelector: React.FC = () => {
 									className={twMerge(
 										'p-2 border-2 border-white text-center cursor-pointer',
 										cell.selected ? 'bg-success' : 'bg-gray-100',
-										cell.highlighted ? 'bg-success-dark' : '',
-										dragging ? 'cursor-crosshair' : 'cursor-pointer'
+										cell.highlighted ? highlightColor : '',
+										dragging && 'cursor-crosshair',
+										readOnly && 'cursor-default'
 									)}
 									onMouseDown={() => {
 										handleStart(cell.day, cell.hour);
-										toggleCell(cell.day, cell.hour);
 									}}
 									onMouseUp={handleEnd}
 									onMouseEnter={() => handleMove(cell.day, cell.hour)}
-									// onTouchStart={(e) => {
-									// 	e.preventDefault(); // Prevent default to avoid accidental scrolling
-									// 	handleStart(cell.day, cell.hour);
-									// 	toggleCell(cell.day, cell.hour);
-									// }}
-									onClick={() => toggleCell(cell.day, cell.hour)}
-									// onTouchEnd={handleEnd}
 									data-day={cell.day}
 									data-hour={cell.hour}
 								></td>
@@ -165,4 +244,4 @@ const OpeningHoursSelector: React.FC = () => {
 	);
 };
 
-export default OpeningHoursSelector;
+export default OpeningHoursPicker;

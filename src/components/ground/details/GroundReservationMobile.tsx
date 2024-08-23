@@ -8,7 +8,7 @@ import { useContext } from 'react';
 
 function GroundReservationMobile() {
 	const { ground, selectedTimes } = useContext(GroundReservationContext);
-
+	
 	return (
 		<Card className='sticky bottom-0 left-0 w-full h-max z-50 border-t rounded-t-none'>
 			<ReservationPickerMobile />

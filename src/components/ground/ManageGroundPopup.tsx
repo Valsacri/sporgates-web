@@ -1,26 +1,36 @@
 'use client';
 
 import { Popup } from '@/components/utils/Popup';
-import { Input } from '@/components/utils/form/Input';
 import Button from '@/components/utils/Button';
 import { usePopup } from '@/client/hooks/utils/usePopup';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { GroundDto, GroundDtoType } from '@/dtos/item/ground.dto';
-import { Select } from '../utils/form/Select';
+import ManageSubscriptionPopup from './ManageSubscriptionPopup';
+import { useImages } from '@/client/hooks/utils/useImages';
+import { Input } from '../utils/form/Input';
+import { HiOutlinePlusCircle } from 'react-icons/hi2';
+import { Table } from '../utils/table/Table';
 import MapboxMap from '../utils/Map';
 import { ImagePicker } from '../utils/form/ImagePicker';
-import { useImages } from '@/client/hooks/utils/useImages';
-import ManageSubscriptionPopup from './ManageSubscriptionPopup';
-import { HiOutlinePlusCircle } from 'react-icons/hi';
-import { Table } from '../utils/table/Table';
-import { count } from 'console';
+import OpeningHoursPicker from '../shared/OpeningHoursPicker';
+import { useEffect } from 'react';
+import { OpeningHours } from '@/types/business.types';
+import Select from '../utils/form/Select';
+import {
+	getDownloadURL,
+	ref as storageRef,
+	uploadBytes,
+	getStorage,
+	deleteObject,
+} from 'firebase/storage';
 
 interface Props {
 	children: React.ReactNode;
+	ground?: GroundDtoType;
 }
 
-function ManageGroundPopup({ children }: Props) {
+function ManageGroundPopup({ children, ground }: Props) {
 	const [isOpen, toggleOpen] = usePopup();
 	const [openSubscriptionPopup, toggleSubscriptionPopup] = usePopup();
 
@@ -28,21 +38,23 @@ function ManageGroundPopup({ children }: Props) {
 		handleSubmit,
 		register,
 		reset,
+		watch,
+		setValue,
 		formState: { errors },
 	} = useForm({
 		resolver: zodResolver(GroundDto),
-		defaultValues: {
+		defaultValues: ground || {
 			name: '',
 			description: '',
 			images: [],
 			openingHours: {
-				monday: { start: '', end: '' },
-				tuesday: { start: '', end: '' },
-				wednesday: { start: '', end: '' },
-				thursday: { start: '', end: '' },
-				friday: { start: '', end: '' },
-				saturday: { start: '', end: '' },
-				sunday: { start: '', end: '' },
+				monday: [],
+				tuesday: [],
+				wednesday: [],
+				thursday: [],
+				friday: [],
+				saturday: [],
+				sunday: [],
 			},
 			address: {
 				country: '',
@@ -63,39 +75,57 @@ function ManageGroundPopup({ children }: Props) {
 		},
 	});
 
-	const onSubmit = (data: any) => {
-		console.log(data);
+	const onSubmit = async (data: GroundDtoType) => {
+		const [uploadedImagesUrls] = await Promise.all([
+			handleUploadImages(),
+			handleDeleteImages(),
+		]);
+
+		if (ground) {
+			console.log('Editing ground:', data);
+		} else {
+			console.log('Creating ground:', data);
+		}
 		reset();
 		toggleOpen();
 	};
 
 	const handleUploadImage = async (image: File) => {
-		return 'https://via.placeholder.com/150';
+		try {
+			const ref = storageRef(getStorage(), `/images/grounds/${image.name}`);
+			await uploadBytes(ref, image);
+			const url = await getDownloadURL(ref);
+			return url;
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	const handleDeleteImage = async (imageUrl: string) => {
-		console.log('delete image', imageUrl);
+		try {
+			const ref = storageRef(getStorage(), imageUrl);
+			await deleteObject(ref);
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	const {
 		imagesUrls,
-		unremovedImagesUrls,
 		handleAddImages,
 		handleRemoveImage,
 		handleUploadImages,
 		handleDeleteImages,
 	} = useImages(
 		// selectedItem?.image ? [selectedItem?.image] : [],
-		[
-			'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-			'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-			'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-			'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-			'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		],
+		ground?.images || [],
 		handleUploadImage,
 		handleDeleteImage
 	);
+
+	useEffect(() => {
+		setValue('images', imagesUrls);
+	}, [imagesUrls]);
 
 	const neighborhoods = [
 		{ value: 'maarif', label: 'Maarif' },
@@ -103,14 +133,16 @@ function ManageGroundPopup({ children }: Props) {
 		{ value: 'california', label: 'California' },
 	];
 
-	const pricePeriods = [
-		{ value: 'oneTime', label: 'One time' },
-		{ value: 'hour', label: 'Hour' },
-		{ value: 'day', label: 'Day' },
-		{ value: 'week', label: 'Week' },
-		{ value: 'month', label: 'Month' },
-		{ value: 'year', label: 'Year' },
-	];
+	const openingHours = watch('openingHours');
+
+	const handleOpeningHoursChange = (openingHours: OpeningHours) => {
+		setValue('openingHours', openingHours);
+	};
+
+	const handleCoordinatesChange = (lat: number, lng: number) => {
+		alert(`Lat: ${lat}, Lng: ${lng}`);
+		setValue('address.geoLocation', { lat, lng });
+	};
 
 	return (
 		<>
@@ -118,8 +150,12 @@ function ManageGroundPopup({ children }: Props) {
 
 			<Popup
 				open={isOpen}
-				title='Create a ground'
-				description='Fill in the details to add a new ground.'
+				title={ground ? 'Edit Ground' : 'Create a Ground'}
+				description={
+					ground
+						? 'Edit the details of the ground.'
+						: 'Fill in the details to add a new ground.'
+				}
 				onClose={toggleOpen}
 				className='w-full lg:w-1/2'
 			>
@@ -130,13 +166,11 @@ function ManageGroundPopup({ children }: Props) {
 							<Input
 								label='Name'
 								{...register('name')}
-								placeholder='Name'
 								error={errors.name?.message}
 							/>
 							<Input
 								label='Description'
 								{...register('description')}
-								placeholder='Description'
 								rows={5}
 								error={errors.description?.message}
 							/>
@@ -148,7 +182,7 @@ function ManageGroundPopup({ children }: Props) {
 						<div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
 							<Input
 								{...register('minReservationTime')}
-								label='Minimum reservation time (minutes)'
+								label='Minimum reservation time (min)'
 								type='number'
 								error={errors.minReservationTime?.message}
 							/>
@@ -209,22 +243,31 @@ function ManageGroundPopup({ children }: Props) {
 						<div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
 							<Select
 								{...register('address.city')}
+								value={watch('address.city')}
+								onChange={(city) => setValue('address.city', city)}
 								options={neighborhoods}
-								placeholder='City'
+								label='City'
+								placeholder='Select a city'
 								error={errors.address?.city?.message}
 							/>
 							<Select
 								{...register('address.neighborhood')}
+								value={watch('address.neighborhood')}
+								onChange={(neighborhood) =>
+									setValue('address.neighborhood', neighborhood)
+								}
 								options={neighborhoods}
-								placeholder='Neighborhood'
+								label='Neighborhood'
+								placeholder='Select a neighborhood'
 								error={errors.address?.neighborhood?.message}
 							/>
 
-							<div className='col-span-2'>
+							<div className='col-span-2 space-y-1'>
+								<label className='text-sm'>Location</label>
 								<MapboxMap
 									lat={33.5731}
 									lng={-7.5898}
-									onCoordinatesChange={console.log}
+									onCoordinatesChange={handleCoordinatesChange}
 								/>
 							</div>
 						</div>
@@ -240,10 +283,21 @@ function ManageGroundPopup({ children }: Props) {
 						/>
 					</div>
 
+					<div className='space-y-3'>
+						<h3 className='text-lg font-medium text-gray-900'>Opening hours</h3>
+						<OpeningHoursPicker
+							value={openingHours}
+							onChange={handleOpeningHoursChange}
+						/>
+					</div>
+
 					<div className='flex justify-end gap-3'>
-						<Button color='secondary'>Close</Button>
-						<Button color='primary' type='submit'>
-							Create
+						<Button color='secondary' onClick={toggleOpen}>
+							Close
+						</Button>
+						{/* <Button color='primary' type='submit'> */}
+						<Button color='primary' onClick={onSubmit as any}>
+							{ground ? 'Save Changes' : 'Create'}
 						</Button>
 					</div>
 				</form>

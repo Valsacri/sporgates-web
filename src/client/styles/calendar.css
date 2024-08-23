@@ -23,3 +23,9 @@
   text-decoration: none !important;
   /* color: #2C4A72 !important; */
 }
+.react-calendar__navigation__arrow, .react-calendar__navigation__label {
+  border-radius: 5px !important;
+}
+.react-calendar__navigation {
+  gap: 5px !important;
+}

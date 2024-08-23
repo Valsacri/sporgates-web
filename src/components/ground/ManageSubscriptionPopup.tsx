@@ -3,7 +3,6 @@
 import { useForm } from 'react-hook-form';
 import { Popup } from '../utils/Popup';
 import { Input } from '../utils/form/Input';
-import { Select } from '../utils/form/Select';
 import Button from '../utils/Button';
 import { HiOutlinePlusCircle } from 'react-icons/hi';
 import ManageSubscriptionFeaturePopup from './ManageSubscriptionFeaturePopup';
@@ -12,6 +11,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SubscriptionDto } from '@/dtos/item/club.dto';
 import { SubscriptionPeriodDuration } from '@/types/item/club.types';
 import { usePopup } from '@/client/hooks/utils/usePopup';
+import { DatePicker } from '../utils/form/DatePicker';
+import Select from '../utils/form/Select';
 
 interface Props {
 	open: boolean;
@@ -23,6 +24,8 @@ function ManageSubscriptionPopup({ open, onClose }: Props) {
 
 	const {
 		handleSubmit,
+		setValue,
+		watch,
 		register,
 		reset,
 		formState: { errors },
@@ -59,6 +62,11 @@ function ManageSubscriptionPopup({ open, onClose }: Props) {
 		{ value: 'month', label: 'Month' },
 		{ value: 'year', label: 'Year' },
 	];
+
+	const discountEndDate = watch('discount.endDate');
+
+	const hangleDatePickerChange = (date: string) =>
+		setValue('discount.endDate', date);
 
 	return (
 		<Popup
@@ -97,6 +105,8 @@ function ManageSubscriptionPopup({ open, onClose }: Props) {
 						/>
 						<Select
 							{...register('period.duration')}
+							value={watch('period.duration')}
+							onChange={(value) => setValue('period.duration', value as SubscriptionPeriodDuration)}
 							options={priceDurations}
 							label='Duration'
 							error={errors.period?.duration?.message}
@@ -115,13 +125,16 @@ function ManageSubscriptionPopup({ open, onClose }: Props) {
 					<div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
 						<Input
 							{...register('discount.amount')}
-							label='Discount %'
+							label='Amount %'
 							type='number'
 							error={errors.discount?.amount?.message}
 						/>
-						<Input
+						<DatePicker
 							{...register('discount.endDate')}
 							label='End date'
+							placeholder='Select a date'
+							onChange={hangleDatePickerChange}
+							value={discountEndDate}
 							error={errors.discount?.endDate?.message}
 						/>
 					</div>

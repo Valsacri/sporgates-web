@@ -41,16 +41,11 @@ function Navbar() {
 						<Button icon='menu' color='secondary'></Button>
 					</div>
 
-					{/* <Input
+					<Input
 						name='dfa'
 						placeholder='Search for people, pages, groups and #hashtags'
 						suffix={<Icon name='search' />}
 						className='hidden lg:block py-3 w-96'
-					/> */}
-					<DatePicker
-						name='dfa'
-						placeholder='Search for people, pages, groups and #hashtags'
-						suffix={<Icon name='search' />}
 					/>
 
 					<div className='flex gap-0 lg:gap-3'>

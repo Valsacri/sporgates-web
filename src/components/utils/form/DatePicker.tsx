@@ -1,11 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { useId } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Dropdown from '../Dropdown';
 import { usePopup } from '@/client/hooks/utils/usePopup';
 import Calendar from 'react-calendar';
+import Card from '../Card';
+import { formatDate, parseDate } from '@/helpers/datetime.helpers';
+import { HiOutlineCalendar } from 'react-icons/hi2';
 
 export type DatePickerType =
 	| 'checkbox'
@@ -37,9 +40,9 @@ interface Props {
 	labelClassName?: string;
 
 	name?: string;
-	onChange?: any;
+	onChange?: (date: string) => void;
 	onBlur?: any;
-	value?: string | number;
+	value?: string;
 
 	label?: string;
 	type?: DatePickerType;
@@ -50,11 +53,9 @@ interface Props {
 	suffixPos?: any;
 	required?: boolean;
 	disabled?: boolean;
-	onClickEnter?: any;
-	onClick?: any;
 }
 
-export const DatePicker = React.forwardRef<
+export const DatePicker = forwardRef<
 	HTMLInputElement | HTMLTextAreaElement,
 	Props
 >(
@@ -74,77 +75,67 @@ export const DatePicker = React.forwardRef<
 			label,
 			suffix,
 			disabled = false,
-			onClickEnter,
-			onClick,
 		}: Props,
 		ref
 	) => {
 		const id = useId();
 
-		const [openDatePicker, toggleDatePicker] = usePopup();
-		const [selectedDate, setSelectedDate] = useState(new Date());
+		const [openDatePicker, , setOpenDatePicker] = usePopup();
 
 		const errorClassName = error && 'text-danger';
 
-		const handleKeyDown = (e: any) => {
-			if (e.key === 'Enter' && !e.shiftKey) {
-				e.preventDefault();
-				onClickEnter?.();
-			}
+		const handleChange = (date: Date) => {
+			const formattedDate = formatDate(date);
+			onChange?.(formattedDate);
+			setOpenDatePicker(false);
 		};
 
 		return (
 			<div className={twMerge('w-full', className)}>
-				{label && (
-					<label htmlFor={id} className={twMerge('text-sm', labelClassName)}>
-						{label}
-					</label>
-				)}
+				<label htmlFor={id} className={twMerge('text-sm', labelClassName)}>
+					{label}
+				</label>
 
-				<div
-					className={twMerge(
-						'flex items-center bg-secondary w-full h-[40px] rounded-md text-xs font-light px-3',
-						label && 'mt-1',
-						containerClassName
-					)}
-				>
-					<Dropdown
-						open={openDatePicker}
-						setOpen={toggleDatePicker}
-						containerClassName='w-1/2'
-						className='shadow-none'
-						closeOnClick
-						trigger={
+				<Dropdown
+					open={openDatePicker}
+					setOpen={setOpenDatePicker}
+					className={twMerge('shadow-none', label && 'mt-1')}
+					trigger={
+						<div
+							className={twMerge(
+								'flex items-center gap-3 bg-secondary w-full h-[40px] rounded-md text-xs font-light px-3',
+								label && 'mt-1',
+								containerClassName
+							)}
+						>
 							<input
 								ref={ref as React.Ref<HTMLInputElement>}
 								name={name}
-								onChange={onChange}
 								onBlur={onBlur}
-								value={value}
 								disabled={disabled}
 								id={id}
 								type={type}
 								placeholder={placeholder}
+								readOnly
 								className={twMerge(
-									'w-full rounded-md outline-none placeholder-text-secondary bg-transparent',
-									inputClassName,
-									errorClassName,
-									onClick && 'cursor-pointer'
+									'w-full rounded-md outline-none placeholder-text-secondary bg-transparent cursor-pointer',
+									inputClassName
 								)}
-								onClick={onClick}
-								onKeyDown={handleKeyDown}
 							/>
-						}
-					>
+
+							{suffix || <HiOutlineCalendar className='size-5' />}
+						</div>
+					}
+				>
+					<Card className='border'>
 						<Calendar
 							minDate={new Date()}
+							value={parseDate(value)}
 							showFixedNumberOfWeeks
-							onChange={(date) => setSelectedDate(date as Date)}
+							onChange={(date) => handleChange(date as Date)}
 						/>
-					</Dropdown>
-
-					{suffix}
-				</div>
+					</Card>
+				</Dropdown>
 
 				{error && (
 					<div className={twMerge('mt-2 text-xs', errorClassName)}>{error}</div>
