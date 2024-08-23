@@ -27,7 +27,7 @@ interface Props {
 	suffixPos?: any;
 }
 
-const Select = forwardRef<HTMLInputElement | HTMLTextAreaElement, Props>(
+export const Select = forwardRef<HTMLInputElement | HTMLTextAreaElement, Props>(
 	(
 		{
 			className,
@@ -115,4 +115,6 @@ const Select = forwardRef<HTMLInputElement | HTMLTextAreaElement, Props>(
 	}
 );
 
-export default Select;
+
+
+Select.displayName = 'Select';

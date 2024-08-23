@@ -16,7 +16,6 @@ import { ImagePicker } from '../utils/form/ImagePicker';
 import OpeningHoursPicker from '../shared/OpeningHoursPicker';
 import { useEffect } from 'react';
 import { OpeningHours } from '@/types/business.types';
-import Select from '../utils/form/Select';
 import {
 	getDownloadURL,
 	ref as storageRef,
@@ -24,6 +23,7 @@ import {
 	getStorage,
 	deleteObject,
 } from 'firebase/storage';
+import { Select } from '../utils/form/Select';
 
 interface Props {
 	children: React.ReactNode;
