@@ -1,9 +1,9 @@
-import PageGrounds from '@/components/ground/PageGrounds';
+import GroundsList from '@/components/ground/GroundsList';
 
 function Page() {
 	return (
 		<>
-			<PageGrounds />
+			<GroundsList />
 		</>
 	);
 }

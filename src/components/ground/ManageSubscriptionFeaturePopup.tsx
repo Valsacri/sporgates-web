@@ -4,15 +4,26 @@ import { useForm } from 'react-hook-form';
 import { Popup } from '../utils/Popup';
 import { Input } from '../utils/form/Input';
 import Button from '../utils/Button';
-import { SubscriptionFeatureDto } from '@/dtos/item/club.dto';
+import {
+	SubscriptionFeatureDto,
+	SubscriptionFeatureDtoType,
+} from '@/dtos/item/club.dto';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect } from 'react';
 
 interface Props {
+	feature?: SubscriptionFeatureDtoType;
 	open: boolean;
 	onClose: () => void;
+	onSubmit: (data: SubscriptionFeatureDtoType) => void;
 }
 
-function ManageSubscriptionFeaturePopup({ open, onClose }: Props) {
+function ManageSubscriptionFeaturePopup({
+	feature,
+	open,
+	onClose,
+	onSubmit,
+}: Props) {
 	const {
 		handleSubmit,
 		register,
@@ -21,15 +32,26 @@ function ManageSubscriptionFeaturePopup({ open, onClose }: Props) {
 	} = useForm({
 		resolver: zodResolver(SubscriptionFeatureDto),
 		defaultValues: {
-			description: '',
-		},
+			description: feature?.description || '',
+		} as SubscriptionFeatureDtoType,
 	});
 
-	const onSubmit = (data: any) => {
-		console.log(data);
-		reset();
+	const onSubmitForm = (data: SubscriptionFeatureDtoType) => {
 		onClose();
+		onSubmit(data);
 	};
+
+	useEffect(() => {
+		if (!open) {
+			reset();
+		}
+	}, [open]);
+
+	useEffect(() => {
+		if (feature) {
+			reset(feature);
+		}
+	}, [feature]);
 
 	return (
 		<Popup
@@ -39,7 +61,7 @@ function ManageSubscriptionFeaturePopup({ open, onClose }: Props) {
 			onClose={onClose}
 			className='w-full lg:w-1/4'
 		>
-			<form onSubmit={handleSubmit(onSubmit)} className='space-y-3'>
+			<form onSubmit={handleSubmit(onSubmitForm)} className='space-y-3'>
 				<div className='space-y-3'>
 					<Input
 						{...register('description')}
@@ -54,7 +76,7 @@ function ManageSubscriptionFeaturePopup({ open, onClose }: Props) {
 						Close
 					</Button>
 					<Button type='submit' color='primary'>
-						Add
+						{feature ? 'Edit' : 'Add'}
 					</Button>
 				</div>
 			</form>

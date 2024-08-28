@@ -14,7 +14,7 @@ import { Table } from '../utils/table/Table';
 import MapboxMap from '../utils/Map';
 import { ImagePicker } from '../utils/form/ImagePicker';
 import OpeningHoursPicker from '../shared/OpeningHoursPicker';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { OpeningHours } from '@/types/business.types';
 import {
 	getDownloadURL,
@@ -23,16 +23,30 @@ import {
 	getStorage,
 	deleteObject,
 } from 'firebase/storage';
+import { GroundClientService } from '@/client/services/ground.client-service';
+import { Ground } from '@/types/item/ground.types';
+import { GeoLocation } from '@/types/general.types';
 import { Select } from '../utils/form/Select';
+import { SubscriptionDtoType } from '@/dtos/item/club.dto';
+import { useRouter } from 'next/navigation';
+import ConfirmationPopup from '../shared/ConfirmationPopup';
+import { deleteFile, uploadFile } from '@/client/helpers/storage.helper';
 
 interface Props {
 	children: React.ReactNode;
-	ground?: GroundDtoType;
+	ground?: Ground;
 }
 
 function ManageGroundPopup({ children, ground }: Props) {
-	const [isOpen, toggleOpen] = usePopup();
+	const [open, toggleOpen] = usePopup();
 	const [openSubscriptionPopup, toggleSubscriptionPopup] = usePopup();
+	const [
+		openSubscriptionRemoveConfirmationPopup,
+		,
+		setOpenSubscriptionRemoveConfirmationPopup,
+	] = usePopup();
+
+	const router = useRouter();
 
 	const {
 		handleSubmit,
@@ -40,10 +54,10 @@ function ManageGroundPopup({ children, ground }: Props) {
 		reset,
 		watch,
 		setValue,
-		formState: { errors },
+		formState: { errors, isSubmitting },
 	} = useForm({
 		resolver: zodResolver(GroundDto),
-		defaultValues: ground || {
+		defaultValues: {
 			name: '',
 			description: '',
 			images: [],
@@ -66,35 +80,59 @@ function ManageGroundPopup({ children, ground }: Props) {
 					lat: 0,
 					lng: 0,
 				},
-				isDefault: false,
+				isHighlighted: false,
 			},
-			minReservationTime: 0,
+			minReservationTime: 60,
 			price: 0,
 			busyHours: [],
 			subscriptions: [],
-		},
+		} as GroundDtoType,
 	});
 
+	const openingHours = watch('openingHours');
+	const subscriptions = watch('subscriptions') || [];
+
+	const [currentSubscriptionIndex, setCurrentSubscriptionIndex] = useState(-1);
+	const currentSubscription = subscriptions[currentSubscriptionIndex];
+
 	const onSubmit = async (data: GroundDtoType) => {
-		const [uploadedImagesUrls] = await Promise.all([
+		const [uploadedImages] = await Promise.all([
 			handleUploadImages(),
 			handleDeleteImages(),
 		]);
 
+		const images = [...uploadedImages, ...unremovedImagesUrls];
+
+		const newGround: GroundDtoType = {
+			...data,
+			images,
+		};
+
 		if (ground) {
-			console.log('Editing ground:', data);
+			await GroundClientService.update(ground.id as string, newGround);
+			router.refresh();
 		} else {
-			console.log('Creating ground:', data);
+			await GroundClientService.create(newGround);
 		}
 		reset();
 		toggleOpen();
 	};
 
+	useEffect(() => {
+		if (!open) {
+			reset();
+		}
+	}, [open]);
+
+	useEffect(() => {
+		if (ground) {
+			reset(ground);
+		}
+	}, [ground]);
+
 	const handleUploadImage = async (image: File) => {
 		try {
-			const ref = storageRef(getStorage(), `/images/grounds/${image.name}`);
-			await uploadBytes(ref, image);
-			const url = await getDownloadURL(ref);
+			const url = await uploadFile('/images/grounds', image);
 			return url;
 		} catch (error) {
 			console.error(error);
@@ -103,8 +141,7 @@ function ManageGroundPopup({ children, ground }: Props) {
 
 	const handleDeleteImage = async (imageUrl: string) => {
 		try {
-			const ref = storageRef(getStorage(), imageUrl);
-			await deleteObject(ref);
+			await deleteFile(imageUrl);
 		} catch (error) {
 			console.error(error);
 		}
@@ -116,6 +153,7 @@ function ManageGroundPopup({ children, ground }: Props) {
 		handleRemoveImage,
 		handleUploadImages,
 		handleDeleteImages,
+		unremovedImagesUrls,
 	} = useImages(
 		// selectedItem?.image ? [selectedItem?.image] : [],
 		ground?.images || [],
@@ -133,15 +171,41 @@ function ManageGroundPopup({ children, ground }: Props) {
 		{ value: 'california', label: 'California' },
 	];
 
-	const openingHours = watch('openingHours');
-
 	const handleOpeningHoursChange = (openingHours: OpeningHours) => {
 		setValue('openingHours', openingHours);
 	};
 
-	const handleCoordinatesChange = (lat: number, lng: number) => {
-		alert(`Lat: ${lat}, Lng: ${lng}`);
-		setValue('address.geoLocation', { lat, lng });
+	const handleCoordinatesChange = (geoLocation: GeoLocation) => {
+		setValue('address.geoLocation', geoLocation);
+	};
+
+	const handleSubmitSubscription = (subscription: SubscriptionDtoType) => {
+		if (currentSubscriptionIndex === -1) {
+			setValue('subscriptions', [...subscriptions, subscription]);
+		} else {
+			subscriptions?.splice(currentSubscriptionIndex, 1, subscription);
+			setValue('subscriptions', subscriptions);
+		}
+	};
+
+	const handleAddSubscription = () => {
+		setCurrentSubscriptionIndex(-1);
+		toggleSubscriptionPopup();
+	};
+
+	const handleEditSubscription = (index: number) => {
+		setCurrentSubscriptionIndex(index);
+		toggleSubscriptionPopup();
+	};
+
+	const handleRemoveSubscription = () => {
+		subscriptions?.splice(currentSubscriptionIndex, 1);
+		setValue('subscriptions', subscriptions);
+	};
+
+	const handleConfirmRemoveSubscription = (index: number) => {
+		setCurrentSubscriptionIndex(index);
+		setOpenSubscriptionRemoveConfirmationPopup(true);
 	};
 
 	return (
@@ -149,12 +213,12 @@ function ManageGroundPopup({ children, ground }: Props) {
 			<div onClick={toggleOpen}>{children}</div>
 
 			<Popup
-				open={isOpen}
-				title={ground ? 'Edit Ground' : 'Create a Ground'}
+				open={open}
+				title={ground ? 'Update Ground' : 'Create a Ground'}
 				description={
 					ground
-						? 'Edit the details of the ground.'
-						: 'Fill in the details to add a new ground.'
+						? 'Update the details of the ground.'
+						: 'Fill in the details to create a new ground.'
 				}
 				onClose={toggleOpen}
 				className='w-full lg:w-1/2'
@@ -202,7 +266,7 @@ function ManageGroundPopup({ children, ground }: Props) {
 							</h3>
 							<Button
 								icon={<HiOutlinePlusCircle className='size-5' />}
-								onClick={toggleSubscriptionPopup}
+								onClick={handleAddSubscription}
 							/>
 						</div>
 
@@ -210,29 +274,26 @@ function ManageGroundPopup({ children, ground }: Props) {
 							headers={[
 								{ field: 'name', display: 'Name' },
 								{ field: 'price', display: 'Price' },
-								{ field: 'period', display: 'Period' },
-								{ field: 'discount', display: 'Discount' },
-							]}
-							data={[
 								{
-									name: 'Ground 1',
-									price: 100,
-									period: 'day',
-									discount: 10,
+									field: (row) => `${row.period.amount} ${row.period.duration}`,
+									display: 'Period',
 								},
 								{
-									name: 'Ground 2',
-									price: 200,
-									period: 'week',
-									discount: 20,
+									field: (row) =>
+										`${row.discount.amount}% until ${row.discount.endDate}`,
+									display: 'Discount',
 								},
 							]}
+							data={subscriptions || []}
 							actions={[
 								{
 									name: 'Edit',
+									callback: (_, index) => handleEditSubscription(index),
 								},
 								{
 									name: 'Delete',
+									callback: (_, index) =>
+										handleConfirmRemoveSubscription(index),
 								},
 							]}
 						/>
@@ -295,17 +356,30 @@ function ManageGroundPopup({ children, ground }: Props) {
 						<Button color='secondary' onClick={toggleOpen}>
 							Close
 						</Button>
-						{/* <Button color='primary' type='submit'> */}
-						<Button color='primary' onClick={onSubmit as any}>
-							{ground ? 'Save Changes' : 'Create'}
+						<Button color='primary' type='submit' loading={isSubmitting}>
+							{ground ? 'Update' : 'Create'}
 						</Button>
 					</div>
 				</form>
 
-				<ManageSubscriptionPopup
-					open={openSubscriptionPopup}
-					onClose={() => toggleSubscriptionPopup()}
-				/>
+				{openSubscriptionPopup && (
+					<ManageSubscriptionPopup
+						subscription={currentSubscription}
+						open={openSubscriptionPopup}
+						onClose={toggleSubscriptionPopup}
+						onSubmit={handleSubmitSubscription}
+					/>
+				)}
+
+				{openSubscriptionRemoveConfirmationPopup && (
+					<ConfirmationPopup
+						open={openSubscriptionRemoveConfirmationPopup}
+						setOpen={setOpenSubscriptionRemoveConfirmationPopup}
+						title='Remove Subscription'
+						description='Are you sure you want to remove this subscription?'
+						onConfirm={handleRemoveSubscription}
+					/>
+				)}
 			</Popup>
 		</>
 	);

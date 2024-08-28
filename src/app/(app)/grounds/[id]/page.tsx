@@ -1,5 +1,3 @@
-'use client';
-
 import { GROUNDS } from '@/data/grounds';
 import GroundImages from '@/components/ground/details/GroundImages';
 import GroundInfo from '@/components/ground/details/GroundInfo';
@@ -8,6 +6,11 @@ import GroundAddress from '@/components/ground/details/GroundAddress';
 import GroundReviews from '@/components/ground/details/GroundReviews';
 import GroundOpeningHours from '@/components/ground/details/GroundOpeningHours';
 import GroundReservation from '@/components/ground/details/GroundReservation';
+import { GroundServerService } from '@/server/services/ground.server-service';
+import { Ground } from '@/types/item/ground.types';
+import { Review } from '@/types/general.types';
+import ManageGroundPopup from '@/components/ground/ManageGroundPopup';
+import Button from '@/components/utils/Button';
 
 interface Props {
 	params: {
@@ -15,8 +18,21 @@ interface Props {
 	};
 }
 
-function GroundDetails({ params: { id } }: Props) {
-	const ground = GROUNDS.find((ground) => ground._id.toString() === id)!;
+async function GroundDetails({ params: { id } }: Props) {
+	let ground: Ground;
+
+	try {
+		const _ground = await GroundServerService.getOne(id);
+
+		if (!_ground) {
+			return <div>Ground not found</div>;
+		}
+
+		ground = _ground;
+	} catch (error) {
+		console.error(error);
+		return <div>Error</div>;
+	}
 
 	return (
 		<>
@@ -28,7 +44,7 @@ function GroundDetails({ params: { id } }: Props) {
 					<GroundAddress address={ground.address} />
 					<div className='grid grid-cols-1 lg:grid-cols-2 gap-5'>
 						<GroundReviews
-							reviews={ground.reviews}
+							reviews={ground.reviews as Review[]}
 							avgRating={ground.avgRating}
 						/>
 						<GroundOpeningHours openingHours={ground.openingHours} />
@@ -37,6 +53,15 @@ function GroundDetails({ params: { id } }: Props) {
 
 				<GroundReservation ground={ground} />
 			</div>
+
+			<ManageGroundPopup ground={ground}>
+				<Button
+					icon='edit'
+					color='primary'
+					className='fixed bottom-5 right-5 p-7 rounded-full'
+					iconClassName='!size-8'
+				></Button>
+			</ManageGroundPopup>
 		</>
 	);
 }

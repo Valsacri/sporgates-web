@@ -22,6 +22,11 @@ const nextConfig = {
 				protocol: 'https',
 				hostname: 'doers.ma',
 			},
+			{
+				protocol: 'https',
+				hostname: 'firebasestorage.googleapis.com',
+			},
+
 		],
 	},
 };

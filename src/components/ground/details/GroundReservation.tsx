@@ -84,7 +84,7 @@ function GroundReservation({ ground }: Props) {
 
 		return timeFrames.map((timeFrame) => {
 			// Check if the timeFrame is busy
-			const isBusy = ground.busyHours[0].hours.some((busyTimeFrame) =>
+			const isBusy = ground.busyHours[0]?.hours.some((busyTimeFrame) =>
 				compareTimeFrames(busyTimeFrame, timeFrame)
 			);
 

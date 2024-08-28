@@ -1,8 +1,8 @@
 import { HiCheck } from 'react-icons/hi';
 import { twMerge } from 'tailwind-merge';
-import { Subscription } from '@/types/business.types';
 import Card from '../utils/Card';
 import Button from '../utils/Button';
+import { Subscription } from '@/types/item/club.types';
 
 interface Props {
 	subscription: Subscription;
@@ -12,8 +12,8 @@ function Pricing({ subscription }: Props) {
 	return (
 		<Card
 			className={twMerge(
-				'min-w-max flex flex-col justify-between gap-5 rounded-3xl py-7 shadow-xl shadow-gray-200',
-				subscription.isDefault && 'bg-primary-dark text-white'
+				'max-w-96 flex flex-col justify-between gap-5 rounded-3xl py-7 shadow-xl shadow-gray-200',
+				subscription.isHighlighted && 'bg-primary-dark text-white'
 			)}
 		>
 			<div className='space-y-5'>
@@ -21,7 +21,7 @@ function Pricing({ subscription }: Props) {
 					<span
 						className={twMerge(
 							'font-bold text-3xl',
-							!subscription.isDefault && 'text-primary'
+							!subscription.isHighlighted && 'text-primary'
 						)}
 					>
 						{subscription.price}dh
@@ -34,7 +34,7 @@ function Pricing({ subscription }: Props) {
 					<div
 						className={twMerge(
 							'text-3xl font-medium',
-							!subscription.isDefault && 'text-primary'
+							!subscription.isHighlighted && 'text-primary'
 						)}
 					>
 						{subscription.name}
@@ -42,16 +42,16 @@ function Pricing({ subscription }: Props) {
 					<p>{subscription.description}</p>
 				</div>
 				<div>
-					<ul className='space-y-3'>
+					<ul className='space-y-3 text-sm'>
 						{subscription.features.map((feature, i) => (
-							<li key={i} className='flex gap-2 items-center'>
+							<li key={i} className='flex gap-2'>
 								<HiCheck
 									className={twMerge(
-										'bg-opacity-20 rounded-full p-0.5 size-5',
-										subscription.isDefault ? 'bg-white' : 'bg-primary'
+										'bg-opacity-20 rounded-full p-0.5 min-w-5 min-h-5',
+										subscription.isHighlighted ? 'bg-white' : 'bg-primary'
 									)}
 								/>
-								{feature}
+								{feature.description}
 							</li>
 						))}
 					</ul>
@@ -59,10 +59,10 @@ function Pricing({ subscription }: Props) {
 			</div>
 
 			<Button
-				color={subscription.isDefault ? 'white' : 'primary'}
+				color={subscription.isHighlighted ? 'white' : 'primary'}
 				className={twMerge(
 					'w-full rounded-full text-base font-medium',
-					subscription.isDefault && 'text-primary-dark'
+					subscription.isHighlighted && 'text-primary-dark'
 				)}
 			>
 				Subscribe

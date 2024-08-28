@@ -15,7 +15,7 @@ function PostCard({ post }: Props) {
 	const funds = 50;
 
 	return (
-		<Card key={post._id} className='space-y-5'>
+		<Card key={post.id} className='space-y-5'>
 			<div className='flex justify-between'>
 				<div className='flex gap-5'>
 					<div className='relative'>

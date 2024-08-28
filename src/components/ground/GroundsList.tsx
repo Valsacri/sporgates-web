@@ -1,11 +1,19 @@
-'use client';
-
-import { GROUNDS } from '@/data/grounds';
 import Button from '../utils/Button';
 import GroundCard from './GroundCard';
 import ManageGroundPopup from './ManageGroundPopup';
+import { GroundServerService } from '@/server/services/ground.server-service';
+import { Ground } from '@/types/item/ground.types';
 
-function PageGrounds() {
+async function GroundsList() {
+	let grounds: Ground[];
+
+	try {
+		grounds = await GroundServerService.getPage();
+	} catch (error) {
+		console.error(error);
+		return <div>Error</div>;
+	}
+
 	return (
 		<>
 			<ManageGroundPopup>
@@ -20,7 +28,7 @@ function PageGrounds() {
 			<h2>Explore our grounds !</h2>
 
 			<div className='grid grid-cols-1 lg:grid-cols-3 gap-5'>
-				{GROUNDS.map((ground, i) => (
+				{grounds.map((ground, i) => (
 					<GroundCard key={i} ground={ground} />
 				))}
 			</div>
@@ -28,4 +36,4 @@ function PageGrounds() {
 	);
 }
 
-export default PageGrounds;
+export default GroundsList;

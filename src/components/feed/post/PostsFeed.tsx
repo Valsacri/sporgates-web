@@ -5,7 +5,7 @@ function PostsFeed() {
 	return (
 		<>
 			{POSTS.map((post) => (
-				<PostCard key={post._id} post={post} />
+				<PostCard key={post.id} post={post} />
 			))}
 
 			<div className='text-center text-sm text-text-secondary'>

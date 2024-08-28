@@ -1,33 +1,37 @@
-import { Ground } from '@/types/item/ground.types';
-import { Create, Update } from '@/types/utils.types';
+import { FilterQuery } from 'mongoose';
 import { GroundModel } from '../models/ground.model';
+import { GroundDtoType, GroundUpdateDtoType } from '@/dtos/item/ground.dto';
+import { Ground } from '@/types/item/ground.types';
+import { formatDocument } from '../helpers/database.helper';
 
 export class GroundServerService {
 	static async getOne(id: string) {
-		return await GroundModel.findById(id);
+		const ground = await GroundModel.findById(id);
+		if (!ground) return null;
+		return formatDocument<Ground>(ground);
 	}
 
-	static async getPage(
-		page: number,
-		limit: number,
-		query: Record<string, unknown>
-	) {
-		return await GroundModel.find(query, null, {
+	static async getPage(page = 1, limit = 10, query: FilterQuery<Ground> = {}) {
+		const grounds = await GroundModel.find(query, null, {
 			limit,
-			skip: page * limit,
+			skip: (page - 1) * limit,
 		});
+		return formatDocument<Ground[]>(grounds);
 	}
-	static async create(data: Create<Ground>) {
-		return await GroundModel.create(data);
+	static async create(data: GroundDtoType) {
+		const ground = await GroundModel.create(data);
+		return formatDocument<Ground>(ground);
 	}
 
-	static async update(id: string, data: Update<Ground>) {
-		return await GroundModel.findByIdAndUpdate(id, data, {
+	static async update(id: string, data: GroundUpdateDtoType) {
+		const ground = await GroundModel.findByIdAndUpdate(id, data, {
 			new: true,
 		});
+		return formatDocument<Ground>(ground);
 	}
 
 	static async delete(id: string) {
-		return await GroundModel.findByIdAndDelete(id);
+		const ground = await GroundModel.findByIdAndDelete(id);
+		return formatDocument<Ground>(ground);
 	}
 }

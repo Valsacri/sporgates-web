@@ -1,14 +1,14 @@
 import Rating from '@/components/shared/Rating';
 import Card from '@/components/utils/Card';
+import { Review } from '@/types/general.types';
 import { User } from '@/types/user.types';
 
-function GroundReviews({
-	reviews,
-	avgRating,
-}: {
-	reviews: any[];
+interface Props {
+	reviews: Review[];
 	avgRating: number;
-}) {
+}
+
+function GroundReviews({ reviews, avgRating }: Props) {
 	return (
 		<Card className='order-2 lg:order-1'>
 			<div className='flex justify-between mb-5'>
@@ -20,9 +20,10 @@ function GroundReviews({
 							{reviews.length} reviews
 						</p>
 					</div>
-					<h1 className='text-3xl'>4.7</h1>
+					<h1 className='text-3xl'>{avgRating}</h1>
 				</div>
 			</div>
+
 			{reviews.map((review, i) => (
 				<div key={i} className='mb-4'>
 					<div className='flex justify-between'>

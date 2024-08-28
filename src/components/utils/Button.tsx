@@ -2,6 +2,8 @@ import Icon from './Icon';
 import { twMerge } from 'tailwind-merge';
 import { CocoIcon } from '@/client/config/coco-icons';
 import { Color } from '@/client/types/general.types';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import Loader from './Loader';
 
 type Props = {
 	children?: React.ReactNode;
@@ -13,6 +15,7 @@ type Props = {
 	onClick?: () => any;
 	type?: 'button' | 'submit' | 'reset';
 	disabled?: boolean;
+	loading?: boolean;
 };
 
 function Button({
@@ -25,6 +28,7 @@ function Button({
 	onClick,
 	type = 'button',
 	disabled,
+	loading,
 }: Props) {
 	const baseStyles =
 		'h-[40px] text-nowrap flex justify-center items-center gap-1 text-sm transition-colors duration-150 py-2.5 rounded-md';
@@ -71,8 +75,10 @@ function Button({
 				disabled ? 'opacity-50 cursor-not-allowed' : variantStyles,
 				className
 			)}
-			disabled={disabled}
+			disabled={disabled || loading}
 		>
+			{loading ? <Loader className='mr-1' /> : null}
+
 			{typeof icon === 'string' ? (
 				<Icon name={icon} className={iconClassName} />
 			) : (

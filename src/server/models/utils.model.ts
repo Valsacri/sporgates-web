@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose';
 
 export const RecordSchema = {
-	createdAt: { type: Number, default: null },
+	createdAt: { type: Number, default: Date.now },
 	updatedAt: { type: Number, default: null },
 	deletedAt: { type: Number, default: null },
 

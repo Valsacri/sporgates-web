@@ -1,18 +1,12 @@
 import HomeNavigation from '@/components/home/HomeNavigation';
-import Buttons from '@/components/profile/Buttons';
 import PageNavigation from '@/components/profile/PageNavigation';
 import ProfileInfos from '@/components/profile/ProfileInfos';
-import Card from '@/components/utils/Card';
-import { headers } from 'next/headers';
 
 interface Props {
 	children: React.ReactNode;
-	params: { id: string };
 }
 
-export default function Page({ children, params }: Props) {
-	const pathname = headers().get('x-pathname');
-	console.log('pathname', pathname);
+export default function Page({ children }: Props) {
 	return (
 		<div className='flex gap-5'>
 			<div className='hidden lg:block w-1/4'>

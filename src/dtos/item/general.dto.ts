@@ -7,14 +7,14 @@ export const AddressDto = z.object({
 	street: z.string(),
 	zip: z.string(),
 	geoLocation: z.object({
-		lat: z.number(),
-		lng: z.number(),
+		lat: z.coerce.number(),
+		lng: z.coerce.number(),
 	}),
-	isDefault: z.boolean().optional(),
+	isHighlighted: z.boolean().optional(),
 });
 
 export const ReviewDto = z.object({
-	rating: z.number(),
+	rating: z.coerce.number(),
 	comment: z.string(),
 	user: z.string(),
 });
@@ -29,12 +29,12 @@ export const SocialsDto = z.object({
 
 export const TimeframeDto = z.object({
 	from: z.object({
-		hours: z.number(),
-		minutes: z.number(),
+		hours: z.coerce.number(),
+		minutes: z.coerce.number(),
 	}),
 	to: z.object({
-		hours: z.number(),
-		minutes: z.number(),
+		hours: z.coerce.number(),
+		minutes: z.coerce.number(),
 	}),
 });
 

@@ -62,8 +62,9 @@ export const Select = forwardRef<HTMLInputElement | HTMLTextAreaElement, Props>(
 			className: 'text-sm',
 		}));
 
-		const displayValue =
-			options.find((option) => option.value === value)?.label || '';
+		const displayValue = options.find(
+			(option) => option.value === value
+		)?.label;
 
 		return (
 			<div className={twMerge('w-full', className)}>
@@ -114,7 +115,5 @@ export const Select = forwardRef<HTMLInputElement | HTMLTextAreaElement, Props>(
 		);
 	}
 );
-
-
 
 Select.displayName = 'Select';

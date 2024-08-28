@@ -15,14 +15,23 @@ export interface SubscriptionPeriod {
 	amount: number;
 }
 
+export interface SubscriptionFeature {
+	description: string;
+}
+
+export interface SubscriptionDiscount {
+	amount: number;
+	endDate: string;
+}
+
 export interface Subscription {
 	name: string;
 	description: string;
-	features: string[];
+	features: SubscriptionFeature[];
 	price: number;
 	period: SubscriptionPeriod;
-	discount: number;
-	isDefault: boolean;
+	discount: SubscriptionDiscount;
+	isHighlighted: boolean;
 }
 
 export interface Club extends Item {

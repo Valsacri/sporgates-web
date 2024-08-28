@@ -55,7 +55,7 @@ const subscriptions: Subscription[] = [
 		price: 1000,
 		period: { duration: SubscriptionPeriodDuration.MONTH, amount: 1 },
 		discount: 0,
-		isDefault: true,
+		isHighlighted: true,
 	},
 	{
 		name: 'Basic',
@@ -73,7 +73,7 @@ const subscriptions: Subscription[] = [
 		price: 1000,
 		period: { duration: SubscriptionPeriodDuration.MONTH, amount: 1 },
 		discount: 0,
-		isDefault: false,
+		isHighlighted: false,
 	},
 	{
 		name: 'Premium',
@@ -87,7 +87,7 @@ const subscriptions: Subscription[] = [
 		price: 2000,
 		period: { duration: SubscriptionPeriodDuration.MONTH, amount: 1 },
 		discount: 20,
-		isDefault: false,
+		isHighlighted: false,
 	},
 	{
 		name: 'Premium',
@@ -101,7 +101,7 @@ const subscriptions: Subscription[] = [
 		price: 2000,
 		period: { duration: SubscriptionPeriodDuration.MONTH, amount: 1 },
 		discount: 20,
-		isDefault: false,
+		isHighlighted: false,
 	},
 	{
 		name: 'Premium',
@@ -115,7 +115,7 @@ const subscriptions: Subscription[] = [
 		price: 2000,
 		period: { duration: SubscriptionPeriodDuration.MONTH, amount: 1 },
 		discount: 20,
-		isDefault: false,
+		isHighlighted: false,
 	},
 	{
 		name: 'Premium',
@@ -129,7 +129,7 @@ const subscriptions: Subscription[] = [
 		price: 2000,
 		period: { duration: SubscriptionPeriodDuration.MONTH, amount: 1 },
 		discount: 20,
-		isDefault: false,
+		isHighlighted: false,
 	},
 ];
 

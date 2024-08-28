@@ -1,9 +1,12 @@
 import Card from '@/components/utils/Card';
-import ManageGroundPopup from '../ManageGroundPopup';
 import Rating from '@/components/shared/Rating';
-import Button from '@/components/utils/Button';
+import { Ground } from '@/types/item/ground.types';
 
-function GroundInfo({ ground }: { ground: any }) {
+interface Props {
+	ground: Ground;
+}
+
+function GroundInfo({ ground }: Props) {
 	return (
 		<Card className='space-y-6'>
 			<div className='flex justify-between'>
@@ -16,9 +19,6 @@ function GroundInfo({ ground }: { ground: any }) {
 						</span>
 					</div>
 				</div>
-				<ManageGroundPopup>
-					<Button icon='edit' color='secondary'></Button>
-				</ManageGroundPopup>
 			</div>
 			<div>
 				<h2 className='text-lg font-medium'>Description</h2>

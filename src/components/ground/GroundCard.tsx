@@ -12,7 +12,7 @@ interface Props {
 function GroundCard({ ground }: Props) {
 	return (
 		<Card className='group lg:min-w-[250px] p-0 flex flex-col hover:bg-primary-dark transition-all duration-200'>
-			<Link href={`/grounds/${ground._id}`}>
+			<Link href={`/grounds/${ground.id}`}>
 				<div
 					className={twMerge(
 						'h-40 flex flex-col justify-between bg-gray-300 rounded-t-lg bg-cover bg-center'
@@ -46,13 +46,15 @@ function GroundCard({ ground }: Props) {
 					</div>
 				</div>
 
-				<div className='flex flex-col justify-between p-5 pt-3 flex-grow'>
+				<div className='flex flex-col justify-between p-4 pt-3 flex-grow'>
 					<div>
 						<h3 className='group-hover:text-white transition-all duration-200'>
 							{ground.name}
 						</h3>
 						<div className='text-text-secondary group-hover:text-white transition-all duration-200'>
-							<p className='text-sm mt-1'>{ground.description}</p>
+							<p className='text-sm mt-1'>
+								{ground.description.slice(0, 100)}...
+							</p>
 							<div className='flex gap-1 items-center text-xs mt-3'>
 								<Icon name='location' className='!size-5' />{' '}
 								{ground.address.neighborhood}, {ground.address.city},{' '}

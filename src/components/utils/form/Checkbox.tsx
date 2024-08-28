@@ -7,6 +7,7 @@ interface Props {
 	label?: string;
 	value?: string | number;
 	onChange?: any;
+	onBlur?: any;
 	error?: any;
 	name: string;
 	required?: boolean;
@@ -21,6 +22,9 @@ export const Checkbox = React.forwardRef<HTMLInputElement, Props>(
 			label,
 			error = '',
 			name,
+			onChange,
+			onBlur,
+			value,
 			required = false,
 			disabled = false,
 		}: Props,
@@ -30,21 +34,25 @@ export const Checkbox = React.forwardRef<HTMLInputElement, Props>(
 		const errorClassName = error && 'text-danger';
 
 		return (
-			<div
-				className={twMerge('w-full', className, inputClassName, errorClassName)}
-			>
+			<div className={twMerge('w-full', className)}>
 				<div className='relative w-full flex items-center'>
 					<input
 						ref={ref}
 						type='checkbox'
 						id={id}
 						name={name}
-						className={twMerge('mr-2 size-4 cursor-pointer', inputClassName, errorClassName)}
+						className={twMerge(
+							'size-4 cursor-pointer',
+							inputClassName,
+							errorClassName
+						)}
+						onChange={onChange}
+						onBlur={onBlur}
 						disabled={disabled}
 						aria-invalid={error ? 'true' : 'false'}
 					/>
 					{label && (
-						<label htmlFor={id} className='text-sm cursor-pointer'>
+						<label htmlFor={id} className='ml-2 text-sm cursor-pointer'>
 							{label}
 						</label>
 					)}

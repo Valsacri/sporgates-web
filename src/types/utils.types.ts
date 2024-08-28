@@ -1,10 +1,10 @@
-import { Schema, Types } from 'mongoose';
+import { Schema } from 'mongoose';
 import { User } from './user.types';
 
 export type Ref<T> = Schema.Types.ObjectId | T;
 
 export interface Record {
-	_id: Types.ObjectId | string;
+	id: string;
 
 	createdAt: number;
 	updatedAt?: number;
