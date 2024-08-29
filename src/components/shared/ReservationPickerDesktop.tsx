@@ -7,6 +7,7 @@ import Card from '../utils/Card';
 import { useContext } from 'react';
 import Button from '../utils/Button';
 import { GroundReservationContext } from '@/client/contexts/ground-reservation.context';
+import TimeFramePicker from './TimeframePicker';
 
 function ReservationPickerDesktop() {
 	const {
@@ -15,11 +16,10 @@ function ReservationPickerDesktop() {
 		openTimesPicker,
 		setOpenTimesPicker,
 		handleDateChange,
+		handleTimeframeChange,
 		getTileClassName,
 		selectedDate,
-		times,
-		hours,
-		minutes,
+		duration: { hours, minutes },
 	} = useContext(GroundReservationContext);
 
 	return (
@@ -38,7 +38,7 @@ function ReservationPickerDesktop() {
 					</div>
 				}
 			>
-				<Card className='border'>
+				<Card className='border p-2'>
 					<Calendar
 						minDate={new Date()}
 						showFixedNumberOfWeeks
@@ -62,20 +62,14 @@ function ReservationPickerDesktop() {
 					</div>
 				}
 			>
-				<Card className='border'>
-					<Buttons
-						containerClassName='flex-1 grid grid-cols-2 lg:grid-cols-4 gap-2'
-						color='secondary'
-						items={times}
+				<Card className='border p-2'>
+					<TimeFramePicker
+						containerClassName='flex-1 grid grid-cols-2 lg:grid-cols-4 gap-1'
+						startTime={{ hours: 8, minutes: 0 }}
+						endTime={{ hours: 20, minutes: 0 }}
+						interval={30}
+						onChange={handleTimeframeChange}
 					/>
-
-					<Button
-						color='primary'
-						className='ml-auto mt-3'
-						onClick={() => setOpenTimesPicker(false)}
-					>
-						Close
-					</Button>
 				</Card>
 			</Dropdown>
 		</div>

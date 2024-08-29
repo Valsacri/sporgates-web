@@ -9,32 +9,32 @@ import { User } from '@/types/user.types';
 
 const openingHours: OpeningHours = {
 	monday: {
-		from: { hours: 8, minutes: 0 },
-		to: { hours: 22, minutes: 0 },
+		start: { hours: 8, minutes: 0 },
+		end: { hours: 22, minutes: 0 },
 	},
 	tuesday: {
-		from: { hours: 8, minutes: 0 },
-		to: { hours: 22, minutes: 0 },
+		start: { hours: 8, minutes: 0 },
+		end: { hours: 22, minutes: 0 },
 	},
 	wednesday: {
-		from: { hours: 8, minutes: 0 },
-		to: { hours: 22, minutes: 0 },
+		start: { hours: 8, minutes: 0 },
+		end: { hours: 22, minutes: 0 },
 	},
 	thursday: {
-		from: { hours: 8, minutes: 0 },
-		to: { hours: 22, minutes: 0 },
+		start: { hours: 8, minutes: 0 },
+		end: { hours: 22, minutes: 0 },
 	},
 	friday: {
-		from: { hours: 8, minutes: 0 },
-		to: { hours: 22, minutes: 0 },
+		start: { hours: 8, minutes: 0 },
+		end: { hours: 22, minutes: 0 },
 	},
 	saturday: {
-		from: { hours: 8, minutes: 0 },
-		to: { hours: 22, minutes: 0 },
+		start: { hours: 8, minutes: 0 },
+		end: { hours: 22, minutes: 0 },
 	},
 	sunday: {
-		from: { hours: 8, minutes: 0 },
-		to: { hours: 22, minutes: 0 },
+		start: { hours: 8, minutes: 0 },
+		end: { hours: 22, minutes: 0 },
 	},
 };
 
@@ -158,8 +158,8 @@ const busyHours: DateTimeframes[] = [
 	{
 		date: new Date(2024, 7, 12),
 		timeframes: [
-			{ from: { hours: 8, minutes: 0 }, to: { hours: 10, minutes: 0 } },
-			{ from: { hours: 16, minutes: 0 }, to: { hours: 18, minutes: 0 } },
+			{ start: { hours: 8, minutes: 0 }, end: { hours: 10, minutes: 0 } },
+			{ start: { hours: 16, minutes: 0 }, end: { hours: 18, minutes: 0 } },
 		],
 	},
 ];

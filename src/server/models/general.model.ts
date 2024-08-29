@@ -31,16 +31,18 @@ export const ReviewSchema = new Schema<Review>({
 	comment: { type: String, required: true },
 });
 
+const TimeSchema = new Schema(
+	{
+		hours: { type: Number, required: true },
+		minutes: { type: Number, required: true },
+	},
+	{ _id: false }
+);
+
 export const TimeframeSchema = new Schema<Timeframe>(
 	{
-		from: {
-			hours: { type: Number, required: true },
-			minutes: { type: Number, required: true },
-		},
-		to: {
-			hours: { type: Number, required: true },
-			minutes: { type: Number, required: true },
-		},
+		start: TimeSchema,
+		end: TimeSchema,
 	},
 	{ _id: false }
 );

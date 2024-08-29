@@ -30,15 +30,14 @@ export interface Socials {
 	tiktok?: string;
 }
 
-export interface Timeframe {
-	from: {
-		hours: number;
-		minutes: number;
-	};
-	to: {
-		hours: number;
-		minutes: number;
-	};
+export interface Time {
+	hours: number;
+	minutes: number;
+}
+
+export interface Timeframe<T = Time> {
+	start: T;
+	end: T;
 }
 
 export interface DateTimeframes {

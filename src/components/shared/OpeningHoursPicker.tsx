@@ -63,7 +63,7 @@ const OpeningHoursPicker: React.FC<OpeningHoursPickerProps> = ({
 				hour,
 				selected: value[days[day].id.toLowerCase() as keyof OpeningHours].some(
 					(timeframe) =>
-						timeframe.from.hours <= hour && timeframe.to.hours > hour
+						timeframe.start.hours <= hour && timeframe.end.hours > hour
 				),
 				highlighted: false,
 			}))
@@ -158,14 +158,14 @@ const OpeningHoursPicker: React.FC<OpeningHoursPickerProps> = ({
 
 					if (
 						lastTimeframe &&
-						lastTimeframe.to.hours === hour &&
-						lastTimeframe.to.minutes === 0
+						lastTimeframe.end.hours === hour &&
+						lastTimeframe.end.minutes === 0
 					) {
-						lastTimeframe.to.hours = hour + 1;
+						lastTimeframe.end.hours = hour + 1;
 					} else {
 						newOpeningHours[dayName].push({
-							from: { hours: hour, minutes: 0 },
-							to: { hours: hour + 1, minutes: 0 },
+							start: { hours: hour, minutes: 0 },
+							end: { hours: hour + 1, minutes: 0 },
 						});
 					}
 				}

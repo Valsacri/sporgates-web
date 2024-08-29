@@ -27,15 +27,14 @@ export const SocialsDto = z.object({
 	tiktok: z.string().nullable(),
 });
 
+export const TimeDto = z.object({
+	hours: z.coerce.number(),
+	minutes: z.coerce.number(),
+});
+
 export const TimeframeDto = z.object({
-	from: z.object({
-		hours: z.coerce.number(),
-		minutes: z.coerce.number(),
-	}),
-	to: z.object({
-		hours: z.coerce.number(),
-		minutes: z.coerce.number(),
-	}),
+	start: TimeDto,
+	end: TimeDto,
 });
 
 export const DateTimeframesDto = z.object({

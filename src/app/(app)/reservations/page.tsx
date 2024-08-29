@@ -6,7 +6,6 @@ import Button from '@/components/utils/Button';
 import Card from '@/components/utils/Card';
 import { Select } from '@/components/utils/form/Select';
 import { GROUNDS } from '@/data/grounds';
-import { GroundReservationDtoType } from '@/dtos/item/ground.dto';
 import {
 	GroundRerservationStatus,
 	GroundReservation,
@@ -22,11 +21,11 @@ const RESERVATIONS = [
 			date: new Date().getTime(),
 			timeframes: [
 				{
-					from: {
+					start: {
 						hours: 10,
 						minutes: 0,
 					},
-					to: {
+					end: {
 						hours: 12,
 						minutes: 0,
 					},
@@ -43,11 +42,11 @@ const RESERVATIONS = [
 			date: new Date().getTime(),
 			timeframes: [
 				{
-					from: {
+					start: {
 						hours: 10,
 						minutes: 0,
 					},
-					to: {
+					end: {
 						hours: 12,
 						minutes: 0,
 					},
@@ -64,11 +63,11 @@ const RESERVATIONS = [
 			date: new Date().getTime(),
 			timeframes: [
 				{
-					from: {
+					start: {
 						hours: 10,
 						minutes: 0,
 					},
-					to: {
+					end: {
 						hours: 12,
 						minutes: 0,
 					},
@@ -85,11 +84,11 @@ const RESERVATIONS = [
 			date: new Date().getTime(),
 			timeframes: [
 				{
-					from: {
+					start: {
 						hours: 10,
 						minutes: 0,
 					},
-					to: {
+					end: {
 						hours: 12,
 						minutes: 0,
 					},

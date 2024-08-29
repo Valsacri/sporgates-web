@@ -1,4 +1,4 @@
-import { Timeframe } from '@/types/general.types';
+import { Time, Timeframe } from '@/types/general.types';
 import { Ground } from '@/types/item/ground.types';
 import { createContext } from 'react';
 
@@ -12,22 +12,15 @@ export type GroundReservationContextType = {
 
 	selectedDate: Date;
 	setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
-	selectedTimes: Timeframe[];
-	setSelectedTimes: React.Dispatch<React.SetStateAction<Timeframe[]>>;
+	selectedTimeframe: Timeframe<Time | null>;
 
 	handleDateChange: (date: Date) => void;
-	handleTimesChange: (timeframe: Timeframe) => void;
+	handleTimeframeChange: (timeframe: Timeframe) => void;
 
 	getTileClassName: (data: any) => any;
 
-	hours: number;
-	minutes: number;
-	times: {
-		text: string;
-		onClick: () => void;
-		disabled: boolean;
-		selected: boolean;
-	}[];
+	duration: Time;
+	setDuration: React.Dispatch<React.SetStateAction<Time>>;
 };
 
 export const GroundReservationContext =
@@ -39,12 +32,13 @@ export const GroundReservationContext =
 		setOpenTimesPicker: () => {},
 		selectedDate: new Date(),
 		setSelectedDate: () => {},
-		selectedTimes: [],
-		setSelectedTimes: () => {},
+		selectedTimeframe: {
+			start: null,
+			end: null,
+		},
 		handleDateChange: () => {},
-		handleTimesChange: () => {},
+		handleTimeframeChange: () => {},
 		getTileClassName: () => {},
-		hours: 0,
-		minutes: 0,
-		times: [],
+		duration: {hours: 0, minutes: 0},
+		setDuration: () => {},
 	});

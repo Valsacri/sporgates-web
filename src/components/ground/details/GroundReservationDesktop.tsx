@@ -5,12 +5,21 @@ import { useReservation } from '@/client/hooks/useReservation';
 import ReservationPickerDesktop from '@/components/shared/ReservationPickerDesktop';
 import Button from '@/components/utils/Button';
 import Card from '@/components/utils/Card';
+import { timeframeToMinutes } from '@/helpers/datetime.helpers';
+import { Timeframe } from '@/types/general.types';
 import { useContext } from 'react';
 
 function GroundReservationDesktop() {
 	const { loading, handleReserve } = useReservation();
 
-	const { ground, selectedTimes } = useContext(GroundReservationContext);
+	const { ground, selectedTimeframe } = useContext(GroundReservationContext);
+
+	const totalPrice =
+		!selectedTimeframe.start || !selectedTimeframe.end
+			? 0
+			: (timeframeToMinutes(selectedTimeframe as Timeframe) /
+					ground.minReservationTime) *
+			  ground.price;
 
 	return (
 		<Card className='sticky top-0 left-0 w-full h-max pt-5'>
@@ -28,9 +37,7 @@ function GroundReservationDesktop() {
 				onClick={handleReserve}
 				loading={loading}
 			>
-				Reserve now{' '}
-				{selectedTimes.length > 0 &&
-					`for ${selectedTimes.length * ground.price} dh`}
+				Reserve now {selectedTimeframe.end && `for ${totalPrice} dh`}
 			</Button>
 		</Card>
 	);

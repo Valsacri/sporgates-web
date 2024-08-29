@@ -1,4 +1,20 @@
-import { Timeframe } from '@/types/general.types';
+import { Time, Timeframe } from '@/types/general.types';
+
+export const generateTimes = (
+	startTime: Time,
+	endTime: Time,
+	interval = 60
+) => {
+	const times: Time[] = [];
+
+	for (let hour = startTime.hours; hour < endTime.hours; hour++) {
+		for (let minute = 0; minute < 60; minute += interval) {
+			times.push({ hours: hour, minutes: minute });
+		}
+	}
+
+	return times;
+};
 
 export const generateTimeframes = (
 	startHour: number,
@@ -13,11 +29,11 @@ export const generateTimeframes = (
 			const endHourAdjusted = hour + Math.floor(endMinute / 60);
 
 			const timeframe: Timeframe = {
-				from: {
+				start: {
 					hours: hour,
 					minutes: minute,
 				},
-				to: {
+				end: {
 					hours: endHourAdjusted,
 					minutes: endMinute % 60,
 				},
@@ -31,9 +47,10 @@ export const generateTimeframes = (
 };
 
 export const timeframeToMinutes = (timeframe: Timeframe): number => {
-	const { from, to } = timeframe;
+	const { start, end } = timeframe;
 
-	let duration = to.hours * 60 + to.minutes - (from.hours * 60 + from.minutes);
+	let duration =
+		end.hours * 60 + end.minutes - (start.hours * 60 + start.minutes);
 
 	if (duration < 0) {
 		duration += 24 * 60; // handle overflow to the next day
@@ -47,18 +64,18 @@ export const compareTimeframes = (
 	timeframe2: Timeframe
 ): boolean => {
 	return (
-		timeframe1.from.hours === timeframe2.from.hours &&
-		timeframe1.from.minutes === timeframe2.from.minutes &&
-		timeframe1.to.hours === timeframe2.to.hours &&
-		timeframe1.to.minutes === timeframe2.to.minutes
+		timeframe1.start.hours === timeframe2.start.hours &&
+		timeframe1.start.minutes === timeframe2.start.minutes &&
+		timeframe1.end.hours === timeframe2.end.hours &&
+		timeframe1.end.minutes === timeframe2.end.minutes
 	);
 };
 
-export const minutesToDuration = (minutes: number) => {
+export const minutesToTime = (minutes: number) => {
 	const hours = Math.floor(minutes / 60);
 	const remainingMinutes = minutes % 60;
 
-	return { hours, minutes: remainingMinutes };
+	return { hours, minutes: remainingMinutes } as Time;
 };
 
 export const formatDate = (date: Date) => {
