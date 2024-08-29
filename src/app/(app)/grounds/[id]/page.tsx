@@ -1,4 +1,3 @@
-import { GROUNDS } from '@/data/grounds';
 import GroundImages from '@/components/ground/details/GroundImages';
 import GroundInfo from '@/components/ground/details/GroundInfo';
 import GroundPricing from '@/components/ground/details/GroundPricing';

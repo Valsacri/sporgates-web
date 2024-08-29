@@ -1,5 +1,5 @@
 import { FilterQuery } from 'mongoose';
-import { GroundModel } from '../models/ground.model';
+import { GroundModel } from '../models/item/ground.model';
 import { GroundDtoType, GroundUpdateDtoType } from '@/dtos/item/ground.dto';
 import { Ground } from '@/types/item/ground.types';
 import { formatDocument } from '../helpers/database.helper';
@@ -18,6 +18,7 @@ export class GroundServerService {
 		});
 		return formatDocument<Ground[]>(grounds);
 	}
+
 	static async create(data: GroundDtoType) {
 		const ground = await GroundModel.create(data);
 		return formatDocument<Ground>(ground);

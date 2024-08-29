@@ -1,11 +1,23 @@
 import { Schema } from 'mongoose';
+import { ModelName } from './model-name.enum';
 
 export const RecordSchema = {
-	createdAt: { type: Number, default: Date.now },
-	updatedAt: { type: Number, default: null },
-	deletedAt: { type: Number, default: null },
+	// id: { type: String },
 
-	createdBy: { type: Schema.Types.ObjectId, ref: 'User', default: null },
-	updatedBy: { type: Schema.Types.ObjectId, ref: 'User', default: null },
-	deletedBy: { type: Schema.Types.ObjectId, ref: 'User', default: null },
+	createdAt: { type: Number, default: Date.now },
+	updatedAt: { type: Number },
+	deletedAt: { type: Number },
+
+	createdBy: {
+		type: Schema.Types.ObjectId,
+		ref: ModelName.User,
+	},
+	updatedBy: {
+		type: Schema.Types.ObjectId,
+		ref: ModelName.User,
+	},
+	deletedBy: {
+		type: Schema.Types.ObjectId,
+		ref: ModelName.User,
+	},
 };

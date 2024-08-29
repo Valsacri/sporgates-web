@@ -42,6 +42,6 @@ export interface Timeframe {
 }
 
 export interface DateTimeframes {
-	date: Date;
-	hours: Timeframe[];
+	date: number;
+	timeframes: Timeframe[];
 }

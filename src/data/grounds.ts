@@ -157,7 +157,7 @@ const reviews = [
 const busyHours: DateTimeframes[] = [
 	{
 		date: new Date(2024, 7, 12),
-		hours: [
+		timeframes: [
 			{ from: { hours: 8, minutes: 0 }, to: { hours: 10, minutes: 0 } },
 			{ from: { hours: 16, minutes: 0 }, to: { hours: 18, minutes: 0 } },
 		],

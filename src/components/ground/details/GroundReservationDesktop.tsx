@@ -1,12 +1,15 @@
 'use client';
 
 import { GroundReservationContext } from '@/client/contexts/ground-reservation.context';
+import { useReservation } from '@/client/hooks/useReservation';
 import ReservationPickerDesktop from '@/components/shared/ReservationPickerDesktop';
 import Button from '@/components/utils/Button';
 import Card from '@/components/utils/Card';
 import { useContext } from 'react';
 
 function GroundReservationDesktop() {
+	const { loading, handleReserve } = useReservation();
+
 	const { ground, selectedTimes } = useContext(GroundReservationContext);
 
 	return (
@@ -18,7 +21,13 @@ function GroundReservationDesktop() {
 				<p className='text-success'>{ground.price} dh</p>
 			</div>
 
-			<Button icon='check' color='primary' className='w-full'>
+			<Button
+				icon='check'
+				color='primary'
+				className='w-full'
+				onClick={handleReserve}
+				loading={loading}
+			>
 				Reserve now{' '}
 				{selectedTimes.length > 0 &&
 					`for ${selectedTimes.length * ground.price} dh`}

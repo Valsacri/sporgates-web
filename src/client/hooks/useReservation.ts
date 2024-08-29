@@ -1,97 +1,34 @@
-import { useState, useMemo } from 'react';
-import { generateTimeFrames } from '@/helpers/datetime.helpers';
+'use client';
 
-interface ReservationHookProps {
-	selectedDate: Date;
-	setSelectedDate: (date: Date) => void;
-	selectedTimes: string[];
-	setSelectedTimes: (times: string[]) => void;
-	busyDates: Date[];
-	busyHours: string[];
-	handleTimeChange: (timeFrame: string) => void;
-}
+import { useContext, useState } from 'react';
+import { UserContext } from '../contexts/user.context';
+import { GroundReservationContext } from '../contexts/ground-reservation.context';
+import { GroundReservationClientService } from '../services/ground-reservation.client-service';
 
-export function useReservation({
-	selectedDate,
-	setSelectedDate,
-	selectedTimes,
-	setSelectedTimes,
-	busyDates,
-	busyHours,
-	handleTimeChange,
-}: ReservationHookProps) {
-	const [openDatePicker, setOpenDatePicker] = useState(false);
-	const [openTimesPicker, setOpenTimesPicker] = useState(false);
+export const useReservation = () => {
+	const [user] = useContext(UserContext);
+	const { ground, selectedDate, selectedTimes } = useContext(
+		GroundReservationContext
+	);
 
-	const getTileClassName = ({ date, view }: any) => {
-		if (view === 'month') {
-			if (
-				busyDates.some(
-					(highlightDate) =>
-						date.toDateString() === highlightDate.toDateString()
-				)
-			) {
-				return 'opacity-50';
-			}
-		}
-		return null;
-	};
+	const [loading, setLoading] = useState(false);
 
-	const handleDateChange = (date: Date) => {
-		setSelectedDate(date);
-		setSelectedTimes([]); // Reset selected times when the date changes
-		setOpenDatePicker(false);
-		setOpenTimesPicker(true);
-	};
-
-	// Function to calculate the total duration for the current day
-	const [hours, minutes] = useMemo(() => {
-		let totalMinutes = 0;
-
-		selectedTimes.forEach((timeFrame) => {
-			const [start, end] = timeFrame.split(' - ');
-			const [startHours, startMinutes] = start.split(':').map(Number);
-			const [endHours, endMinutes] = end.split(':').map(Number);
-
-			let duration =
-				endHours * 60 + endMinutes - (startHours * 60 + startMinutes);
-			if (duration < 0) {
-				duration += 24 * 60; // handle overflow to the next day
-			}
-			totalMinutes += duration;
+	const handleReserve = async () => {
+		setLoading(true);
+		await GroundReservationClientService.create({
+			ground: ground.id,
+			dateTimeframes: {
+				date: selectedDate.getTime(),
+				timeframes: selectedTimes,
+			},
+			user: user!.id,
+			totalPrice: selectedTimes.length * ground.price,
 		});
-
-		const hours = Math.floor(totalMinutes / 60);
-		const minutes = totalMinutes % 60;
-
-		return [hours, minutes];
-	}, [selectedTimes]);
-
-	const times = useMemo(() => {
-		const timeFrames = generateTimeFrames(8, 21, 30);
-
-		return timeFrames.map((timeFrame) => {
-			const isBusy = busyHours.includes(timeFrame);
-			const isSelected = selectedTimes.includes(timeFrame);
-
-			return {
-				text: timeFrame,
-				onClick: () => handleTimeChange(timeFrame),
-				disabled: isBusy,
-				selected: isSelected,
-			};
-		});
-	}, [busyHours, selectedTimes]);
+		setLoading(false);
+	};
 
 	return {
-		openDatePicker,
-		setOpenDatePicker,
-		openTimesPicker,
-		setOpenTimesPicker,
-		getTileClassName,
-		handleDateChange,
-		hours,
-		minutes,
-		times,
+		loading,
+		handleReserve,
 	};
-}
+};

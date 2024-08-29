@@ -2,14 +2,19 @@ import { User } from '@/types/user.types';
 import { Update } from '@/types/utils.types';
 import { UserModel } from '../models/user.model';
 import { CreateUserDtoType } from '@/dtos/user.dto';
+import { formatDocument } from '../helpers/database.helper';
 
 export class UserServerService {
 	static async getOne(id: string) {
-		return await UserModel.findById(id);
+		const user = await UserModel.findById(id);
+		if (!user) return null;
+		return formatDocument<User>(user);
 	}
 
 	static async getOneByUid(uid: string) {
-		return await UserModel.findOne({ uid });
+		const user = await UserModel.findOne({ uid });
+		if (!user) return null;
+		return formatDocument<User>(user);
 	}
 
 	static async getPage(
@@ -17,23 +22,30 @@ export class UserServerService {
 		limit: number,
 		query: Record<string, unknown>
 	) {
-		return await UserModel.find(query, null, {
+		const users = await UserModel.find(query, null, {
 			limit,
 			skip: page * limit,
 		});
+		return formatDocument<User[]>(users);
 	}
 
 	static async create(data: CreateUserDtoType) {
-		return await UserModel.create(data);
+		const user = await UserModel.create(data);
+		if (!user) return null;
+		return formatDocument<User>(user);
 	}
 
 	static async update(id: string, data: Update<User>) {
-		return await UserModel.findByIdAndUpdate(id, data, {
+		const user = await UserModel.findByIdAndUpdate(id, data, {
 			new: true,
 		});
+		if (!user) return null;
+		return formatDocument<User>(user);
 	}
 
 	static async delete(id: string) {
-		return await UserModel.findByIdAndDelete(id);
+		const user = await UserModel.findByIdAndDelete(id);
+		if (!user) return null;
+		return formatDocument<User>(user);
 	}
 }

@@ -16,7 +16,7 @@ export type GroundReservationContextType = {
 	setSelectedTimes: React.Dispatch<React.SetStateAction<Timeframe[]>>;
 
 	handleDateChange: (date: Date) => void;
-	handleTimesChange: (timeFrame: Timeframe) => void;
+	handleTimesChange: (timeframe: Timeframe) => void;
 
 	getTileClassName: (data: any) => any;
 

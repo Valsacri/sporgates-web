@@ -1,3 +1,4 @@
+import { Address } from '../general.types';
 import { Item } from './item.types';
 
 export enum SubscriptionPeriodDuration {
@@ -35,5 +36,6 @@ export interface Subscription {
 }
 
 export interface Club extends Item {
+	address: Address;
 	subscriptions: Subscription[];
 }

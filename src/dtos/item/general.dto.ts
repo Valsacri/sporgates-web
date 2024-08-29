@@ -39,6 +39,6 @@ export const TimeframeDto = z.object({
 });
 
 export const DateTimeframesDto = z.object({
-	date: z.date(),
-	hours: z.array(TimeframeDto),
+	date: z.number(),
+	timeframes: z.array(TimeframeDto),
 });

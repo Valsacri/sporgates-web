@@ -2,7 +2,11 @@ import Card from '@/components/utils/Card';
 import Image from 'next/image';
 import { twMerge } from 'tailwind-merge';
 
-function GroundImages({ images }: { images: string[] }) {
+interface Props {
+	images: string[];
+}
+
+function GroundImages({ images }: Props) {
 	return (
 		<Card className='grid grid-cols-4 gap-2'>
 			{images.map((image, index) => (

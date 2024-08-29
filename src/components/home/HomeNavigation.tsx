@@ -39,6 +39,13 @@ function HomeNavigation() {
 					{ prefix: <Icon name='calendar' />, item: 'Events' },
 					{ prefix: <Icon name='star' />, item: 'Offers' },
 					{ prefix: <Icon name='user-plus' />, item: 'Find friends' },
+					{
+						prefix: <Icon name='document' />,
+						item: 'Reservations',
+						onClick() {
+							router.push('/reservations');
+						},
+					},
 				]}
 			/>
 		</Card>

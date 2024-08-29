@@ -4,10 +4,10 @@ import { useEffect, useMemo, useState } from 'react';
 import useBreakpoint from '@/client/hooks/utils/useBreakpoint';
 import GroundReservationMobile from './GroundReservationMobile';
 import {
-	compareTimeFrames,
-	generateTimeFrames,
+	compareTimeframes,
+	generateTimeframes,
 	minutesToDuration,
-	timeFrameToMinutes,
+	timeframeToMinutes,
 } from '@/helpers/datetime.helpers';
 import { Ground } from '@/types/item/ground.types';
 import { Timeframe } from '@/types/general.types';
@@ -42,21 +42,21 @@ function GroundReservation({ ground }: Props) {
 		setOpenTimesPicker(true);
 	};
 
-	const handleTimesChange = (timeFrame: Timeframe) => {
+	const handleTimesChange = (timeframe: Timeframe) => {
 		let newTimes: Timeframe[];
 
 		if (
-			selectedTimes.some((selectedTimeFrame) =>
-				compareTimeFrames(selectedTimeFrame, timeFrame)
+			selectedTimes.some((selectedTimeframe) =>
+				compareTimeframes(selectedTimeframe, timeframe)
 			)
 		) {
-			// Remove the timeFrame if it is already selected
+			// Remove the timeframe if it is already selected
 			newTimes = selectedTimes.filter(
-				(selectedTimeFrame) => !compareTimeFrames(selectedTimeFrame, timeFrame)
+				(selectedTimeframe) => !compareTimeframes(selectedTimeframe, timeframe)
 			);
 		} else {
-			// Add the timeFrame if it is not selected
-			newTimes = [...selectedTimes, timeFrame];
+			// Add the timeframe if it is not selected
+			newTimes = [...selectedTimes, timeframe];
 		}
 
 		// Sort newTimes based on the start time
@@ -72,7 +72,7 @@ function GroundReservation({ ground }: Props) {
 	// Function to calculate the total duration for the current day
 	const { hours, minutes } = useMemo(() => {
 		const totalMinutes = selectedTimes.reduce(
-			(totalMinutes, timeFrame) => totalMinutes + timeFrameToMinutes(timeFrame),
+			(totalMinutes, timeframe) => totalMinutes + timeframeToMinutes(timeframe),
 			0
 		);
 
@@ -80,26 +80,26 @@ function GroundReservation({ ground }: Props) {
 	}, [selectedTimes]);
 
 	const times = useMemo(() => {
-		const timeFrames = generateTimeFrames(8, 21, 30);
+		const timeframes = generateTimeframes(8, 21, 30);
 
-		return timeFrames.map((timeFrame) => {
-			// Check if the timeFrame is busy
-			const isBusy = ground.busyHours[0]?.hours.some((busyTimeFrame) =>
-				compareTimeFrames(busyTimeFrame, timeFrame)
+		return timeframes.map((timeframe) => {
+			// Check if the timeframe is busy
+			const isBusy = ground.busyHours[0]?.timeframes.some((busyTimeframe) =>
+				compareTimeframes(busyTimeframe, timeframe)
 			);
 
-			// Check if the timeFrame is selected
-			const isSelected = selectedTimes.some((selectedTimeFrame) =>
-				compareTimeFrames(selectedTimeFrame, timeFrame)
+			// Check if the timeframe is selected
+			const isSelected = selectedTimes.some((selectedTimeframe) =>
+				compareTimeframes(selectedTimeframe, timeframe)
 			);
 
 			return {
-				text: `${timeFrame.from.hours}:${timeFrame.from.minutes
+				text: `${timeframe.from.hours}:${timeframe.from.minutes
 					.toString()
-					.padStart(2, '0')} - ${timeFrame.to.hours}:${timeFrame.to.minutes
+					.padStart(2, '0')} - ${timeframe.to.hours}:${timeframe.to.minutes
 					.toString()
 					.padStart(2, '0')}`,
-				onClick: () => handleTimesChange(timeFrame),
+				onClick: () => handleTimesChange(timeframe),
 				disabled: isBusy,
 				selected: isSelected,
 			};

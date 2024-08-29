@@ -1,18 +1,18 @@
 import { Timeframe } from '@/types/general.types';
 
-export const generateTimeFrames = (
+export const generateTimeframes = (
 	startHour: number,
 	endHour: number,
 	interval = 60
 ): Timeframe[] => {
-	const timeFrames: Timeframe[] = [];
+	const timeframes: Timeframe[] = [];
 
 	for (let hour = startHour; hour < endHour; hour++) {
 		for (let minute = 0; minute < 60; minute += interval) {
 			const endMinute = minute + interval;
 			const endHourAdjusted = hour + Math.floor(endMinute / 60);
 
-			const timeFrame: Timeframe = {
+			const timeframe: Timeframe = {
 				from: {
 					hours: hour,
 					minutes: minute,
@@ -23,15 +23,15 @@ export const generateTimeFrames = (
 				},
 			};
 
-			timeFrames.push(timeFrame);
+			timeframes.push(timeframe);
 		}
 	}
 
-	return timeFrames;
+	return timeframes;
 };
 
-export const timeFrameToMinutes = (timeFrame: Timeframe): number => {
-	const { from, to } = timeFrame;
+export const timeframeToMinutes = (timeframe: Timeframe): number => {
+	const { from, to } = timeframe;
 
 	let duration = to.hours * 60 + to.minutes - (from.hours * 60 + from.minutes);
 
@@ -42,15 +42,15 @@ export const timeFrameToMinutes = (timeFrame: Timeframe): number => {
 	return duration;
 };
 
-export const compareTimeFrames = (
-	timeFrame1: Timeframe,
-	timeFrame2: Timeframe
+export const compareTimeframes = (
+	timeframe1: Timeframe,
+	timeframe2: Timeframe
 ): boolean => {
 	return (
-		timeFrame1.from.hours === timeFrame2.from.hours &&
-		timeFrame1.from.minutes === timeFrame2.from.minutes &&
-		timeFrame1.to.hours === timeFrame2.to.hours &&
-		timeFrame1.to.minutes === timeFrame2.to.minutes
+		timeframe1.from.hours === timeframe2.from.hours &&
+		timeframe1.from.minutes === timeframe2.from.minutes &&
+		timeframe1.to.hours === timeframe2.to.hours &&
+		timeframe1.to.minutes === timeframe2.to.minutes
 	);
 };
 
