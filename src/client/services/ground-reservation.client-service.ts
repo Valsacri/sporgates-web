@@ -10,6 +10,11 @@ export class GroundReservationClientService {
 
 	static async getPage() {}
 
+	static async getAll() {
+		const res = await Axios.get<GroundReservation[]>('/grounds/reservations');
+		return res.data;
+	}
+
 	static async create(data: GroundReservationDtoType) {
 		const res = await Axios.post<GroundReservation>(
 			`/grounds/reservations`,

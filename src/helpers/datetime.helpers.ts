@@ -46,6 +46,17 @@ export const generateTimeframes = (
 	return timeframes;
 };
 
+export const formatTime = (time: Time) => {
+	const { hours, minutes } = time;
+	return `${hours.toString().padStart(2, '0')}:${minutes
+		.toString()
+		.padStart(2, '0')}`;
+};
+
+export const formatTimeframe = (timeframe: Timeframe) => {
+	return `${formatTime(timeframe.start)} - ${formatTime(timeframe.end)}`;
+};
+
 export const timeframeToMinutes = (timeframe: Timeframe): number => {
 	const { start, end } = timeframe;
 

@@ -1,4 +1,4 @@
-import { Address, DateTimeframes } from '../general.types';
+import { Address, DateTimeframes, Timeframe } from '../general.types';
 import { Item } from './item.types';
 import { Subscription } from './club.types';
 import { User } from '../user.types';
@@ -14,7 +14,8 @@ export enum GroundRerservationStatus {
 export interface GroundReservation extends Record {
 	ground: string | Ground;
 	user: string | User;
-	dateTimeframes: DateTimeframes;
+	date: number;
+	timeframe: Timeframe;
 	totalPrice: number;
 	status: GroundRerservationStatus;
 }

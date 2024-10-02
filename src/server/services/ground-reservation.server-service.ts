@@ -4,7 +4,10 @@ import {
 	GroundReservationDtoType,
 	GroundReservationUpdateDtoType,
 } from '@/dtos/item/ground.dto';
-import { GroundReservation } from '@/types/item/ground.types';
+import {
+	GroundRerservationStatus,
+	GroundReservation,
+} from '@/types/item/ground.types';
 import { formatDocument } from '../helpers/database.helper';
 
 export class GroundReservationServerService {
@@ -12,6 +15,25 @@ export class GroundReservationServerService {
 		const reservation = await GroundReservationModel.findById(id);
 		if (!reservation) return null;
 		return formatDocument<GroundReservation>(reservation);
+	}
+
+	static async getAll(
+		groundId: string | null,
+		status: GroundRerservationStatus | null
+	) {
+		const query = {} as FilterQuery<GroundReservation>;
+
+		if (groundId) {
+			query.ground = groundId;
+		}
+		if (status) {
+			query.status = status;
+		}
+
+		const reservations = await GroundReservationModel.find(query).populate(
+			'ground'
+		);
+		return formatDocument<GroundReservation[]>(reservations);
 	}
 
 	static async getPage(
