@@ -1,11 +1,9 @@
 'use client';
 
 import Calendar from 'react-calendar';
-import Buttons from '../profile/Buttons';
 import Dropdown from '../utils/Dropdown';
 import Card from '../utils/Card';
 import { useContext } from 'react';
-import Button from '../utils/Button';
 import { GroundReservationContext } from '@/client/contexts/ground-reservation.context';
 import TimeFramePicker from './TimeframePicker';
 
@@ -16,6 +14,7 @@ function ReservationPickerDesktop() {
 		openTimesPicker,
 		setOpenTimesPicker,
 		handleDateChange,
+		selectedTimeframe,
 		handleTimeframeChange,
 		getTileClassName,
 		selectedDate,
@@ -68,6 +67,7 @@ function ReservationPickerDesktop() {
 						startTime={{ hours: 8, minutes: 0 }}
 						endTime={{ hours: 20, minutes: 0 }}
 						interval={30}
+						value={selectedTimeframe}
 						onChange={handleTimeframeChange}
 					/>
 				</Card>

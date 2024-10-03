@@ -17,6 +17,7 @@ type Props = {
 	disabled?: boolean;
 	loading?: boolean;
 	onMouseEnter?: () => void;
+	onMouseLeave?: () => void;
 };
 
 function Button({
@@ -30,7 +31,8 @@ function Button({
 	type = 'button',
 	disabled,
 	loading,
-	onMouseEnter
+	onMouseEnter,
+	onMouseLeave,
 }: Props) {
 	const baseStyles =
 		'h-[40px] text-nowrap flex justify-center items-center gap-1 text-sm transition-colors duration-150 py-2.5 rounded-md';
@@ -79,6 +81,7 @@ function Button({
 			)}
 			disabled={disabled || loading}
 			onMouseEnter={onMouseEnter}
+			onMouseLeave={onMouseLeave}
 		>
 			{loading ? <Loader className='mr-1' /> : null}
 

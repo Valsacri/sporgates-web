@@ -75,11 +75,13 @@ export const compareTimeframes = (
 	timeframe2: Timeframe
 ): boolean => {
 	return (
-		timeframe1.start.hours === timeframe2.start.hours &&
-		timeframe1.start.minutes === timeframe2.start.minutes &&
-		timeframe1.end.hours === timeframe2.end.hours &&
-		timeframe1.end.minutes === timeframe2.end.minutes
+		compareTimes(timeframe1.start, timeframe2.start) &&
+		compareTimes(timeframe1.end, timeframe2.end)
 	);
+};
+
+export const compareTimes = (time1: Time, time2: Time): boolean => {
+	return time1.hours === time2.hours && time1.minutes === time2.minutes;
 };
 
 export const minutesToTime = (minutes: number) => {
