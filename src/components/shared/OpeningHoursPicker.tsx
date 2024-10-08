@@ -6,7 +6,7 @@ import {
 	simplifyOpeningHours,
 } from '@/helpers/datetime.helpers';
 import { OpeningHours } from '@/types/business.types';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 export interface Time {
@@ -45,62 +45,107 @@ const OpeningHoursPicker = ({
 	onChange,
 	readOnly = false,
 }: Props) => {
-	const [startHour, setStartHour] = useState<OpeningHour | null>(null);
-	const [initialState, setInitialState] = useState<boolean | null>(null);
+	const grid = useMemo(() => {
+		// Create a grid where each row represents an hour (0–23),
+		// and each column represents a day of the week.
+		return hours.map((hour) => {
+			// For each hour, map it to an array of booleans representing each day (Monday to Sunday)
+			return DAYS.map((day) => {
+				// Check if the current hour is selected for the current day
+				return value[day].some(
+					(timeframe) =>
+						timeframe.start.hours <= hour && hour < timeframe.end.hours
+				);
+			});
+		});
+	}, [value]);
 
-	const isSelected = (day: Day, hour: number) => {
-		return value[day].some((timeframe) =>
-			isTimeInTimeframe({ hours: hour, minutes: 0 }, timeframe)
-		);
+	const [startCell, setStartCell] = useState<{
+		hourIndex: number;
+		dayIndex: number;
+	} | null>(null);
+
+	const isSelected = (hourIndex: number, dayIndex: number) => {
+		return grid[hourIndex][dayIndex];
 	};
 
-	const handleClick = (day: Day, hour: number) => {
+	const handleClick = (hourIndex: number, dayIndex: number) => {
 		if (readOnly) return;
 
-		const currentSelected = isSelected(day, hour);
-
-		if (!startHour) {
+		if (!startCell) {
 			// If no starting cell is selected, set the starting cell and its initial state
-			setStartHour({ day, hour });
-			setInitialState(currentSelected);
+			setStartCell({ hourIndex, dayIndex });
 		} else {
 			// If a starting cell is already selected, update the rectangle
-			const updatedValue = { ...value };
-			const minDayIndex = Math.min(
-				DAYS.indexOf(startHour.day),
-				DAYS.indexOf(day)
-			);
-			const maxDayIndex = Math.max(
-				DAYS.indexOf(startHour.day),
-				DAYS.indexOf(day)
-			);
-			const minHour = Math.min(startHour.hour, hour);
-			const maxHour = Math.max(startHour.hour, hour);
 
-			for (let d = minDayIndex; d <= maxDayIndex; d++) {
-				for (let h = minHour; h <= maxHour; h++) {
-					const currentDay = DAYS[d];
-					const isCurrentlySelected = isSelected(currentDay, h);
-					if (initialState) {
-						// Remove timeframe if it was initially selected
-						updatedValue[currentDay] = updatedValue[currentDay].filter(
-							(timeframe) =>
-								!(timeframe.start.hours === h && timeframe.end.hours === h + 1)
-						);
+			const isStartCellSelected = isSelected(hourIndex, dayIndex);
+
+			const minDayIndex = Math.min(startCell.dayIndex, dayIndex);
+			const maxDayIndex = Math.max(startCell.dayIndex, dayIndex);
+
+			const minHour = Math.min(startCell.hourIndex, hourIndex);
+			const maxHour = Math.max(startCell.hourIndex, hourIndex);
+
+			for (let h = minHour; h <= maxHour; h++) {
+				for (let d = minDayIndex; d <= maxDayIndex; d++) {
+					grid[h][d] = !isStartCellSelected;
+				}
+			}
+
+			onChange(transformGridToOpeningHours(grid));
+			setStartCell(null);
+		}
+	};
+
+	const transformGridToOpeningHours = (grid: boolean[][]) => {
+		const openingHours: OpeningHours = {
+			monday: [],
+			tuesday: [],
+			wednesday: [],
+			thursday: [],
+			friday: [],
+			saturday: [],
+			sunday: [],
+		};
+
+		// Loop over each day (i.e., each column in the grid)
+		DAYS.forEach((day, dayIndex) => {
+			const timeframes: Timeframe[] = [];
+			let currentTimeframe: Timeframe | null = null;
+
+			for (let hour = 0; hour < grid.length; hour++) {
+				const isSelected = grid[hour][dayIndex];
+
+				if (isSelected) {
+					// If this hour is selected and there's no current timeframe, start a new one
+					if (!currentTimeframe) {
+						currentTimeframe = {
+							start: { hours: hour, minutes: 0 },
+							end: { hours: hour + 1, minutes: 0 }, // We start by assuming it's a one-hour block
+						};
 					} else {
-						// Add timeframe if it was initially unselected
-						updatedValue[currentDay].push({
-							start: { hours: h, minutes: 0 },
-							end: { hours: h + 1, minutes: 0 },
-						});
+						// Extend the current timeframe by one hour
+						currentTimeframe.end.hours = hour + 1;
+					}
+				} else {
+					// If this hour is not selected, and we have an active timeframe, close it
+					if (currentTimeframe) {
+						timeframes.push(currentTimeframe);
+						currentTimeframe = null;
 					}
 				}
 			}
 
-			onChange(simplifyOpeningHours(updatedValue));
-			setStartHour(null);
-			setInitialState(null);
-		}
+			// If the day ends and we're still tracking a timeframe, close it
+			if (currentTimeframe) {
+				timeframes.push(currentTimeframe);
+			}
+
+			// Assign the timeframes for this day to the openingHours object
+			openingHours[day] = timeframes;
+		});
+
+		return openingHours;
 	};
 
 	return (
@@ -108,27 +153,31 @@ const OpeningHoursPicker = ({
 			<div className='grid grid-cols-8 gap-0.5'>
 				<div className='p-1'></div>
 				{DAYS.map((day) => (
-					<div key={day} className='text-center font-bold'>
+					<div key={day} className='text-center capitalize text-sm'>
 						{day.slice(0, 3)}
 					</div>
 				))}
 			</div>
-			{hours.map((hour) => (
-				<div key={hour} className='grid grid-cols-8 gap-0.5 items-center'>
-					<div className='text-center font-bold'>{hour}</div>
-					{DAYS.map((day) => (
+			{grid.map((row, hourIndex) => (
+				<div key={hourIndex} className='grid grid-cols-8 gap-0.5 items-center'>
+					<div className='text-center text-sm'>
+						{hourIndex}
+					</div>
+					{row.map((isSelected, dayIndex) => (
 						<div
-							key={`${day}-${hour}`}
+							key={`${hourIndex}-${dayIndex}`}
 							className={twMerge(
-								'h-8 cursor-pointer',
-								startHour?.day === day && startHour?.hour === hour
+								'h-8',
+								!readOnly && 'cursor-pointer',
+								startCell?.hourIndex === hourIndex &&
+									startCell?.dayIndex === dayIndex
 									? // ? initialState
 									  'bg-success-light'
-									: isSelected(day, hour)
+									: isSelected
 									? 'bg-success'
 									: 'bg-secondary'
 							)}
-							onClick={() => handleClick(day, hour)}
+							onClick={() => handleClick(hourIndex, dayIndex)}
 						/>
 					))}
 				</div>
