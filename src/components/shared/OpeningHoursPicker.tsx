@@ -1,34 +1,38 @@
 'use client';
 
+import { Day, DAYS } from '@/client/types/general.types';
+import {
+	isTimeInTimeframe,
+	simplifyOpeningHours,
+} from '@/helpers/datetime.helpers';
 import { OpeningHours } from '@/types/business.types';
-import React, { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-const days = [
-	{ id: 'monday', display: 'Mon' },
-	{ id: 'tuesday', display: 'Tue' },
-	{ id: 'wednesday', display: 'Wed' },
-	{ id: 'thursday', display: 'Thu' },
-	{ id: 'friday', display: 'Fri' },
-	{ id: 'saturday', display: 'Sat' },
-	{ id: 'sunday', display: 'Sun' },
-];
+export interface Time {
+	hours: number;
+	minutes: number;
+}
+
+export interface Timeframe<T = Time> {
+	start: T;
+	end: T;
+}
+
+export interface OpeningHour {
+	day: Day;
+	hour: number;
+}
+
+interface Props {
+	value: OpeningHours;
+	onChange: (value: OpeningHours) => void;
+	readOnly?: boolean;
+}
+
 const hours = Array.from({ length: 24 }, (_, i) => i);
 
-type Cell = {
-	day: number;
-	hour: number;
-	selected: boolean;
-	highlighted: boolean;
-};
-
-type OpeningHoursPickerProps = {
-	value?: OpeningHours;
-	onChange?: (openingHours: OpeningHours) => void;
-	readOnly?: boolean;
-};
-
-const OpeningHoursPicker: React.FC<OpeningHoursPickerProps> = ({
+const OpeningHoursPicker = ({
 	value = {
 		monday: [],
 		tuesday: [],
@@ -40,206 +44,95 @@ const OpeningHoursPicker: React.FC<OpeningHoursPickerProps> = ({
 	},
 	onChange,
 	readOnly = false,
-}) => {
-	const [grid, setGrid] = useState<Cell[][]>(
-		Array.from({ length: 24 }, (_, hour) =>
-			Array.from({ length: 7 }, (_, day) => ({
-				day,
-				hour,
-				selected: false,
-				highlighted: false,
-			}))
-		)
-	);
-	const [dragging, setDragging] = useState(false);
-	const [startCell, setStartCell] = useState<Cell | null>(null);
-	const [highlightColor, setHighlightColor] = useState('bg-success-dark');
-	const touchMoveRef = useRef<HTMLDivElement>(null);
+}: Props) => {
+	const [startHour, setStartHour] = useState<OpeningHour | null>(null);
+	const [initialState, setInitialState] = useState<boolean | null>(null);
 
-	useEffect(() => {
-		const newGrid = Array.from({ length: 24 }, (_, hour) =>
-			Array.from({ length: 7 }, (_, day) => ({
-				day,
-				hour,
-				selected: value[days[day].id.toLowerCase() as keyof OpeningHours].some(
-					(timeframe) =>
-						timeframe.start.hours <= hour && timeframe.end.hours > hour
-				),
-				highlighted: false,
-			}))
+	const isSelected = (day: Day, hour: number) => {
+		return value[day].some((timeframe) =>
+			isTimeInTimeframe({ hours: hour, minutes: 0 }, timeframe)
 		);
-
-		// Check if the grid needs to be updated
-		const gridNeedsUpdate = grid.some((row, hourIndex) =>
-			row.some(
-				(cell, dayIndex) =>
-					cell.selected !== newGrid[hourIndex][dayIndex].selected
-			)
-		);
-
-		if (gridNeedsUpdate) {
-			setGrid(newGrid);
-		}
-	}, [value]);
-
-	const handleStart = (day: number, hour: number) => {
-		if (readOnly) return;
-
-		const cell = grid[hour][day];
-		setStartCell(cell);
-		setHighlightColor(cell.selected ? 'bg-gray-100' : 'bg-success');
-		setDragging(true);
 	};
 
-	const handleEnd = () => {
+	const handleClick = (day: Day, hour: number) => {
 		if (readOnly) return;
 
-		setDragging(false);
-		if (startCell) {
-			const updatedGrid = grid.map((row) =>
-				row.map((cell) =>
-					cell.highlighted
-						? { ...cell, selected: !startCell.selected, highlighted: false }
-						: cell
-				)
+		const currentSelected = isSelected(day, hour);
+
+		if (!startHour) {
+			// If no starting cell is selected, set the starting cell and its initial state
+			setStartHour({ day, hour });
+			setInitialState(currentSelected);
+		} else {
+			// If a starting cell is already selected, update the rectangle
+			const updatedValue = { ...value };
+			const minDayIndex = Math.min(
+				DAYS.indexOf(startHour.day),
+				DAYS.indexOf(day)
 			);
-			setGrid(updatedGrid);
-			handleOnChange(updatedGrid);
-		}
-		setStartCell(null);
-	};
+			const maxDayIndex = Math.max(
+				DAYS.indexOf(startHour.day),
+				DAYS.indexOf(day)
+			);
+			const minHour = Math.min(startHour.hour, hour);
+			const maxHour = Math.max(startHour.hour, hour);
 
-	const handleMove = (day: number, hour: number) => {
-		if (readOnly) return;
-
-		if (dragging && startCell) {
-			updateRectangle(startCell, { day, hour });
-		}
-	};
-
-	const updateRectangle = (
-		start: { day: number; hour: number },
-		end: { day: number; hour: number }
-	) => {
-		const minDay = Math.min(start.day, end.day);
-		const maxDay = Math.max(start.day, end.day);
-		const minHour = Math.min(start.hour, end.hour);
-		const maxHour = Math.max(start.hour, end.hour);
-
-		setGrid((prevGrid) =>
-			prevGrid.map((row, h) =>
-				row.map((cell, d) => {
-					if (h >= minHour && h <= maxHour && d >= minDay && d <= maxDay) {
-						return { ...cell, highlighted: true };
-					}
-					return { ...cell, highlighted: false };
-				})
-			)
-		);
-	};
-
-	const handleOnChange = (updatedGrid: Cell[][]) => {
-		const newOpeningHours: OpeningHours = {
-			monday: [],
-			tuesday: [],
-			wednesday: [],
-			thursday: [],
-			friday: [],
-			saturday: [],
-			sunday: [],
-		};
-
-		updatedGrid.forEach((row, hour) => {
-			row.forEach((cell, day) => {
-				if (cell.selected) {
-					const dayName = days[day].id.toLowerCase() as keyof OpeningHours;
-					const lastTimeframe =
-						newOpeningHours[dayName][newOpeningHours[dayName].length - 1];
-
-					if (
-						lastTimeframe &&
-						lastTimeframe.end.hours === hour &&
-						lastTimeframe.end.minutes === 0
-					) {
-						lastTimeframe.end.hours = hour + 1;
+			for (let d = minDayIndex; d <= maxDayIndex; d++) {
+				for (let h = minHour; h <= maxHour; h++) {
+					const currentDay = DAYS[d];
+					const isCurrentlySelected = isSelected(currentDay, h);
+					if (initialState) {
+						// Remove timeframe if it was initially selected
+						updatedValue[currentDay] = updatedValue[currentDay].filter(
+							(timeframe) =>
+								!(timeframe.start.hours === h && timeframe.end.hours === h + 1)
+						);
 					} else {
-						newOpeningHours[dayName].push({
-							start: { hours: hour, minutes: 0 },
-							end: { hours: hour + 1, minutes: 0 },
+						// Add timeframe if it was initially unselected
+						updatedValue[currentDay].push({
+							start: { hours: h, minutes: 0 },
+							end: { hours: h + 1, minutes: 0 },
 						});
 					}
 				}
-			});
-		});
-
-		onChange?.(newOpeningHours);
-	};
-
-	const handleTouchMove = (e: React.TouchEvent) => {
-		if (readOnly) return;
-
-		e.preventDefault();
-
-		const touch = e.touches[0];
-		if (touchMoveRef.current) {
-			const target = document.elementFromPoint(touch.clientX, touch.clientY);
-			if (target instanceof HTMLElement) {
-				const day = parseInt(target.dataset.day || '-1', 10);
-				const hour = parseInt(target.dataset.hour || '-1', 10);
-				if (!isNaN(day) && !isNaN(hour)) {
-					handleMove(day, hour);
-				}
 			}
+
+			onChange(simplifyOpeningHours(updatedValue));
+			setStartHour(null);
+			setInitialState(null);
 		}
 	};
 
 	return (
-		<div
-			className='overflow-x-auto select-none touch-none'
-			ref={touchMoveRef}
-			onTouchMove={handleTouchMove}
-		>
-			<table className='border-collapse border-white table-fixed font-normal text-xs'>
-				<thead>
-					<tr>
-						<th className='p-2 border border-white'></th>
-						{days.map((day, index) => (
-							<th
-								key={index}
-								className='p-2 border border-white w-12 text-center font-normal'
-							>
-								{day.display}
-							</th>
-						))}
-					</tr>
-				</thead>
-				<tbody>
-					{hours.map((hour, hourIndex) => (
-						<tr key={hourIndex}>
-							<td className='border-2 border-white text-center w-12'>{hour}</td>
-							{grid[hourIndex].map((cell, dayIndex) => (
-								<td
-									key={dayIndex}
-									className={twMerge(
-										'p-2 border-2 border-white text-center cursor-pointer',
-										cell.selected ? 'bg-success' : 'bg-gray-100',
-										cell.highlighted ? highlightColor : '',
-										dragging && 'cursor-crosshair',
-										readOnly && 'cursor-default'
-									)}
-									onMouseDown={() => {
-										handleStart(cell.day, cell.hour);
-									}}
-									onMouseUp={handleEnd}
-									onMouseEnter={() => handleMove(cell.day, cell.hour)}
-									data-day={cell.day}
-									data-hour={cell.hour}
-								></td>
-							))}
-						</tr>
+		<div className='select-none flex flex-col gap-0.5'>
+			<div className='grid grid-cols-8 gap-0.5'>
+				<div className='p-1'></div>
+				{DAYS.map((day) => (
+					<div key={day} className='text-center font-bold'>
+						{day.slice(0, 3)}
+					</div>
+				))}
+			</div>
+			{hours.map((hour) => (
+				<div key={hour} className='grid grid-cols-8 gap-0.5 items-center'>
+					<div className='text-center font-bold'>{hour}</div>
+					{DAYS.map((day) => (
+						<div
+							key={`${day}-${hour}`}
+							className={twMerge(
+								'h-8 cursor-pointer',
+								startHour?.day === day && startHour?.hour === hour
+									? // ? initialState
+									  'bg-success-light'
+									: isSelected(day, hour)
+									? 'bg-success'
+									: 'bg-secondary'
+							)}
+							onClick={() => handleClick(day, hour)}
+						/>
 					))}
-				</tbody>
-			</table>
+				</div>
+			))}
 		</div>
 	);
 };

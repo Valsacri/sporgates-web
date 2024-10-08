@@ -3,7 +3,7 @@ import {
 	GroundReservation,
 } from '@/types/item/ground.types';
 import mongoose, { Schema } from 'mongoose';
-import { DateTimeframesSchema } from '../general.model';
+import { TimeframeSchema } from '../general.model';
 import { Model } from 'mongoose';
 import { ModelName } from '../model-name.enum';
 import { RecordSchema } from '../utils.model';
@@ -16,7 +16,8 @@ const GroundReservationSchema = new Schema<GroundReservation>({
 		required: true,
 	},
 	user: { type: Schema.Types.ObjectId, ref: ModelName.User, required: true },
-	dateTimeframes: { type: DateTimeframesSchema, required: true },
+	date: { type: Number, required: true },
+	timeframe: { type: TimeframeSchema, required: true },
 	totalPrice: { type: Number, required: true },
 	status: {
 		type: String,

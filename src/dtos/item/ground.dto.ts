@@ -1,13 +1,14 @@
 import { z } from 'zod';
 import { ItemDto } from './item.dto';
-import { AddressDto, DateTimeframesDto } from './general.dto';
+import { AddressDto, DateTimeframesDto, TimeframeDto } from './general.dto';
 import { SubscriptionDto } from './club.dto';
 import { GroundRerservationStatus } from '@/types/item/ground.types';
 
 export const GroundReservationDto = z.object({
 	ground: z.string().min(1),
 	user: z.string().min(1),
-	dateTimeframes: DateTimeframesDto,
+	date: z.number(),
+	timeframe: TimeframeDto,
 	totalPrice: z.number(),
 	status: z.nativeEnum(GroundRerservationStatus).optional(),
 });

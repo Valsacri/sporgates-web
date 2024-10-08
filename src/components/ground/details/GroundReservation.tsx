@@ -18,12 +18,9 @@ function GroundReservation({ ground }: Props) {
 
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
-	const [selectedTimeframe, setSelectedTimeframe] = useState<
-		Timeframe<Time | null>
-	>({
-		start: null,
-		end: null,
-	});
+	const [selectedTimeframe, setSelectedTimeframe] = useState<Timeframe | null>(
+		null
+	);
 
 	const [duration, setDuration] = useState<Time>({ hours: 0, minutes: 0 });
 
@@ -40,15 +37,12 @@ function GroundReservation({ ground }: Props) {
 
 	const handleDateChange = (date: Date) => {
 		setSelectedDate(date);
-		setSelectedTimeframe({
-			start: null,
-			end: null,
-		});
+		setSelectedTimeframe(null);
 		setOpenDatePicker(false);
 		setOpenTimesPicker(true);
 	};
 
-	const handleTimeframeChange = (timeframe: Timeframe<Time | null>) => {
+	const handleTimeframeChange = (timeframe: Timeframe) => {
 		setSelectedTimeframe(timeframe);
 		setDuration(
 			!timeframe.start || !timeframe.end

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { forwardRef, useState } from 'react';
+import { forwardRef } from 'react';
 import { useId } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Dropdown from '../Dropdown';

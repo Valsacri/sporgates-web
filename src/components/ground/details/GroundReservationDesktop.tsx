@@ -14,12 +14,11 @@ function GroundReservationDesktop() {
 
 	const { ground, selectedTimeframe } = useContext(GroundReservationContext);
 
-	const totalPrice =
-		!selectedTimeframe.start || !selectedTimeframe.end
-			? 0
-			: (timeframeToMinutes(selectedTimeframe as Timeframe) /
-					ground.minReservationTime) *
-			  ground.price;
+	const totalPrice = !selectedTimeframe
+		? 0
+		: (timeframeToMinutes(selectedTimeframe as Timeframe) /
+				ground.minReservationTime) *
+		  ground.price;
 
 	return (
 		<Card className='sticky top-0 left-0 w-full h-max pt-5'>
@@ -37,7 +36,7 @@ function GroundReservationDesktop() {
 				onClick={handleReserve}
 				loading={loading}
 			>
-				Reserve now {selectedTimeframe.end && `for ${totalPrice} dh`}
+				Reserve now {selectedTimeframe && `for ${totalPrice} dh`}
 			</Button>
 		</Card>
 	);

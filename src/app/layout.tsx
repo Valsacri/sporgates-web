@@ -1,6 +1,5 @@
 'use client';
 
-import type { Metadata } from 'next';
 import { twMerge } from 'tailwind-merge';
 import { poppinsFont } from '@/client/config/fonts';
 import ContextProvider from '@/components/ContextProvider';
@@ -9,8 +8,6 @@ import '../client/styles/globals.css';
 import '../client/styles/calendar.css';
 import 'react-calendar/dist/Calendar.css';
 import { initFirebaseApp } from '@/client/config/firebase.config';
-import { useEffect } from 'react';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 // export const metadata: Metadata = {
 // 	title: 'Sporgates',

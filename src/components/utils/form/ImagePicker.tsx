@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useRef } from 'react';
+import { ChangeEvent, useRef } from 'react';
 import { BiLoader } from 'react-icons/bi';
 import { twMerge } from 'tailwind-merge';
 import { HiX } from 'react-icons/hi';

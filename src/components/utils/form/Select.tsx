@@ -1,4 +1,4 @@
-import React, { forwardRef, useId, useState } from 'react';
+import { forwardRef, useId, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import List, { ListItem } from '../List';
 import Dropdown from '../Dropdown';

@@ -1,3 +1,4 @@
+import { OpeningHours } from '@/types/business.types';
 import { Time, Timeframe } from '@/types/general.types';
 
 export const generateTimes = (
@@ -70,18 +71,117 @@ export const timeframeToMinutes = (timeframe: Timeframe): number => {
 	return duration;
 };
 
-export const compareTimeframes = (
+export const isTimeInTimeframe = (
+	time: Time,
+	timeframe: Timeframe
+): boolean => {
+	return isGteTime(time, timeframe.start) && isLteTime(time, timeframe.end);
+};
+
+export const isTimeframesEqual = (
 	timeframe1: Timeframe,
 	timeframe2: Timeframe
 ): boolean => {
 	return (
-		compareTimes(timeframe1.start, timeframe2.start) &&
-		compareTimes(timeframe1.end, timeframe2.end)
+		isTimesEqual(timeframe1.start, timeframe2.start) &&
+		isTimesEqual(timeframe1.end, timeframe2.end)
 	);
 };
 
-export const compareTimes = (time1: Time, time2: Time): boolean => {
+export const isTimesEqual = (time1: Time, time2: Time) => {
 	return time1.hours === time2.hours && time1.minutes === time2.minutes;
+};
+
+export const isGteTime = (time1: Time, time2: Time) => {
+	return (
+		time1.hours > time2.hours ||
+		(time1.hours === time2.hours && time1.minutes >= time2.minutes)
+	);
+};
+
+export const isLteTime = (time1: Time, time2: Time) => {
+	return (
+		time1.hours < time2.hours ||
+		(time1.hours === time2.hours && time1.minutes <= time2.minutes)
+	);
+};
+
+export const isGtTime = (time1: Time, time2: Time) => {
+	return (
+		time1.hours > time2.hours ||
+		(time1.hours === time2.hours && time1.minutes > time2.minutes)
+	);
+};
+
+export const isLtTime = (time1: Time, time2: Time) => {
+	return (
+		time1.hours < time2.hours ||
+		(time1.hours === time2.hours && time1.minutes < time2.minutes)
+	);
+};
+
+/**
+ * Helper function to check if two timeframes are consecutive (1 hour apart).
+ */
+const areConsecutive = (a: Timeframe, b: Timeframe): boolean => {
+	// Check if the start of timeframeB is exactly 1 hour after the end of timeframeA
+	return (
+		a.end.hours + 1 === b.start.hours &&
+		a.end.minutes === b.start.minutes
+	);
+};
+
+/**
+ * Merges consecutive timeframes for a given day.
+ */
+const mergeConsecutiveTimeframes = (timeframes: Timeframe[]): Timeframe[] => {
+	if (timeframes.length === 0) return [];
+
+	// Sort timeframes by start time to ensure we are merging in the correct order
+	timeframes.sort((a, b) => {
+		if (a.start.hours === b.start.hours) {
+			return a.start.minutes - b.start.minutes;
+		}
+		return a.start.hours - b.start.hours;
+	});
+
+	const merged: Timeframe[] = [];
+	let current = timeframes[0];
+
+	for (let i = 1; i < timeframes.length; i++) {
+		const next = timeframes[i];
+
+		// If current timeframe is consecutive (1 hour apart) with the next one, merge them
+		if (areConsecutive(current, next)) {
+			current = { start: current.start, end: next.end };
+		} else {
+			// Otherwise, push the current timeframe and move to the next
+			merged.push(current);
+			current = next;
+		}
+	}
+
+	// Don't forget to push the last timeframe
+	merged.push(current);
+
+	return merged;
+};
+
+/**
+ * Simplifies the opening hours by merging consecutive timeframes for each day.
+ */
+export const simplifyOpeningHours = (
+	openingHours: OpeningHours
+): OpeningHours => {
+	return {
+		monday: mergeConsecutiveTimeframes(openingHours.monday),
+		tuesday: mergeConsecutiveTimeframes(openingHours.tuesday),
+		wednesday: mergeConsecutiveTimeframes(openingHours.wednesday),
+		thursday: mergeConsecutiveTimeframes(openingHours.thursday),
+		friday: mergeConsecutiveTimeframes(openingHours.friday),
+		saturday: mergeConsecutiveTimeframes(openingHours.saturday),
+		sunday: mergeConsecutiveTimeframes(openingHours.sunday),
+	};
 };
 
 export const minutesToTime = (minutes: number) => {

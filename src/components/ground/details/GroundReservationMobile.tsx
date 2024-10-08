@@ -15,7 +15,7 @@ function GroundReservationMobile() {
 	const { ground, selectedTimeframe } = useContext(GroundReservationContext);
 
 	const totalPrice =
-		!selectedTimeframe.start || !selectedTimeframe.end
+		!selectedTimeframe || !selectedTimeframe
 			? 0
 			: (timeframeToMinutes(selectedTimeframe as Timeframe) /
 					ground.minReservationTime) *
@@ -32,7 +32,7 @@ function GroundReservationMobile() {
 				onClick={handleReserve}
 				loading={loading}
 			>
-				Reserve now {selectedTimeframe.end && `for ${totalPrice} dh`}
+				Reserve now {selectedTimeframe && `for ${totalPrice} dh`}
 			</Button>
 		</Card>
 	);

@@ -1,6 +1,5 @@
-import React from 'react';
-import Card from '../utils/Card';
 import { GroundReservation } from '@/types/item/ground.types';
+import Card from '../utils/Card';
 
 interface Props {
 	reservation: GroundReservation;

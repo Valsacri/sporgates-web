@@ -12,7 +12,7 @@ export type GroundReservationContextType = {
 
 	selectedDate: Date;
 	setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
-	selectedTimeframe: Timeframe<Time | null>;
+	selectedTimeframe: Timeframe | null;
 
 	handleDateChange: (date: Date) => void;
 	handleTimeframeChange: (timeframe: Timeframe) => void;
@@ -32,13 +32,10 @@ export const GroundReservationContext =
 		setOpenTimesPicker: () => {},
 		selectedDate: new Date(),
 		setSelectedDate: () => {},
-		selectedTimeframe: {
-			start: null,
-			end: null,
-		},
+		selectedTimeframe: null,
 		handleDateChange: () => {},
 		handleTimeframeChange: () => {},
 		getTileClassName: () => {},
-		duration: {hours: 0, minutes: 0},
+		duration: { hours: 0, minutes: 0 },
 		setDuration: () => {},
 	});

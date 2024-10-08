@@ -4,11 +4,7 @@ import Button from '@/components/utils/Button';
 import { twMerge } from 'tailwind-merge';
 import { useMemo, useState } from 'react';
 import { Timeframe, Time } from '@/types/general.types';
-import {
-	compareTimeframes,
-	compareTimes,
-	generateTimeframes,
-} from '@/helpers/datetime.helpers';
+import { isTimesEqual, generateTimeframes } from '@/helpers/datetime.helpers';
 
 interface Props {
 	startTime: Time;
@@ -16,8 +12,8 @@ interface Props {
 	interval: number;
 	buttonClassName?: string;
 	containerClassName?: string;
-	value?: Timeframe<Time | null>;
-	onChange?: (timeframe: Timeframe<Time | null>, time?: Time) => void;
+	value?: Timeframe | null;
+	onChange?: (timeframe: Timeframe, time?: Time) => void;
 }
 
 function TimeFramePicker({
@@ -40,10 +36,10 @@ function TimeFramePicker({
 
 		if (value?.start && value?.end) {
 			initStartIndex = timeframes.findIndex((timeframe) =>
-				compareTimes(timeframe.start, value.start!)
+				isTimesEqual(timeframe.start, value.start!)
 			);
 			initEndIndex = timeframes.findIndex((timeframe) =>
-				compareTimes(timeframe.end, value.end!)
+				isTimesEqual(timeframe.end, value.end!)
 			);
 		}
 
@@ -52,14 +48,12 @@ function TimeFramePicker({
 
 	const [startIndex, setStartIndex] = useState<number>(initStartIndex);
 	const [endIndex, setEndIndex] = useState<number>(initEndIndex);
-	const [hoverIndex, setHoverIndex] = useState<number>(-1);
 
 	const handleClick = (index: number) => {
 		if (startIndex === -1 || endIndex !== -1) {
 			// Start a new selection
 			setStartIndex(index);
 			setEndIndex(-1);
-			setHoverIndex(-1);
 			return;
 		}
 
@@ -97,37 +91,39 @@ function TimeFramePicker({
 	};
 
 	const isSelected = (index: number) => {
-		if (startIndex !== -1 && endIndex === -1 && hoverIndex !== -1) {
-			const minIndex = Math.min(startIndex, hoverIndex);
-			const maxIndex = Math.max(startIndex, hoverIndex);
-			return index >= minIndex && index <= maxIndex;
-		}
 		return (startIndex <= index && endIndex >= index) || startIndex === index;
 	};
 
 	return (
-		<div className={twMerge('flex gap-2', containerClassName)}>
-			{timeframes.map((timeframe, index) => (
-				<Button
-					key={index}
-					color={isSelected(index) ? 'primary' : 'secondary'}
-					variant='filled'
-					className={twMerge(buttonClassName)}
-					onClick={() => handleClick(index)}
-					onMouseEnter={() => setHoverIndex(index)}
-					onMouseLeave={() => setHoverIndex(-1)}
-				>
-					{`${timeframe.start.hours
-						.toString()
-						.padStart(2, '0')}:${timeframe.start.minutes
-						.toString()
-						.padStart(2, '0')} - ${timeframe.end.hours
-						.toString()
-						.padStart(2, '0')}:${timeframe.end.minutes
-						.toString()
-						.padStart(2, '0')}`}
-				</Button>
-			))}
+		<div>
+			<div className={twMerge('flex gap-2', containerClassName)}>
+				{timeframes.map((timeframe, index) => (
+					<Button
+						key={index}
+						color={isSelected(index) ? 'primary' : 'secondary'}
+						variant={
+							startIndex === index && endIndex === -1 ? 'outlined' : 'filled'
+						}
+						className={twMerge(
+							buttonClassName,
+							startIndex === index && endIndex === -1
+								? 'hover:bg-secondary hover:text-primary'
+								: ''
+						)}
+						onClick={() => handleClick(index)}
+					>
+						{`${timeframe.start.hours
+							.toString()
+							.padStart(2, '0')}:${timeframe.start.minutes
+							.toString()
+							.padStart(2, '0')} - ${timeframe.end.hours
+							.toString()
+							.padStart(2, '0')}:${timeframe.end.minutes
+							.toString()
+							.padStart(2, '0')}`}
+					</Button>
+				))}
+			</div>
 		</div>
 	);
 }
