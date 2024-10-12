@@ -82,7 +82,7 @@ function ManageGroundPopup({ children, ground }: Props) {
 		} as GroundDtoType,
 	});
 
-	const openingHours = watch('openingHours');
+	const openingHours = watch('openingHours') as OpeningHours;
 	const subscriptions = watch('subscriptions') || [];
 
 	const [currentSubscriptionIndex, setCurrentSubscriptionIndex] = useState(-1);
@@ -228,7 +228,7 @@ function ManageGroundPopup({ children, ground }: Props) {
 							<Input
 								label='Description'
 								{...register('description')}
-								rows={5}
+								multiline
 								error={errors.description?.message}
 							/>
 						</div>

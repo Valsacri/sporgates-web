@@ -1,11 +1,15 @@
 'use client';
 
+import { AlertContext, AlertMessage } from '@/client/contexts/alert.context';
 import { UserContext } from '@/client/contexts/user.context';
+import { useAlert } from '@/client/hooks/utils/useAlert';
 import { UserClientService } from '@/client/services/user.client-service';
 import { User } from '@/types/user.types';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { Alert } from './utils/Alert';
+import Loader from './utils/Loader';
 
 interface Props {
 	children: React.ReactNode;
@@ -13,7 +17,8 @@ interface Props {
 
 function ContextProvider({ children }: Props) {
 	const router = useRouter();
-	const [user, setUser] = useState<User | null | undefined>(null);
+	const [user, setUser] = useState<User | null | undefined>(undefined);
+	const { alert, showAlert } = useAlert();
 
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(getAuth(), async (authUser) => {
@@ -33,7 +38,16 @@ function ContextProvider({ children }: Props) {
 
 	return (
 		<UserContext.Provider value={[user, setUser]}>
-			{children}
+			<AlertContext.Provider value={showAlert}>
+				{user !== undefined ? (
+					children
+				) : (
+					<div className='w-screen h-screen flex justify-center items-center'>
+						<Loader className='size-20' />
+					</div>
+				)}
+				{alert && <Alert alert={alert} />}
+			</AlertContext.Provider>
 		</UserContext.Provider>
 	);
 }

@@ -6,7 +6,7 @@ import { Color } from '@/client/types/general.types';
 import { useRouter } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 
-type Item = {
+export interface ButtonItem {
 	text: string;
 	icon?: CocoIcon;
 	href?: string;
@@ -15,10 +15,10 @@ type Item = {
 	disabled?: boolean;
 	color?: Color;
 	selected?: boolean;
-};
+}
 
 interface Props {
-	items: Item[];
+	items: ButtonItem[];
 	buttonClassName?: string;
 	containerClassName?: string;
 	stretch?: boolean;
@@ -36,7 +36,7 @@ function Buttons({
 }: Props) {
 	const router = useRouter();
 
-	const handleClick = (item: Item) => {
+	const handleClick = (item: ButtonItem) => {
 		if (item.href) {
 			router.push(item.href);
 		} else if (item.onClick) {

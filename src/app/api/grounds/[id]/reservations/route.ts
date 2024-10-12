@@ -3,20 +3,23 @@ import {
 	GroundReservationDtoType,
 } from '@/dtos/item/ground.dto';
 import { setupDbConnection } from '@/server/config/mongodb.config';
+import { getServerUser } from '@/server/helpers/http.helper';
 import { GroundReservationServerService } from '@/server/services/ground-reservation.server-service';
 import { GroundRerservationStatus } from '@/types/item/ground.types';
 import { NextRequest } from 'next/server';
 
-export async function GET(req: NextRequest) {
+export async function GET(
+	req: NextRequest,
+	{ params: { id } }: { params: { id: string } }
+) {
 	try {
 		await setupDbConnection();
 
 		const searchParams = req.nextUrl.searchParams;
-		const groundId = searchParams.get('groundId');
 		const status = searchParams.get('status');
 
 		const grounds = await GroundReservationServerService.getAll(
-			groundId,
+			id === 'all' ? null : id,
 			status as GroundRerservationStatus
 		);
 
@@ -29,9 +32,11 @@ export async function GET(req: NextRequest) {
 	}
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
 	try {
 		await setupDbConnection();
+
+		const user = getServerUser(req);
 
 		const data: GroundReservationDtoType = await req.json();
 
@@ -43,7 +48,7 @@ export async function POST(req: Request) {
 			});
 		}
 
-		const ground = await GroundReservationServerService.create(data);
+		const ground = await GroundReservationServerService.create(data, user.id);
 
 		return Response.json(ground, {
 			status: 201,

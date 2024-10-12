@@ -1,124 +1,113 @@
 'use client';
 
+import { AlertContext } from '@/client/contexts/alert.context';
+import { useFetch } from '@/client/hooks/utils/useFetch';
 import { GroundReservationClientService } from '@/client/services/ground-reservation.client-service';
-import Buttons from '@/components/profile/Buttons';
-import Button from '@/components/utils/Button';
+import { GroundClientService } from '@/client/services/ground.client-service';
+import Buttons, { ButtonItem } from '@/components/profile/Buttons';
 import Card from '@/components/utils/Card';
-import { Select } from '@/components/utils/form/Select';
+import { Select, SelectOption } from '@/components/utils/form/Select';
+import Loader from '@/components/utils/Loader';
 import { Table } from '@/components/utils/table/Table';
-import { GROUNDS } from '@/data/grounds';
+import { TableAction } from '@/components/utils/table/table.types';
 import { formatTimeframe } from '@/helpers/datetime.helpers';
 import {
 	Ground,
 	GroundRerservationStatus,
 	GroundReservation,
 } from '@/types/item/ground.types';
-import { useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-// const RESERVATIONS = [
-// 	{
-// 		ground: '66cc5cf50937e343f1de86cc',
-// 		user: '66c65187f00ea05ffef7aaf2',
-// 		date: new Date().getTime(),
-// 		timeframe: {
-// 			start: {
-// 				hours: 10,
-// 				minutes: 0,
-// 			},
-// 			end: {
-// 				hours: 12,
-// 				minutes: 0,
-// 			},
-// 		},
-// 		totalPrice: 100,
-// 		status: GroundRerservationStatus.PENDING,
-// 	},
-// 	{
-// 		ground: '66cc5cf50937e343f1de86cc',
-// 		user: '66c65187f00ea05ffef7aaf2',
-// 		date: new Date().getTime(),
-// 		timeframe: {
-// 			start: {
-// 				hours: 10,
-// 				minutes: 0,
-// 			},
-// 			end: {
-// 				hours: 12,
-// 				minutes: 0,
-// 			},
-// 		},
-// 		totalPrice: 200,
-// 		status: GroundRerservationStatus.ACCEPTED,
-// 	},
-// 	{
-// 		ground: '66cc5cf50937e343f1de86cc',
-// 		user: '66c65187f00ea05ffef7aaf2',
-// 		date: new Date().getTime(),
-// 		timeframe: {
-// 			start: {
-// 				hours: 10,
-// 				minutes: 0,
-// 			},
-// 			end: {
-// 				hours: 12,
-// 				minutes: 0,
-// 			},
-// 		},
-// 		totalPrice: 300,
-// 		status: GroundRerservationStatus.REJECTED,
-// 	},
-// 	{
-// 		ground: '66cc5cf50937e343f1de86cc',
-// 		user: '66c65187f00ea05ffef7aaf2',
-// 		date: new Date().getTime(),
-// 		timeframe: {
-// 			start: {
-// 				hours: 10,
-// 				minutes: 0,
-// 			},
-// 			end: {
-// 				hours: 12,
-// 				minutes: 0,
-// 			},
-// 		},
-// 		totalPrice: 400,
-// 		status: GroundRerservationStatus.CANCELLED,
-// 	},
-// ] as GroundReservation[];
-
 function Page() {
-	const [selectedTypeIndex, setSelectedTypeIndex] = useState(0);
+	const [selectedStatus, setSelectedStatus] = useState<
+		GroundRerservationStatus | 'all'
+	>('all');
 
-	const [reservations, setReservations] = useState<GroundReservation[]>([]);
+	const [loadingActionIndex, setLoadingActionIndex] = useState(-1);
+
+	const showAlert = useContext(AlertContext);
 
 	const { handleSubmit, register, reset, watch, setValue } = useForm({
 		defaultValues: {
-			ground: '',
-		},
+			ground: 'all',
+		} as { ground: string },
 	});
 
-	const handleUpdateReservationStatus = (
-		index: number,
-		status: GroundRerservationStatus
+	const ground = watch('ground');
+
+	const { data: grounds } = useFetch(
+		[],
+		{
+			async fetch() {
+				try {
+					const grounds = await GroundClientService.getAll();
+					return grounds;
+				} catch (error) {
+					console.log(error);
+					showAlert({
+						color: 'danger',
+						message: 'Error while fetching grounds',
+					});
+					return [];
+				}
+			},
+		},
+		[]
+	);
+
+	const {
+		data: reservations,
+		loading,
+		refetch,
+	} = useFetch(
+		[],
+		{
+			async fetch() {
+				try {
+					const reservations = await GroundReservationClientService.getAll(
+						ground,
+						selectedStatus === 'all' ? null : selectedStatus
+					);
+					return reservations;
+				} catch (error) {
+					console.log(error);
+					showAlert({
+						color: 'danger',
+						message: 'Error while fetching reservations',
+					});
+					return [];
+				}
+			},
+		},
+		[ground, selectedStatus]
+	);
+
+	const groundOptions: SelectOption[] = [
+		{
+			value: 'all',
+			label: 'All',
+		},
+		...grounds.map((ground) => ({
+			value: ground.id,
+			label: ground.name,
+		})),
+	];
+
+	const handleUpdateStatus = async (
+		reservation: GroundReservation,
+		status: GroundRerservationStatus,
+		index: number
 	) => {
-		const newReservations = [...reservations];
-		newReservations[index].status = status;
-		setReservations(newReservations);
+		try {
+			setLoadingActionIndex(index);
+			await GroundReservationClientService.updateStatus(reservation.id, status);
+			refetch();
+		} catch (e) {
+		} finally {
+			setLoadingActionIndex(-1);
+		}
 	};
-
-	useEffect(() => {
-		const fetchReservations = async () => {
-			const res = await GroundReservationClientService.getAll();
-			setReservations(res);
-		};
-		fetchReservations();
-	}, []);
-
-	const groundOptions = GROUNDS.map((ground) => ({
-		value: ground.id,
-		label: ground.name,
-	}));
 
 	return (
 		<div className='space-y-5'>
@@ -127,52 +116,63 @@ function Page() {
 				<div className='grid grid-cols-12 gap-5 items-end'>
 					<Select
 						{...register('ground')}
-						value={watch('ground')}
+						value={ground}
 						onChange={(value) => setValue('ground', value)}
 						label='Ground'
 						placeholder='Select a ground'
 						options={groundOptions}
-						className='col-span-4'
+						className='col-span-12 sm:col-span-4'
 					/>
 					<Buttons
-						containerClassName='col-span-5'
+						containerClassName='col-span-12 sm:col-span-8'
 						color='secondary'
-						items={[
-							{
-								text: 'Pending',
-							},
-							{
-								text: 'Accepted',
-							},
-							{
-								text: 'Rejected',
-							},
-							{
-								text: 'Ongoing',
-							},
-							{
-								text: 'Canceled',
-							},
-						].map(
-							(item, i) =>
+						items={(
+							[
+								{
+									text: 'All',
+									value: 'all',
+								},
+								{
+									text: 'Pending',
+									value: 'pending',
+								},
+								{
+									text: 'Accepted',
+									value: 'accepted',
+								},
+								{
+									text: 'Rejected',
+									value: 'rejected',
+								},
+								{
+									text: 'Ongoing',
+									value: 'ongoing',
+								},
+								{
+									text: 'Cancelled',
+									value: 'cancelled',
+								},
+							] as { text: string; value: GroundRerservationStatus }[]
+						).map(
+							(item) =>
 								({
-									...item,
-									onClick: () => setSelectedTypeIndex(i),
-									selected: selectedTypeIndex === i,
-								} as any)
+									text: item.text,
+									onClick: () => setSelectedStatus(item.value),
+									selected: selectedStatus === item.value,
+								} as ButtonItem)
 						)}
 					/>
-					<Button type='submit' color='primary' className='col-span-3'>
-						Search
-					</Button>
 				</div>
 			</Card>
 
 			<Card title='Reservations'>
 				<Table
 					headers={[
-						{ field: row => (row.ground as Ground).name, display: 'Ground' },
-						{ field: 'status', display: 'Status' },
+						{ field: (row) => (row.ground as Ground).name, display: 'Ground' },
+						{
+							field: (row) => <div className='capitalize'>{row.status}</div>,
+							display: 'Status',
+						},
 						{ field: 'totalPrice', display: 'Total Price' },
 						{
 							field: (row) => new Date(row.date).toLocaleDateString('fr-FR'),
@@ -184,24 +184,55 @@ function Page() {
 						},
 					]}
 					data={reservations || []}
-					actions={[
-						{
-							name: 'Accept',
-							callback: (_, index) =>
-								handleUpdateReservationStatus(
-									index,
-									GroundRerservationStatus.ACCEPTED
-								),
-						},
-						{
-							name: 'Reject',
-							callback: (_, index) =>
-								handleUpdateReservationStatus(
-									index,
-									GroundRerservationStatus.REJECTED
-								),
-						},
-					]}
+					actions={(row, index) => {
+						let actions: TableAction<GroundReservation>[] = [];
+
+						if (loadingActionIndex === index) {
+							return [
+								{
+									name: <Loader />,
+								},
+							];
+						}
+
+						if (row.status === GroundRerservationStatus.PENDING) {
+							actions = [
+								{
+									name: 'Accept',
+									callback: () =>
+										handleUpdateStatus(
+											row,
+											GroundRerservationStatus.ACCEPTED,
+											index
+										),
+								},
+								{
+									name: 'Reject',
+									callback: () =>
+										handleUpdateStatus(
+											row,
+											GroundRerservationStatus.REJECTED,
+											index
+										),
+								},
+							];
+						} else if (row.status === GroundRerservationStatus.ACCEPTED) {
+							actions = [
+								{
+									name: 'Cancel',
+									callback: () =>
+										handleUpdateStatus(
+											row,
+											GroundRerservationStatus.CANCELLED,
+											index
+										),
+								},
+							];
+						}
+
+						return actions;
+					}}
+					loading={loading}
 				/>
 			</Card>
 		</div>

@@ -5,4 +5,6 @@ export enum ModelName {
 	Subscription = 'Subscription',
 	Ground = 'Ground',
 	GroundReservation = 'GroundReservation',
+	Wallet = 'Wallet',
+	Transaction = 'Transaction'
 }

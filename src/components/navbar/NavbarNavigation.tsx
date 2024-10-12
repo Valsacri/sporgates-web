@@ -61,6 +61,7 @@ function NavbarNavigation() {
 					{
 						prefix: <Icon name='dollar' />,
 						item: 'Wallet: 530 DH',
+						onClick: () => router.push('/wallet'),
 					},
 					null,
 					{ prefix: <Icon name='edit' />, item: 'Edit' },

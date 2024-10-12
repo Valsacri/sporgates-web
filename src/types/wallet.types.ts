@@ -1,4 +1,7 @@
+import { Club } from './item/club.types';
+import { Ground } from './item/ground.types';
 import { Item } from './item/item.types';
+import { User } from './user.types';
 import { Record } from './utils.types';
 
 export enum OrderStatus {
@@ -6,6 +9,11 @@ export enum OrderStatus {
 	PROCESSING = 'processing',
 	COMPLETED = 'completed',
 	CANCELLED = 'cancelled',
+}
+
+export enum OrderSubject {
+	reservation = 'RESERVATION',
+	subscription = 'SUBSCRIPTION',
 }
 
 export interface OrderItem {
@@ -16,9 +24,11 @@ export interface OrderItem {
 export interface Order extends Record {
 	items: OrderItem[];
 	status: OrderStatus;
-	subject: 'service' | 'subscription';
+	subject: OrderSubject;
 	amount: number;
 	transaction: string | Transaction;
+	ground: string | Ground | null;
+	club: string | Club | null;
 }
 
 export enum TransactionStatus {
@@ -33,21 +43,21 @@ export enum TransactionType {
 }
 
 export enum TransactionSubject {
-	TRANSFER = 'transfer',
 	DEPOSIT = 'deposit',
-	WITHDRAWAL = 'withdrawal',
+	PURCHASE = 'purchase',
 }
 
 export interface Transaction extends Record {
+	ref: string;
 	amount: number;
 	type: TransactionType;
 	subject: TransactionSubject;
 	status: TransactionStatus;
 	sender: string | Wallet;
-	receiver: string | Wallet;
-	ref: string;
+	receiver: string | Wallet | null;
 }
 
 export interface Wallet {
 	balance: string;
+	user: string | User;
 }

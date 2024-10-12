@@ -59,6 +59,13 @@ export class TimeframeHelper {
 		);
 	}
 
+	static isTimeframeInTimeframe(timeframe1: Timeframe, timeframe2: Timeframe) {
+		return (
+			this.isTimeInTimeframe(timeframe1.start, timeframe2) &&
+			this.isTimeInTimeframe(timeframe1.end, timeframe2)
+		);
+	}
+
 	static isTimeframesEqual(timeframe1: Timeframe, timeframe2: Timeframe) {
 		return (
 			TimeHelper.isEquals(timeframe1.start, timeframe2.start) &&

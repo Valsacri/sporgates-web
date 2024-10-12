@@ -153,14 +153,14 @@ const OpeningHoursPicker = ({
 			<div className='grid grid-cols-8 gap-0.5'>
 				<div className='p-1'></div>
 				{DAYS.map((day) => (
-					<div key={day} className='text-center capitalize text-sm'>
+					<div key={day} className='text-center capitalize text-xs'>
 						{day.slice(0, 3)}
 					</div>
 				))}
 			</div>
 			{grid.map((row, hourIndex) => (
 				<div key={hourIndex} className='grid grid-cols-8 gap-0.5 items-center'>
-					<div className='text-center text-sm'>
+					<div className='text-center text-xs'>
 						{hourIndex}
 					</div>
 					{row.map((isSelected, dayIndex) => (

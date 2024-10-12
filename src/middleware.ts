@@ -43,7 +43,6 @@ export async function middleware(req: NextRequest) {
 			try {
 				const authorization = req.headers.get('authorization');
 
-				// const res = { status: 200 };
 				const res = await Axios.get<User>('auth', {
 					headers: {
 						Authorization: authorization,
@@ -56,6 +55,10 @@ export async function middleware(req: NextRequest) {
 						{ status: 401 }
 					);
 				}
+
+				return NextResponse.next({
+					headers: { ...headers, user: JSON.stringify(res.data) },
+				});
 			} catch (error) {
 				console.error(error);
 				return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });

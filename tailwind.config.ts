@@ -10,7 +10,6 @@ const config: Config = {
 		extend: {
 			colors: {
 				background: '#f0f2f5',
-				// primary: '#2c4a72',
 				'primary-light': '#E6EAF0',
 				primary: '#3A5E8C',
 				'primary-dark': '#2C4A72',
@@ -35,6 +34,7 @@ const config: Config = {
 				heading: '#174455',
 				text: '#333333',
 				'text-secondary': '#777777',
+				'text-secondary-dark': '#555555',
 			},
 		},
 		fontFamily: {

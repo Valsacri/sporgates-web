@@ -1,19 +1,19 @@
-import { useCallback, useState } from 'react'
-
-interface AlertMessage {
-  type: 'success' | 'error'
-  message: string
-}
+import { AlertMessage } from '@/client/contexts/alert.context';
+import { useCallback, useState } from 'react';
 
 export const useAlert = () => {
-  const [alert, setAlert] = useState<AlertMessage | null>(null)
+	const [alert, setAlert] = useState<AlertMessage | null>(null);
 
-  const handleShowAlert = useCallback((alert: AlertMessage) => {
-    setAlert(alert)
-    setTimeout(() => {
-      setAlert(null)
-    }, 3000)
-  }, [])
+	const showAlert = useCallback((alert: AlertMessage | null) => {
+		if (!alert) {
+			setAlert(null);
+			return;
+		}
+		setAlert(alert);
+		setTimeout(() => {
+			setAlert(null);
+		}, 3000);
+	}, []);
 
-  return { alert, handleShowAlert }
-}
+	return { alert, showAlert };
+};

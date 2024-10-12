@@ -1,5 +1,6 @@
 import { initFirebaseAdminApp } from '@/server/config/firebase-admin.config';
 import { setupDbConnection } from '@/server/config/mongodb.config';
+import { UserServerService } from '@/server/services/user.server-service';
 import { auth } from 'firebase-admin';
 
 export async function GET(req: Request, res: Response) {
@@ -19,7 +20,9 @@ export async function GET(req: Request, res: Response) {
 		try {
 			const { uid } = await auth().verifyIdToken(token);
 
-			return Response.json(uid, {
+			const user = await UserServerService.getOneByUid(uid);
+
+			return Response.json(user, {
 				status: 200,
 			});
 		} catch (error) {

@@ -26,6 +26,7 @@ function Page() {
 			shouldRememberDevice: false,
 		},
 	});
+	
 	const onSubmit = async (data: any) => {
 		await signInWithEmailAndPassword(getAuth(), data.email, data.password);
 		router.push('/');

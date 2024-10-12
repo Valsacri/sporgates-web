@@ -21,6 +21,8 @@ export type GroundReservationContextType = {
 
 	duration: Time;
 	setDuration: React.Dispatch<React.SetStateAction<Time>>;
+
+	reservedTimeframes: Timeframe[];
 };
 
 export const GroundReservationContext =
@@ -38,4 +40,5 @@ export const GroundReservationContext =
 		getTileClassName: () => {},
 		duration: { hours: 0, minutes: 0 },
 		setDuration: () => {},
+		reservedTimeframes: [],
 	});

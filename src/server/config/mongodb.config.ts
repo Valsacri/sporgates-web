@@ -1,6 +1,16 @@
 // Importing mongoose library along with Connection type from it
 import mongoose, { Connection } from 'mongoose';
 
+import { UserModel } from '../models/user.model';
+import { ClubModel } from '../models/item/club.model';
+import { GroundModel } from '../models/item/ground.model';
+import { GroundReservationModel } from '../models/item/ground-reservation.model';
+
+UserModel;
+ClubModel;
+GroundModel;
+GroundReservationModel;
+
 // Declaring a variable to store the cached database connection
 let cachedConnection: Connection | null = null;
 

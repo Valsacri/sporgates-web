@@ -1,10 +1,12 @@
+'use client';
+
 import { forwardRef, useId, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import List, { ListItem } from '../List';
 import Dropdown from '../Dropdown';
 import { HiChevronDown } from 'react-icons/hi2';
 
-interface Option {
+export interface SelectOption {
 	value: string;
 	label: string;
 }
@@ -18,7 +20,7 @@ interface Props {
 	value?: string;
 	onBlur?: any;
 	onChange?: (value: string) => void;
-	options: Option[];
+	options: SelectOption[];
 	placeholder?: string;
 	error?: string;
 	name?: string;

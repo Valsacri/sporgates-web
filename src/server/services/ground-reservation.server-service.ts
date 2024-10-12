@@ -48,22 +48,22 @@ export class GroundReservationServerService {
 		return formatDocument<GroundReservation[]>(reservations);
 	}
 
-	static async getPending() {
-		const reservations = await GroundReservationModel.find({
-			status: 'pending',
+	static async create(data: GroundReservationDtoType, createdBy?: string) {
+		const reservation = await GroundReservationModel.create({
+			createdBy,
+			...data,
 		});
-		return formatDocument<GroundReservation[]>(reservations);
-	}
-
-	static async create(data: GroundReservationDtoType) {
-		const reservation = await GroundReservationModel.create(data);
 		return formatDocument<GroundReservation>(reservation);
 	}
 
-	static async update(id: string, data: GroundReservationUpdateDtoType) {
+	static async update(
+		id: string,
+		data: GroundReservationUpdateDtoType,
+		updatedBy?: string
+	) {
 		const reservation = await GroundReservationModel.findByIdAndUpdate(
 			id,
-			data,
+			{ updatedBy, ...data },
 			{
 				new: true,
 			}
@@ -74,5 +74,21 @@ export class GroundReservationServerService {
 	static async delete(id: string) {
 		const reservation = await GroundReservationModel.findByIdAndDelete(id);
 		return formatDocument<GroundReservation>(reservation);
+	}
+
+	static async getReservedTimeframes(groundId: string, dateTimestamp: number) {
+		const endOfDayTimestamp = dateTimestamp + 24 * 60 * 60 * 1000 - 1;
+
+		const _reservations = await GroundReservationModel.find({
+			ground: groundId,
+			date: {
+				$gte: dateTimestamp,
+				$lt: endOfDayTimestamp,
+			},
+		});
+
+		const reservations = formatDocument<GroundReservation[]>(_reservations);
+
+		return reservations.map((reservation) => reservation.timeframe);
 	}
 }

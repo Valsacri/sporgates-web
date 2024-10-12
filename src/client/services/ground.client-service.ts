@@ -5,6 +5,11 @@ import { Ground } from '@/types/item/ground.types';
 export class GroundClientService {
 	static async getOne(id: string) {}
 
+	static async getAll() {
+		const res = await Axios.get<Ground[]>('/grounds');
+		return res.data;
+	}
+
 	static async getPage() {}
 
 	static async create(data: GroundDtoType) {
@@ -17,5 +22,8 @@ export class GroundClientService {
 		return res.data;
 	}
 
-	static async delete(id: string) {}
+	static async delete(id: string) {
+		const res = await Axios.delete<Ground>(`/grounds/${id}`);
+		return res.data;
+	}
 }

@@ -3,7 +3,6 @@
 import Calendar from 'react-calendar';
 import { useContext } from 'react';
 import { Popup } from '../utils/Popup';
-import Button from '../utils/Button';
 import { GroundReservationContext } from '@/client/contexts/ground-reservation.context';
 import TimeFramePicker from './TimeframePicker';
 
@@ -15,9 +14,12 @@ function ReservationPickerMobile() {
 		openTimesPicker,
 		setOpenTimesPicker,
 		handleDateChange,
+		selectedTimeframe,
+		handleTimeframeChange,
 		getTileClassName,
 		selectedDate,
 		duration: { hours, minutes },
+		reservedTimeframes,
 	} = useContext(GroundReservationContext);
 
 	return (
@@ -64,15 +66,10 @@ function ReservationPickerMobile() {
 					startTime={{ hours: 8, minutes: 0 }}
 					endTime={{ hours: 20, minutes: 0 }}
 					interval={30}
+					disabledTimeframes={reservedTimeframes}
+					value={selectedTimeframe}
+					onChange={handleTimeframeChange}
 				/>
-
-				{/* <Button
-					color='primary'
-					className='ml-auto mt-3 w-full'
-					onClick={() => setOpenTimesPicker(false)}
-				>
-					Close
-				</Button> */}
 			</Popup>
 		</>
 	);

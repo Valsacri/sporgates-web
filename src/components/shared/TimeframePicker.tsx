@@ -5,6 +5,7 @@ import { twMerge } from 'tailwind-merge';
 import { useMemo, useState } from 'react';
 import { Timeframe, Time } from '@/types/general.types';
 import { isTimesEqual, generateTimeframes } from '@/helpers/datetime.helpers';
+import { TimeframeHelper } from '@/helpers/datetime/timeframe.helpers';
 
 interface Props {
 	startTime: Time;
@@ -14,6 +15,7 @@ interface Props {
 	containerClassName?: string;
 	value?: Timeframe | null;
 	onChange?: (timeframe: Timeframe, time?: Time) => void;
+	disabledTimeframes?: Timeframe[];
 }
 
 function TimeFramePicker({
@@ -24,11 +26,22 @@ function TimeFramePicker({
 	containerClassName,
 	value,
 	onChange,
+	disabledTimeframes = [],
 }: Props) {
-	const timeframes = useMemo(
-		() => generateTimeframes(startTime.hours, endTime.hours, interval),
-		[startTime, endTime, interval]
-	);
+	const timeframes = useMemo(() => {
+		const timeframes = generateTimeframes(
+			startTime.hours,
+			endTime.hours,
+			interval
+		);
+
+		return timeframes.map((timeframe) => ({
+			disabled: disabledTimeframes.some((_timeframe) =>
+				TimeframeHelper.isTimeframeInTimeframe(timeframe, _timeframe)
+			),
+			...timeframe,
+		}));
+	}, [startTime, endTime, interval, disabledTimeframes]);
 
 	const [initStartIndex, initEndIndex] = useMemo(() => {
 		let initStartIndex = -1;
@@ -49,7 +62,15 @@ function TimeFramePicker({
 	const [startIndex, setStartIndex] = useState<number>(initStartIndex);
 	const [endIndex, setEndIndex] = useState<number>(initEndIndex);
 
-	const handleClick = (index: number) => {
+	const handleClick = (index: number, _timeframe: Timeframe) => {
+		if (
+			disabledTimeframes.some((__timeframe) =>
+				TimeframeHelper.isTimeframesEqual(__timeframe, _timeframe)
+			)
+		) {
+			return;
+		}
+
 		if (startIndex === -1 || endIndex !== -1) {
 			// Start a new selection
 			setStartIndex(index);
@@ -94,6 +115,22 @@ function TimeFramePicker({
 		return (startIndex <= index && endIndex >= index) || startIndex === index;
 	};
 
+	// Disable buttons that cannot be part of the selection due to unavailable timeframes
+	const isButtonDisabled = (index: number) => {
+		if (startIndex === -1 || (startIndex !== -1 && endIndex !== -1)) {
+			// If no start has been selected, use the default disabled state
+			return timeframes[index].disabled;
+		}
+
+		// If a start timeframe has been selected, disable any buttons where a disabled timeframe exists between the current timeframe and the start
+		const minIndex = Math.min(startIndex, index);
+		const maxIndex = Math.max(startIndex, index);
+
+		return timeframes
+			.slice(minIndex, maxIndex + 1)
+			.some((timeframe) => timeframe.disabled);
+	};
+
 	return (
 		<div>
 			<div className={twMerge('flex gap-2', containerClassName)}>
@@ -104,13 +141,15 @@ function TimeFramePicker({
 						variant={
 							startIndex === index && endIndex === -1 ? 'outlined' : 'filled'
 						}
+						disabled={isButtonDisabled(index)}
 						className={twMerge(
 							buttonClassName,
-							startIndex === index && endIndex === -1
-								? 'hover:bg-secondary hover:text-primary'
-								: ''
+							timeframe.disabled && 'cursor-not-allowed opacity-50',
+							startIndex === index &&
+								endIndex === -1 &&
+								'hover:bg-secondary hover:text-primary'
 						)}
-						onClick={() => handleClick(index)}
+						onClick={() => !timeframe.disabled && handleClick(index, timeframe)}
 					>
 						{`${timeframe.start.hours
 							.toString()

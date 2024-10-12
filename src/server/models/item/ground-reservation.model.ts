@@ -7,12 +7,13 @@ import { TimeframeSchema } from '../general.model';
 import { Model } from 'mongoose';
 import { ModelName } from '../model-name.enum';
 import { RecordSchema } from '../utils.model';
+import { GroundModel } from './ground.model';
 
 const GroundReservationSchema = new Schema<GroundReservation>({
 	...RecordSchema,
 	ground: {
 		type: Schema.Types.ObjectId,
-		ref: ModelName.Ground,
+		ref: GroundModel.modelName,
 		required: true,
 	},
 	user: { type: Schema.Types.ObjectId, ref: ModelName.User, required: true },

@@ -15,6 +15,7 @@ type Props = {
 	onClick?: () => any;
 	type?: 'button' | 'submit' | 'reset';
 	disabled?: boolean;
+	disableHover?: boolean;
 	loading?: boolean;
 	onMouseEnter?: () => void;
 	onMouseLeave?: () => void;
@@ -30,6 +31,7 @@ function Button({
 	onClick,
 	type = 'button',
 	disabled,
+	disableHover,
 	loading,
 	onMouseEnter,
 	onMouseLeave,
@@ -39,14 +41,14 @@ function Button({
 	const paddingStyles = children ? 'px-4' : 'w-[40px] justify-center';
 
 	const colorsMap = {
-		primary: 'bg-primary hover:bg-primary-dark text-white',
-		accent: 'bg-accent hover:bg-accent-dark text-white',
+		primary: 'bg-primary text-white hover:bg-primary-dark',
+		accent: 'bg-accent text-white hover:bg-accent-dark',
 		secondary: 'bg-secondary hover:bg-secondary-dark',
 		transparent: 'bg-transparent hover:bg-secondary',
-		success: 'bg-success hover:bg-success-dark text-white',
+		success: 'bg-success text-white hover:bg-success-dark',
 		warning: 'bg-warning hover:bg-warning-dark',
-		info: 'bg-info hover:bg-info-dark text-white',
-		danger: 'bg-danger hover:bg-danger-dark text-white',
+		info: 'bg-info text-white hover:bg-info-dark',
+		danger: 'bg-danger text-white hover:bg-danger-dark',
 		white: 'bg-white text-text hover:bg-secondary',
 	};
 

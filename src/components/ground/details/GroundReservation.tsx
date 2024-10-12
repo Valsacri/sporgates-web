@@ -8,6 +8,7 @@ import { Ground } from '@/types/item/ground.types';
 import { Time, Timeframe } from '@/types/general.types';
 import { GroundReservationContext } from '@/client/contexts/ground-reservation.context';
 import GroundReservationDesktop from './GroundReservationDesktop';
+import { GroundReservationClientService } from '@/client/services/ground-reservation.client-service';
 
 interface Props {
 	ground: Ground;
@@ -29,13 +30,24 @@ function GroundReservation({ ground }: Props) {
 
 	const [isDesktop, setIsDesktop] = useState(false);
 
+	const [reservedTimeframes, setReservedTimeframes] = useState<Timeframe[]>([]);
+
 	useEffect(() => {
 		if (windowWidth >= breakpointsSize.lg) {
 			setIsDesktop(true);
 		}
 	}, [windowWidth]);
 
-	const handleDateChange = (date: Date) => {
+	const handleDateChange = async (date: Date) => {
+		date.setHours(0, 0, 0, 0);
+
+		const reservedTimeframes =
+			await GroundReservationClientService.getReservedTimeframes(
+				ground.id,
+				date.getTime()
+			);
+		setReservedTimeframes(reservedTimeframes);
+
 		setSelectedDate(date);
 		setSelectedTimeframe(null);
 		setOpenDatePicker(false);
@@ -78,6 +90,7 @@ function GroundReservation({ ground }: Props) {
 					getTileClassName,
 					duration,
 					setDuration,
+					reservedTimeframes,
 				}}
 			>
 				{isDesktop ? <GroundReservationDesktop /> : <GroundReservationMobile />}

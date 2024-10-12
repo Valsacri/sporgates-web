@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { useId } from 'react';
+import React, { useRef, useId, useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 export type InputType =
@@ -45,8 +44,9 @@ interface Props {
 	error?: any;
 	suffix?: any;
 	suffixPos?: any;
+	suffixClassName?: string;
 	required?: boolean;
-	rows?: number;
+	multiline?: boolean;
 	min?: string | number;
 	max?: string | number;
 	disabled?: boolean;
@@ -73,7 +73,8 @@ export const Input = React.forwardRef<
 			error = '',
 			label,
 			suffix,
-			rows = 0,
+			suffixClassName,
+			multiline,
 			min = 0,
 			max,
 			disabled = false,
@@ -84,6 +85,25 @@ export const Input = React.forwardRef<
 	) => {
 		const id = useId();
 		const errorClassName = error && 'text-danger';
+
+		// Automatically adjusts the textarea height as the user types
+		const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+		const adjustTextareaHeight = () => {
+			if (textareaRef.current) {
+				textareaRef.current.style.height = 'auto'; // Reset to auto to calculate scroll height
+				textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Dynamically adjust height
+			}
+		};
+
+		const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+			adjustTextareaHeight();
+			onChange?.(e); // Pass event to the onChange prop
+		};
+
+		// Effect to resize the textarea when value changes programmatically or from the parent
+		useEffect(() => {
+			adjustTextareaHeight();
+		}, [value]);
 
 		const handleKeyDown = (e: any) => {
 			if (e.key === 'Enter' && !e.shiftKey) {
@@ -102,26 +122,33 @@ export const Input = React.forwardRef<
 
 				<div
 					className={twMerge(
-						'flex items-center bg-secondary w-full h-[40px] rounded-md text-xs font-light px-3',
+						'flex items-center bg-secondary w-full min-h-[40px] rounded-md text-xs font-light px-3',
 						label && 'mt-1',
 						containerClassName
 					)}
 				>
-					{rows ? (
+					{multiline ? (
 						<textarea
-							ref={ref as React.Ref<HTMLTextAreaElement>}
+							ref={(el) => {
+								textareaRef.current = el;
+								if (typeof ref === 'function') {
+									ref(el);
+								} else if (ref) {
+									ref.current = el;
+								}
+							}}
 							name={name}
-							onChange={onChange}
+							onChange={handleInput}
 							onBlur={onBlur}
-							// value={value}
+							value={value}
 							disabled={disabled}
 							id={id}
 							placeholder={placeholder}
 							className={twMerge(
-								'w-full rounded-md outline-none placeholder-text-secondary bg-transparent',
-								inputClassName,
+								'w-full rounded-md outline-none placeholder-text-secondary bg-transparent resize-none', // Disable manual resize
+								inputClassName
 							)}
-							rows={rows}
+							style={{ height: 'auto', overflowY: 'hidden' }} // Auto height for textarea
 						/>
 					) : (
 						<input
@@ -129,7 +156,7 @@ export const Input = React.forwardRef<
 							name={name}
 							onChange={onChange}
 							onBlur={onBlur}
-							// value={value}
+							value={value}
 							disabled={disabled}
 							id={id}
 							type={type}
@@ -146,7 +173,7 @@ export const Input = React.forwardRef<
 							onKeyDown={handleKeyDown}
 						/>
 					)}
-					{suffix}
+					<div className={suffixClassName}>{suffix}</div>
 				</div>
 
 				{error && (

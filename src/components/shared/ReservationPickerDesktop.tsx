@@ -3,7 +3,7 @@
 import Calendar from 'react-calendar';
 import Dropdown from '../utils/Dropdown';
 import Card from '../utils/Card';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { GroundReservationContext } from '@/client/contexts/ground-reservation.context';
 import TimeFramePicker from './TimeframePicker';
 
@@ -19,6 +19,7 @@ function ReservationPickerDesktop() {
 		getTileClassName,
 		selectedDate,
 		duration: { hours, minutes },
+		reservedTimeframes,
 	} = useContext(GroundReservationContext);
 
 	return (
@@ -67,6 +68,7 @@ function ReservationPickerDesktop() {
 						startTime={{ hours: 8, minutes: 0 }}
 						endTime={{ hours: 20, minutes: 0 }}
 						interval={30}
+						disabledTimeframes={reservedTimeframes}
 						value={selectedTimeframe}
 						onChange={handleTimeframeChange}
 					/>

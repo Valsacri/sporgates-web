@@ -2,7 +2,7 @@ import { twMerge } from 'tailwind-merge';
 
 interface Props {
 	title?: string;
-	titleSuffix?: string;
+	titleSuffix?: React.ReactNode;
 	description?: string;
 	children?: React.ReactNode;
 	className?: string;

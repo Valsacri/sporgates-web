@@ -8,13 +8,14 @@ import '../client/styles/globals.css';
 import '../client/styles/calendar.css';
 import 'react-calendar/dist/Calendar.css';
 import { initFirebaseApp } from '@/client/config/firebase.config';
+import { Metadata } from 'next';
 
 // export const metadata: Metadata = {
 // 	title: 'Sporgates',
 // 	description: "Lotrima l'mlih",
 // };
 
-const app = initFirebaseApp();
+initFirebaseApp();
 
 export default function RootLayout({
 	children,
