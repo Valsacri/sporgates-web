@@ -86,7 +86,7 @@ export const Popup = ({
 							)}
 						</div>
 					</div>
-					{description && <p className='t1 mb-7'>{description}</p>}
+					{description && <p className='t1 mb-7 text-text-secondary-dark'>{description}</p>}
 					{children}
 				</div>
 			</div>

@@ -35,5 +35,5 @@ export const useFetch = <T>(init: any, { fetch, onError }: Callbacks<T>, deps: a
     setFetchData()
   }, deps)
 
-  return { data, loading, error, refetch: setFetchData }
+  return { data, setData, loading, error, refetch: setFetchData }
 }

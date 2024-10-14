@@ -1,8 +1,8 @@
 import { OpeningHours } from '@/types/business.types';
 import { DateTimeframes } from '@/types/general.types';
 import {
-	Subscription,
-	SubscriptionPeriodDuration,
+	ClubSubscription,
+	ClubSubscriptionPeriodDuration,
 } from '@/types/item/club.types';
 import { Ground } from '@/types/item/ground.types';
 import { User } from '@/types/user.types';
@@ -38,7 +38,7 @@ const openingHours: OpeningHours = {
 	},
 };
 
-const subscriptions: Subscription[] = [
+const subscriptions: ClubSubscription[] = [
 	{
 		name: 'Basic',
 		description: 'Basic subscription',
@@ -53,7 +53,7 @@ const subscriptions: Subscription[] = [
 			'96 MB Max upload size',
 		],
 		price: 1000,
-		period: { duration: SubscriptionPeriodDuration.MONTH, amount: 1 },
+		period: { duration: ClubSubscriptionPeriodDuration.MONTH, amount: 1 },
 		discount: 0,
 		isHighlighted: true,
 	},
@@ -71,7 +71,7 @@ const subscriptions: Subscription[] = [
 			'96 MB Max upload size',
 		],
 		price: 1000,
-		period: { duration: SubscriptionPeriodDuration.MONTH, amount: 1 },
+		period: { duration: ClubSubscriptionPeriodDuration.MONTH, amount: 1 },
 		discount: 0,
 		isHighlighted: false,
 	},
@@ -85,7 +85,7 @@ const subscriptions: Subscription[] = [
 			'Personal trainer',
 		],
 		price: 2000,
-		period: { duration: SubscriptionPeriodDuration.MONTH, amount: 1 },
+		period: { duration: ClubSubscriptionPeriodDuration.MONTH, amount: 1 },
 		discount: 20,
 		isHighlighted: false,
 	},
@@ -99,7 +99,7 @@ const subscriptions: Subscription[] = [
 			'Personal trainer',
 		],
 		price: 2000,
-		period: { duration: SubscriptionPeriodDuration.MONTH, amount: 1 },
+		period: { duration: ClubSubscriptionPeriodDuration.MONTH, amount: 1 },
 		discount: 20,
 		isHighlighted: false,
 	},
@@ -113,7 +113,7 @@ const subscriptions: Subscription[] = [
 			'Personal trainer',
 		],
 		price: 2000,
-		period: { duration: SubscriptionPeriodDuration.MONTH, amount: 1 },
+		period: { duration: ClubSubscriptionPeriodDuration.MONTH, amount: 1 },
 		discount: 20,
 		isHighlighted: false,
 	},
@@ -127,7 +127,7 @@ const subscriptions: Subscription[] = [
 			'Personal trainer',
 		],
 		price: 2000,
-		period: { duration: SubscriptionPeriodDuration.MONTH, amount: 1 },
+		period: { duration: ClubSubscriptionPeriodDuration.MONTH, amount: 1 },
 		discount: 20,
 		isHighlighted: false,
 	},

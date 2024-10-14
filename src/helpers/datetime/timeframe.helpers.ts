@@ -33,57 +33,44 @@ export class TimeframeHelper {
 		return timeframes;
 	}
 
-	static formatTimeframe(timeframe: Timeframe) {
+	static format(timeframe: Timeframe) {
 		return `${TimeHelper.format(timeframe.start)} - ${TimeHelper.format(
 			timeframe.end
 		)}`;
 	}
 
-	static timeframeToMinutes(timeframe: Timeframe): number {
-		const { start, end } = timeframe;
-
-		let duration =
-			end.hours * 60 + end.minutes - (start.hours * 60 + start.minutes);
-
-		if (duration < 0) {
-			duration += 24 * 60; // handle overflow to the next day
-		}
-
-		return duration;
-	}
-
-	static isTimeInTimeframe(time: Time, timeframe: Timeframe) {
+	static includesTime(timeframe: Timeframe, time: Time) {
 		return (
 			TimeHelper.isGte(time, timeframe.start) &&
 			TimeHelper.isLte(time, timeframe.end)
 		);
 	}
 
-	static isTimeframeInTimeframe(timeframe1: Timeframe, timeframe2: Timeframe) {
+	static includesTimeframe(timeframe1: Timeframe, timeframe2: Timeframe) {
 		return (
-			this.isTimeInTimeframe(timeframe1.start, timeframe2) &&
-			this.isTimeInTimeframe(timeframe1.end, timeframe2)
+			this.includesTime(timeframe1, timeframe2.start) &&
+			this.includesTime(timeframe1, timeframe2.end)
 		);
 	}
 
-	static isTimeframesEqual(timeframe1: Timeframe, timeframe2: Timeframe) {
+	static isEqual(timeframe1: Timeframe, timeframe2: Timeframe) {
 		return (
-			TimeHelper.isEquals(timeframe1.start, timeframe2.start) &&
-			TimeHelper.isEquals(timeframe1.end, timeframe2.end)
+			TimeHelper.isEqual(timeframe1.start, timeframe2.start) &&
+			TimeHelper.isEqual(timeframe1.end, timeframe2.end)
 		);
 	}
 
 	/**
 	 * Helper function to check if two timeframes are consecutive.
 	 */
-	areTimeframesConsecutive(a: Timeframe, b: Timeframe) {
+	static areConsecutive(a: Timeframe, b: Timeframe) {
 		return a.end.hours === b.start.hours && a.end.minutes === b.start.minutes;
 	}
 
 	/**
 	 * Merges consecutive timeframes for a given day.
 	 */
-	mergeConsecutiveTimeframes(timeframes: Timeframe[]) {
+	static mergeConsecutive(timeframes: Timeframe[]) {
 		if (timeframes.length === 0) return [];
 
 		// Sort timeframes by start time to ensure we are merging in the correct order
@@ -101,7 +88,7 @@ export class TimeframeHelper {
 			const next = timeframes[i];
 
 			// If current timeframe is consecutive with the next one, merge them
-			if (this.areTimeframesConsecutive(current, next)) {
+			if (this.areConsecutive(current, next)) {
 				current = { start: current.start, end: next.end };
 			} else {
 				// Otherwise, push the current timeframe and move to the next
@@ -119,15 +106,36 @@ export class TimeframeHelper {
 	/**
 	 * Simplifies the opening hours by merging consecutive timeframes for each day.
 	 */
-	simplifyOpeningHours(openingHours: OpeningHours): OpeningHours {
+	static simplifyOpeningHours(openingHours: OpeningHours): OpeningHours {
 		return {
-			monday: this.mergeConsecutiveTimeframes(openingHours.monday),
-			tuesday: this.mergeConsecutiveTimeframes(openingHours.tuesday),
-			wednesday: this.mergeConsecutiveTimeframes(openingHours.wednesday),
-			thursday: this.mergeConsecutiveTimeframes(openingHours.thursday),
-			friday: this.mergeConsecutiveTimeframes(openingHours.friday),
-			saturday: this.mergeConsecutiveTimeframes(openingHours.saturday),
-			sunday: this.mergeConsecutiveTimeframes(openingHours.sunday),
+			monday: this.mergeConsecutive(openingHours.monday),
+			tuesday: this.mergeConsecutive(openingHours.tuesday),
+			wednesday: this.mergeConsecutive(openingHours.wednesday),
+			thursday: this.mergeConsecutive(openingHours.thursday),
+			friday: this.mergeConsecutive(openingHours.friday),
+			saturday: this.mergeConsecutive(openingHours.saturday),
+			sunday: this.mergeConsecutive(openingHours.sunday),
 		};
+	}
+
+	static toMinutes(timeframe: Timeframe) {
+		const { start, end } = timeframe;
+
+		let duration =
+			end.hours * 60 + end.minutes - (start.hours * 60 + start.minutes);
+
+		if (duration < 0) {
+			duration += 24 * 60; // handle overflow to the next day
+		}
+
+		return duration;
+	}
+
+	static toTime(timeframe: Timeframe) {
+		const minutes = this.toMinutes(timeframe);
+		const hours = Math.floor(minutes / 60);
+		const remainingMinutes = minutes % 60;
+
+		return { hours, minutes: remainingMinutes } as Time;
 	}
 }

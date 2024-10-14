@@ -13,7 +13,7 @@ import {
 	SubscriptionDtoType,
 	SubscriptionFeatureDtoType,
 } from '@/dtos/item/club.dto';
-import { SubscriptionPeriodDuration } from '@/types/item/club.types';
+import { ClubSubscriptionPeriodDuration } from '@/types/item/club.types';
 import { usePopup } from '@/client/hooks/utils/usePopup';
 import { DatePicker } from '../utils/form/DatePicker';
 import { Select } from '../utils/form/Select';
@@ -56,7 +56,7 @@ function ManageSubscriptionPopup({
 			features: [],
 			price: 0,
 			period: {
-				duration: SubscriptionPeriodDuration.MONTH,
+				duration: ClubSubscriptionPeriodDuration.MONTH,
 				amount: 1,
 			},
 			discount: {
@@ -178,7 +178,10 @@ function ManageSubscriptionPopup({
 							{...register('period.duration')}
 							value={watch('period.duration')}
 							onChange={(value) =>
-								setValue('period.duration', value as SubscriptionPeriodDuration)
+								setValue(
+									'period.duration',
+									value as ClubSubscriptionPeriodDuration
+								)
 							}
 							options={priceDurations}
 							label='Duration'

@@ -1,7 +1,7 @@
 import { twMerge } from 'tailwind-merge';
 
 interface Props {
-	title?: string;
+	title?: React.ReactNode;
 	titleSuffix?: React.ReactNode;
 	description?: string;
 	children?: React.ReactNode;
@@ -26,13 +26,15 @@ function Card({
 			onClick={onClick}
 		>
 			{(title || titleSuffix) && (
-				<div className='flex justify-between items-center mb-2'>
+				<div className='flex justify-between items-center'>
 					<h2>{title}</h2>
 					{titleSuffix}
 				</div>
 			)}
 
-			{description && <p className='text-text-secondary mb-3'>{description}</p>}
+			{description && (
+				<p className='text-text-secondary mt-2 mb-3'>{description}</p>
+			)}
 
 			{children}
 		</div>

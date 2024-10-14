@@ -2,10 +2,10 @@ import { HiCheck } from 'react-icons/hi';
 import { twMerge } from 'tailwind-merge';
 import Card from '../utils/Card';
 import Button from '../utils/Button';
-import { Subscription } from '@/types/item/club.types';
+import { ClubSubscription } from '@/types/item/club.types';
 
 interface Props {
-	subscription: Subscription;
+	subscription: ClubSubscription;
 }
 
 function Pricing({ subscription }: Props) {

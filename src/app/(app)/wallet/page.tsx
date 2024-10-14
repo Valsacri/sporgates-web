@@ -1,98 +1,79 @@
 'use client';
 
-import Button from '@/components/utils/Button';
+import { useFetch } from '@/client/hooks/utils/useFetch';
+import { TransactionClientService } from '@/client/services/transaction.client-service';
+import Balance from '@/components/shared/Balance';
 import Card from '@/components/utils/Card';
-import { Input } from '@/components/utils/form/Input';
 import { Table } from '@/components/utils/table/Table';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { FaWallet } from 'react-icons/fa6';
+import { Club, ClubSubscription } from '@/types/item/club.types';
+import { Ground, GroundReservation } from '@/types/item/ground.types';
+import { Transaction, TransactionSubject } from '@/types/wallet.types';
 
 function Page() {
-	const [showAddToBalance, setShowAddToBalance] = useState(false);
-
-	const { handleSubmit, register, reset } = useForm({
-		defaultValues: {
-			amount: '',
+	const {
+		data: transactions,
+		loading: loadingTransactions,
+		refetch: refetchTransactions,
+	} = useFetch([], {
+		async fetch() {
+			return await TransactionClientService.getPage();
 		},
 	});
 
-	const handleDeposit = ({ amount }: { amount: number }) => {
-		try {
-			const reservations = await walletser.getAll(
-				ground,
-				selectedStatus === 'all' ? null : selectedStatus
-			);
-			return reservations;
-		} catch (error) {
-			console.log(error);
-			showAlert({
-				color: 'danger',
-				message: 'Error while fetching reservations',
-			});
-			return [];
+	const getCounterpart = (transaction: Transaction) => {
+		if (transaction.subject === TransactionSubject.DEPOSIT) {
+			return 'Sporgates';
+		}
+
+		if (transaction.subject === TransactionSubject.GROUND_RESERVATION_REFUND) {
+			const reservation =
+				transaction.refundGroundReservation as GroundReservation;
+			const ground = reservation.ground as Ground;
+			return ground.name;
+		}
+
+		if (transaction.subject === TransactionSubject.CLUB_SUBSCRIPTION_REFUND) {
+			const subscription =
+				transaction.refundClubSubscription as ClubSubscription;
+			const club = subscription.club as Club;
+			return club.name;
 		}
 	};
 
 	return (
-		<div className='space-y-5'>
-			<Card title='Wallet'>
-				<div className='flex justify-between items-center mt-5'>
-					<div className='flex gap-3'>
-						<FaWallet className='size-20 cursor-pointer text-primary-dark' />
-						<div>
-							<div className='text-2xl'>Balance</div>
-							<div className='font-semibold text-3xl text-success-dark'>
-								400,00MAD
-							</div>
-						</div>
-					</div>
+		<div className='grid grid-cols-12 gap-5'>
+			<Card
+				className='col-span-12 text-3xl'
+				title={<h1 className='text-3xl'>Wallet</h1>}
+			></Card>
 
-					<Button
-						color='primary'
-						icon='add'
-						onClick={() => setShowAddToBalance(!showAddToBalance)}
-					>
-						Add to balance
-					</Button>
-				</div>
-
-				{showAddToBalance && (
-					<>
-						<hr className='my-5' />
-						<div className='flex justify-between items-center'>
-							<h2 className='mb-3'>Add funds</h2>
-							<form
-								className='flex justify-between gap-3'
-								onSubmit={handleSubmit(onSubmit)}
-							>
-								<Input
-									{...register('amount')}
-									placeholder='00,00'
-									suffix={'DH'}
-									className='w-28'
-									inputClassName='text-xl'
-									suffixClassName='text-xl'
-								/>
-								<Button color='primary' icon='check' type='submit'>
-									Continue
-								</Button>
-							</form>
-						</div>
-					</>
-				)}
-			</Card>
-
-			<Card title='Transactions'>
+			<Card title='Transactions' className='col-span-8'>
 				<Table
 					headers={[
-						{ field: '', display: 'Date' },
-						{ field: '', display: 'Description' },
-						{ field: '', display: 'Amount' },
+						{
+							field: (row) => new Date(row.createdAt).toLocaleString('fr-FR'),
+							display: 'Date',
+						},
+						{
+							field: 'subject',
+							display: 'Subject',
+						},
+						{
+							field: getCounterpart,
+							display: 'Counterpart',
+						},
+						{ field: 'amount', display: 'Amount' },
 					]}
-					data={[]}
+					data={transactions}
+					loading={loadingTransactions}
 				/>
 			</Card>
+
+			<Card className='col-span-4 h-min'>
+				<Balance onDeposit={refetchTransactions} />
+			</Card>
+
+			{/* <Card title='Filter transactions' className='col-span-8'></Card> */}
 		</div>
 	);
 }

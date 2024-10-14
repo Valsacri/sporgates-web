@@ -10,7 +10,8 @@ import { Select, SelectOption } from '@/components/utils/form/Select';
 import Loader from '@/components/utils/Loader';
 import { Table } from '@/components/utils/table/Table';
 import { TableAction } from '@/components/utils/table/table.types';
-import { formatTimeframe } from '@/helpers/datetime.helpers';
+import { TimeHelper } from '@/helpers/datetime/time.helpers';
+import { TimeframeHelper } from '@/helpers/datetime/timeframe.helpers';
 import {
 	Ground,
 	GroundRerservationStatus,
@@ -179,8 +180,13 @@ function Page() {
 							display: 'Date',
 						},
 						{
-							field: (row) => formatTimeframe(row.timeframe),
+							field: (row) => `${TimeframeHelper.format(row.timeframe)}`,
 							display: 'Timeframe',
+						},
+						{
+							field: (row) =>
+								TimeHelper.format(TimeframeHelper.toTime(row.timeframe)),
+							display: 'Duration',
 						},
 					]}
 					data={reservations || []}

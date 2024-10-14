@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { ItemDto } from './item.dto';
-import { SubscriptionPeriodDuration } from '@/types/item/club.types';
+import { ClubSubscriptionPeriodDuration } from '@/types/item/club.types';
 
 export const SubscriptionDiscountDto = z.object({
 	amount: z.coerce.number(),
@@ -8,7 +8,7 @@ export const SubscriptionDiscountDto = z.object({
 });
 
 export const SubscriptionPeriodDto = z.object({
-	duration: z.nativeEnum(SubscriptionPeriodDuration),
+	duration: z.nativeEnum(ClubSubscriptionPeriodDuration),
 	amount: z.coerce.number().min(1),
 });
 

@@ -1,7 +1,10 @@
+import { MIN_DEPOSIT_AMOUNT } from '@/constants';
 import { z } from 'zod';
 
 export const WalletDepositeDto = z.object({
-	wallet: z.string().min(1, 'Wallet is required'),
-	amount: z.string().min(1, 'Amount is required'),
+	amount: z
+		.number()
+		.positive('Amount should be positive')
+		.gte(MIN_DEPOSIT_AMOUNT),
 });
-export type WalletDepositeType = z.infer<typeof WalletDepositeDto>;
+export type WalletDepositeDtoType = z.infer<typeof WalletDepositeDto>;

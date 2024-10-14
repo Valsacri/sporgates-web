@@ -1,10 +1,6 @@
 'use client';
 
 import { Day, DAYS } from '@/client/types/general.types';
-import {
-	isTimeInTimeframe,
-	simplifyOpeningHours,
-} from '@/helpers/datetime.helpers';
 import { OpeningHours } from '@/types/business.types';
 import { useMemo, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -160,9 +156,7 @@ const OpeningHoursPicker = ({
 			</div>
 			{grid.map((row, hourIndex) => (
 				<div key={hourIndex} className='grid grid-cols-8 gap-0.5 items-center'>
-					<div className='text-center text-xs'>
-						{hourIndex}
-					</div>
+					<div className='text-center text-xs'>{hourIndex}</div>
 					{row.map((isSelected, dayIndex) => (
 						<div
 							key={`${hourIndex}-${dayIndex}`}

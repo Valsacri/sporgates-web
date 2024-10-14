@@ -4,13 +4,17 @@ import { AddressDto, DateTimeframesDto, TimeframeDto } from './general.dto';
 import { SubscriptionDto } from './club.dto';
 import { GroundRerservationStatus } from '@/types/item/ground.types';
 
+export const GroundReservationStatusDto = z.nativeEnum(
+	GroundRerservationStatus
+);
+
 export const GroundReservationDto = z.object({
 	ground: z.string().min(1),
 	user: z.string().min(1),
 	date: z.number(),
 	timeframe: TimeframeDto,
 	totalPrice: z.number(),
-	status: z.nativeEnum(GroundRerservationStatus).optional(),
+	status: GroundReservationStatusDto,
 });
 export type GroundReservationDtoType = z.infer<typeof GroundReservationDto>;
 

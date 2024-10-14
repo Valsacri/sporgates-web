@@ -1,9 +1,9 @@
 import Pricing from '@/components/shared/Pricing';
 import Card from '@/components/utils/Card';
-import { Subscription } from '@/types/item/club.types';
+import { ClubSubscription } from '@/types/item/club.types';
 
 interface Props {
-	subscriptions: Subscription[];
+	subscriptions: ClubSubscription[];
 }
 
 function GroundPricing({ subscriptions }: Props) {

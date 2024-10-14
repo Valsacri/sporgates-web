@@ -3,9 +3,10 @@
 import Calendar from 'react-calendar';
 import Dropdown from '../utils/Dropdown';
 import Card from '../utils/Card';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { GroundReservationContext } from '@/client/contexts/ground-reservation.context';
 import TimeFramePicker from './TimeframePicker';
+import { TimeHelper } from '@/helpers/datetime/time.helpers';
 
 function ReservationPickerDesktop() {
 	const {
@@ -18,7 +19,7 @@ function ReservationPickerDesktop() {
 		handleTimeframeChange,
 		getTileClassName,
 		selectedDate,
-		duration: { hours, minutes },
+		duration,
 		reservedTimeframes,
 	} = useContext(GroundReservationContext);
 
@@ -55,10 +56,7 @@ function ReservationPickerDesktop() {
 				trigger={
 					<div className='border-r-[0.5px] p-3'>
 						<h6>Duration</h6>
-						<p className='text-sm'>
-							{!hours && !minutes ? '----' : ''}
-							{hours ? `${hours}h` : ''} {minutes ? `${minutes}min` : ''}
-						</p>
+						<p className='text-sm'>{TimeHelper.format(duration)}</p>
 					</div>
 				}
 			>

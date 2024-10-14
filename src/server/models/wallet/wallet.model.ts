@@ -1,10 +1,12 @@
 import mongoose, { Schema, Model } from 'mongoose';
 import { ModelName } from '../model-name.enum';
 import { Wallet } from '@/types/wallet.types';
+import { RecordSchema } from '../utils.model';
 
 const WalletSchema = new Schema<Wallet>({
+	...RecordSchema,
 	user: { type: Schema.Types.ObjectId, ref: ModelName.User, required: true },
-	balance: { type: String, required: true },
+	balance: { type: Number, required: true },
 });
 
 export const WalletModel =

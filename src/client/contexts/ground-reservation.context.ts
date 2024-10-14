@@ -13,6 +13,7 @@ export type GroundReservationContextType = {
 	selectedDate: Date;
 	setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
 	selectedTimeframe: Timeframe | null;
+	setSelectedTimeframe: React.Dispatch<React.SetStateAction<Timeframe | null>>;
 
 	handleDateChange: (date: Date) => void;
 	handleTimeframeChange: (timeframe: Timeframe) => void;
@@ -20,9 +21,13 @@ export type GroundReservationContextType = {
 	getTileClassName: (data: any) => any;
 
 	duration: Time;
-	setDuration: React.Dispatch<React.SetStateAction<Time>>;
 
 	reservedTimeframes: Timeframe[];
+
+	totalPrice: number;
+
+	openBalancePopup: boolean;
+	toggleBalancePopup: () => void;
 };
 
 export const GroundReservationContext =
@@ -35,10 +40,13 @@ export const GroundReservationContext =
 		selectedDate: new Date(),
 		setSelectedDate: () => {},
 		selectedTimeframe: null,
+		setSelectedTimeframe: () => {},
 		handleDateChange: () => {},
 		handleTimeframeChange: () => {},
 		getTileClassName: () => {},
 		duration: { hours: 0, minutes: 0 },
-		setDuration: () => {},
 		reservedTimeframes: [],
+		totalPrice: 0,
+		openBalancePopup: false,
+		toggleBalancePopup: () => {},
 	});

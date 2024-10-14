@@ -1,39 +1,31 @@
 import mongoose, { Schema, Model } from 'mongoose';
 import { ModelName } from '../model-name.enum';
-import {
-  Transaction,
-  TransactionStatus,
-  TransactionType,
-  TransactionSubject,
-} from '@/types/wallet.types';
+import { Transaction, TransactionSubject } from '@/types/wallet.types';
+import { RecordSchema } from '../utils.model';
 
 const TransactionSchema = new Schema<Transaction>({
-	ref: { type: String, required: true },
+	...RecordSchema,
 	amount: { type: Number, required: true },
-	type: {
-		type: String,
-		enum: Object.values(TransactionType),
-		required: true,
-	},
 	subject: {
 		type: String,
 		enum: Object.values(TransactionSubject),
 		required: true,
 	},
-	status: {
-		type: String,
-		enum: Object.values(TransactionStatus),
-		default: TransactionStatus.PENDING,
-	},
 	sender: {
 		type: Schema.Types.ObjectId,
 		ref: ModelName.Wallet,
-		required: true,
 	},
 	receiver: {
 		type: Schema.Types.ObjectId,
 		ref: ModelName.Wallet,
-		default: null,
+	},
+	refundGroundReservation: {
+		type: Schema.Types.ObjectId,
+		ref: ModelName.GroundReservation,
+	},
+	refundClubSubscription: {
+		type: Schema.Types.ObjectId,
+		ref: ModelName.ClubSubscription,
 	},
 });
 

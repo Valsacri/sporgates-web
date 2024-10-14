@@ -4,8 +4,8 @@ import Button from '@/components/utils/Button';
 import { twMerge } from 'tailwind-merge';
 import { useMemo, useState } from 'react';
 import { Timeframe, Time } from '@/types/general.types';
-import { isTimesEqual, generateTimeframes } from '@/helpers/datetime.helpers';
 import { TimeframeHelper } from '@/helpers/datetime/timeframe.helpers';
+import { TimeHelper } from '@/helpers/datetime/time.helpers';
 
 interface Props {
 	startTime: Time;
@@ -29,7 +29,7 @@ function TimeFramePicker({
 	disabledTimeframes = [],
 }: Props) {
 	const timeframes = useMemo(() => {
-		const timeframes = generateTimeframes(
+		const timeframes = TimeframeHelper.generate(
 			startTime.hours,
 			endTime.hours,
 			interval
@@ -37,7 +37,7 @@ function TimeFramePicker({
 
 		return timeframes.map((timeframe) => ({
 			disabled: disabledTimeframes.some((_timeframe) =>
-				TimeframeHelper.isTimeframeInTimeframe(timeframe, _timeframe)
+				TimeframeHelper.includesTimeframe(_timeframe, timeframe)
 			),
 			...timeframe,
 		}));
@@ -49,15 +49,15 @@ function TimeFramePicker({
 
 		if (value?.start && value?.end) {
 			initStartIndex = timeframes.findIndex((timeframe) =>
-				isTimesEqual(timeframe.start, value.start!)
+				TimeHelper.isEqual(timeframe.start, value.start!)
 			);
 			initEndIndex = timeframes.findIndex((timeframe) =>
-				isTimesEqual(timeframe.end, value.end!)
+				TimeHelper.isEqual(timeframe.end, value.end!)
 			);
 		}
 
 		return [initStartIndex, initEndIndex];
-	}, []);
+	}, [value]);
 
 	const [startIndex, setStartIndex] = useState<number>(initStartIndex);
 	const [endIndex, setEndIndex] = useState<number>(initEndIndex);
@@ -65,7 +65,7 @@ function TimeFramePicker({
 	const handleClick = (index: number, _timeframe: Timeframe) => {
 		if (
 			disabledTimeframes.some((__timeframe) =>
-				TimeframeHelper.isTimeframesEqual(__timeframe, _timeframe)
+				TimeframeHelper.isEqual(__timeframe, _timeframe)
 			)
 		) {
 			return;

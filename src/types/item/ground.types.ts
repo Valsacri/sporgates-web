@@ -1,6 +1,6 @@
 import { Address, DateTimeframes, Timeframe } from '../general.types';
 import { Item } from './item.types';
-import { Subscription } from './club.types';
+import { ClubSubscription } from './club.types';
 import { User } from '../user.types';
 import { Record } from '../utils.types';
 
@@ -26,5 +26,5 @@ export interface Ground extends Item {
 	price: number;
 	busyHours: DateTimeframes[];
 
-	subscriptions: Subscription[];
+	subscriptions: ClubSubscription[];
 }

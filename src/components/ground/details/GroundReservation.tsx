@@ -3,12 +3,16 @@
 import { useEffect, useState } from 'react';
 import useBreakpoint from '@/client/hooks/utils/useBreakpoint';
 import GroundReservationMobile from './GroundReservationMobile';
-import { minutesToTime, timeframeToMinutes } from '@/helpers/datetime.helpers';
 import { Ground } from '@/types/item/ground.types';
 import { Time, Timeframe } from '@/types/general.types';
 import { GroundReservationContext } from '@/client/contexts/ground-reservation.context';
 import GroundReservationDesktop from './GroundReservationDesktop';
 import { GroundReservationClientService } from '@/client/services/ground-reservation.client-service';
+import { Popup } from '@/components/utils/Popup';
+import Balance from '@/components/shared/Balance';
+import { usePopup } from '@/client/hooks/utils/usePopup';
+import { TimeframeHelper } from '@/helpers/datetime/timeframe.helpers';
+import { TimeHelper } from '@/helpers/datetime/time.helpers';
 
 interface Props {
 	ground: Ground;
@@ -23,14 +27,27 @@ function GroundReservation({ ground }: Props) {
 		null
 	);
 
-	const [duration, setDuration] = useState<Time>({ hours: 0, minutes: 0 });
-
 	const [openDatePicker, setOpenDatePicker] = useState(false);
 	const [openTimesPicker, setOpenTimesPicker] = useState(false);
 
 	const [isDesktop, setIsDesktop] = useState(false);
 
 	const [reservedTimeframes, setReservedTimeframes] = useState<Timeframe[]>([]);
+
+	const [openBalancePopup, toggleBalancePopup] = usePopup();
+
+	const totalPrice = !selectedTimeframe
+		? 0
+		: (TimeframeHelper.toMinutes(selectedTimeframe as Timeframe) /
+				ground.minReservationTime) *
+		  ground.price;
+
+	const duration =
+		!selectedTimeframe?.start || !selectedTimeframe?.end
+			? { hours: 0, minutes: 0 }
+			: TimeHelper.fromMinutes(
+					TimeframeHelper.toMinutes(selectedTimeframe as Timeframe<Time>)
+			  );
 
 	useEffect(() => {
 		if (windowWidth >= breakpointsSize.lg) {
@@ -56,11 +73,7 @@ function GroundReservation({ ground }: Props) {
 
 	const handleTimeframeChange = (timeframe: Timeframe) => {
 		setSelectedTimeframe(timeframe);
-		setDuration(
-			!timeframe.start || !timeframe.end
-				? { hours: 0, minutes: 0 }
-				: minutesToTime(timeframeToMinutes(timeframe as Timeframe<Time>))
-		);
+
 		setOpenTimesPicker(false);
 	};
 
@@ -85,15 +98,27 @@ function GroundReservation({ ground }: Props) {
 					selectedDate,
 					setSelectedDate,
 					selectedTimeframe,
+					setSelectedTimeframe,
 					handleDateChange,
 					handleTimeframeChange,
 					getTileClassName,
 					duration,
-					setDuration,
 					reservedTimeframes,
+					totalPrice,
+					openBalancePopup,
+					toggleBalancePopup,
 				}}
 			>
 				{isDesktop ? <GroundReservationDesktop /> : <GroundReservationMobile />}
+
+				<Popup
+					title='Add credits'
+					description='Insufficient credits on your balance, add credits to proceed.'
+					open={openBalancePopup}
+					onClose={toggleBalancePopup}
+				>
+					<Balance purchasePrice={totalPrice} onDeposit={toggleBalancePopup} />
+				</Popup>
 			</GroundReservationContext.Provider>
 		</div>
 	);

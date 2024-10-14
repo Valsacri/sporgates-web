@@ -18,9 +18,9 @@ interface Props {
 }
 
 const alerts = {
-	success: { icon: FaCircleCheck, bgColor: 'bg-success' },
-	warning: { icon: FaTriangleExclamation, bgColor: 'bg-danger' },
-	danger: { icon: FaCircleXmark, bgColor: 'bg-warning' },
+	success: { icon: FaCircleCheck, bgColor: 'bg-success-dark' },
+	warning: { icon: FaTriangleExclamation, bgColor: 'bg-danger-dark' },
+	danger: { icon: FaCircleXmark, bgColor: 'bg-warning-dark' },
 };
 
 export const Alert = ({ alert, onClick, className }: Props) => {

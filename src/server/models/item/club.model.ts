@@ -1,5 +1,5 @@
 import mongoose, { Model, Schema } from 'mongoose';
-import { Club, Subscription } from '@/types/item/club.types';
+import { Club, ClubSubscription } from '@/types/item/club.types';
 import { RecordSchema } from '../utils.model';
 import { ItemSchema } from './item.model';
 import { ModelName } from '../model-name.enum';
@@ -27,7 +27,7 @@ const SubscriptionDiscountSchema = new Schema(
 	{ _id: false }
 );
 
-export const SubscriptionSchema = new Schema<Subscription>(
+export const SubscriptionSchema = new Schema<ClubSubscription>(
 	{
 		name: { type: String, required: true },
 		description: { type: String },

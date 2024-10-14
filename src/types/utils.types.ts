@@ -6,9 +6,9 @@ export type Ref<T> = Schema.Types.ObjectId | T;
 export interface Record {
 	id: string;
 
-	createdAt: Number;
-	updatedAt?: Number;
-	deletedAt?: Number;
+	createdAt: number;
+	updatedAt?: number;
+	deletedAt?: number;
 
 	createdBy: Ref<User>;
 	updatedBy?: Ref<User>;

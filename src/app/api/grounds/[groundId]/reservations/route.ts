@@ -10,7 +10,7 @@ import { NextRequest } from 'next/server';
 
 export async function GET(
 	req: NextRequest,
-	{ params: { id } }: { params: { id: string } }
+	{ params: { groundId } }: { params: { groundId: string } }
 ) {
 	try {
 		await setupDbConnection();
@@ -19,7 +19,7 @@ export async function GET(
 		const status = searchParams.get('status');
 
 		const grounds = await GroundReservationServerService.getAll(
-			id === 'all' ? null : id,
+			groundId === 'all' ? null : groundId,
 			status as GroundRerservationStatus
 		);
 

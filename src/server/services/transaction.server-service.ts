@@ -2,6 +2,7 @@ import { formatDocument } from '../helpers/database.helper';
 import { Transaction } from '@/types/wallet.types';
 import { TransactionModel } from '../models/wallet/transaction.model';
 import { TransactionDtoType } from '@/dtos/wallet/transaction.dto';
+import { WalletModel } from '../models/wallet/wallet.model';
 
 export class TransactionServerService {
 	static async getOne(id: string) {
@@ -10,16 +11,33 @@ export class TransactionServerService {
 		return formatDocument<Transaction>(transaction);
 	}
 
-	static async getPage(
-		page: number,
-		limit: number,
-		query: Record<string, unknown>
-	) {
-		const users = await TransactionModel.find(query, null, {
-			limit,
-			skip: page * limit,
-		}).populate('ground');
-		return formatDocument<Transaction[]>(users);
+	static async getPage(userId: string, page = 1, limit = 10) {
+		const wallet = await WalletModel.findOne({
+			user: userId,
+		});
+
+		const transactions = await TransactionModel.find(
+			{
+				$or: [
+					{
+						sender: wallet?.id,
+					},
+					{
+						receiver: wallet?.id,
+					},
+				],
+			},
+			null,
+			{
+				limit,
+				skip: (page - 1) * limit,
+			}
+		)
+			.populate('sender')
+			.populate('receiver')
+			.populate('groundReservation')
+			.populate('clubSubscription');
+		return formatDocument<Transaction[]>(transactions);
 	}
 
 	static async create(data: TransactionDtoType) {

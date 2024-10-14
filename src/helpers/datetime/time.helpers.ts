@@ -15,12 +15,12 @@ export class TimeHelper {
 
 	static format(time: Time) {
 		const { hours, minutes } = time;
-		return `${hours.toString().padStart(2, '0')}:${minutes
+		return `${hours.toString().padStart(2, '0')}h${minutes
 			.toString()
-			.padStart(2, '0')}`;
+			.padStart(2, '0')}min`;
 	}
 
-	static isEquals(time1: Time, time2: Time) {
+	static isEqual(time1: Time, time2: Time) {
 		return time1.hours === time2.hours && time1.minutes === time2.minutes;
 	}
 

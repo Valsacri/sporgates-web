@@ -4,14 +4,14 @@ import { NextRequest } from 'next/server';
 
 export async function GET(
 	req: NextRequest,
-	{ params }: { params: { id: string; date: string } }
+	{ params }: { params: { groundId: string; date: string } }
 ) {
 	try {
 		await setupDbConnection();
 
 		const timeframes =
 			await GroundReservationServerService.getReservedTimeframes(
-				params.id,
+				params.groundId,
 				Number(params.date)
 			);
 

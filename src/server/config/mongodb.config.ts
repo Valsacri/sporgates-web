@@ -5,11 +5,15 @@ import { UserModel } from '../models/user.model';
 import { ClubModel } from '../models/item/club.model';
 import { GroundModel } from '../models/item/ground.model';
 import { GroundReservationModel } from '../models/item/ground-reservation.model';
+import { WalletModel } from '../models/wallet/wallet.model';
+import { TransactionModel } from '../models/wallet/transaction.model';
 
 UserModel;
 ClubModel;
 GroundModel;
 GroundReservationModel;
+WalletModel;
+TransactionModel;
 
 // Declaring a variable to store the cached database connection
 let cachedConnection: Connection | null = null;

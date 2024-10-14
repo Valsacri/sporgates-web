@@ -28,7 +28,7 @@ export class GroundReservationClientService {
 
 	static async create(data: GroundReservationDtoType) {
 		const res = await Axios.post<GroundReservation>(
-			`/grounds/reservations`,
+			`/grounds/${data.ground}/reservations`,
 			data
 		);
 		return res.data;

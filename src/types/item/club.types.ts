@@ -1,7 +1,8 @@
 import { Address } from '../general.types';
+import { Record } from '../utils.types';
 import { Item } from './item.types';
 
-export enum SubscriptionPeriodDuration {
+export enum ClubSubscriptionPeriodDuration {
 	ONCE = 'once',
 	MINUTE = 'minute',
 	HOUR = 'hour',
@@ -11,31 +12,31 @@ export enum SubscriptionPeriodDuration {
 	YEAR = 'year',
 }
 
-export interface SubscriptionPeriod {
-	duration: SubscriptionPeriodDuration;
+export interface ClubSubscriptionPeriod {
+	duration: ClubSubscriptionPeriodDuration;
 	amount: number;
 }
 
-export interface SubscriptionFeature {
+export interface ClubSubscriptionFeature {
 	description: string;
 }
 
-export interface SubscriptionDiscount {
+export interface ClubSubscriptionDiscount {
 	amount: number;
 	endDate: string;
 }
 
-export interface Subscription {
+export interface ClubSubscription extends Record {
+	club: string | Club;
 	name: string;
 	description: string;
-	features: SubscriptionFeature[];
+	features: ClubSubscriptionFeature[];
 	price: number;
-	period: SubscriptionPeriod;
-	discount: SubscriptionDiscount;
+	period: ClubSubscriptionPeriod;
+	discount: ClubSubscriptionDiscount;
 	isHighlighted: boolean;
 }
 
 export interface Club extends Item {
 	address: Address;
-	subscriptions: Subscription[];
 }

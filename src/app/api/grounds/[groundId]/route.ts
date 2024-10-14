@@ -4,7 +4,7 @@ import { GroundServerService } from '@/server/services/ground.server-service';
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { id: string } }
+	{ params }: { params: { groundId: string } }
 ) {
 	try {
 		await setupDbConnection();
@@ -20,7 +20,7 @@ export async function PATCH(
 			});
 		}
 
-		const ground = await GroundServerService.update(params.id, data);
+		const ground = await GroundServerService.update(params.groundId, data);
 
 		return Response.json(ground, {
 			status: 200,

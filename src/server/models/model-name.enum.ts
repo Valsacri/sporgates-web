@@ -2,9 +2,10 @@ export enum ModelName {
 	User = 'User',
 	Item = 'Item',
 	Club = 'Club',
-	Subscription = 'Subscription',
+	ClubSubscription = 'ClubSubscription',
 	Ground = 'Ground',
 	GroundReservation = 'GroundReservation',
 	Wallet = 'Wallet',
-	Transaction = 'Transaction'
+	Transaction = 'Transaction',
+	Order = 'Order',
 }
