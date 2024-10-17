@@ -1,19 +1,24 @@
 import { OpeningHours } from '@/types/business.types';
-import {
-	Address,
-	DateTimeframes,
-	Review,
-	Timeframe,
-} from '@/types/general.types';
+import { DateTimeframes, Review, Timeframe } from '@/types/general.types';
 import { Schema } from 'mongoose';
 import { RecordSchema } from './utils.model';
 import { ModelName } from './model-name.enum';
+import { Address } from '@/types/geo.types';
 
 export const AddressSchema = new Schema<Address>(
 	{
-		country: { type: String },
-		city: { type: String, required: true },
-		neighborhood: { type: String, required: true },
+		city: {
+			type: Schema.Types.ObjectId,
+			ref: ModelName.City,
+
+			required: true,
+		},
+		town: {
+			type: Schema.Types.ObjectId,
+			ref: ModelName.Town,
+
+			required: true,
+		},
 		street: { type: String },
 		zip: { type: String },
 		geoLocation: {
@@ -21,12 +26,17 @@ export const AddressSchema = new Schema<Address>(
 			lng: { type: Number, required: true },
 		},
 	},
-	{ _id: false }
+	{ _id: false, toObject: { getters: true }, toJSON: { getters: true } }
 );
 
 export const ReviewSchema = new Schema<Review>({
 	...RecordSchema,
-	user: { type: Schema.Types.ObjectId, ref: ModelName.User, required: true },
+	user: {
+		type: Schema.Types.ObjectId,
+		ref: ModelName.User,
+
+		required: true,
+	},
 	rating: { type: Number, required: true },
 	comment: { type: String, required: true },
 });

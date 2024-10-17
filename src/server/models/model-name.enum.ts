@@ -8,4 +8,7 @@ export enum ModelName {
 	Wallet = 'Wallet',
 	Transaction = 'Transaction',
 	Order = 'Order',
+
+	City = 'City',
+	Town = 'Town',
 }

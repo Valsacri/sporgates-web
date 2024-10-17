@@ -11,6 +11,8 @@ export interface SelectOption {
 	label: string;
 }
 
+export const ALL_SELECT_OPTION = { value: 'all', label: 'All' };
+
 interface Props {
 	className?: string;
 	inputClassName?: string;
@@ -79,7 +81,7 @@ export const Select = forwardRef<HTMLInputElement | HTMLTextAreaElement, Props>(
 				<Dropdown
 					open={open}
 					setOpen={setOpen}
-					className={twMerge('shadow-none', label && 'w-full mt-1')}
+					className={twMerge('shadow-none w-full', label && 'w-full mt-1')}
 					trigger={
 						<div
 							className={twMerge(

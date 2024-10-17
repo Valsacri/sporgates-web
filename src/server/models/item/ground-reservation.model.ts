@@ -16,7 +16,11 @@ const GroundReservationSchema = new Schema<GroundReservation>({
 		ref: GroundModel.modelName,
 		required: true,
 	},
-	user: { type: Schema.Types.ObjectId, ref: ModelName.User, required: true },
+	user: {
+		type: Schema.Types.ObjectId,
+		ref: ModelName.User,
+		required: true,
+	},
 	date: { type: Number, required: true },
 	timeframe: { type: TimeframeSchema, required: true },
 	totalPrice: { type: Number, required: true },

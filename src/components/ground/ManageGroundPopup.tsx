@@ -18,12 +18,15 @@ import { useEffect, useState } from 'react';
 import { OpeningHours } from '@/types/business.types';
 import { GroundClientService } from '@/client/services/ground.client-service';
 import { Ground } from '@/types/item/ground.types';
-import { GeoLocation } from '@/types/general.types';
-import { Select } from '../utils/form/Select';
+import { Select, SelectOption } from '../utils/form/Select';
 import { SubscriptionDtoType } from '@/dtos/item/club.dto';
 import { useRouter } from 'next/navigation';
 import ConfirmationPopup from '../shared/ConfirmationPopup';
 import { deleteFile, uploadFile } from '@/client/helpers/storage.helper';
+import { GeoLocation } from '@/types/geo.types';
+import { useFetch } from '@/client/hooks/utils/useFetch';
+import { CityClientService } from '@/client/services/geo/city.client-service';
+import { TownClientService } from '@/client/services/geo/town.client-service';
 
 interface Props {
 	children: React.ReactNode;
@@ -64,9 +67,8 @@ function ManageGroundPopup({ children, ground }: Props) {
 				sunday: [],
 			},
 			address: {
-				country: '',
 				city: '',
-				neighborhood: '',
+				town: '',
 				street: '',
 				zip: '',
 				geoLocation: {
@@ -84,6 +86,8 @@ function ManageGroundPopup({ children, ground }: Props) {
 
 	const openingHours = watch('openingHours') as OpeningHours;
 	const subscriptions = watch('subscriptions') || [];
+	const selectedCity = watch('address.city');
+	const selectedTown = watch('address.town');
 
 	const [currentSubscriptionIndex, setCurrentSubscriptionIndex] = useState(-1);
 	const currentSubscription = subscriptions[currentSubscriptionIndex];
@@ -158,11 +162,32 @@ function ManageGroundPopup({ children, ground }: Props) {
 		setValue('images', imagesUrls);
 	}, [imagesUrls]);
 
-	const neighborhoods = [
-		{ value: 'maarif', label: 'Maarif' },
-		{ value: 'ain-diab', label: 'Ain Diab' },
-		{ value: 'california', label: 'California' },
-	];
+	const { data: citiesOptions } = useFetch([], {
+		async fetch() {
+			const cities = await CityClientService.getPage();
+			return cities.map(
+				(city) => ({ value: city.id, label: city.name } as SelectOption)
+			);
+		},
+	});
+
+	const { data: townsOptions, loading: loadingTowns } = useFetch(
+		[],
+		{
+			async fetch() {
+				if (!selectedCity) return [];
+
+				const towns = await TownClientService.getPage(selectedCity);
+
+				setValue('address.town', towns[0].id);
+
+				return towns.map(
+					(town) => ({ value: town.id, label: town.name } as SelectOption)
+				);
+			},
+		},
+		[selectedCity]
+	);
 
 	const handleOpeningHoursChange = (openingHours: OpeningHours) => {
 		setValue('openingHours', openingHours);
@@ -297,23 +322,22 @@ function ManageGroundPopup({ children, ground }: Props) {
 						<div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
 							<Select
 								{...register('address.city')}
-								value={watch('address.city')}
+								value={selectedCity}
 								onChange={(city) => setValue('address.city', city)}
-								options={neighborhoods}
+								options={citiesOptions}
 								label='City'
 								placeholder='Select a city'
 								error={errors.address?.city?.message}
 							/>
 							<Select
-								{...register('address.neighborhood')}
-								value={watch('address.neighborhood')}
-								onChange={(neighborhood) =>
-									setValue('address.neighborhood', neighborhood)
-								}
-								options={neighborhoods}
-								label='Neighborhood'
-								placeholder='Select a neighborhood'
-								error={errors.address?.neighborhood?.message}
+								{...register('address.town')}
+								value={selectedTown}
+								onChange={(town) => setValue('address.town', town)}
+								options={townsOptions}
+								label='Town'
+								placeholder='Select a town'
+								error={errors.address?.town?.message}
+								disabled={loadingTowns}
 							/>
 
 							<div className='col-span-2 space-y-1'>

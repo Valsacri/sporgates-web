@@ -173,7 +173,7 @@ export const GROUNDS: Ground[] = [
 		address: {
 			country: 'Morocco',
 			city: 'Casablanca',
-			neighborhood: '2 mars',
+			town: '2 mars',
 			street: '2 mars rue 33 n 44',
 			zip: '10000',
 			geoLocation: {
@@ -210,7 +210,7 @@ export const GROUNDS: Ground[] = [
 		address: {
 			country: 'Morocco',
 			city: 'Casablanca',
-			neighborhood: 'Bélvedère',
+			town: 'Bélvedère',
 			street: 'Bélvedère avenue des jardins n 12',
 			zip: '20000',
 			geoLocation: {
@@ -247,7 +247,7 @@ export const GROUNDS: Ground[] = [
 		address: {
 			country: 'Morocco',
 			city: 'Casablanca',
-			neighborhood: 'Beauséjour',
+			town: 'Beauséjour',
 			street: 'Beauséjour boulevard des étoiles n 123',
 			zip: '30000',
 			geoLocation: {
@@ -283,7 +283,7 @@ export const GROUNDS: Ground[] = [
 		address: {
 			country: 'Morocco',
 			city: 'Casablanca',
-			neighborhood: '2 mars',
+			town: '2 mars',
 			street: '2 mars rue 33 n 44',
 			zip: '10000',
 			geoLocation: {
@@ -320,7 +320,7 @@ export const GROUNDS: Ground[] = [
 		address: {
 			country: 'Morocco',
 			city: 'Casablanca',
-			neighborhood: 'Bélvedère',
+			town: 'Bélvedère',
 			street: 'Bélvedère avenue des jardins n 12',
 			zip: '20000',
 			geoLocation: {
@@ -357,7 +357,7 @@ export const GROUNDS: Ground[] = [
 		address: {
 			country: 'Morocco',
 			city: 'Casablanca',
-			neighborhood: 'Beauséjour',
+			town: 'Beauséjour',
 			street: 'Beauséjour boulevard des étoiles n 123',
 			zip: '30000',
 			geoLocation: {

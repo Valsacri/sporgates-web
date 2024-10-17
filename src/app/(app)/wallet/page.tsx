@@ -69,7 +69,7 @@ function Page() {
 				/>
 			</Card>
 
-			<Card className='col-span-4 h-min'>
+			<Card title='Balance' className='col-span-4 h-min'>
 				<Balance onDeposit={refetchTransactions} />
 			</Card>
 

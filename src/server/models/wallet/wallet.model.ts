@@ -5,7 +5,11 @@ import { RecordSchema } from '../utils.model';
 
 const WalletSchema = new Schema<Wallet>({
 	...RecordSchema,
-	user: { type: Schema.Types.ObjectId, ref: ModelName.User, required: true },
+	user: {
+		type: Schema.Types.ObjectId,
+		ref: ModelName.User,
+		required: true,
+	},
 	balance: { type: Number, required: true },
 });
 

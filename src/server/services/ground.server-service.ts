@@ -11,11 +11,24 @@ export class GroundServerService {
 		return formatDocument<Ground>(ground);
 	}
 
-	static async getAll(uid: string) {
+	static async getAll(filters: {
+		keywords?: string;
+		user?: string;
+		city?: string;
+		town?: string;
+	}) {
 		const grounds = await GroundModel.find({
-			createdBy: new mongoose.Types.ObjectId(uid),
-		});
-		return formatDocument<Ground>(grounds);
+			...(filters.keywords
+				? { name: { $regex: filters.keywords, $options: 'i' } }
+				: {}),
+			...(filters.user ? { createdBy: filters.user } : {}),
+			...(filters.city ? { 'address.city': filters.city } : {}),
+			...(filters.town ? { 'address.town': filters.town } : {}),
+		})
+			.collation({ locale: 'en', strength: 1 })
+			.populate('address.city')
+			.populate('address.town');
+		return formatDocument<Ground[]>(grounds);
 	}
 
 	static async getPage(page = 1, limit = 10, query: FilterQuery<Ground> = {}) {

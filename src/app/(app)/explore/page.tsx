@@ -1,25 +1,85 @@
 'use client';
 
+import { useFetch } from '@/client/hooks/utils/useFetch';
+import { CityClientService } from '@/client/services/geo/city.client-service';
+import { TownClientService } from '@/client/services/geo/town.client-service';
+import { GroundClientService } from '@/client/services/ground.client-service';
 import GroundCard from '@/components/ground/GroundCard';
 import Buttons from '@/components/profile/Buttons';
-import Button from '@/components/utils/Button';
 import Card from '@/components/utils/Card';
 import { Input } from '@/components/utils/form/Input';
-import { Select } from '@/components/utils/form/Select';
-import { GROUNDS } from '@/data/grounds';
-import { useState } from 'react';
+import {
+	ALL_SELECT_OPTION,
+	Select,
+	SelectOption,
+} from '@/components/utils/form/Select';
+import Loader from '@/components/utils/Loader';
 import { useForm } from 'react-hook-form';
 
 function Page() {
-	const [selectedTypeIndex, setSelectedTypeIndex] = useState(0);
-
-	const { handleSubmit, register, reset } = useForm({
+	const { handleSubmit, register, reset, watch, setValue } = useForm({
 		defaultValues: {
-			keyword: '',
+			keywords: '',
 			city: 'all',
-			neighborhood: 'all',
+			town: 'all',
+			type: 'grounds',
 		},
 	});
+
+	const keywords = watch('keywords');
+	const selectedCity = watch('city');
+	const selectedTown = watch('town');
+	const selectedType = watch('type');
+
+	const { data: citiesOptions } = useFetch([], {
+		async fetch() {
+			const cities = await CityClientService.getPage();
+			return [
+				ALL_SELECT_OPTION,
+				...cities.map(
+					(city) => ({ value: city.id, label: city.name } as SelectOption)
+				),
+			];
+		},
+	});
+
+	const { data: townsOptions } = useFetch(
+		[],
+		{
+			async fetch() {
+				if (selectedCity === 'all') return [ALL_SELECT_OPTION];
+
+				const towns = await TownClientService.getPage(selectedCity);
+
+				setValue('town', ALL_SELECT_OPTION.value);
+
+				return [
+					ALL_SELECT_OPTION,
+					...towns.map(
+						(town) => ({ value: town.id, label: town.name } as SelectOption)
+					),
+				];
+			},
+		},
+		[selectedCity]
+	);
+
+	const { data: results, loading: loadingResults } = useFetch(
+		[],
+		{
+			async fetch() {
+				if (selectedType === 'grounds') {
+					return await GroundClientService.getAll({
+						keywords: keywords === 'all' ? undefined : keywords.trim(),
+						city: selectedCity === 'all' ? undefined : selectedCity,
+						town: selectedTown === 'all' ? undefined : selectedTown,
+					});
+				}
+				return [];
+			},
+		},
+		[keywords, selectedCity, selectedTown, selectedType]
+	);
 
 	return (
 		<div className='space-y-5'>
@@ -27,33 +87,26 @@ function Page() {
 				Search for champs, grounds, and more...
 				<div className='grid grid-cols-12 gap-5'>
 					<Input
-						{...register('keyword')}
+						{...register('keywords')}
 						placeholder='Search'
-						className='col-span-4'
+						className='col-span-6'
 					/>
 					<Select
 						{...register('city')}
+						value={watch('city')}
+						onChange={(value) => setValue('city', value)}
 						placeholder='City'
-						options={[
-							{ value: 'all', label: 'All cities' },
-							{ value: 'city1', label: 'City 1' },
-							{ value: 'city2', label: 'City 2' },
-						]}
+						options={citiesOptions}
 						className='col-span-3'
 					/>
 					<Select
-						{...register('neighborhood')}
-						placeholder='Neighborhood'
-						options={[
-							{ value: 'all', label: 'All neighborhood' },
-							{ value: 'neighborhood1', label: 'Neighborhood 1' },
-							{ value: 'neighborhood2', label: 'Neighborhood 2' },
-						]}
+						{...register('town')}
+						value={watch('town')}
+						onChange={(value) => setValue('town', value)}
+						placeholder='Town'
+						options={townsOptions}
 						className='col-span-3'
 					/>
-					<Button type='submit' color='primary' className='col-span-2'>
-						Search
-					</Button>
 				</div>
 				<Buttons
 					color='secondary'
@@ -61,31 +114,39 @@ function Page() {
 						{
 							icon: 'two-user',
 							text: 'Champs',
+							value: 'champs',
 						},
 						{
 							icon: 'location',
 							text: 'Grounds',
+							value: 'grounds',
 						},
 						{
 							icon: 'two-user',
 							text: 'Clubs',
+							value: 'clubs',
 						},
 					].map(
-						(item, i) =>
+						(item) =>
 							({
-								...item,
-								onClick: () => setSelectedTypeIndex(i),
-								selected: selectedTypeIndex === i,
+								icon: item.icon,
+								text: item.text,
+								onClick: () => setValue('type', item.value),
+								selected: selectedType === item.value,
 							} as any)
 					)}
 				/>
 			</Card>
 
-			<div className='grid grid-cols-1 lg:grid-cols-3 gap-5'>
-				{GROUNDS.map((ground) => (
-					<GroundCard key={ground.id} ground={ground} />
-				))}
-			</div>
+			{loadingResults ? (
+				<Loader className='size-20 mx-auto' />
+			) : (
+				<div className='grid grid-cols-1 lg:grid-cols-3 gap-5'>
+					{results.map((ground) => (
+						<GroundCard key={ground.id} ground={ground} />
+					))}
+				</div>
+			)}
 		</div>
 	);
 }

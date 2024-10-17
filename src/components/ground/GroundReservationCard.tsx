@@ -11,7 +11,7 @@ function GroundReservationCard({ reservation }: Props) {
 			<div className='flex items-center justify-between'>
 				<div>
 					<h3 className='text-lg font-semibold'>Ground Name</h3>
-					<p className='text-sm text-gray-500'>City, Neighborhood</p>
+					<p className='text-sm text-gray-500'>City, Town</p>
 				</div>
 				<div>
 					<p className='text-sm text-gray-500'>Date</p>

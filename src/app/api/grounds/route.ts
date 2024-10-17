@@ -8,9 +8,18 @@ export async function GET(req: NextRequest, res: Response) {
 	try {
 		await setupDbConnection();
 
-		const user = getServerUser(req);
+		const { searchParams } = req.nextUrl;
+		const keywords = searchParams.get('keywords') || undefined;
+		const user = searchParams.get('user') || undefined;
+		const city = searchParams.get('city') || undefined;
+		const town = searchParams.get('town') || undefined;
 
-		const grounds = await GroundServerService.getAll(user.id);
+		const grounds = await GroundServerService.getAll({
+			keywords,
+			user,
+			city,
+			town,
+		});
 
 		return Response.json(grounds, {
 			status: 200,

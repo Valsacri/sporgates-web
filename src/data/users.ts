@@ -1,7 +1,6 @@
 import { CreateUserDtoType } from '@/dtos/user.dto';
 import { Role } from '@/types/user.types';
 
-
 export const USERS = [
 	{
 		firstName: 'Oussama',
@@ -17,7 +16,7 @@ export const USERS = [
 		address: {
 			country: 'Morocco',
 			city: 'Casablanca',
-			neighborhood: 'Maarif',
+			town: 'Maarif',
 			street: 'Imm 1, Rue 1, N 1',
 			zip: '20230',
 			geoLocation: {
@@ -48,7 +47,7 @@ export const USERS = [
 		address: {
 			country: 'Morocco',
 			city: 'Rabat',
-			neighborhood: 'Agdal',
+			town: 'Agdal',
 			street: 'Imm 10, Rue 2, N 5',
 			zip: '10000',
 			geoLocation: {
@@ -79,7 +78,7 @@ export const USERS = [
 		address: {
 			country: 'Morocco',
 			city: 'Casablanca',
-			neighborhood: 'Gauthier',
+			town: 'Gauthier',
 			street: 'Imm 5, Rue 6, N 12',
 			zip: '20000',
 			geoLocation: {
@@ -110,7 +109,7 @@ export const USERS = [
 		address: {
 			country: 'Morocco',
 			city: 'Tangier',
-			neighborhood: 'Malabata',
+			town: 'Malabata',
 			street: 'Imm 2, Rue 3, N 4',
 			zip: '90000',
 			geoLocation: {
@@ -141,7 +140,7 @@ export const USERS = [
 		address: {
 			country: 'Morocco',
 			city: 'Marrakech',
-			neighborhood: 'Gueliz',
+			town: 'Gueliz',
 			street: 'Imm 3, Rue 4, N 7',
 			zip: '40000',
 			geoLocation: {
@@ -172,7 +171,7 @@ export const USERS = [
 		address: {
 			country: 'Morocco',
 			city: 'Fez',
-			neighborhood: 'Ville Nouvelle',
+			town: 'Ville Nouvelle',
 			street: 'Imm 4, Rue 5, N 3',
 			zip: '30000',
 			geoLocation: {
@@ -203,7 +202,7 @@ export const USERS = [
 		address: {
 			country: 'Morocco',
 			city: 'Agadir',
-			neighborhood: 'Talborjt',
+			town: 'Talborjt',
 			street: 'Imm 7, Rue 8, N 2',
 			zip: '80000',
 			geoLocation: {
@@ -234,7 +233,7 @@ export const USERS = [
 		address: {
 			country: 'Morocco',
 			city: 'Casablanca',
-			neighborhood: 'Oulfa',
+			town: 'Oulfa',
 			street: 'Imm 9, Rue 10, N 11',
 			zip: '20400',
 			geoLocation: {
@@ -265,7 +264,7 @@ export const USERS = [
 		address: {
 			country: 'Morocco',
 			city: 'Rabat',
-			neighborhood: 'Souissi',
+			town: 'Souissi',
 			street: 'Imm 11, Rue 12, N 13',
 			zip: '10100',
 			geoLocation: {
@@ -296,7 +295,7 @@ export const USERS = [
 		address: {
 			country: 'Morocco',
 			city: 'Meknes',
-			neighborhood: 'Hamria',
+			town: 'Hamria',
 			street: 'Imm 12, Rue 13, N 14',
 			zip: '50000',
 			geoLocation: {
@@ -327,7 +326,7 @@ export const USERS = [
 		address: {
 			country: 'Morocco',
 			city: 'Casablanca',
-			neighborhood: 'Anfa',
+			town: 'Anfa',
 			street: 'Imm 14, Rue 15, N 16',
 			zip: '20250',
 			geoLocation: {

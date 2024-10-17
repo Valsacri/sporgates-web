@@ -5,8 +5,15 @@ import { Ground } from '@/types/item/ground.types';
 export class GroundClientService {
 	static async getOne(id: string) {}
 
-	static async getAll() {
-		const res = await Axios.get<Ground[]>('/grounds');
+	static async getAll(filters: {
+		keywords?: string;
+		user?: string;
+		city?: string;
+		town?: string;
+	}) {
+		const res = await Axios.get<Ground[]>('/grounds', {
+			params: filters,
+		});
 		return res.data;
 	}
 

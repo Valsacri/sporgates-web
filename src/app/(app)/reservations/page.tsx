@@ -1,6 +1,7 @@
 'use client';
 
 import { AlertContext } from '@/client/contexts/alert.context';
+import { UserContext } from '@/client/contexts/user.context';
 import { useFetch } from '@/client/hooks/utils/useFetch';
 import { GroundReservationClientService } from '@/client/services/ground-reservation.client-service';
 import { GroundClientService } from '@/client/services/ground.client-service';
@@ -28,6 +29,7 @@ function Page() {
 	const [loadingActionIndex, setLoadingActionIndex] = useState(-1);
 
 	const showAlert = useContext(AlertContext);
+	const [user] = useContext(UserContext);
 
 	const { handleSubmit, register, reset, watch, setValue } = useForm({
 		defaultValues: {
@@ -42,7 +44,7 @@ function Page() {
 		{
 			async fetch() {
 				try {
-					const grounds = await GroundClientService.getAll();
+					const grounds = await GroundClientService.getAll({ user: user?.id });
 					return grounds;
 				} catch (error) {
 					console.log(error);

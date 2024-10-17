@@ -1,8 +1,9 @@
-import { Address, DateTimeframes, Timeframe } from '../general.types';
+import {  DateTimeframes, Timeframe } from '../general.types';
 import { Item } from './item.types';
 import { ClubSubscription } from './club.types';
 import { User } from '../user.types';
 import { Record } from '../utils.types';
+import { Address } from '../geo.types';
 
 export enum GroundRerservationStatus {
 	PENDING = 'pending',

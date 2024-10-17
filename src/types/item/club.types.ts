@@ -1,4 +1,4 @@
-import { Address } from '../general.types';
+import { Address } from '../geo.types';
 import { Record } from '../utils.types';
 import { Item } from './item.types';
 

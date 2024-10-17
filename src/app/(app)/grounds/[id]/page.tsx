@@ -10,6 +10,8 @@ import { Ground } from '@/types/item/ground.types';
 import { Review } from '@/types/general.types';
 import ManageGroundPopup from '@/components/ground/ManageGroundPopup';
 import Button from '@/components/utils/Button';
+import { CityModel } from '@/server/models/geo/city.model';
+import { TownModel } from '@/server/models/geo/town.model';
 
 interface Props {
 	params: {

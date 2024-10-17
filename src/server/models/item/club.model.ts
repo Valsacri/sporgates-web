@@ -43,8 +43,6 @@ export const SubscriptionSchema = new Schema<ClubSubscription>(
 const ClubSchema = new Schema<Club>({
 	...RecordSchema,
 	...ItemSchema,
-
-	subscriptions: { type: [SubscriptionSchema], required: true },
 });
 
 export const ClubModel =

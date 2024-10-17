@@ -1,9 +1,8 @@
 import { z } from 'zod';
 
 export const AddressDto = z.object({
-	country: z.string(),
 	city: z.string().min(1, 'This field is required'),
-	neighborhood: z.string().min(1, 'This field is required'),
+	town: z.string().min(1, 'This field is required'),
 	street: z.string(),
 	zip: z.string(),
 	geoLocation: z.object({

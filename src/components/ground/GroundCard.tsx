@@ -4,6 +4,7 @@ import { twMerge } from 'tailwind-merge';
 import Link from 'next/link';
 import Rating from '../shared/Rating';
 import { Ground } from '@/types/item/ground.types';
+import { City, Town } from '@/types/geo.types';
 
 interface Props {
 	ground: Ground;
@@ -57,8 +58,7 @@ function GroundCard({ ground }: Props) {
 							</p>
 							<div className='flex gap-1 items-center text-xs mt-3'>
 								<Icon name='location' className='!size-5' />{' '}
-								{ground.address.neighborhood}, {ground.address.city},{' '}
-								{ground.address.country}
+								{(ground.address.town as Town).name}, {(ground.address.city as City).name},{' '}
 							</div>
 						</div>
 					</div>
