@@ -1,29 +1,80 @@
+'use client';
+
 import Card from '@/components/utils/Card';
-import Image from 'next/image';
 import { twMerge } from 'tailwind-merge';
 
 interface Props {
 	images: string[];
 }
 
+
 function GroundImages({ images }: Props) {
 	return (
-		<Card className='grid grid-cols-4 gap-2'>
-			{images.map((image, index) => (
-				<Image
-					key={index}
-					src={image}
-					alt={`Image ${index + 1}`}
-					className={twMerge(
-						'w-full h-auto rounded-md',
-						index === 0 && 'col-span-2 row-span-2'
-					)}
-					width={200}
-					height={100}
-				/>
-			))}
+		<Card className='grid grid-cols-4 grid-rows-2 gap-2 h-96'>
+			<GalleryImage
+				image={images[0]}
+				className={twMerge(
+					'row-span-2',
+					images.length === 1 ? 'col-span-4' : 'col-span-2'
+				)}
+			></GalleryImage>
+
+			{images.length === 2 && (
+				<GalleryImage
+					image={images[1]}
+					className='col-span-2 row-span-2'
+				></GalleryImage>
+			)}
+
+			{images.length > 2 && (
+				<div className='col-span-2 grid row-span-2 grid-rows-2 gap-2'>
+					<div className='grid grid-cols-2 gap-2'>
+						{(images.length === 3 || images.length === 4) && (
+							<GalleryImage image={images[1]} className='col-span-2' />
+						)}
+						{images.length === 5 && (
+							<>
+								<GalleryImage image={images[1]} />
+								<GalleryImage image={images[2]} />
+							</>
+						)}
+					</div>
+
+					<div className='grid grid-cols-2 gap-2'>
+						{images.length === 3 && (
+							<GalleryImage image={images[2]} className='col-span-2' />
+						)}
+						{images.length === 4 && (
+							<>
+								<GalleryImage image={images[2]} />
+								<GalleryImage image={images[3]} />
+							</>
+						)}
+						{images.length === 5 && (
+							<>
+								<GalleryImage image={images[3]} />
+								<GalleryImage image={images[4]} />
+							</>
+						)}
+					</div>
+				</div>
+			)}
 		</Card>
 	);
 }
 
 export default GroundImages;
+
+function GalleryImage({ image, className }: any) {
+	return (
+		<div
+			className={twMerge(
+				'w-full h-full rounded-md bg-cover bg-center',
+				className
+			)}
+			style={{
+				backgroundImage: `url(${image})`,
+			}}
+		></div>
+	);
+}

@@ -11,7 +11,7 @@ export const documentToObject = <T>(document?: Document | null) => {
 };
 
 export const formatDocument = <T>(data?: Document | Document[] | null) => {
-	if (!data) return null;
+	if (!data) return null as T;
 
 	if (Array.isArray(data)) {
 		return data.map((document) =>

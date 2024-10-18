@@ -123,7 +123,7 @@ function ManageGroundPopup({ children, ground }: Props) {
 
 	useEffect(() => {
 		if (ground) {
-			reset(ground);
+			reset(ground as GroundDtoType);
 		}
 	}, [ground]);
 
