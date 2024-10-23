@@ -1,12 +1,18 @@
-import mongoose, { FilterQuery } from 'mongoose';
+import { FilterQuery } from 'mongoose';
 import { GroundModel } from '../models/item/ground.model';
 import { GroundDtoType, GroundUpdateDtoType } from '@/dtos/item/ground.dto';
 import { Ground } from '@/types/item/ground.types';
-import { formatDocument } from '../helpers/database.helper';
+import {
+	formatDocument,
+	getGeoLocationQuery,
+	valueOrEmptyObject,
+} from '../helpers/database.helper';
 
 export class GroundServerService {
 	static async getOne(id: string) {
-		const ground = await GroundModel.findById(id);
+		const ground = await GroundModel.findById(id)
+			.populate('address.city')
+			.populate('address.town');
 		if (!ground) return null;
 		return formatDocument<Ground>(ground);
 	}
@@ -16,18 +22,25 @@ export class GroundServerService {
 		user?: string;
 		city?: string;
 		town?: string;
+		lat?: number;
+		lng?: number;
+		radius?: number;
 	}) {
 		const grounds = await GroundModel.find({
-			...(filters.keywords
-				? { name: { $regex: filters.keywords, $options: 'i' } }
-				: {}),
-			...(filters.user ? { createdBy: filters.user } : {}),
-			...(filters.city ? { 'address.city': filters.city } : {}),
-			...(filters.town ? { 'address.town': filters.town } : {}),
+			...valueOrEmptyObject(filters.keywords, {
+				name: { $regex: filters.keywords, $options: 'i' },
+			}),
+			...valueOrEmptyObject(filters.user, { createdBy: filters.user }),
+			...valueOrEmptyObject(filters.city, { 'address.city': filters.city }),
+			...valueOrEmptyObject(filters.town, { 'address.town': filters.town }),
+			...valueOrEmptyObject(filters.lat && filters.lng && filters.radius, {
+				'address.geoLocation': getGeoLocationQuery(filters),
+			}),
 		})
 			.collation({ locale: 'en', strength: 1 })
 			.populate('address.city')
 			.populate('address.town');
+
 		return formatDocument<Ground[]>(grounds);
 	}
 
@@ -35,12 +48,16 @@ export class GroundServerService {
 		const grounds = await GroundModel.find(query, null, {
 			limit,
 			skip: (page - 1) * limit,
-		});
+		})
+			.populate('address.city')
+			.populate('address.town');
+
 		return formatDocument<Ground[]>(grounds);
 	}
 
 	static async create(data: GroundDtoType, createdBy?: string) {
 		const ground = await GroundModel.create({ createdBy, ...data });
+
 		return formatDocument<Ground>(ground);
 	}
 
@@ -56,11 +73,13 @@ export class GroundServerService {
 				new: true,
 			}
 		);
+
 		return formatDocument<Ground>(ground);
 	}
 
 	static async delete(id: string) {
 		const ground = await GroundModel.findByIdAndDelete(id);
+
 		return formatDocument<Ground>(ground);
 	}
 }

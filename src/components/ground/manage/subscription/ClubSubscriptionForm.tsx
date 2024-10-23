@@ -1,12 +1,7 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { Popup } from '../utils/Popup';
-import { Input } from '../utils/form/Input';
-import Button from '../utils/Button';
 import { HiOutlinePlusCircle } from 'react-icons/hi';
-import ManageSubscriptionFeaturePopup from './ManageSubscriptionFeaturePopup';
-import { Table } from '../utils/table/Table';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
 	SubscriptionDto,
@@ -15,25 +10,23 @@ import {
 } from '@/dtos/item/club.dto';
 import { ClubSubscriptionPeriodDuration } from '@/types/item/club.types';
 import { usePopup } from '@/client/hooks/utils/usePopup';
-import { DatePicker } from '../utils/form/DatePicker';
-import { Select } from '../utils/form/Select';
 import { useEffect, useState } from 'react';
-import ConfirmationPopup from '../shared/ConfirmationPopup';
-import { Checkbox } from '../utils/form/Checkbox';
+import { Input } from '@/components/utils/form/Input';
+import { Select } from '@/components/utils/form/Select';
+import Button from '@/components/utils/Button';
+import { Table } from '@/components/utils/table/Table';
+import { DatePicker } from '@/components/utils/form/DatePicker';
+import { Checkbox } from '@/components/utils/form/Checkbox';
+import ConfirmationPopup from '@/components/shared/ConfirmationPopup';
+import ClubSubscriptionFeatureFormPopup from './feature/ClubSubscriptionFeatureFormPopup';
 
 interface Props {
 	subscription?: SubscriptionDtoType;
-	open: boolean;
 	onClose: () => void;
 	onSubmit: (data: SubscriptionDtoType) => void;
 }
 
-function ManageSubscriptionPopup({
-	subscription,
-	open,
-	onClose,
-	onSubmit,
-}: Props) {
+function ClubSubscriptionForm({ subscription, onClose, onSubmit }: Props) {
 	const [openFeaturePopup, toggleFeaturePopup] = usePopup();
 	const [
 		openFeatureRemoveConfirmationPopup,
@@ -78,12 +71,6 @@ function ManageSubscriptionPopup({
 		onClose();
 		onSubmit(data);
 	};
-
-	useEffect(() => {
-		if (!open) {
-			reset();
-		}
-	}, [open]);
 
 	useEffect(() => {
 		if (subscription) {
@@ -136,17 +123,7 @@ function ManageSubscriptionPopup({
 	};
 
 	return (
-		<Popup
-			open={open}
-			title={subscription ? 'Edit subscription' : 'Add a subscription'}
-			description={
-				subscription
-					? 'Edit the details of the subscription.'
-					: 'Fill in the details to add a new subscription.'
-			}
-			onClose={onClose}
-			className='w-full lg:w-1/2'
-		>
+		<>
 			<form onSubmit={handleSubmit(onSubmitForm)} className='space-y-3'>
 				<div className='space-y-3'>
 					<h3>Infos</h3>
@@ -159,7 +136,7 @@ function ManageSubscriptionPopup({
 						<Input
 							{...register('description')}
 							label='Description'
-							rows={5}
+							multiline
 							error={errors.description?.message}
 						/>
 					</div>
@@ -254,9 +231,8 @@ function ManageSubscriptionPopup({
 			</form>
 
 			{openFeaturePopup && (
-				<ManageSubscriptionFeaturePopup
+				<ClubSubscriptionFeatureFormPopup
 					feature={currentFeature}
-					open={openFeaturePopup}
 					onClose={toggleFeaturePopup}
 					onSubmit={handleSubmitFeature}
 				/>
@@ -271,8 +247,8 @@ function ManageSubscriptionPopup({
 					onConfirm={handleRemoveSubscription}
 				/>
 			)}
-		</Popup>
+		</>
 	);
 }
 
-export default ManageSubscriptionPopup;
+export default ClubSubscriptionForm;

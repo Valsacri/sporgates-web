@@ -58,7 +58,8 @@ function GroundCard({ ground }: Props) {
 							</p>
 							<div className='flex gap-1 items-center text-xs mt-3'>
 								<Icon name='location' className='!size-5' />{' '}
-								{(ground.address.town as Town).name}, {(ground.address.city as City).name},{' '}
+								{(ground.address.town as Town).name},{' '}
+								{(ground.address.city as City).name}
 							</div>
 						</div>
 					</div>

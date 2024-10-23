@@ -39,3 +39,22 @@ const replaceObjectIdsWithStrings = (obj: any) => {
 	}
 	return obj;
 };
+
+export const getGeoLocationQuery = (filters: {
+	lat?: number;
+	lng?: number;
+	radius?: number;
+}) => {
+	return {
+		$nearSphere: {
+			$geometry: {
+				type: 'Point',
+				coordinates: [filters.lat, filters.lng], // Longitude first, then Latitude
+			},
+			$maxDistance: (filters.radius || 0) * 1000, // Radius in meters
+		},
+	};
+};
+
+export const valueOrEmptyObject = (condition: any, value: any) =>
+	condition ? value : {};

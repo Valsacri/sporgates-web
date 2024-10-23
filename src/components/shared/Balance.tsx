@@ -8,6 +8,7 @@ import Button from '../utils/Button';
 import { Input } from '../utils/form/Input';
 import { twMerge } from 'tailwind-merge';
 import { useForm } from 'react-hook-form';
+import { GENERIC_ERROR_MESSAGE } from '@/constants';
 
 interface Props {
 	purchasePrice?: number;
@@ -41,7 +42,7 @@ function Balance({ onDeposit, purchasePrice = 0 }: Props) {
 			console.log(error);
 			showAlert({
 				color: 'danger',
-				message: 'An error occured, please try later.',
+				message: GENERIC_ERROR_MESSAGE,
 			});
 			return [];
 		}

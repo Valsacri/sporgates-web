@@ -20,7 +20,7 @@ export default function RootLayout({
 	return (
 		<>
 			<Navbar />
-			<div className='2xl:container mx-auto px-2 py-3 lg:px-16'>{children}</div>
+			<div className='2xl:container mx-auto mt-16 px-2 py-3 lg:px-16'>{children}</div>
 		</>
 	);
 }

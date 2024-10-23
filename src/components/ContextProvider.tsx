@@ -39,13 +39,7 @@ function ContextProvider({ children }: Props) {
 	return (
 		<UserContext.Provider value={[user, setUser]}>
 			<AlertContext.Provider value={showAlert}>
-				{user !== undefined ? (
-					children
-				) : (
-					<div className='w-screen h-screen flex justify-center items-center'>
-						<Loader className='size-20' />
-					</div>
-				)}
+				{children}
 				{alert && <Alert alert={alert} />}
 			</AlertContext.Provider>
 		</UserContext.Provider>

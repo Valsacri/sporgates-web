@@ -13,12 +13,18 @@ export async function GET(req: NextRequest, res: Response) {
 		const user = searchParams.get('user') || undefined;
 		const city = searchParams.get('city') || undefined;
 		const town = searchParams.get('town') || undefined;
+		const lat = Number(searchParams.get('lat')) || undefined;
+		const lng = Number(searchParams.get('lng')) || undefined;
+		const radius = Number(searchParams.get('radius')) || undefined;
 
 		const grounds = await GroundServerService.getAll({
 			keywords,
 			user,
 			city,
 			town,
+			lat,
+			lng,
+			radius,
 		});
 
 		return Response.json(grounds, {

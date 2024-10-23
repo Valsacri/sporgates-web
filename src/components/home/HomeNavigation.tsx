@@ -26,9 +26,9 @@ function HomeNavigation() {
 							router.push('/gallery');
 						},
 					},
-					{ prefix: <Icon name='saved' />, item: 'Saved posts' },
-					{ prefix: <Icon name='report' />, item: 'My page' },
-					{ prefix: <Icon name='bag' />, item: 'Market' },
+					// { prefix: <Icon name='saved' />, item: 'Saved posts' },
+					// { prefix: <Icon name='report' />, item: 'My page' },
+					// { prefix: <Icon name='bag' />, item: 'Market' },
 					{
 						prefix: <Icon name='discover' />,
 						item: 'Explore',
@@ -36,8 +36,8 @@ function HomeNavigation() {
 							router.push('/explore');
 						},
 					},
-					{ prefix: <Icon name='calendar' />, item: 'Events' },
-					{ prefix: <Icon name='star' />, item: 'Offers' },
+					// { prefix: <Icon name='calendar' />, item: 'Events' },
+					// { prefix: <Icon name='star' />, item: 'Offers' },
 					{ prefix: <Icon name='user-plus' />, item: 'Find friends' },
 					{
 						prefix: <Icon name='document' />,

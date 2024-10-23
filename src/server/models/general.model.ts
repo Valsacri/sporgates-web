@@ -29,6 +29,8 @@ export const AddressSchema = new Schema<Address>(
 	{ _id: false, toObject: { getters: true }, toJSON: { getters: true } }
 );
 
+AddressSchema.index({ geoLocation: '2dsphere' });
+
 export const ReviewSchema = new Schema<Review>({
 	...RecordSchema,
 	user: {

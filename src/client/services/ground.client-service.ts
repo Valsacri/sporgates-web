@@ -10,6 +10,9 @@ export class GroundClientService {
 		user?: string;
 		city?: string;
 		town?: string;
+		lat?: number;
+		lng?: number;
+		radius?: number;
 	}) {
 		const res = await Axios.get<Ground[]>('/grounds', {
 			params: filters,

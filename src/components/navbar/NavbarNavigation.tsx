@@ -41,40 +41,40 @@ function NavbarNavigation() {
 						item: 'Oussama Khalfi',
 						onClick: () => router.push('/page'),
 					},
-					{
-						prefix: <Icon name='shield-check' />,
-						item: 'Manage subscription',
-					},
-					{
-						prefix: <Icon name='note' />,
-						item: 'Boosted posts',
-					},
-					{
-						prefix: <Icon name='report' />,
-						item: 'Boosted pages',
-					},
+					// {
+					// 	prefix: <Icon name='shield-check' />,
+					// 	item: 'Manage subscription',
+					// },
+					// {
+					// 	prefix: <Icon name='note' />,
+					// 	item: 'Boosted posts',
+					// },
+					// {
+					// 	prefix: <Icon name='report' />,
+					// 	item: 'Boosted pages',
+					// },
 					null,
-					{
-						prefix: <Icon name='status' />,
-						item: 'Advertising',
-					},
+					// {
+					// 	prefix: <Icon name='status' />,
+					// 	item: 'Advertising',
+					// },
 					{
 						prefix: <Icon name='dollar' />,
 						item: 'Wallet: 530 DH',
 						onClick: () => router.push('/wallet'),
 					},
 					null,
-					{ prefix: <Icon name='edit' />, item: 'Edit' },
+					// { prefix: <Icon name='edit' />, item: 'Edit' },
 					{
 						prefix: <Icon name='settings' />,
 						item: 'General setting',
 					},
 					null,
-					{
-						prefix: <Icon name='menu' />,
-						item: 'Admin area',
-					},
-					null,
+					// {
+					// 	prefix: <Icon name='menu' />,
+					// 	item: 'Admin area',
+					// },
+					// null,
 					{
 						prefix: <Icon name='turn-off' />,
 						item: 'Logout',

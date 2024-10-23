@@ -66,7 +66,7 @@ export const Popup = ({
 
 			<div
 				className={twMerge(
-					'fixed z-50 top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center py-10',
+					'fixed z-50 top-0 left-0 w-screen h-screen bg-black bg-opacity-50 flex justify-center items-center py-10',
 					backdropClassName
 				)}
 			>

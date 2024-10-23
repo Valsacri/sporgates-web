@@ -8,10 +8,8 @@ import GroundReservation from '@/components/ground/details/GroundReservation';
 import { GroundServerService } from '@/server/services/ground.server-service';
 import { Ground } from '@/types/item/ground.types';
 import { Review } from '@/types/general.types';
-import ManageGroundPopup from '@/components/ground/ManageGroundPopup';
+import GroundFormPopup from '@/components/ground/manage/GroundFormPopup';
 import Button from '@/components/utils/Button';
-import { CityModel } from '@/server/models/geo/city.model';
-import { TownModel } from '@/server/models/geo/town.model';
 
 interface Props {
 	params: {
@@ -38,6 +36,7 @@ async function GroundDetails({ params: { id } }: Props) {
 	return (
 		<>
 			<GroundImages images={ground.images} />
+
 			<div className='grid grid-cols-1 lg:grid-cols-3 gap-0 lg:gap-5'>
 				<div className='space-y-5 col-span-2 pt-5'>
 					<GroundInfo ground={ground} />
@@ -55,14 +54,14 @@ async function GroundDetails({ params: { id } }: Props) {
 				<GroundReservation ground={ground} />
 			</div>
 
-			<ManageGroundPopup ground={ground}>
+			<GroundFormPopup ground={ground}>
 				<Button
 					icon='edit'
 					color='primary'
 					className='fixed bottom-5 right-5 p-7 rounded-full'
 					iconClassName='!size-8'
 				></Button>
-			</ManageGroundPopup>
+			</GroundFormPopup>
 		</>
 	);
 }

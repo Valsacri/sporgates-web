@@ -1,5 +1,6 @@
 'use client';
 
+import { UserContext } from '@/client/contexts/user.context';
 import { useFetch } from '@/client/hooks/utils/useFetch';
 import { CityClientService } from '@/client/services/geo/city.client-service';
 import { TownClientService } from '@/client/services/geo/town.client-service';
@@ -13,16 +14,27 @@ import {
 	Select,
 	SelectOption,
 } from '@/components/utils/form/Select';
+import { SlidePicker } from '@/components/utils/form/SlidePicker';
 import Loader from '@/components/utils/Loader';
+import MapboxMap from '@/components/utils/Map';
+import { GeoLocation } from '@/types/geo.types';
+import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 
 function Page() {
+	const [user] = useContext(UserContext);
+
 	const { handleSubmit, register, reset, watch, setValue } = useForm({
 		defaultValues: {
 			keywords: '',
 			city: 'all',
 			town: 'all',
 			type: 'grounds',
+			radius: 1,
+			geolocation: {
+				lat: 33.5731,
+				lng: -7.5898,
+			},
 		},
 	});
 
@@ -30,20 +42,27 @@ function Page() {
 	const selectedCity = watch('city');
 	const selectedTown = watch('town');
 	const selectedType = watch('type');
+	const lat = watch('geolocation.lat');
+	const lng = watch('geolocation.lng');
+	const radius = watch('radius');
 
-	const { data: citiesOptions } = useFetch([], {
-		async fetch() {
-			const cities = await CityClientService.getPage();
-			return [
-				ALL_SELECT_OPTION,
-				...cities.map(
-					(city) => ({ value: city.id, label: city.name } as SelectOption)
-				),
-			];
+	const { data: citiesOptions, loading: loadingCities } = useFetch(
+		[],
+		{
+			async fetch() {
+				const cities = await CityClientService.getPage();
+				return [
+					ALL_SELECT_OPTION,
+					...cities.map(
+						(city) => ({ value: city.id, label: city.name } as SelectOption)
+					),
+				];
+			},
 		},
-	});
+		[user]
+	);
 
-	const { data: townsOptions } = useFetch(
+	const { data: townsOptions, loading: loadingTowns } = useFetch(
 		[],
 		{
 			async fetch() {
@@ -73,13 +92,21 @@ function Page() {
 						keywords: keywords === 'all' ? undefined : keywords.trim(),
 						city: selectedCity === 'all' ? undefined : selectedCity,
 						town: selectedTown === 'all' ? undefined : selectedTown,
+						lat,
+						lng,
+						radius,
 					});
 				}
 				return [];
 			},
 		},
-		[keywords, selectedCity, selectedTown, selectedType]
+		[keywords, selectedCity, selectedTown, selectedType, lat, lng, radius]
 	);
+
+	const handleCoordinatesChange = (coordinates: GeoLocation) => {
+		setValue('geolocation.lat', coordinates.lat);
+		setValue('geolocation.lng', coordinates.lng);
+	};
 
 	return (
 		<div className='space-y-5'>
@@ -98,6 +125,7 @@ function Page() {
 						placeholder='City'
 						options={citiesOptions}
 						className='col-span-3'
+						loading={loadingCities}
 					/>
 					<Select
 						{...register('town')}
@@ -106,6 +134,7 @@ function Page() {
 						placeholder='Town'
 						options={townsOptions}
 						className='col-span-3'
+						loading={loadingTowns}
 					/>
 				</div>
 				<Buttons
@@ -135,6 +164,22 @@ function Page() {
 								selected: selectedType === item.value,
 							} as any)
 					)}
+				/>
+				<SlidePicker
+					{...register('radius', {
+						valueAsNumber: true,
+					})}
+					value={radius}
+					label='Radius (km)'
+					min={1}
+					max={5}
+					step={0.5}
+				/>
+				<MapboxMap
+					lat={lat}
+					lng={lng}
+					radius={radius}
+					onCoordinatesChange={handleCoordinatesChange}
 				/>
 			</Card>
 

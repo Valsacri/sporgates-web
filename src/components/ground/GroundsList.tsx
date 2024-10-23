@@ -1,6 +1,6 @@
 import Button from '../utils/Button';
 import GroundCard from './GroundCard';
-import ManageGroundPopup from './ManageGroundPopup';
+import GroundFormPopup from './manage/GroundFormPopup';
 import { GroundServerService } from '@/server/services/ground.server-service';
 import { Ground } from '@/types/item/ground.types';
 
@@ -16,14 +16,14 @@ async function GroundsList() {
 
 	return (
 		<>
-			<ManageGroundPopup>
+			<GroundFormPopup>
 				<Button
 					icon='plus'
 					color='primary'
 					className='fixed bottom-5 right-5 p-7 rounded-full'
 					iconClassName='!size-12'
 				></Button>
-			</ManageGroundPopup>
+			</GroundFormPopup>
 
 			<h2>Explore our grounds !</h2>
 

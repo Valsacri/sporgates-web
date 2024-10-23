@@ -8,6 +8,7 @@ import { Timeframe } from '@/types/general.types';
 import { GroundRerservationStatus } from '@/types/item/ground.types';
 import { WalletClientService } from '../services/wallet.client-service';
 import { AlertContext } from '../contexts/alert.context';
+import { GENERIC_ERROR_MESSAGE } from '@/constants';
 
 export const useReservation = () => {
 	const [user] = useContext(UserContext);
@@ -53,8 +54,8 @@ export const useReservation = () => {
 		} catch (error) {
 			console.log(error);
 			showAlert({
-				color: 'success',
-				message: "An error happened, please try later",
+				color: 'danger',
+				message: GENERIC_ERROR_MESSAGE,
 			});
 		} finally {
 			setLoading(false);

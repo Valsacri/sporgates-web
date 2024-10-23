@@ -5,6 +5,7 @@ import { twMerge } from 'tailwind-merge';
 import List, { ListItem } from '../List';
 import Dropdown from '../Dropdown';
 import { HiChevronDown } from 'react-icons/hi2';
+import Loader from '../Loader';
 
 export interface SelectOption {
 	value: string;
@@ -29,6 +30,7 @@ interface Props {
 	disabled?: boolean;
 	suffix?: any;
 	suffixPos?: any;
+	loading?: boolean;
 }
 
 export const Select = forwardRef<HTMLInputElement | HTMLTextAreaElement, Props>(
@@ -48,6 +50,7 @@ export const Select = forwardRef<HTMLInputElement | HTMLTextAreaElement, Props>(
 			error = '',
 			disabled = false,
 			suffix,
+			loading,
 		}: Props,
 		ref
 	) => {
@@ -105,7 +108,11 @@ export const Select = forwardRef<HTMLInputElement | HTMLTextAreaElement, Props>(
 								)}
 							/>
 
-							{suffix || <HiChevronDown className='size-5' />}
+							{loading ? (
+								<Loader className='size-4' />
+							) : (
+								suffix || <HiChevronDown className='size-5' />
+							)}
 						</div>
 					}
 				>

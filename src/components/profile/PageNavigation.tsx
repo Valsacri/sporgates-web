@@ -25,8 +25,8 @@ function PageNavigation() {
 						selected: pathname?.startsWith('/page/grounds'),
 					},
 					{
-						icon: 'todo',
-						text: 'Services',
+						icon: 'two-user',
+						text: 'Clubs',
 						href: '',
 						selected: pathname?.startsWith('/page/services'),
 					},

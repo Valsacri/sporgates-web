@@ -10,7 +10,7 @@ import { DatePicker } from '../utils/form/DatePicker';
 
 function Navbar() {
 	return (
-		<div className='bg-white'>
+		<div className='bg-white fixed top-0 w-full z-40'>
 			<div className='2xl:container mx-auto px-2 lg:px-16 flex justify-between items-center'>
 				<div>
 					<Dropdown

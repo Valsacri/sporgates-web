@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
+    "@turf/turf": "^7.1.0",
     "axios": "^1.7.4",
     "firebase": "^10.12.5",
     "firebase-admin": "^12.3.0",
