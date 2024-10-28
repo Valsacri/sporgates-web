@@ -6,9 +6,13 @@ import Avatar from '../utils/Avatar';
 import Icon from '../utils/Icon';
 import List from '../utils/List';
 import { useRouter } from 'next/navigation';
-import { getAuth, signOut } from 'firebase/auth';
+import { useContext } from 'react';
+import { UserContext } from '@/client/contexts/user.context';
+import { AuthClientService } from '@/client/services/auth.client-service';
 
 function NavbarNavigation() {
+	const [user] = useContext(UserContext);
+
 	const router = useRouter();
 
 	return (
@@ -23,7 +27,9 @@ function NavbarNavigation() {
 						size={30}
 					/>
 					<div className='hidden lg:flex items-center gap-1'>
-						<div>Oussama Khalfi</div>
+						<div>
+							{user?.firstName} {user?.lastName}
+						</div>
 						<Icon name='arrow-bottom' />
 					</div>
 				</Button>
@@ -78,7 +84,10 @@ function NavbarNavigation() {
 					{
 						prefix: <Icon name='turn-off' />,
 						item: 'Logout',
-						onClick: () => signOut(getAuth()),
+						onClick: async () => {
+							await AuthClientService.signOut();
+							router.push('/');
+						},
 					},
 					null,
 					{

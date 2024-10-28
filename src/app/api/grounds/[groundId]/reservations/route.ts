@@ -3,7 +3,7 @@ import {
 	GroundReservationDtoType,
 } from '@/dtos/item/ground.dto';
 import { setupDbConnection } from '@/server/config/mongodb.config';
-import { getServerUser } from '@/server/helpers/http.helper';
+import { HttpHelper } from '@/server/helpers/http.helper';
 import { GroundReservationServerService } from '@/server/services/ground-reservation.server-service';
 import { GroundRerservationStatus } from '@/types/item/ground.types';
 import { NextRequest } from 'next/server';
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
 	try {
 		await setupDbConnection();
 
-		const user = getServerUser(req);
+		const { userId } = HttpHelper.getContextDecodedIdToken(req);
 
 		const data: GroundReservationDtoType = await req.json();
 
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
 			});
 		}
 
-		const ground = await GroundReservationServerService.create(data, user.id);
+		const ground = await GroundReservationServerService.create(data, userId);
 
 		return Response.json(ground, {
 			status: 201,

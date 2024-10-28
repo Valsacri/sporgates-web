@@ -1,6 +1,6 @@
 import { GroundDto, GroundDtoType } from '@/dtos/item/ground.dto';
 import { setupDbConnection } from '@/server/config/mongodb.config';
-import { getServerUser } from '@/server/helpers/http.helper';
+import { HttpHelper } from '@/server/helpers/http.helper';
 import { GroundServerService } from '@/server/services/ground.server-service';
 import { NextRequest } from 'next/server';
 
@@ -42,7 +42,7 @@ export async function POST(req: Request, res: Response) {
 	try {
 		await setupDbConnection();
 
-		const user = getServerUser(req);
+		const { userId } = HttpHelper.getContextDecodedIdToken(req);
 
 		const data: GroundDtoType = await req.json();
 
@@ -55,7 +55,7 @@ export async function POST(req: Request, res: Response) {
 			});
 		}
 
-		const ground = await GroundServerService.create(data, user.id);
+		const ground = await GroundServerService.create(data, userId);
 
 		return Response.json(ground, {
 			status: 201,

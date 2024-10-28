@@ -1,12 +1,12 @@
 'use client';
 
+import { AuthClientService } from '@/client/services/auth.client-service';
 import AuthProviders from '@/components/auth/AuthProviders';
 import Button from '@/components/utils/Button';
 import { Checkbox } from '@/components/utils/form/Checkbox';
 import { Input } from '@/components/utils/form/Input';
 import { SignInDto } from '@/dtos/user.dto';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -17,7 +17,7 @@ function Page() {
 	const {
 		register,
 		handleSubmit,
-		formState: { errors },
+		formState: { errors, isSubmitting },
 	} = useForm({
 		resolver: zodResolver(SignInDto),
 		defaultValues: {
@@ -26,9 +26,9 @@ function Page() {
 			shouldRememberDevice: false,
 		},
 	});
-	
+
 	const onSubmit = async (data: any) => {
-		await signInWithEmailAndPassword(getAuth(), data.email, data.password);
+		await AuthClientService.signIn(data.email, data.password);
 		router.push('/');
 	};
 
@@ -72,6 +72,7 @@ function Page() {
 				color='primary'
 				className='w-full mx-auto py-6 rounded-full mb-3'
 				type='submit'
+				loading={isSubmitting}
 			>
 				Sign in
 			</Button>

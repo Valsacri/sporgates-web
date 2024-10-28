@@ -1,4 +1,5 @@
-import { Address, Socials } from './general.types';
+import { Socials } from './general.types';
+import { Address } from './geo.types';
 import { Record } from './utils.types';
 
 export enum Role {
@@ -15,7 +16,7 @@ export interface User extends Record {
 	firstName: string;
 	lastName: string;
 	email: string;
-	role: Role;
+	roles: Role[];
 
 	username?: string;
 	phoneNumber?: string;

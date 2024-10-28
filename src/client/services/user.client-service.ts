@@ -1,6 +1,9 @@
 import { User } from '@/types/user.types';
 import { Create, Update } from '@/types/utils.types';
 import { Axios } from '../config/axios';
+import { getAuth } from 'firebase/auth';
+import { HttpHelper } from '@/server/helpers/http.helper';
+import { toBearerToken } from '@/helpers/http.helpers';
 
 export class UserClientService {
 	static async getOne(id: string) {
@@ -9,7 +12,10 @@ export class UserClientService {
 	}
 
 	static async getConnected() {
-		const res = await Axios.get<User>('/users/connected');
+		const token = await getAuth().currentUser?.getIdToken();
+		const res = await Axios.get<User>('/users/connected', {
+			headers: { Authorization: toBearerToken(token) },
+		});
 		return res.data;
 	}
 

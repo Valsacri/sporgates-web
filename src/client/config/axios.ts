@@ -8,22 +8,22 @@ const axiosInstance = axios.create({
 	},
 });
 
-axiosInstance.interceptors.request.use(
-	async (config) => {
-		if (typeof window === 'undefined') {
-			return config;
-		}
+// axiosInstance.interceptors.request.use(
+// 	async (config) => {
+// 		if (typeof window === 'undefined') {
+// 			return config;
+// 		}
 
-		const token = await getAuth().currentUser?.getIdToken();
-		if (token) {
-			config.headers.Authorization = `Bearer ${token}`;
-		}
-		return config;
-	},
-	(error) => {
-		return Promise.reject(error);
-	}
-);
+// 		const token = await getAuth().currentUser?.getIdToken();
+// 		if (token) {
+// 			config.headers.Authorization = `Bearer ${token}`;
+// 		}
+// 		return config;
+// 	},
+// 	(error) => {
+// 		return Promise.reject(error);
+// 	}
+// );
 
 // axiosInstance.interceptors.response.use(
 // 	(response) => {

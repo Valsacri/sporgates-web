@@ -3,6 +3,8 @@ import { Update } from '@/types/utils.types';
 import { UserModel } from '../models/user.model';
 import { CreateUserDtoType } from '@/dtos/user.dto';
 import { formatDocument } from '../helpers/database.helper';
+import { cookies, headers } from 'next/headers';
+import { DecodedIdToken } from 'firebase-admin/auth';
 
 export class UserServerService {
 	static async getOne(id: string) {
@@ -17,6 +19,13 @@ export class UserServerService {
 		return formatDocument<User>(user);
 	}
 
+	static async getConnected() {
+		const decodedIdToken = JSON.parse(
+			headers().get('decodedIdToken')!
+		) as DecodedIdToken;
+		return await this.getOneByUid(decodedIdToken.uid);
+	}
+
 	static async getPage(
 		page: number,
 		limit: number,
@@ -29,9 +38,8 @@ export class UserServerService {
 		return formatDocument<User[]>(users);
 	}
 
-	static async create(data: CreateUserDtoType) {
-		const user = await UserModel.create(data);
-		if (!user) return null;
+	static async create(data: CreateUserDtoType, uid: string) {
+		const user = await UserModel.create({ ...data, uid });
 		return formatDocument<User>(user);
 	}
 

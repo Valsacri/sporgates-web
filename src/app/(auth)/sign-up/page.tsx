@@ -1,6 +1,7 @@
 'use client';
 
 import { UserContext } from '@/client/contexts/user.context';
+import { AuthClientService } from '@/client/services/auth.client-service';
 import { UserClientService } from '@/client/services/user.client-service';
 import AuthProviders from '@/components/auth/AuthProviders';
 import Button from '@/components/utils/Button';
@@ -14,6 +15,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { CgPassword } from 'react-icons/cg';
 
 function Page() {
 	const router = useRouter();
@@ -37,18 +39,10 @@ function Page() {
 	});
 
 	const onSubmit = async (data: any) => {
-		const authUser = await createUserWithEmailAndPassword(
-			getAuth(),
-			data.email,
-			data.password
-		);
-
-		const user = await UserClientService.create({
-			uid: authUser.user.uid,
-			email: authUser.user.email!,
+		const user = await AuthClientService.signUp(data.email, data.password, {
 			firstName: data.firstName,
 			lastName: data.lastName,
-			role: Role.CHAMPION,
+			email: data.email,
 		});
 
 		setUser(user);

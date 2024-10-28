@@ -1,5 +1,3 @@
-'use client';
-
 import { twMerge } from 'tailwind-merge';
 import { poppinsFont } from '@/client/config/fonts';
 import ContextProvider from '@/components/ContextProvider';
@@ -7,14 +5,12 @@ import ContextProvider from '@/components/ContextProvider';
 import '../client/styles/globals.css';
 import '../client/styles/calendar.css';
 import 'react-calendar/dist/Calendar.css';
-import { initFirebaseApp } from '@/client/config/firebase.config';
+import { Metadata } from 'next';
 
-// export const metadata: Metadata = {
-// 	title: 'Sporgates',
-// 	description: "Lotrima l'mlih",
-// };
-
-initFirebaseApp();
+export const metadata: Metadata = {
+	title: 'Sporgates',
+	description: "Lotrima l'mlih",
+};
 
 export default function RootLayout({
 	children,

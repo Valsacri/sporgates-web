@@ -1,5 +1,5 @@
 import { Socials } from '@/types/general.types';
-import { User } from '@/types/user.types';
+import { Role, User } from '@/types/user.types';
 import mongoose, { Model, Schema } from 'mongoose';
 import { AddressSchema } from './general.model';
 import { RecordSchema } from './utils.model';
@@ -22,7 +22,7 @@ export const UserSchema = new Schema<User>({
 	firstName: { type: String, required: true },
 	lastName: { type: String, required: true },
 	email: { type: String, required: true },
-	role: { type: String, required: true },
+	roles: { type: [String], enum: Object.values(Role) },
 
 	username: { type: String },
 	phoneNumber: { type: String },

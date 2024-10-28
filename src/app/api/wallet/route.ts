@@ -3,7 +3,7 @@ import {
 	WalletDepositeDtoType,
 } from '@/dtos/wallet/wallet.dto';
 import { setupDbConnection } from '@/server/config/mongodb.config';
-import { getServerUser } from '@/server/helpers/http.helper';
+import { HttpHelper } from '@/server/helpers/http.helper';
 import { WalletServerService } from '@/server/services/wallet.server-service';
 import { NextRequest } from 'next/server';
 
@@ -11,9 +11,9 @@ export async function GET(req: NextRequest, res: Response) {
 	try {
 		await setupDbConnection();
 
-		const user = getServerUser(req);
+		const { userId } = HttpHelper.getContextDecodedIdToken(req);
 
-		const balance = await WalletServerService.getBalance(user.id);
+		const balance = await WalletServerService.getBalance(userId);
 
 		return Response.json(balance, {
 			status: 201,
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest, res: Response) {
 	try {
 		await setupDbConnection();
 
-		const user = getServerUser(req);
+		const { userId } = HttpHelper.getContextDecodedIdToken(req);
 
 		const data: WalletDepositeDtoType = await req.json();
 
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest, res: Response) {
 			});
 		}
 
-		const balance = await WalletServerService.deposit(data.amount, user.id);
+		const balance = await WalletServerService.deposit(data.amount, userId);
 
 		return Response.json(balance, {
 			status: 201,
