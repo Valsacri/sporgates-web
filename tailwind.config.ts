@@ -45,6 +45,7 @@ const config: Config = {
 			'infinite-scroll': 'infinite-scroll 25s linear infinite',
 			'animation-spin': 'spin 1s linear infinite',
 			'animation-bounce': 'bounce 1.2s infinite',
+			ripple: 'ripple 0.6s ease-out',
 		},
 		keyframes: {
 			'infinite-scroll': {
@@ -60,14 +61,21 @@ const config: Config = {
 				},
 			},
 			bounce: {
-				'0%, 100%': {
+				'0%': {
 					transform: 'translateY(-30%)',
 					animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)',
 				},
 				'50%': {
-					transform: 'translateY(0)',
+					transform: 'translateY(0)', // Ball touches the button
 					animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
 				},
+				'100%': {
+					transform: 'translateY(-30%)',
+				},
+			},
+			ripple: {
+				'0%': { transform: 'scale(0)', opacity: '0.5' },
+				'100%': { transform: 'scale(4)', opacity: '0' },
 			},
 		},
 	},

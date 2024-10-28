@@ -2,29 +2,35 @@
 
 import { UserContext } from '@/client/contexts/user.context';
 import { useFetch } from '@/client/hooks/utils/useFetch';
+import { usePopup } from '@/client/hooks/utils/usePopup';
 import { CityClientService } from '@/client/services/geo/city.client-service';
 import { TownClientService } from '@/client/services/geo/town.client-service';
 import { GroundClientService } from '@/client/services/ground.client-service';
+import { GeoFilters } from '@/components/explore/GeoFilters';
 import GroundCard from '@/components/ground/GroundCard';
 import Buttons from '@/components/profile/Buttons';
+import Button from '@/components/utils/Button';
 import Card from '@/components/utils/Card';
 import { Input } from '@/components/utils/form/Input';
-import {
-	ALL_SELECT_OPTION,
-	Select,
-	SelectOption,
-} from '@/components/utils/form/Select';
+import { Select, SelectOption } from '@/components/utils/form/Select';
 import { SlidePicker } from '@/components/utils/form/SlidePicker';
 import Loader from '@/components/utils/Loader';
 import MapboxMap from '@/components/utils/Map';
+import { Popup } from '@/components/utils/Popup';
 import { GeoLocation } from '@/types/geo.types';
-import { useContext } from 'react';
-import { useForm } from 'react-hook-form';
+import { useContext, useEffect, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { BiChevronDown, BiChevronUp, BiRadar } from 'react-icons/bi';
+import { GiRadarSweep } from 'react-icons/gi';
+import { LuRadar } from 'react-icons/lu';
 
 function Page() {
 	const [user] = useContext(UserContext);
 
-	const { handleSubmit, register, reset, watch, setValue } = useForm({
+	const [showRadiusPicker, setShowRadiusPicker] = useState(false);
+	const [openGeoFiltersPopup, toggleGeoFiltersPopup] = usePopup();
+
+	const form = useForm({
 		defaultValues: {
 			keywords: '',
 			city: 'all',
@@ -37,6 +43,7 @@ function Page() {
 			},
 		},
 	});
+	const { handleSubmit, register, reset, watch, setValue } = form;
 
 	const keywords = watch('keywords');
 	const selectedCity = watch('city');
@@ -52,7 +59,7 @@ function Page() {
 			async fetch() {
 				const cities = await CityClientService.getPage();
 				return [
-					ALL_SELECT_OPTION,
+					{ value: 'all', label: 'All cities' },
 					...cities.map(
 						(city) => ({ value: city.id, label: city.name } as SelectOption)
 					),
@@ -66,14 +73,15 @@ function Page() {
 		[],
 		{
 			async fetch() {
-				if (selectedCity === 'all') return [ALL_SELECT_OPTION];
+				if (selectedCity === 'all')
+					return [{ value: 'all', label: 'All towns' }];
 
 				const towns = await TownClientService.getPage(selectedCity);
 
-				setValue('town', ALL_SELECT_OPTION.value);
+				setValue('town', 'all');
 
 				return [
-					ALL_SELECT_OPTION,
+					{ value: 'all', label: 'All towns' },
 					...towns.map(
 						(town) => ({ value: town.id, label: town.name } as SelectOption)
 					),
@@ -89,18 +97,36 @@ function Page() {
 			async fetch() {
 				if (selectedType === 'grounds') {
 					return await GroundClientService.getAll({
-						keywords: keywords === 'all' ? undefined : keywords.trim(),
-						city: selectedCity === 'all' ? undefined : selectedCity,
-						town: selectedTown === 'all' ? undefined : selectedTown,
-						lat,
-						lng,
-						radius,
+						keywords:
+							keywords === 'all' || showRadiusPicker
+								? undefined
+								: keywords.trim(),
+						city:
+							selectedCity === 'all' || showRadiusPicker
+								? undefined
+								: selectedCity,
+						town:
+							selectedTown === 'all' || showRadiusPicker
+								? undefined
+								: selectedTown,
+						lat: showRadiusPicker ? lat : undefined,
+						lng: showRadiusPicker ? lng : undefined,
+						radius: showRadiusPicker ? radius : undefined,
 					});
 				}
 				return [];
 			},
 		},
-		[keywords, selectedCity, selectedTown, selectedType, lat, lng, radius]
+		[
+			keywords,
+			selectedCity,
+			selectedTown,
+			selectedType,
+			showRadiusPicker,
+			lat,
+			lng,
+			radius,
+		]
 	);
 
 	const handleCoordinatesChange = (coordinates: GeoLocation) => {
@@ -109,36 +135,20 @@ function Page() {
 	};
 
 	return (
-		<div className='space-y-5'>
-			<Card title='Explore' className='space-y-5'>
-				Search for champs, grounds, and more...
-				<div className='grid grid-cols-12 gap-5'>
-					<Input
-						{...register('keywords')}
-						placeholder='Search'
-						className='col-span-6'
-					/>
-					<Select
-						{...register('city')}
-						value={watch('city')}
-						onChange={(value) => setValue('city', value)}
-						placeholder='City'
-						options={citiesOptions}
-						className='col-span-3'
-						loading={loadingCities}
-					/>
-					<Select
-						{...register('town')}
-						value={watch('town')}
-						onChange={(value) => setValue('town', value)}
-						placeholder='Town'
-						options={townsOptions}
-						className='col-span-3'
-						loading={loadingTowns}
-					/>
-				</div>
+		<div className='fixed top-20 left-0 2xl:container mx-auto px-2 py-3 lg:px-16 h-[calc(100vh-64px-20px)] grid grid-cols-12 gap-5 space-y-5'>
+			<Card
+				title='Explore'
+				className='col-span-12 md:col-span-6 xl:col-span-4 space-y-5 max-h-min overflow-y-auto'
+			>
+				Search for champs, grounds, clubs and more...
+				<Input
+					{...register('keywords')}
+					placeholder='Search'
+					className='col-span-6'
+				/>
 				<Buttons
 					color='secondary'
+					stretch
 					items={[
 						{
 							icon: 'two-user',
@@ -165,33 +175,76 @@ function Page() {
 							} as any)
 					)}
 				/>
-				<SlidePicker
-					{...register('radius', {
-						valueAsNumber: true,
-					})}
-					value={radius}
-					label='Radius (km)'
-					min={1}
-					max={5}
-					step={0.5}
-				/>
-				<MapboxMap
-					lat={lat}
-					lng={lng}
-					radius={radius}
-					onCoordinatesChange={handleCoordinatesChange}
-				/>
+				<Button
+					color='secondary'
+					icon={<LuRadar className='size-5 mr-1' />}
+					className='w-full lg:hidden'
+					onClick={() => toggleGeoFiltersPopup()}
+				>
+					Find by location
+				</Button>
+				<FormProvider {...form}>
+					<div className='hidden lg:block'>
+						<GeoFilters
+							citiesOptions={citiesOptions}
+							townsOptions={townsOptions}
+							loadingCities={loadingCities}
+							loadingTowns={loadingTowns}
+							showRadiusPicker={showRadiusPicker}
+							toggleRadiusPicker={() => setShowRadiusPicker(!showRadiusPicker)}
+							lat={lat}
+							lng={lng}
+							radius={radius}
+							handleCoordinatesChange={handleCoordinatesChange}
+						/>
+					</div>
+					{openGeoFiltersPopup && (
+						<Popup
+							title='Find by location'
+							open={true}
+							onClose={toggleGeoFiltersPopup}
+							className='space-y-5'
+						>
+							<GeoFilters
+								citiesOptions={citiesOptions}
+								townsOptions={townsOptions}
+								loadingCities={loadingCities}
+								loadingTowns={loadingTowns}
+								showRadiusPicker={showRadiusPicker}
+								toggleRadiusPicker={() =>
+									setShowRadiusPicker(!showRadiusPicker)
+								}
+								lat={lat}
+								lng={lng}
+								radius={radius}
+								handleCoordinatesChange={handleCoordinatesChange}
+							/>
+						</Popup>
+					)}
+				</FormProvider>
 			</Card>
 
-			{loadingResults ? (
-				<Loader className='size-20 mx-auto' />
-			) : (
-				<div className='grid grid-cols-1 lg:grid-cols-3 gap-5'>
-					{results.map((ground) => (
-						<GroundCard key={ground.id} ground={ground} />
-					))}
-				</div>
-			)}
+			<div className='col-span-12 md:col-span-6 xl:col-span-8 overflow-y-auto !mt-0'>
+				{loadingResults ? (
+					<div className='h-full flex justify-center items-center '>
+						<Loader className='size-20 mx-auto' />
+					</div>
+				) : (
+					<div className='grid grid-cols-1 xl:grid-cols-2 gap-5'>
+						{results.map((ground) => (
+							<>
+								<GroundCard key={ground.id} ground={ground} />
+								<GroundCard key={ground.id} ground={ground} />
+								<GroundCard key={ground.id} ground={ground} />
+								<GroundCard key={ground.id} ground={ground} />
+								<GroundCard key={ground.id} ground={ground} />
+								<GroundCard key={ground.id} ground={ground} />
+								<GroundCard key={ground.id} ground={ground} />
+							</>
+						))}
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }

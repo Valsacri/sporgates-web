@@ -165,7 +165,7 @@ const MapboxMap: React.FC<MapboxMapProps> = ({
 		};
 	}, [radius, centerCoords, isMapLoaded, onCoordinatesChange]);
 
-	return <div ref={mapContainerRef} className='h-96 w-full rounded-lg' />;
+	return <div ref={mapContainerRef} className='h-72 w-full rounded-lg' />;
 };
 
 export default MapboxMap;

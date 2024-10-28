@@ -1,3 +1,4 @@
+import CallToAction from '@/components/landing-page/CallToAction';
 import Logo from '@/components/Logo';
 import Navbar from '@/components/navbar/Navbar';
 import Button from '@/components/utils/Button';
@@ -10,9 +11,9 @@ export default function Home() {
 			<Navbar />
 
 			{/* Hero Section */}
-			<section className="bg-cover bg-center h-screen bg-[url('/images/hero.jpg')]">
-				<div className='w-full h-full flex items-center justify-center gap-20 bg-black bg-opacity-50'>
-					<div className='flex items-end gap-20'>
+			<section className="mt-16 bg-cover bg-center h-[calc(100vh-64px)] bg-[url('/images/hero.jpg')]">
+				<div className='w-full h-full p-5 flex items-center justify-center gap-20 bg-black bg-opacity-50'>
+					<div className='flex flex-col md:flex-row items-center md:items-end gap-20'>
 						<div className='rounded-lg'>
 							<h1 className='text-4xl md:text-6xl font-bold text-white mb-4'>
 								Connect with Athletes, <br /> Anytime, Anywhere
@@ -22,18 +23,8 @@ export default function Home() {
 								socialize with athletes.
 							</p>
 						</div>
-						<div className='flex flex-col items-center'>
-							<Image
-								src='/images/basketball.webp'
-								width={250}
-								height={250}
-								alt='Find players icon'
-								className='animate-animation-bounce'
-							/>
-							<Button color='primary' className='w-full'>
-								Join now !
-							</Button>
-						</div>
+
+						<CallToAction />
 					</div>
 				</div>
 			</section>
@@ -41,7 +32,7 @@ export default function Home() {
 			{/* Features Section */}
 			<section className='py-20 px-6 md:px-20 bg-white'>
 				<h2 className='text-3xl font-bold text-center mb-12 text-gray-800'>
-					Why Choose Our Platform?
+					Lorem ipsum dolor sit amet consectetur !
 				</h2>
 				<div className='grid md:grid-cols-3 gap-12'>
 					{/* Find Players */}

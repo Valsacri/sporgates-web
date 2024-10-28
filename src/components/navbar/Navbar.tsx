@@ -10,6 +10,7 @@ import { Input } from '../utils/form/Input';
 import NavbarNavigation from './NavbarNavigation';
 import { useContext } from 'react';
 import { UserContext } from '@/client/contexts/user.context';
+import { BiChevronRight } from 'react-icons/bi';
 
 function Navbar() {
 	const [user] = useContext(UserContext);
@@ -32,41 +33,68 @@ function Navbar() {
 					</Link>
 				</div>
 
-				{user && (
-					<div className='flex gap-5'>
-						<div className='flex gap-3 py-3'>
-							<Link href='\'>
+				<ul className='flex gap-5 font-medium'>
+					<li>
+						<Link href='#'>Athletes</Link>
+					</li>
+					<li>
+						<Link href='#'>Grounds</Link>
+					</li>
+					<li>
+						<Link href='#'>Clubs</Link>
+					</li>
+					<li>
+						<Link href='#'>Contact us</Link>
+					</li>
+				</ul>
+
+				<div className='flex gap-5'>
+					{user && (
+						<>
+							{/* <div className='flex gap-3 py-3'>
+								<Link href='\'>
+									<Button
+										icon='home'
+										color='primary'
+										className='w-[40px] lg:w-max justify-center '
+									>
+										<span className='hidden lg:block'>Home</span>
+									</Button>
+								</Link>
+								<Button icon='menu' color='secondary'></Button>
+							</div> */}
+							<Input
+								name='dfa'
+								placeholder='Search for champs, grounds, clubs and more...'
+								suffix={<Icon name='search' />}
+								className='hidden lg:block py-3 w-96'
+							/>
+							<div className='flex gap-0 lg:gap-3'>
+								{/* <Button
+									icon='two-user'
+									className='h-full rounded-none'
+								></Button>
+								<Button icon='message' className='h-full rounded-none'></Button> */}
 								<Button
-									icon='home'
-									color='primary'
-									className='w-[40px] lg:w-max justify-center '
-								>
-									<span className='hidden lg:block'>Home</span>
+									icon='notification'
+									className='h-full rounded-none'
+								></Button>
+							</div>
+						</>
+					)}
+
+					<div>
+						{user ? (
+							<NavbarNavigation />
+						) : (
+							<Link href='/sign-up'>
+								<Button color='primary' className='uppercase font-semibold'>
+									Join now !
 								</Button>
 							</Link>
-							<Button icon='menu' color='secondary'></Button>
-						</div>
-
-						<Input
-							name='dfa'
-							placeholder='Search for people, pages, groups and #hashtags'
-							suffix={<Icon name='search' />}
-							className='hidden lg:block py-3 w-96'
-						/>
-						<div className='flex gap-0 lg:gap-3'>
-							<Button icon='two-user' className='h-full rounded-none'></Button>
-							<Button icon='message' className='h-full rounded-none'></Button>
-							<Button
-								icon='notification'
-								className='h-full rounded-none'
-							></Button>
-						</div>
-
-						<div>
-							<NavbarNavigation />
-						</div>
+						)}
 					</div>
-				)}
+				</div>
 			</div>
 		</div>
 	);

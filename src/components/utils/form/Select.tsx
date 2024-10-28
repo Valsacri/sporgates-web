@@ -74,7 +74,7 @@ export const Select = forwardRef<HTMLInputElement | HTMLTextAreaElement, Props>(
 		)?.label;
 
 		return (
-			<div className={twMerge('w-full', className)}>
+			<div className={twMerge('w-full', className, disabled && 'opacity-60')}>
 				{label && (
 					<label htmlFor={id} className={twMerge('text-sm', labelClassName)}>
 						{label}
@@ -115,6 +115,7 @@ export const Select = forwardRef<HTMLInputElement | HTMLTextAreaElement, Props>(
 							)}
 						</div>
 					}
+					disabled={disabled}
 				>
 					<List items={listItems} className='border rounded-xl' />
 				</Dropdown>

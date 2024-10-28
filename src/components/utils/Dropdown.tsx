@@ -15,6 +15,7 @@ interface Props {
 	className?: string;
 	containerClassName?: string;
 	triggerClassName?: string;
+	disabled?: boolean;
 }
 
 export const Dropdown = ({
@@ -27,6 +28,7 @@ export const Dropdown = ({
 	className,
 	containerClassName,
 	triggerClassName,
+	disabled,
 }: Props) => {
 	const [__open, __setOpen] = useState(false);
 
@@ -47,7 +49,7 @@ export const Dropdown = ({
 		<div ref={ref} className={twMerge('relative', containerClassName)}>
 			{trigger && (
 				<div
-					onClick={() => setOpen(!open)}
+					onClick={() => !disabled && setOpen(!open)}
 					className={twMerge('cursor-pointer', triggerClassName)}
 				>
 					{trigger}

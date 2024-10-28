@@ -14,6 +14,12 @@ const GroundSchema = new Schema<Ground>({
 	price: { type: Number, required: true },
 	busyHours: { type: [DateTimeframesSchema], required: true },
 	subscriptions: { type: [SubscriptionSchema], required: true },
+	sports: [
+		{
+			type: Schema.Types.ObjectId,
+			ref: ModelName.Sport,
+		},
+	],
 });
 
 export const GroundModel =
