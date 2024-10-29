@@ -7,6 +7,7 @@ import { Checkbox } from '@/components/utils/form/Checkbox';
 import { Input } from '@/components/utils/form/Input';
 import { SignInDto } from '@/dtos/user.dto';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -28,7 +29,12 @@ function Page() {
 	});
 
 	const onSubmit = async (data: any) => {
-		await AuthClientService.signIn(data.email, data.password);
+		const credentials = await signInWithEmailAndPassword(
+			getAuth(),
+			data.email,
+			data.password
+		);
+		await AuthClientService.signIn(credentials);
 		router.push('/');
 	};
 

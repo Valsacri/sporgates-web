@@ -22,8 +22,7 @@ export interface OpeningHour {
 
 interface Props {
 	value: OpeningHours;
-	onChange: (value: OpeningHours) => void;
-	readOnly?: boolean;
+	onChange?: (value: OpeningHours) => void;
 }
 
 const hours = Array.from({ length: 24 }, (_, i) => i);
@@ -39,7 +38,6 @@ const OpeningHoursPicker = ({
 		sunday: [],
 	},
 	onChange,
-	readOnly = false,
 }: Props) => {
 	const grid = useMemo(() => {
 		// Create a grid where each row represents an hour (0–23),
@@ -66,7 +64,7 @@ const OpeningHoursPicker = ({
 	};
 
 	const handleClick = (hourIndex: number, dayIndex: number) => {
-		if (readOnly) return;
+		if (!onChange) return;
 
 		if (!startCell) {
 			// If no starting cell is selected, set the starting cell and its initial state
@@ -162,7 +160,7 @@ const OpeningHoursPicker = ({
 							key={`${hourIndex}-${dayIndex}`}
 							className={twMerge(
 								'h-8',
-								!readOnly && 'cursor-pointer',
+								onChange && 'cursor-pointer',
 								startCell?.hourIndex === hourIndex &&
 									startCell?.dayIndex === dayIndex
 									? // ? initialState

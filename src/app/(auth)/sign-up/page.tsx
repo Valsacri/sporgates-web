@@ -39,11 +39,17 @@ function Page() {
 	});
 
 	const onSubmit = async (data: any) => {
-		const user = await AuthClientService.signUp(data.email, data.password, {
-			firstName: data.firstName,
-			lastName: data.lastName,
-			email: data.email,
-		});
+		const credentials = await createUserWithEmailAndPassword(
+			getAuth(),
+			data.email,
+			data.password
+		);
+		const user = await AuthClientService.signUp(
+			credentials,
+			data.email,
+			data.firstName,
+			data.lastName
+		);
 
 		setUser(user);
 		router.push('/');

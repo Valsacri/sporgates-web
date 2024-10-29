@@ -1,6 +1,6 @@
 import { Post, PostSubject } from '@/types/post.types';
 
-export const POSTS: Post[] = [
+export const POSTS: any[] = [
 	{
 		_id: '1',
 		title: 'Post 1',

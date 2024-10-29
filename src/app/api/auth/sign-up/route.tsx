@@ -10,8 +10,6 @@ export async function GET(req: Request, res: Response) {
 		initFirebaseAdminApp();
 		await setupDbConnection();
 
-		const decodedIdToken = HttpHelper.getContextDecodedIdToken(req);
-
 		const body: CreateUserDtoType = await req.json();
 
 		const validation = CreateUserDto.safeParse(body);
@@ -22,9 +20,9 @@ export async function GET(req: Request, res: Response) {
 			});
 		}
 
-		const user = await UserServerService.create(body, decodedIdToken.uid);
+		const user = await UserServerService.create(body);
 
-		await auth().setCustomUserClaims(decodedIdToken.uid, {
+		await auth().setCustomUserClaims(body.uid, {
 			userId: user.id,
 		});
 

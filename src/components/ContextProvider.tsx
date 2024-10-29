@@ -9,6 +9,7 @@ import { Alert } from './utils/Alert';
 import { initFirebaseApp } from '@/client/config/firebase.config';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { UserClientService } from '@/client/services/user.client-service';
+import { useUserListener } from '@/client/hooks/utils/useUserListener';
 
 interface Props {
 	children: React.ReactNode;
@@ -17,23 +18,8 @@ interface Props {
 initFirebaseApp();
 
 function ContextProvider({ children }: Props) {
-	const [user, setUser] = useState<User | null | undefined>(undefined);
+	const [user, setUser] = useUserListener();
 	const { alert, showAlert } = useAlert();
-
-	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(getAuth(), async (authUser) => {
-			if (authUser) {
-				const user = await UserClientService.getConnected();
-
-				if (user) {
-					setUser(user);
-				}
-			} else {
-				setUser(null);
-			}
-		});
-		return unsubscribe;
-	}, []);
 
 	return (
 		<UserContext.Provider value={[user, setUser]}>

@@ -1,5 +1,6 @@
-import { Address, Socials } from "./general.types";
-import { Record } from "./utils.types";
+import { Socials } from './general.types';
+import { Address } from './geo.types';
+import { Record } from './utils.types';
 
 export interface Page extends Record {
 	name: string;

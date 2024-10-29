@@ -38,8 +38,8 @@ export class UserServerService {
 		return formatDocument<User[]>(users);
 	}
 
-	static async create(data: CreateUserDtoType, uid: string) {
-		const user = await UserModel.create({ ...data, uid });
+	static async create(data: CreateUserDtoType) {
+		const user = await UserModel.create(data);
 		return formatDocument<User>(user);
 	}
 

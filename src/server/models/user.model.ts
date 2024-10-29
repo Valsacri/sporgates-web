@@ -18,13 +18,13 @@ export const SocialsSchema = new Schema<Socials>(
 
 export const UserSchema = new Schema<User>({
 	...RecordSchema,
-	uid: { type: String, required: true },
+	uid: { type: String, required: true, unique: true },
 	firstName: { type: String, required: true },
 	lastName: { type: String, required: true },
-	email: { type: String, required: true },
+	email: { type: String, required: true, unique: true },
 	roles: { type: [String], enum: Object.values(Role) },
 
-	username: { type: String },
+	username: { type: String, unique: true },
 	phoneNumber: { type: String },
 	avatar: { type: String },
 	cover: { type: String },

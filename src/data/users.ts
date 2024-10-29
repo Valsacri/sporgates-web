@@ -1,4 +1,3 @@
-import { CreateUserDtoType } from '@/dtos/user.dto';
 import { Role } from '@/types/user.types';
 
 export const USERS = [
