@@ -13,6 +13,7 @@ export interface Socials {
 	x?: string;
 	linkedin?: string;
 	tiktok?: string;
+	website?: string;
 }
 
 export interface Time {

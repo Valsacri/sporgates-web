@@ -1,9 +1,8 @@
 import { z } from 'zod';
 import { ItemDto } from './item.dto';
-import { AddressDto, DateTimeframesDto, TimeframeDto } from './general.dto';
+import { AddressDto, TimeframeDto } from './general.dto';
 import { SubscriptionDto } from './club.dto';
 import { GroundRerservationStatus } from '@/types/item/ground.types';
-import { CreateSportDto } from '../sport.dto';
 
 export const GroundReservationStatusDto = z.nativeEnum(
 	GroundRerservationStatus
@@ -32,7 +31,6 @@ export const GroundDto = ItemDto.merge(
 			.number()
 			.min(1, 'Minimum reservation time must be greater than 0'),
 		price: z.coerce.number().min(1, 'Price must be greater than 0'),
-		busyHours: z.array(DateTimeframesDto),
 		subscriptions: z.array(SubscriptionDto).optional(),
 	})
 );

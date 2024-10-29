@@ -8,56 +8,9 @@ import { useState, useCallback } from 'react';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
 import { twMerge } from 'tailwind-merge';
 import Cropper from 'react-easy-crop';
+import { ImageHelper } from '@/client/helpers/image.helper';
 
-function getCroppedImg(
-	imageSrc: string,
-	pixelCrop: { x: number; y: number; width: number; height: number }
-): Promise<string> {
-	return new Promise((resolve, reject) => {
-		const image = new window.Image();
-		image.src = imageSrc;
-		image.onload = () => {
-			const canvas = document.createElement('canvas');
-			canvas.width = pixelCrop.width;
-			canvas.height = pixelCrop.height;
-			const ctx = canvas.getContext('2d');
-
-			if (!ctx) {
-				reject(new Error('Failed to get canvas context'));
-				return;
-			}
-
-			ctx.drawImage(
-				image,
-				pixelCrop.x,
-				pixelCrop.y,
-				pixelCrop.width,
-				pixelCrop.height,
-				0,
-				0,
-				pixelCrop.width,
-				pixelCrop.height
-			);
-
-			canvas.toBlob((blob) => {
-				if (!blob) {
-					reject(new Error('Canvas is empty'));
-					return;
-				}
-
-				const file = new File([blob], 'croppedImage.png', {
-					type: 'image/png',
-				});
-				resolve(URL.createObjectURL(file));
-			}, 'image/png');
-		};
-		image.onerror = () => {
-			reject(new Error('Failed to load image'));
-		};
-	});
-}
-
-function Page() {
+function CreatePostFab() {
 	const [file, setFile] = useState<File | null>(null);
 	const [isDragging, setIsDragging] = useState(false);
 	const [open, toggleOpen] = usePopup();
@@ -95,7 +48,7 @@ function Page() {
 	const handleConfirm = async () => {
 		try {
 			if (!file || !croppedAreaPixels) return;
-			const croppedImage = await getCroppedImg(
+			const croppedImage = await ImageHelper.getCroppedImg(
 				URL.createObjectURL(file),
 				croppedAreaPixels
 			);
@@ -104,24 +57,6 @@ function Page() {
 			console.error(e);
 		}
 	};
-
-	const images = [
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-	];
 
 	return (
 		<>
@@ -184,10 +119,8 @@ function Page() {
 					</div>
 				)}
 			</Popup>
-
-			<Gallery images={images} />
 		</>
 	);
 }
 
-export default Page;
+export default CreatePostFab;

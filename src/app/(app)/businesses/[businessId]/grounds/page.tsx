@@ -1,11 +1,7 @@
 import GroundsList from '@/components/ground/GroundsList';
 
 function Page() {
-	return (
-		<>
-			<GroundsList />
-		</>
-	);
+	return <GroundsList />;
 }
 
 export default Page;

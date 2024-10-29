@@ -1,9 +1,26 @@
-import { OpeningHours } from '@/types/business.types';
-import { DateTimeframes, Review, Timeframe } from '@/types/general.types';
+import {
+	DateTimeframes,
+	Review,
+	Socials,
+	Timeframe,
+} from '@/types/general.types';
 import { Schema } from 'mongoose';
 import { RecordSchema } from './utils.model';
 import { ModelName } from './model-name.enum';
 import { Address } from '@/types/geo.types';
+import { OpeningHours } from '@/types/business.types';
+
+export const SocialsSchema = new Schema<Socials>(
+	{
+		instagram: { type: String },
+		facebook: { type: String },
+		x: { type: String },
+		linkedin: { type: String },
+		tiktok: { type: String },
+		website: { type: String },
+	},
+	{ _id: false }
+);
 
 export const AddressSchema = new Schema<Address>(
 	{

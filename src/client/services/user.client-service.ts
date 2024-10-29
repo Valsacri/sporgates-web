@@ -2,7 +2,6 @@ import { User } from '@/types/user.types';
 import { Create, Update } from '@/types/utils.types';
 import { Axios } from '../config/axios';
 import { getAuth } from 'firebase/auth';
-import { HttpHelper } from '@/server/helpers/http.helper';
 import { toBearerToken } from '@/helpers/http.helpers';
 
 export class UserClientService {

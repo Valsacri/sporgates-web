@@ -5,6 +5,7 @@ import { User } from '../user.types';
 import { Record } from '../utils.types';
 import { Address } from '../geo.types';
 import { Sport } from '../sport.types';
+import { Business } from '../business.types';
 
 export enum GroundRerservationStatus {
 	PENDING = 'pending',
@@ -26,9 +27,8 @@ export interface Ground extends Item {
 	address: Address;
 	minReservationTime: number;
 	price: number;
-	busyHours: DateTimeframes[];
 
 	subscriptions: ClubSubscription[];
 
-	sports: string[] ;
+	sports: string[];
 }

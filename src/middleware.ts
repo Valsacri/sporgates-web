@@ -11,103 +11,85 @@ const ALLOWED_ORIGINS = [
 ];
 
 export async function middleware(req: NextRequest) {
-	const { pathname }: { pathname: string } = req.nextUrl;
+	const { pathname } = req.nextUrl;
+	const origin = req.headers.get('origin') || '';
 	const isApiRoute = pathname.startsWith('/api');
+	const headers = buildHeaders(pathname, origin);
+
+	const isPublic =
+		PUBLIC_PAGES.includes(pathname) ||
+		PUBLIC_ROUTES.includes(pathname) ||
+		pathname === '/api/auth/verify';
+
+	// Skip auth verification for public routes
+	if (isPublic) {
+		return NextResponse.next({ headers });
+	}
 
 	try {
-		const origin = req.headers.get('origin') || '';
-
-		const headers: any = {
-			'x-pathname': pathname,
-			'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
-			'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-		};
-
-		// // check if origin is allowed
-		// if (ALLOWED_ORIGINS.includes(origin)) {
-		// 	headers['Access-Control-Allow-Origin'] = origin;
-		// }
-
-		// check if the path is protected
-		const isPublicPage = PUBLIC_PAGES.some((page) => page === pathname);
-		const isPublicRoute = PUBLIC_ROUTES.some((route) => route === pathname);
-
-		if (!isPublicPage && !isPublicRoute && pathname !== '/api/auth/verify') {
-			try {
-				const sessionCookie = cookies().get('session')?.value;
-				const authorizationToken = fromBearerToken(
-					req.headers.get('Authorization')
-				);
-
-				if (isApiRoute && !sessionCookie && !authorizationToken) {
-					return NextResponse.json(
-						{ message: 'No auth provided' },
-						{ status: 401 }
-					);
-				}
-
-				if (!isApiRoute && !sessionCookie) {
-					return NextResponse.redirect(new URL('/sign-in', req.url));
-				}
-
-				const res = await Axios.post<{
-					decodedIdToken: DecodedIdToken;
-					token: string;
-				}>(
-					'auth/verify',
-					{
-						sessionCookie,
-						authorizationToken,
-					},
-					{
-						headers: {
-							Authorization: toBearerToken(authorizationToken),
-						},
-					}
-				);
-
-				return NextResponse.next({
-					headers: {
-						...headers,
-						decodedIdToken: JSON.stringify(res.data.decodedIdToken),
-						token: res.data.token,
-					},
-				});
-			} catch (error: any) {
-				console.error(error);
-
-				if (isApiRoute) {
-					return NextResponse.json(
-						{ message: 'Unauthorized' },
-						{ status: 401 }
-					);
-				} else {
-					if (error.response?.status === 401) {
-						return NextResponse.redirect(new URL('/sign-in', req.url));
-					} else {
-						return NextResponse.redirect(new URL('/server-error', req.url));
-					}
-				}
-			}
-		}
-
-		return NextResponse.next({ headers });
+		// Authenticate and return response with headers if successful
+		const authResponse = await verifyUserSession(req);
+		return authResponse instanceof NextResponse
+			? authResponse
+			: NextResponse.next({ headers: { ...headers, ...authResponse.headers } });
 	} catch (error: any) {
-		console.log(error);
+		console.error(error);
 
-		if (isApiRoute) {
-			return NextResponse.json({ message: 'Server error' }, { status: 500 });
-		} else {
-			if (error.response?.status === 401) {
-				return NextResponse.redirect(new URL('/sign-in', req.url));
-			} else {
-				return NextResponse.redirect(new URL('/server-error', req.url));
-			}
-		}
+		// Handle errors and redirect based on route type
+		return isApiRoute
+			? NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+			: NextResponse.redirect(new URL('/sign-in', req.url));
 	}
 }
 
-export default middleware;
+// Helper to build CORS headers
+function buildHeaders(pathname: string, origin?: string) {
+	const headers: Record<string, string> = {
+		'x-pathname': pathname,
+		'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+		'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+	};
+	if (origin && ALLOWED_ORIGINS.includes(origin)) {
+		headers['Access-Control-Allow-Origin'] = origin;
+	}
+	return headers;
+}
+
+// Fetch user session data and verify authentication
+async function verifyUserSession(req: NextRequest) {
+	const sessionCookie = cookies().get('session')?.value;
+	const authorizationToken = fromBearerToken(req.headers.get('Authorization'));
+	const isApiRoute = req.nextUrl.pathname.startsWith('/api');
+
+	if (isApiRoute && !sessionCookie && !authorizationToken) {
+		return NextResponse.json({ message: 'No auth provided' }, { status: 401 });
+	}
+
+	if (!isApiRoute && !sessionCookie) {
+		return NextResponse.redirect(new URL('/sign-in', req.url));
+	}
+
+	// Verify the session or token
+	const res = await Axios.post<{
+		decodedIdToken: DecodedIdToken;
+		token: string;
+	}>(
+		'auth/verify',
+		{ sessionCookie, authorizationToken },
+		{
+			headers: {
+				Authorization: toBearerToken(authorizationToken),
+			},
+		}
+	);
+
+	return {
+		headers: {
+			decodedIdToken: JSON.stringify(res.data.decodedIdToken),
+			token: res.data.token,
+		},
+	};
+}
 
 export const config = {
 	matcher: [

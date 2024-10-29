@@ -81,7 +81,6 @@ function GroundForm({ ground }: Props) {
 			},
 			minReservationTime: 60,
 			price: 0,
-			busyHours: [],
 			subscriptions: [],
 		} as GroundDtoType,
 	});

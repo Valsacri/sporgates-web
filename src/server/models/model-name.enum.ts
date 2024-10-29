@@ -12,4 +12,6 @@ export enum ModelName {
 
 	City = 'City',
 	Town = 'Town',
+
+	Business = 'Business',
 }

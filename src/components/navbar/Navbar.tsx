@@ -10,7 +10,6 @@ import { Input } from '../utils/form/Input';
 import NavbarNavigation from './NavbarNavigation';
 import { useContext } from 'react';
 import { UserContext } from '@/client/contexts/user.context';
-import { BiChevronRight } from 'react-icons/bi';
 
 function Navbar() {
 	const [user] = useContext(UserContext);
@@ -33,7 +32,7 @@ function Navbar() {
 					</Link>
 				</div>
 
-				<ul className='flex gap-5 font-medium'>
+				{/* <ul className='flex gap-5 font-medium'>
 					<li>
 						<Link href='#'>Athletes</Link>
 					</li>
@@ -46,12 +45,12 @@ function Navbar() {
 					<li>
 						<Link href='#'>Contact us</Link>
 					</li>
-				</ul>
+				</ul> */}
 
 				<div className='flex gap-5'>
 					{user && (
 						<>
-							{/* <div className='flex gap-3 py-3'>
+							<div className='flex gap-3 py-3'>
 								<Link href='\'>
 									<Button
 										icon='home'
@@ -62,7 +61,7 @@ function Navbar() {
 									</Button>
 								</Link>
 								<Button icon='menu' color='secondary'></Button>
-							</div> */}
+							</div>
 							<Input
 								name='dfa'
 								placeholder='Search for champs, grounds, clubs and more...'
@@ -70,11 +69,11 @@ function Navbar() {
 								className='hidden lg:block py-3 w-96'
 							/>
 							<div className='flex gap-0 lg:gap-3'>
-								{/* <Button
+								<Button
 									icon='two-user'
 									className='h-full rounded-none'
 								></Button>
-								<Button icon='message' className='h-full rounded-none'></Button> */}
+								<Button icon='message' className='h-full rounded-none'></Button>
 								<Button
 									icon='notification'
 									className='h-full rounded-none'

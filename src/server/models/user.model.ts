@@ -1,20 +1,8 @@
-import { Socials } from '@/types/general.types';
 import { Role, User } from '@/types/user.types';
 import mongoose, { Model, Schema } from 'mongoose';
-import { AddressSchema } from './general.model';
+import { AddressSchema, SocialsSchema } from './general.model';
 import { RecordSchema } from './utils.model';
 import { ModelName } from './model-name.enum';
-
-export const SocialsSchema = new Schema<Socials>(
-	{
-		facebook: { type: String },
-		x: { type: String },
-		instagram: { type: String },
-		linkedin: { type: String },
-		tiktok: { type: String },
-	},
-	{ _id: false }
-);
 
 export const UserSchema = new Schema<User>({
 	...RecordSchema,

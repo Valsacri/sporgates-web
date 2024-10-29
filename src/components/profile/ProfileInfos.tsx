@@ -3,15 +3,22 @@ import Card from '../utils/Card';
 import Button from '../utils/Button';
 
 interface Props {
-	type: 'user' | 'page';
+	type: 'user' | 'business';
+	infos: {
+		id: string;
+		name: string;
+		username: string;
+		avatar?: string;
+		cover?: string;
+	};
 }
 
-function ProfileInfos({ type }: Props) {
+function ProfileInfos({ type, infos }: Props) {
 	return (
 		<Card
 			className={twMerge(
 				'group/cover flex flex-col justify-between gap-5 h-[300px] bg-cover bg-center',
-				'bg-[url(https://sporgates.com/upload/photos/d-cover.jpg?cache=0)]'
+				`bg-[url(${infos.cover})]`
 			)}
 		>
 			<div className='opacity-0 group-hover/cover:opacity-100 transition-all duration-50 space-y-2'>
@@ -24,7 +31,7 @@ function ProfileInfos({ type }: Props) {
 					<div
 						className={twMerge(
 							'group/avatar size-[140px] rounded-full bg-cover bg-center',
-							'bg-[url(https://sporgates.com/upload/photos/d-avatar.jpg?cache=0)]'
+							`bg-[url(${infos.avatar})]`
 						)}
 					>
 						<div className='hidden group-hover/avatar:flex size-full rounded-full justify-around items-center bg-opacity-0 hover:bg-black hover:bg-opacity-20 transition-all duration-50'>
@@ -34,10 +41,8 @@ function ProfileInfos({ type }: Props) {
 					</div>
 
 					<div>
-						<h1>{type === 'page' ? 'JK Sports' : 'Oussama Khalfi'}</h1>
-						<span className='text-sm'>
-							{type === 'page' ? '@jk_sports' : '@oussamakhalfi'}
-						</span>
+						<h1>{infos.name}</h1>
+						<span className='text-sm'>{`@${infos.username}`}</span>
 					</div>
 				</div>
 

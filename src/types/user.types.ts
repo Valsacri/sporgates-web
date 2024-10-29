@@ -13,12 +13,12 @@ export enum Role {
 
 export interface User extends Record {
 	uid: string;
+	username: string;
 	firstName: string;
 	lastName: string;
 	email: string;
 	roles: Role[];
 
-	username?: string;
 	phoneNumber?: string;
 	avatar?: string;
 	cover?: string;

@@ -4,7 +4,6 @@ import { RecordSchema } from '../utils.model';
 import { SubscriptionSchema } from './club.model';
 import { ItemSchema } from './item.model';
 import { ModelName } from '../model-name.enum';
-import { DateTimeframesSchema } from '../general.model';
 
 const GroundSchema = new Schema<Ground>({
 	...RecordSchema,
@@ -12,14 +11,8 @@ const GroundSchema = new Schema<Ground>({
 
 	minReservationTime: { type: Number, required: true },
 	price: { type: Number, required: true },
-	busyHours: { type: [DateTimeframesSchema], required: true },
 	subscriptions: { type: [SubscriptionSchema], required: true },
-	sports: [
-		{
-			type: Schema.Types.ObjectId,
-			ref: ModelName.Sport,
-		},
-	],
+	sports: [{ type: Schema.Types.ObjectId, ref: ModelName.Sport }],
 });
 
 export const GroundModel =

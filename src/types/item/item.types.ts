@@ -1,4 +1,4 @@
-import { OpeningHours } from '../business.types';
+import { Business, OpeningHours } from '../business.types';
 import { Review } from '../general.types';
 import { Record, Ref } from '../utils.types';
 
@@ -9,6 +9,7 @@ export interface Item extends Record {
 	openingHours: OpeningHours;
 	avgRating: number;
 	reviews: Ref<Review>[];
+	business: string | Business;
 }
 
 export interface Offer {
