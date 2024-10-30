@@ -1,7 +1,7 @@
-import { GroundDto, GroundDtoType } from '@/dtos/item/ground.dto';
+import { BusinessDto, BusinessDtoType } from '@/dtos/business.dto';
 import { setupDbConnection } from '@/server/config/mongodb.config';
 import { HttpHelper } from '@/server/helpers/http.helper';
-import { GroundServerService } from '@/server/services/ground.server-service';
+import { BusinessServerService } from '@/server/services/business.server-service';
 import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest, res: Response) {
@@ -10,21 +10,11 @@ export async function GET(req: NextRequest, res: Response) {
 
 		const { searchParams } = req.nextUrl;
 		const keywords = searchParams.get('keywords') || undefined;
-		const business = searchParams.get('business') || undefined;
-		const city = searchParams.get('city') || undefined;
-		const town = searchParams.get('town') || undefined;
-		const lat = Number(searchParams.get('lat')) || undefined;
-		const lng = Number(searchParams.get('lng')) || undefined;
-		const radius = Number(searchParams.get('radius')) || undefined;
+		const user = searchParams.get('user') || undefined;
 
-		const grounds = await GroundServerService.getAll({
+		const grounds = await BusinessServerService.getAll({
 			keywords,
-			business,
-			city,
-			town,
-			lat,
-			lng,
-			radius,
+			user,
 		});
 
 		return Response.json(grounds, {
@@ -44,10 +34,10 @@ export async function POST(req: Request, res: Response) {
 
 		const { userId } = HttpHelper.getContextDecodedIdToken(req);
 
-		const data: GroundDtoType = await req.json();
+		const data: BusinessDtoType = await req.json();
 
 		// validate data with zod schema
-		const validation = GroundDto.safeParse(data);
+		const validation = BusinessDto.safeParse(data);
 
 		if (!validation.success) {
 			return Response.json(validation.error, {
@@ -55,9 +45,9 @@ export async function POST(req: Request, res: Response) {
 			});
 		}
 
-		const ground = await GroundServerService.create(data, userId);
+		const business = await BusinessServerService.create(data, userId);
 
-		return Response.json(ground, {
+		return Response.json(business, {
 			status: 201,
 		});
 	} catch (error) {

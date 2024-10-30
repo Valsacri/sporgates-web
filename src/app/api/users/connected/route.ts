@@ -6,7 +6,6 @@ import { auth } from 'firebase-admin';
 
 export async function GET(req: Request, res: Response) {
 	try {
-		initFirebaseAdminApp();
 		await setupDbConnection();
 
 		const decodedIdToken = HttpHelper.getContextDecodedIdToken(req);

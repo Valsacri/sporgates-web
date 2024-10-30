@@ -3,12 +3,8 @@
 import { AlertContext } from '@/client/contexts/alert.context';
 import { UserContext } from '@/client/contexts/user.context';
 import { useAlert } from '@/client/hooks/utils/useAlert';
-import { User } from '@/types/user.types';
-import { useEffect, useState } from 'react';
 import { Alert } from './utils/Alert';
 import { initFirebaseApp } from '@/client/config/firebase.config';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { UserClientService } from '@/client/services/user.client-service';
 import { useUserListener } from '@/client/hooks/utils/useUserListener';
 
 interface Props {

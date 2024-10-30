@@ -23,7 +23,7 @@ export async function POST(req: Request, res: Response) {
 		}
 
 		return Response.json(
-			{ token, decodedIdToken },
+			{ decodedIdToken, token },
 			{
 				status: 200,
 			}

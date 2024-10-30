@@ -8,6 +8,7 @@ const BusinessSchema = new Schema<Business>({
 	...RecordSchema,
 
 	name: { type: String, required: true },
+	username: { type: String, required: true, unique: true },
 	description: { type: String, required: true },
 	slogan: { type: String, required: true },
 	logo: { type: String, required: true },

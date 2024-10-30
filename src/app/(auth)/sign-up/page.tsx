@@ -2,20 +2,17 @@
 
 import { UserContext } from '@/client/contexts/user.context';
 import { AuthClientService } from '@/client/services/auth.client-service';
-import { UserClientService } from '@/client/services/user.client-service';
 import AuthProviders from '@/components/auth/AuthProviders';
 import Button from '@/components/utils/Button';
 import { Checkbox } from '@/components/utils/form/Checkbox';
 import { Input } from '@/components/utils/form/Input';
 import { SignUpDto } from '@/dtos/user.dto';
-import { Role } from '@/types/user.types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { CgPassword } from 'react-icons/cg';
 
 function Page() {
 	const router = useRouter();

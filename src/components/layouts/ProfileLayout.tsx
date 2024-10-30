@@ -1,22 +1,27 @@
 import HomeNavigation from '@/components/home/HomeNavigation';
 import ProfileNavigation from '@/components/profile/ProfileNavigation';
 import ProfileInfos from '@/components/profile/ProfileInfos';
-import { HttpHelper } from '@/server/helpers/http.helper';
 import { UserServerService } from '@/server/services/user.server-service';
 import { User } from '@/types/user.types';
 import { redirect } from 'next/navigation';
-import React from 'react';
 
 interface Props {
 	children: React.ReactNode;
-	params: { userId: string };
+	userId: string;
 }
 
-export default async function Layout({ children, params: { userId } }: Props) {
-	const pathname = HttpHelper.getPathname();
-
-	const user = await UserServerService.getOne(userId);
-	if (!user) redirect('/not-found');
+export default async function ProfileLayout({ children, userId }: Props) {
+	let user: User = {} as User;
+	try {
+		const _user = await UserServerService.getOne(userId);
+		if (!_user) {
+			return redirect('/not-found');
+		}
+		user = _user;
+	} catch (error: any) {
+		console.error(error);
+		return redirect('/server-error');
+	}
 
 	return (
 		<div className='flex gap-5'>
@@ -30,16 +35,7 @@ export default async function Layout({ children, params: { userId } }: Props) {
 					infos={{ ...user, name: `${user.firstName} ${user.lastName}` }}
 				/>
 
-				<ProfileNavigation
-					items={[
-						{
-							icon: 'gallery',
-							text: 'Gallery',
-							href: `/users/${userId}/gallery`,
-							selected: pathname?.endsWith('/gallery'),
-						},
-					]}
-				/>
+				<ProfileNavigation />
 
 				{children}
 			</div>

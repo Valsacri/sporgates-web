@@ -5,8 +5,11 @@ import FeedFriendsSuggestions from '@/components/feed/post/FeedFriendsSuggestion
 import PostsFeed from '@/components/feed/post/PostsFeed';
 import Statuses from '@/components/feed/status/Statuses';
 import HomeNavigation from '@/components/home/HomeNavigation';
+import { AuthServerService } from '@/server/services/auth.server-service';
 
-export default function Home() {
+export default async function Home() {
+	await AuthServerService.verifyPageAuth();
+
 	return (
 		<div className='flex gap-5'>
 			<div className='hidden lg:block w-1/4'>

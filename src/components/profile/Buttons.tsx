@@ -5,6 +5,7 @@ import { CocoIcon } from '@/client/config/coco-icons';
 import { Color } from '@/client/types/general.types';
 import { useRouter } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
+import Link from 'next/link';
 
 export interface ButtonItem {
 	text: string;
@@ -52,23 +53,31 @@ function Buttons({
 				containerClassName
 			)}
 		>
-			{items.map((item, index) => (
-				<Button
-					key={index}
-					icon={item.icon as CocoIcon}
-					color={item.selected ? selectedColor : item.color || color}
-					className={twMerge(
-						'rounded-full',
-						stretch && 'lg:w-full',
-						buttonClassName,
-						item.className
-					)}
-					onClick={() => handleClick(item)}
-					disabled={item.disabled}
-				>
-					{item.text}
-				</Button>
-			))}
+			{items.map((item, index) => {
+				const Component = item.href ? Link : 'div';
+				return (
+					<Component
+						href={item.href as any}
+						className={twMerge(stretch && 'lg:w-full')}
+					>
+						<Button
+							key={index}
+							icon={item.icon as CocoIcon}
+							color={item.selected ? selectedColor : item.color || color}
+							className={twMerge(
+								'rounded-full',
+								'w-full',
+								buttonClassName,
+								item.className
+							)}
+							onClick={() => handleClick(item)}
+							disabled={item.disabled}
+						>
+							{item.text}
+						</Button>
+					</Component>
+				);
+			})}
 		</div>
 	);
 }

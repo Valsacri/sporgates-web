@@ -4,12 +4,17 @@ import { useRouter } from 'next/navigation';
 import Card from '../utils/Card';
 import Icon from '../utils/Icon';
 import List from '../utils/List';
+import { useContext } from 'react';
+import { UserContext } from '@/client/contexts/user.context';
 
 function HomeNavigation() {
 	const router = useRouter();
+	const [user] = useContext(UserContext);
+
+	if (!user) return null;
 
 	return (
-		<Card className='px-0 py-3'>
+		<Card className='p-0'>
 			<List
 				items={[
 					{
@@ -22,9 +27,7 @@ function HomeNavigation() {
 					{
 						prefix: <Icon name='gallery' />,
 						item: 'Gallery',
-						onClick() {
-							router.push('/gallery');
-						},
+						href: `/users/${user.id}/gallery`,
 					},
 					// { prefix: <Icon name='saved' />, item: 'Saved posts' },
 					// { prefix: <Icon name='report' />, item: 'My page' },

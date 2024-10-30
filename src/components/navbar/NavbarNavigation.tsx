@@ -9,11 +9,19 @@ import { useRouter } from 'next/navigation';
 import { useContext } from 'react';
 import { UserContext } from '@/client/contexts/user.context';
 import { AuthClientService } from '@/client/services/auth.client-service';
+import { useFetch } from '@/client/hooks/utils/useFetch';
+import { BusinessClientService } from '@/client/services/business.client-service';
 
 function NavbarNavigation() {
 	const [user] = useContext(UserContext);
 
 	const router = useRouter();
+
+	const { data: businesses } = useFetch([], {
+		async fetch() {
+			return await BusinessClientService.getAll({ user: user?.id });
+		},
+	});
 
 	return (
 		<Dropdown
@@ -41,12 +49,22 @@ function NavbarNavigation() {
 						prefix: (
 							<Avatar
 								src='https://sporgates.com/upload/photos/d-avatar.jpg?cache=0'
-								size={20}
+								size={30}
 							/>
 						),
 						item: 'Oussama Khalfi',
-						onClick: () => router.push('/page'),
+						href: `/users/${user?.id}`,
 					},
+					...businesses.map((business) => ({
+						prefix: (
+							<Avatar
+								src={business.logo || '/images/avatar-placeholder.png'}
+								size={30}
+							/>
+						),
+						item: business.name,
+						href: `/businesses/${business?.id}`,
+					})),
 					// {
 					// 	prefix: <Icon name='shield-check' />,
 					// 	item: 'Manage subscription',
@@ -86,7 +104,7 @@ function NavbarNavigation() {
 						item: 'Logout',
 						onClick: async () => {
 							await AuthClientService.signOut();
-							router.push('/');
+							router.push('/sign-in');
 						},
 					},
 					null,

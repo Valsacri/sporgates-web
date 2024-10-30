@@ -83,14 +83,14 @@ function Navbar() {
 					)}
 
 					<div>
-						{user ? (
-							<NavbarNavigation />
-						) : (
+						{user === undefined ? null : user === null ? (
 							<Link href='/sign-up'>
 								<Button color='primary' className='uppercase font-semibold'>
 									Join now !
 								</Button>
 							</Link>
+						) : (
+							<NavbarNavigation />
 						)}
 					</div>
 				</div>

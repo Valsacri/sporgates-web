@@ -8,13 +8,20 @@ export function useUserListener() {
 
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(getAuth(), async (authUser) => {
-			if (authUser) {
-				const user = await UserClientService.getConnected();
+			try {
+				if (authUser) {
+					const user = await UserClientService.getConnected();
 
-				if (user) {
-					setUser(user);
+					if (user) {
+						setUser(user);
+					} else {
+						setUser(null);
+					}
+				} else {
+					setUser(null);
 				}
-			} else {
+			} catch (error) {
+				console.error('User listener failed:', error);
 				setUser(null);
 			}
 		});

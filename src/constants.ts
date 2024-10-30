@@ -11,4 +11,5 @@ export const PUBLIC_PAGES = [
 	'/grounds',
 	'/clubs',
 ];
+export const AUTH_PAGES = ['/sign-in', '/sign-up'];
 export const PUBLIC_ROUTES = ['/api/auth/sign-out'];

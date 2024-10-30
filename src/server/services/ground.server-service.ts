@@ -19,7 +19,7 @@ export class GroundServerService {
 
 	static async getAll(filters: {
 		keywords?: string;
-		user?: string;
+		business?: string;
 		city?: string;
 		town?: string;
 		lat?: number;
@@ -30,7 +30,7 @@ export class GroundServerService {
 			...valueOrEmptyObject(filters.keywords, {
 				name: { $regex: filters.keywords, $options: 'i' },
 			}),
-			...valueOrEmptyObject(filters.user, { createdBy: filters.user }),
+			...valueOrEmptyObject(filters.business, { business: filters.business }),
 			...valueOrEmptyObject(filters.city, { 'address.city': filters.city }),
 			...valueOrEmptyObject(filters.town, { 'address.town': filters.town }),
 			...valueOrEmptyObject(filters.lat && filters.lng && filters.radius, {

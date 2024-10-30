@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
 
 export interface ListItem {
@@ -8,6 +9,7 @@ export interface ListItem {
 	suffix?: React.ReactNode;
 	className?: string;
 	onClick?: () => any;
+	href?: string;
 }
 
 interface Props {
@@ -16,41 +18,46 @@ interface Props {
 }
 
 function List({ items, className }: Props) {
-	const handleClick = (
-		e: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
-		onClick?: () => any
-	) => {
+	const handleClick = (e: any, onClick?: () => any) => {
 		e.stopPropagation();
 		onClick?.();
 	};
 
 	return (
 		<div className={twMerge(className)}>
-			{items.map((item, i) => (
-				<div
-					key={i}
-					className={twMerge(
-						'py-3 px-6',
-						item && 'hover:bg-secondary cursor-pointer',
-						i === 0 && 'rounded-t-xl',
-						i === items.length - 1 && 'rounded-b-xl',
-						item?.className
-					)}
-					onClick={(e) => handleClick(e, item?.onClick)}
-				>
-					{item?.item ? (
-						<div className='flex items-center justify-between'>
-							<div className='flex items-center gap-3'>
-								{item.prefix}
-								{item.item}
+			{items.map((item, i) => {
+				const Component = item?.href ? Link : 'div';
+
+				return (
+					<Component
+						href={item?.href as any}
+						aria-disabled
+						key={i}
+						className={twMerge(
+							'px-6 block',
+							item && 'hover:bg-secondary cursor-pointer',
+							i === 0 && 'rounded-t-xl',
+							i === items.length - 1 && 'rounded-b-xl',
+							item?.className
+						)}
+						onClick={(e) => handleClick(e, item?.onClick)}
+					>
+						{item?.item ? (
+							<div
+								className={twMerge('flex items-center justify-between py-4')}
+							>
+								<div className='flex items-center gap-3'>
+									{item.prefix}
+									{item.item}
+								</div>
+								{item.suffix}
 							</div>
-							{item.suffix}
-						</div>
-					) : (
-						<hr />
-					)}
-				</div>
-			))}
+						) : (
+							<hr />
+						)}
+					</Component>
+				);
+			})}
 		</div>
 	);
 }
