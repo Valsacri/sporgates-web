@@ -42,12 +42,7 @@ function Page() {
 
 	return (
 		<div className='grid grid-cols-12 gap-5'>
-			<Card
-				className='col-span-12 text-3xl'
-				title={<h1 className='text-3xl'>Wallet</h1>}
-			></Card>
-
-			<Card title='Transactions' className='col-span-8'>
+			<Card title='Wallet transactions' className='col-span-8'>
 				<Table
 					headers={[
 						{
@@ -69,7 +64,7 @@ function Page() {
 				/>
 			</Card>
 
-			<Card title='Balance' className='col-span-4 h-min'>
+			<Card title='Wallet balance' className='col-span-4 h-min'>
 				<Balance onDeposit={refetchTransactions} />
 			</Card>
 

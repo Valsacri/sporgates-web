@@ -15,9 +15,27 @@ export class TimeHelper {
 
 	static format(time: Time) {
 		const { hours, minutes } = time;
-		return `${hours.toString().padStart(2, '0')}h${minutes
-			.toString()
-			.padStart(2, '0')}min`;
+		const hoursString = hours.toString().padStart(2, '0');
+		const minutesString = minutes.toString().padStart(2, '0');
+
+		return `${hoursString}:${minutesString}`;
+	}
+
+	static formatDuration(time: Time) {
+		const { hours, minutes } = time;
+		const hoursString = hours.toString();
+		const minutesString = minutes.toString();
+
+		if (hours === 0 && minutes === 0) {
+			return '';
+		}
+		if (hours === 0) {
+			return `${minutesString}min`;
+		}
+		if (minutes === 0) {
+			return `${hoursString}h`;
+		}
+		return `${hoursString}h${minutesString}min`;
 	}
 
 	static isEqual(time1: Time, time2: Time) {

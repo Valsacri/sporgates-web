@@ -22,6 +22,11 @@ export async function POST(req: Request, res: Response) {
 			return Response.json(error, { status: 401 });
 		}
 
+		const user = await auth().getUser(decodedIdToken!.uid);
+		const customClaims = user.customClaims || {};
+
+		decodedIdToken = { ...decodedIdToken, ...customClaims } as DecodedIdToken;
+
 		return Response.json(
 			{ decodedIdToken, token },
 			{

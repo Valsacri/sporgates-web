@@ -4,6 +4,7 @@ import { fromBearerToken } from './helpers/http.helpers';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { Axios } from './client/config/axios';
 import { AUTH_PAGES, PUBLIC_ROUTES } from './constants';
+import { auth } from 'firebase-admin';
 
 const ALLOWED_ORIGINS = [
 	'http://localhost:3000',

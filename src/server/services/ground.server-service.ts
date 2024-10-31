@@ -1,4 +1,4 @@
-import { FilterQuery } from 'mongoose';
+import mongoose, { FilterQuery } from 'mongoose';
 import { GroundModel } from '../models/item/ground.model';
 import { GroundDtoType, GroundUpdateDtoType } from '@/dtos/item/ground.dto';
 import { Ground } from '@/types/item/ground.types';
@@ -19,6 +19,7 @@ export class GroundServerService {
 
 	static async getAll(filters: {
 		keywords?: string;
+		sport?: string;
 		business?: string;
 		city?: string;
 		town?: string;
@@ -26,20 +27,32 @@ export class GroundServerService {
 		lng?: number;
 		radius?: number;
 	}) {
-		const grounds = await GroundModel.find({
-			...valueOrEmptyObject(filters.keywords, {
-				name: { $regex: filters.keywords, $options: 'i' },
-			}),
-			...valueOrEmptyObject(filters.business, { business: filters.business }),
-			...valueOrEmptyObject(filters.city, { 'address.city': filters.city }),
-			...valueOrEmptyObject(filters.town, { 'address.town': filters.town }),
-			...valueOrEmptyObject(filters.lat && filters.lng && filters.radius, {
-				'address.geoLocation': getGeoLocationQuery(filters),
-			}),
-		})
+		const query = {} as FilterQuery<Ground>;
+
+		if (filters.keywords) {
+			query.name = { $regex: filters.keywords, $options: 'i' };
+		}
+		if (filters.sport) {
+			query.sports = filters.sport;
+		}
+		if (filters.business) {
+			query.business = filters.business;
+		}
+		if (filters.city) {
+			query['address.city'] = filters.city;
+		}
+		if (filters.town) {
+			query['address.town'] = filters.town;
+		}
+		if (filters.lat && filters.lng && filters.radius) {
+			query['address.geoLocation'] = getGeoLocationQuery(filters);
+		}
+
+		const grounds = await GroundModel.find(query)
 			.collation({ locale: 'en', strength: 1 })
 			.populate('address.city')
-			.populate('address.town');
+			.populate('address.town')
+			.populate('sports');
 
 		return formatDocument<Ground[]>(grounds);
 	}
@@ -50,7 +63,8 @@ export class GroundServerService {
 			skip: (page - 1) * limit,
 		})
 			.populate('address.city')
-			.populate('address.town');
+			.populate('address.town')
+			.populate('sports');
 
 		return formatDocument<Ground[]>(grounds);
 	}

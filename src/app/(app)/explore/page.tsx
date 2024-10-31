@@ -1,11 +1,10 @@
 'use client';
 
-import { UserContext } from '@/client/contexts/user.context';
+import { AlertContext } from '@/client/contexts/alert.context';
 import { useFetch } from '@/client/hooks/utils/useFetch';
 import { usePopup } from '@/client/hooks/utils/usePopup';
-import { CityClientService } from '@/client/services/geo/city.client-service';
-import { TownClientService } from '@/client/services/geo/town.client-service';
 import { GroundClientService } from '@/client/services/ground.client-service';
+import { SportClientService } from '@/client/services/sport.client-service';
 import { GeoFilters } from '@/components/explore/GeoFilters';
 import GroundCard from '@/components/ground/GroundCard';
 import Buttons from '@/components/profile/Buttons';
@@ -13,19 +12,15 @@ import Button from '@/components/utils/Button';
 import Card from '@/components/utils/Card';
 import { Input } from '@/components/utils/form/Input';
 import { Select, SelectOption } from '@/components/utils/form/Select';
-import { SlidePicker } from '@/components/utils/form/SlidePicker';
 import Loader from '@/components/utils/Loader';
-import MapboxMap from '@/components/utils/Map';
 import { Popup } from '@/components/utils/Popup';
-import { GeoLocation } from '@/types/geo.types';
-import { useContext, useEffect, useState } from 'react';
+import { GENERIC_ERROR_MESSAGE } from '@/constants';
+import { useContext, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { BiChevronDown, BiChevronUp, BiRadar } from 'react-icons/bi';
-import { GiRadarSweep } from 'react-icons/gi';
 import { LuRadar } from 'react-icons/lu';
 
 function Page() {
-	const [user] = useContext(UserContext);
+	const showAlert = useContext(AlertContext);
 
 	const [showRadiusPicker, setShowRadiusPicker] = useState(false);
 	const [openGeoFiltersPopup, toggleGeoFiltersPopup] = usePopup();
@@ -33,6 +28,7 @@ function Page() {
 	const form = useForm({
 		defaultValues: {
 			keywords: '',
+			sport: 'all',
 			city: 'all',
 			town: 'all',
 			type: 'grounds',
@@ -46,50 +42,13 @@ function Page() {
 	const { handleSubmit, register, reset, watch, setValue } = form;
 
 	const keywords = watch('keywords');
+	const selectedSport = watch('sport');
 	const selectedCity = watch('city');
 	const selectedTown = watch('town');
 	const selectedType = watch('type');
 	const lat = watch('geolocation.lat');
 	const lng = watch('geolocation.lng');
 	const radius = watch('radius');
-
-	const { data: citiesOptions, loading: loadingCities } = useFetch(
-		[],
-		{
-			async fetch() {
-				const cities = await CityClientService.getPage();
-				return [
-					{ value: 'all', label: 'All cities' },
-					...cities.map(
-						(city) => ({ value: city.id, label: city.name } as SelectOption)
-					),
-				];
-			},
-		},
-		[user]
-	);
-
-	const { data: townsOptions, loading: loadingTowns } = useFetch(
-		[],
-		{
-			async fetch() {
-				if (selectedCity === 'all')
-					return [{ value: 'all', label: 'All towns' }];
-
-				const towns = await TownClientService.getPage(selectedCity);
-
-				setValue('town', 'all');
-
-				return [
-					{ value: 'all', label: 'All towns' },
-					...towns.map(
-						(town) => ({ value: town.id, label: town.name } as SelectOption)
-					),
-				];
-			},
-		},
-		[selectedCity]
-	);
 
 	const { data: results, loading: loadingResults } = useFetch(
 		[],
@@ -101,6 +60,7 @@ function Page() {
 							keywords === 'all' || showRadiusPicker
 								? undefined
 								: keywords.trim(),
+						sport: selectedSport === 'all' ? undefined : selectedSport,
 						city:
 							selectedCity === 'all' || showRadiusPicker
 								? undefined
@@ -119,6 +79,7 @@ function Page() {
 		},
 		[
 			keywords,
+			selectedSport,
 			selectedCity,
 			selectedTown,
 			selectedType,
@@ -129,10 +90,26 @@ function Page() {
 		]
 	);
 
-	const handleCoordinatesChange = (coordinates: GeoLocation) => {
-		setValue('geolocation.lat', coordinates.lat);
-		setValue('geolocation.lng', coordinates.lng);
-	};
+	const { data: sportsOptions, loading: loadingSports } = useFetch([], {
+		async fetch() {
+			try {
+				const sports = await SportClientService.getAll();
+				return [
+					{ value: 'all', label: 'All sports' },
+					...sports.map(
+						(sport) => ({ value: sport.id, label: sport.name } as SelectOption)
+					),
+				];
+			} catch (error) {
+				console.error(error);
+				showAlert({
+					color: 'danger',
+					message: GENERIC_ERROR_MESSAGE,
+				});
+				return [];
+			}
+		},
+	});
 
 	return (
 		<div className='fixed top-20 left-0 2xl:container mx-auto px-2 py-3 lg:px-16 h-[calc(100vh-64px-20px)] grid grid-cols-12 gap-5 space-y-5'>
@@ -140,18 +117,25 @@ function Page() {
 				title='Explore'
 				className='col-span-12 md:col-span-6 xl:col-span-4 space-y-5 max-h-min overflow-y-auto'
 			>
-				Search for champs, grounds, clubs and more...
-				<Input
-					{...register('keywords')}
-					placeholder='Search'
-					className='col-span-6'
-				/>
+				Search for champs, grounds and clubs
+				<div className='flex gap-4'>
+					<Input {...register('keywords')} placeholder='Search' />
+					<Select
+						{...register('sport')}
+						value={watch('sport')}
+						onChange={(value) => setValue('sport', value)}
+						placeholder='Sport'
+						options={sportsOptions}
+						loading={loadingSports}
+					/>
+				</div>
 				<Buttons
+					className='overflow-x-auto'
 					color='secondary'
 					stretch
 					items={[
 						{
-							icon: 'two-user',
+							icon: 'two-',
 							text: 'Champs',
 							value: 'champs',
 						},
@@ -161,7 +145,7 @@ function Page() {
 							value: 'grounds',
 						},
 						{
-							icon: 'two-user',
+							icon: 'two-',
 							text: 'Clubs',
 							value: 'clubs',
 						},
@@ -186,16 +170,8 @@ function Page() {
 				<FormProvider {...form}>
 					<div className='hidden lg:block'>
 						<GeoFilters
-							citiesOptions={citiesOptions}
-							townsOptions={townsOptions}
-							loadingCities={loadingCities}
-							loadingTowns={loadingTowns}
 							showRadiusPicker={showRadiusPicker}
 							toggleRadiusPicker={() => setShowRadiusPicker(!showRadiusPicker)}
-							lat={lat}
-							lng={lng}
-							radius={radius}
-							handleCoordinatesChange={handleCoordinatesChange}
 						/>
 					</div>
 					{openGeoFiltersPopup && (
@@ -206,18 +182,10 @@ function Page() {
 							className='space-y-5'
 						>
 							<GeoFilters
-								citiesOptions={citiesOptions}
-								townsOptions={townsOptions}
-								loadingCities={loadingCities}
-								loadingTowns={loadingTowns}
 								showRadiusPicker={showRadiusPicker}
 								toggleRadiusPicker={() =>
 									setShowRadiusPicker(!showRadiusPicker)
 								}
-								lat={lat}
-								lng={lng}
-								radius={radius}
-								handleCoordinatesChange={handleCoordinatesChange}
 							/>
 						</Popup>
 					)}
@@ -233,10 +201,6 @@ function Page() {
 					<div className='grid grid-cols-1 xl:grid-cols-2 gap-5'>
 						{results.map((ground) => (
 							<>
-								<GroundCard key={ground.id} ground={ground} />
-								<GroundCard key={ground.id} ground={ground} />
-								<GroundCard key={ground.id} ground={ground} />
-								<GroundCard key={ground.id} ground={ground} />
 								<GroundCard key={ground.id} ground={ground} />
 								<GroundCard key={ground.id} ground={ground} />
 								<GroundCard key={ground.id} ground={ground} />

@@ -7,6 +7,8 @@ import { useContext } from 'react';
 import { GroundReservationContext } from '@/client/contexts/ground-reservation.context';
 import TimeFramePicker from './TimeframePicker';
 import { TimeHelper } from '@/helpers/datetime/time.helpers';
+import { TimeframeHelper } from '@/helpers/datetime/timeframe.helpers';
+import Loader from '../utils/Loader';
 
 function ReservationPickerDesktop() {
 	const {
@@ -21,7 +23,10 @@ function ReservationPickerDesktop() {
 		selectedDate,
 		duration,
 		reservedTimeframes,
+		loadingReservedTimeframes,
 	} = useContext(GroundReservationContext);
+
+	const formattedDuration = TimeHelper.formatDuration(duration);
 
 	return (
 		<div className='flex border rounded-md'>
@@ -55,8 +60,20 @@ function ReservationPickerDesktop() {
 				containerClassName='w-1/2'
 				trigger={
 					<div className='border-r-[0.5px] p-3'>
-						<h6>Duration</h6>
-						<p className='text-sm'>{TimeHelper.format(duration)}</p>
+						<h6>Timeframe</h6>
+						<p className='text-sm'>
+							{loadingReservedTimeframes ? (
+								<div className='flex'>
+									Choose hours <Loader className='size-5 ml-auto' />
+								</div>
+							) : selectedTimeframe ? (
+								`${TimeframeHelper.format(
+									selectedTimeframe!
+								)} (${formattedDuration})`
+							) : (
+								'Choose hours'
+							)}
+						</p>
 					</div>
 				}
 			>

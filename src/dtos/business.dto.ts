@@ -6,6 +6,7 @@ export const BusinessDto = z.object({
 	description: z.string().min(1),
 	slogan: z.string().min(1),
 	logo: z.string().min(1),
+	cover: z.string().min(1),
 	socials: SocialsDto,
 
 	owner: z.string().min(1),

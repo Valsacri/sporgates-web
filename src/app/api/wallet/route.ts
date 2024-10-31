@@ -2,6 +2,7 @@ import {
 	WalletDepositeDto,
 	WalletDepositeDtoType,
 } from '@/dtos/wallet/wallet.dto';
+import { initFirebaseAdminApp } from '@/server/config/firebase-admin.config';
 import { setupDbConnection } from '@/server/config/mongodb.config';
 import { HttpHelper } from '@/server/helpers/http.helper';
 import { WalletServerService } from '@/server/services/wallet.server-service';
@@ -9,6 +10,7 @@ import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest, res: Response) {
 	try {
+		initFirebaseAdminApp();
 		await setupDbConnection();
 
 		const { userId } = HttpHelper.getContextDecodedIdToken(req);

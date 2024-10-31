@@ -1,4 +1,5 @@
 import { Time, Timeframe } from '@/types/general.types';
+import { TimeHelper } from './datetime/time.helpers';
 
 export const generateTimes = (
 	startTime: Time,
@@ -46,15 +47,10 @@ export const generateTimeframes = (
 	return timeframes;
 };
 
-export const formatTime = (time: Time) => {
-	const { hours, minutes } = time;
-	return `${hours.toString().padStart(2, '0')}h${minutes
-		.toString()
-		.padStart(2, '0')}min`;
-};
-
 export const formatTimeframe = (timeframe: Timeframe) => {
-	return `${formatTime(timeframe.start)} - ${formatTime(timeframe.end)}`;
+	return `${TimeHelper.format(timeframe.start)} - ${TimeHelper.format(
+		timeframe.end
+	)}`;
 };
 
 export const timeframeToMinutes = (timeframe: Timeframe) => {
@@ -80,6 +76,10 @@ export const timeframeToTime = (timeframe: Timeframe) => {
 
 export const formatDate = (date: Date) => {
 	return date.toLocaleDateString('fr-FR');
+};
+
+export const formatDateTime = (date: Date) => {
+	return date.toLocaleString('fr-FR');
 };
 
 export const parseDate = (date?: string) => {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import useBreakpoint from '@/client/hooks/utils/useBreakpoint';
 import GroundReservationMobile from './GroundReservationMobile';
 import { Ground } from '@/types/item/ground.types';
@@ -13,6 +13,8 @@ import Balance from '@/components/shared/Balance';
 import { usePopup } from '@/client/hooks/utils/usePopup';
 import { TimeframeHelper } from '@/helpers/datetime/timeframe.helpers';
 import { TimeHelper } from '@/helpers/datetime/time.helpers';
+import { AlertContext } from '@/client/contexts/alert.context';
+import { GENERIC_ERROR_MESSAGE } from '@/constants';
 
 interface Props {
 	ground: Ground;
@@ -20,6 +22,7 @@ interface Props {
 
 function GroundReservation({ ground }: Props) {
 	const { breakpointsSize, windowWidth } = useBreakpoint();
+	const showAlert = useContext(AlertContext);
 
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
@@ -33,6 +36,8 @@ function GroundReservation({ ground }: Props) {
 	const [isDesktop, setIsDesktop] = useState(false);
 
 	const [reservedTimeframes, setReservedTimeframes] = useState<Timeframe[]>([]);
+	const [loadingReservedTimeframes, setLoadingReservedTimeframes] =
+		useState(false);
 
 	const [openBalancePopup, toggleBalancePopup] = usePopup();
 
@@ -56,19 +61,31 @@ function GroundReservation({ ground }: Props) {
 	}, [windowWidth]);
 
 	const handleDateChange = async (date: Date) => {
-		date.setHours(0, 0, 0, 0);
+		setLoadingReservedTimeframes(true);
 
-		const reservedTimeframes =
-			await GroundReservationClientService.getReservedTimeframes(
-				ground.id,
-				date.getTime()
-			);
-		setReservedTimeframes(reservedTimeframes);
+		try {
+			date.setHours(0, 0, 0, 0);
 
-		setSelectedDate(date);
-		setSelectedTimeframe(null);
-		setOpenDatePicker(false);
-		setOpenTimesPicker(true);
+			const reservedTimeframes =
+				await GroundReservationClientService.getReservedTimeframes(
+					ground.id,
+					date.getTime()
+				);
+			setReservedTimeframes(reservedTimeframes);
+
+			setSelectedDate(date);
+			setOpenTimesPicker(true);
+		} catch (error) {
+			console.error(error);
+			showAlert({
+				color: 'danger',
+				message: GENERIC_ERROR_MESSAGE,
+			});
+		} finally {
+			setSelectedTimeframe(null);
+			setOpenDatePicker(false);
+			setLoadingReservedTimeframes(false);
+		}
 	};
 
 	const handleTimeframeChange = (timeframe: Timeframe) => {
@@ -104,6 +121,7 @@ function GroundReservation({ ground }: Props) {
 					getTileClassName,
 					duration,
 					reservedTimeframes,
+					loadingReservedTimeframes,
 					totalPrice,
 					openBalancePopup,
 					toggleBalancePopup,

@@ -9,6 +9,8 @@ import { WalletModel } from '../models/wallet/wallet.model';
 import { TransactionModel } from '../models/wallet/transaction.model';
 import { CityModel } from '../models/geo/city.model';
 import { TownModel } from '../models/geo/town.model';
+import { SportModel } from '../models/sport.model';
+import { BusinessModel } from '../models/business.model';
 
 UserModel;
 ClubModel;
@@ -18,6 +20,8 @@ WalletModel;
 TransactionModel;
 CityModel;
 TownModel;
+SportModel;
+BusinessModel;
 
 // Declaring a variable to store the cached database connection
 let cachedConnection: Connection | null = null;

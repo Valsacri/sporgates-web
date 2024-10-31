@@ -10,6 +10,7 @@ export async function GET(req: NextRequest, res: Response) {
 
 		const { searchParams } = req.nextUrl;
 		const keywords = searchParams.get('keywords') || undefined;
+		const sport = searchParams.get('sport') || undefined;
 		const business = searchParams.get('business') || undefined;
 		const city = searchParams.get('city') || undefined;
 		const town = searchParams.get('town') || undefined;
@@ -19,6 +20,7 @@ export async function GET(req: NextRequest, res: Response) {
 
 		const grounds = await GroundServerService.getAll({
 			keywords,
+			sport,
 			business,
 			city,
 			town,

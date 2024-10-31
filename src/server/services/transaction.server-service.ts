@@ -31,12 +31,12 @@ export class TransactionServerService {
 			{
 				limit,
 				skip: (page - 1) * limit,
+				sort: { createdAt: -1 },
 			}
 		)
+			.sort({ createdAt: -1 })
 			.populate('sender')
-			.populate('receiver')
-			.populate('groundReservation')
-			.populate('clubSubscription');
+			.populate('receiver');
 		return formatDocument<Transaction[]>(transactions);
 	}
 

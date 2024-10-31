@@ -25,16 +25,15 @@ function CreatePost() {
 				</Button>
 			</div>
 
-			<div className='overflow-x-auto'>
-				<Buttons
-					items={[
-						{ icon: 'gallery', text: 'Upload image', href: '' },
-						{ icon: 'todo', text: 'Create poll', href: '' },
-						{ icon: 'play', text: 'Upload video', href: '' },
-						{ icon: 'add', text: 'More', href: '' },
-					]}
-				/>
-			</div>
+			<Buttons
+				className='overflow-x-auto'
+				items={[
+					{ icon: 'gallery', text: 'Upload image', href: '' },
+					{ icon: 'todo', text: 'Create poll', href: '' },
+					{ icon: 'play', text: 'Upload video', href: '' },
+					{ icon: 'add', text: 'More', href: '' },
+				]}
+			/>
 		</Card>
 	);
 }

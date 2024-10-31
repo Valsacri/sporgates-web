@@ -5,10 +5,21 @@ import Link from 'next/link';
 import Rating from '../shared/Rating';
 import { Ground } from '@/types/item/ground.types';
 import { City, Town } from '@/types/geo.types';
+import { Sport } from '@/types/sport.types';
+import {
+	IoBasketballOutline, IoFootballOutline,
+	IoTennisballOutline
+} from 'react-icons/io5';
 
 interface Props {
 	ground: Ground;
 }
+
+const SPORTS_ICONS = {
+	football: <IoFootballOutline className='size-5' />,
+	basketball: <IoBasketballOutline className='size-5' />,
+	tennis: <IoTennisballOutline className='size-5' />,
+} as any;
 
 function GroundCard({ ground }: Props) {
 	return (
@@ -28,11 +39,14 @@ function GroundCard({ ground }: Props) {
 							// defaultPrice?.discount ? 'justify-between' : 'justify-end'
 						)}
 					>
-						{/* {defaultPrice?.discount && (
-							<h5 className='w-max bg-success text-white rounded-tl-lg rounded-br-2xl px-3 py-1.5'>
-								-{defaultPrice.discount}%
-							</h5>
-						)} */}
+						{/* <h5 className='w-max bg-success text-white rounded-tl-lg rounded-br-2xl px-3 py-1.5'>
+							-{defaultPrice.discount}%
+						</h5> */}
+						<div className='flex gap-1 w-max bg-black bg-opacity-50 text-white rounded-tl-lg rounded-br-2xl px-3 py-1.5'>
+							{(ground.sports as Sport[]).map(
+								(sport) => SPORTS_ICONS[sport.code]
+							)}
+						</div>
 						<h5 className='w-max bg-primary text-white rounded-tr-lg rounded-bl-2xl px-3 py-1.5 ml-auto'>
 							{ground.price}dh / {ground.minReservationTime}min
 						</h5>

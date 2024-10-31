@@ -15,6 +15,7 @@ export enum GroundRerservationStatus {
 }
 
 export interface GroundReservation extends Record {
+	business: string | Business;
 	ground: string | Ground;
 	user: string | User;
 	date: number;
@@ -30,5 +31,5 @@ export interface Ground extends Item {
 
 	subscriptions: ClubSubscription[];
 
-	sports: string[];
+	sports: string[] | Sport[];
 }

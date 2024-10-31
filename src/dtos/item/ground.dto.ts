@@ -3,12 +3,14 @@ import { ItemDto } from './item.dto';
 import { AddressDto, TimeframeDto } from './general.dto';
 import { SubscriptionDto } from './club.dto';
 import { GroundRerservationStatus } from '@/types/item/ground.types';
+import { buffer } from 'stream/consumers';
 
 export const GroundReservationStatusDto = z.nativeEnum(
 	GroundRerservationStatus
 );
 
 export const GroundReservationDto = z.object({
+	business: z.string().min(1),
 	ground: z.string().min(1),
 	user: z.string().min(1),
 	date: z.number(),

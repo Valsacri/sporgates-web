@@ -17,22 +17,26 @@ export class GroundReservationServerService {
 		return formatDocument<GroundReservation>(reservation);
 	}
 
-	static async getAll(
-		groundId: string | null,
-		status: GroundRerservationStatus | null
-	) {
-		const query = {} as FilterQuery<GroundReservation>;
+	static async getAll(filters: {
+		business: string;
+		ground?: string;
+		status: GroundRerservationStatus;
+	}) {
+		const query = {
+			business: filters.business,
+		} as FilterQuery<GroundReservation>;
 
-		if (groundId) {
-			query.ground = groundId;
+		if (filters.ground) {
+			query.ground = filters.ground;
 		}
-		if (status) {
-			query.status = status;
+		if (filters.status) {
+			query.status = filters.status;
 		}
 
-		const reservations = await GroundReservationModel.find(query).populate(
-			'ground'
-		);
+		const reservations = await GroundReservationModel.find(query)
+			.sort({ createdAt: -1 })
+			.populate('ground');
+
 		return formatDocument<GroundReservation[]>(reservations);
 	}
 

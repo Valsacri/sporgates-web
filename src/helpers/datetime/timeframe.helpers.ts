@@ -131,11 +131,19 @@ export class TimeframeHelper {
 		return duration;
 	}
 
-	static toTime(timeframe: Timeframe) {
+	static toDuration(timeframe: Timeframe) {
 		const minutes = this.toMinutes(timeframe);
 		const hours = Math.floor(minutes / 60);
 		const remainingMinutes = minutes % 60;
 
 		return { hours, minutes: remainingMinutes } as Time;
+	}
+
+	static isNow(timeframe: Timeframe) {
+		const now = new Date();
+		const hours = now.getHours();
+		const minutes = now.getMinutes();
+
+		return this.includesTime(timeframe, { hours, minutes });
 	}
 }

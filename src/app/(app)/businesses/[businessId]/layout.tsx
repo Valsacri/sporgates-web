@@ -2,7 +2,6 @@ import HomeNavigation from '@/components/home/HomeNavigation';
 import ProfileNavigation from '@/components/profile/ProfileNavigation';
 import ProfileInfos from '@/components/profile/ProfileInfos';
 import { redirect } from 'next/navigation';
-import { HttpHelper } from '@/server/helpers/http.helper';
 import { BusinessServerService } from '@/server/services/business.server-service';
 
 interface Props {
@@ -14,8 +13,6 @@ export default async function Layout({
 	children,
 	params: { businessId },
 }: Props) {
-	const pathname = HttpHelper.getPathname();
-
 	const business = await BusinessServerService.getOne(businessId);
 	if (!business) redirect('/not-found');
 
@@ -26,7 +23,10 @@ export default async function Layout({
 			</div>
 
 			<div className='w-full lg:w-4/5 space-y-5'>
-				<ProfileInfos type='business' infos={business} />
+				<ProfileInfos
+					type='business'
+					infos={{ ...business, avatar: business.logo }}
+				/>
 
 				<ProfileNavigation
 					items={[
@@ -39,11 +39,35 @@ export default async function Layout({
 							icon: 'location',
 							text: 'Grounds',
 							href: `/businesses/${businessId}/grounds`,
+							subItems: [
+								{
+									icon: 'document',
+									text: 'List',
+									href: `/businesses/${businessId}/grounds`,
+								},
+								{
+									icon: 'todo',
+									text: 'Reservations',
+									href: `/businesses/${businessId}/grounds/reservations`,
+								},
+							],
 						},
 						{
 							icon: 'two-user',
 							text: 'Clubs',
-							href: '',
+							href: `/businesses/${businessId}/clubs`,
+							subItems: [
+								{
+									icon: 'document',
+									text: 'List',
+									href: `/businesses/${businessId}/clubs`,
+								},
+								{
+									icon: 'todo',
+									text: 'Subscriptions',
+									href: `/businesses/${businessId}/clubs/subscriptions`,
+								},
+							],
 						},
 					]}
 				/>

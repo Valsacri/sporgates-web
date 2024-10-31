@@ -8,33 +8,67 @@ import { SlidePicker } from '@/components/utils/form/SlidePicker';
 import MapboxMap from '@/components/utils/Map';
 import { GeoLocation } from '@/types/geo.types';
 import Button from '../utils/Button';
+import { useFetch } from '@/client/hooks/utils/useFetch';
+import { CityClientService } from '@/client/services/geo/city.client-service';
+import { TownClientService } from '@/client/services/geo/town.client-service';
+import { UserContext } from '@/client/contexts/user.context';
+import { useContext } from 'react';
 
 interface GeoFiltersPopupProps {
-	citiesOptions: SelectOption[];
-	townsOptions: SelectOption[];
-	loadingCities: boolean;
-	loadingTowns: boolean;
 	showRadiusPicker: boolean;
 	toggleRadiusPicker: () => void;
-	lat: number;
-	lng: number;
-	radius: number;
-	handleCoordinatesChange: (coordinates: GeoLocation) => void;
 }
 
 export function GeoFilters({
-	citiesOptions,
-	townsOptions,
-	loadingCities,
-	loadingTowns,
 	showRadiusPicker,
 	toggleRadiusPicker,
-	lat,
-	lng,
-	radius,
-	handleCoordinatesChange,
 }: GeoFiltersPopupProps) {
 	const { register, watch, setValue } = useFormContext();
+	const [user] = useContext(UserContext);
+
+	const selectedCity = watch('city');
+	const lat = watch('geolocation.lat');
+	const lng = watch('geolocation.lng');
+	const radius = watch('radius');
+
+	const { data: citiesOptions, loading: loadingCities } = useFetch([], {
+		async fetch() {
+			const cities = await CityClientService.getPage();
+			return [
+				{ value: 'all', label: 'All cities' },
+				...cities.map(
+					(city) => ({ value: city.id, label: city.name } as SelectOption)
+				),
+			];
+		},
+	});
+
+	const { data: townsOptions, loading: loadingTowns } = useFetch(
+		[],
+		{
+			async fetch() {
+				if (selectedCity === 'all')
+					return [{ value: 'all', label: 'All towns' }];
+
+				const towns = await TownClientService.getPage(selectedCity);
+
+				setValue('town', 'all');
+
+				return [
+					{ value: 'all', label: 'All towns' },
+					...towns.map(
+						(town) => ({ value: town.id, label: town.name } as SelectOption)
+					),
+				];
+			},
+		},
+		[selectedCity]
+	);
+
+	const handleCoordinatesChange = (coordinates: GeoLocation) => {
+		setValue('geolocation.lat', coordinates.lat);
+		setValue('geolocation.lng', coordinates.lng);
+	};
 
 	return (
 		<div className='space-y-4'>

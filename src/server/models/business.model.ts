@@ -12,6 +12,7 @@ const BusinessSchema = new Schema<Business>({
 	description: { type: String, required: true },
 	slogan: { type: String, required: true },
 	logo: { type: String, required: true },
+	cover: { type: String, required: true },
 	socials: { type: SocialsSchema, required: true },
 
 	owner: { type: Schema.Types.ObjectId, ref: ModelName.User, required: true },

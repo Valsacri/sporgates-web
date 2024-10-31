@@ -46,7 +46,7 @@ export const Dropdown = ({
 	};
 
 	return (
-		<div ref={ref} className={twMerge('relative', containerClassName)}>
+		<div ref={ref} className={twMerge('relative z-50', containerClassName)}>
 			{trigger && (
 				<div
 					onClick={() => !disabled && setOpen(!open)}

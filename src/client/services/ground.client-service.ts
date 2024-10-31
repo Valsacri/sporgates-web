@@ -7,6 +7,7 @@ export class GroundClientService {
 
 	static async getAll(filters: {
 		keywords?: string;
+		sport?: string;
 		business?: string;
 		city?: string;
 		town?: string;

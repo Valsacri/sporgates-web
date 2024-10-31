@@ -1,8 +1,10 @@
+import { Schema } from 'mongoose';
 import {
 	AddressSchema,
 	OpeningHoursSchema,
 	ReviewSchema,
 } from '../general.model';
+import { ModelName } from '../model-name.enum';
 
 export const ItemSchema = {
 	name: { type: String, required: true },
@@ -12,4 +14,9 @@ export const ItemSchema = {
 	avgRating: { type: Number, default: 0 },
 	reviews: { type: [ReviewSchema], required: true },
 	openingHours: { type: OpeningHoursSchema, required: true },
+	business: {
+		type: Schema.Types.ObjectId,
+		ref: ModelName.Business,
+		required: true,
+	},
 };

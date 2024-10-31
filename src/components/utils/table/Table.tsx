@@ -25,6 +25,7 @@ interface Props<T> {
 	noData?: React.ReactNode;
 	minColumnWidth?: number | CellCallback<T>;
 	actionsMinWidth?: number;
+	verticalActions?: boolean;
 }
 
 export const Table = <T,>({
@@ -39,8 +40,9 @@ export const Table = <T,>({
 	rowClassName,
 	headersClassName,
 	noData = 'No data',
-	minColumnWidth = 200,
+	minColumnWidth = 0,
 	actionsMinWidth,
+	verticalActions,
 }: Props<T>) => {
 	const isActions = !!actions.length;
 
@@ -141,7 +143,10 @@ export const Table = <T,>({
 
 								{isActions && (
 									<td
-										className='flex gap-3 align-top p-3'
+										className={twMerge(
+											'gap-3 align-top p-3',
+											verticalActions && 'flex'
+										)}
 										style={{
 											minWidth:
 												actionsMinWidth ||
@@ -161,9 +166,11 @@ export const Table = <T,>({
 												!(typeof hidden === 'function'
 													? hidden(row, rowIndex, data)
 													: hidden) && (
-													<span
+													<div
 														key={actionIndex}
-														className='underline cursor-pointer whitespace-nowrap'
+														className={twMerge(
+															'underline cursor-pointer whitespace-nowrap hover:text-primary'
+														)}
 														onClick={(e) =>
 															handleClickAction(e, row, rowIndex, callback)
 														}
@@ -171,7 +178,7 @@ export const Table = <T,>({
 														{typeof name === 'function'
 															? name(row, rowIndex, data)
 															: name}
-													</span>
+													</div>
 												)
 										)}
 									</td>

@@ -35,6 +35,8 @@ function Balance({ onDeposit, purchasePrice = 0 }: Props) {
 
 	const handleDeposit = async () => {
 		try {
+			if (!amount) return;
+
 			const newBalance = await WalletClientService.deposit(Number(amount));
 			setBalance(newBalance);
 			onDeposit?.();

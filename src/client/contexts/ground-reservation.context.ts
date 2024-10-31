@@ -23,6 +23,7 @@ export type GroundReservationContextType = {
 	duration: Time;
 
 	reservedTimeframes: Timeframe[];
+	loadingReservedTimeframes: boolean;
 
 	totalPrice: number;
 
@@ -46,6 +47,7 @@ export const GroundReservationContext =
 		getTileClassName: () => {},
 		duration: { hours: 0, minutes: 0 },
 		reservedTimeframes: [],
+		loadingReservedTimeframes: false,
 		totalPrice: 0,
 		openBalancePopup: false,
 		toggleBalancePopup: () => {},

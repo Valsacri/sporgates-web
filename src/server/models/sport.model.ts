@@ -5,6 +5,7 @@ import { ModelName } from './model-name.enum';
 
 export const SportSchema = new Schema<Sport>({
 	...RecordSchema,
+	code: { type: String, required: true },
 	name: { type: String, required: true },
 	imageUrl: { type: String },
 });

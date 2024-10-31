@@ -151,15 +151,7 @@ function TimeFramePicker({
 						)}
 						onClick={() => !timeframe.disabled && handleClick(index, timeframe)}
 					>
-						{`${timeframe.start.hours
-							.toString()
-							.padStart(2, '0')}:${timeframe.start.minutes
-							.toString()
-							.padStart(2, '0')} - ${timeframe.end.hours
-							.toString()
-							.padStart(2, '0')}:${timeframe.end.minutes
-							.toString()
-							.padStart(2, '0')}`}
+						{TimeframeHelper.format(timeframe)}
 					</Button>
 				))}
 			</div>

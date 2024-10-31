@@ -8,21 +8,21 @@ async function Page({ params: { businessId } }: Props) {
 	// const posts = await PostServerService.getAll(businessId);
 
 	const images = [
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
-		'https://sporgates.com/upload/photos/d-avatar.jpg?cache=0',
+		'/images/logo-big.png',
+		'/images/logo-big.png',
+		'/images/logo-big.png',
+		'/images/logo-big.png',
+		'/images/logo-big.png',
+		'/images/logo-big.png',
+		'/images/logo-big.png',
+		'/images/logo-big.png',
+		'/images/logo-big.png',
+		'/images/logo-big.png',
+		'/images/logo-big.png',
+		'/images/logo-big.png',
+		'/images/logo-big.png',
+		'/images/logo-big.png',
+		'/images/logo-big.png',
 	];
 
 	return <Gallery images={images} />;

@@ -21,7 +21,7 @@ export interface ButtonItem {
 interface Props {
 	items: ButtonItem[];
 	buttonClassName?: string;
-	containerClassName?: string;
+	className?: string;
 	stretch?: boolean;
 	color?: Color;
 	selectedColor?: Color;
@@ -30,7 +30,7 @@ interface Props {
 function Buttons({
 	items,
 	buttonClassName,
-	containerClassName,
+	className,
 	stretch,
 	color = 'transparent',
 	selectedColor = 'primary',
@@ -49,8 +49,8 @@ function Buttons({
 		<div
 			className={twMerge(
 				'flex gap-3',
-				stretch && 'lg:justify-between',
-				containerClassName
+				stretch && 'justify-between',
+				className
 			)}
 		>
 			{items.map((item, index) => {
@@ -58,18 +58,19 @@ function Buttons({
 				return (
 					<Component
 						href={item.href as any}
-						className={twMerge(stretch && 'lg:w-full')}
+						className={twMerge(stretch && 'w-full')}
 					>
 						<Button
 							key={index}
 							icon={item.icon as CocoIcon}
 							color={item.selected ? selectedColor : item.color || color}
+							variant={item.selected ? 'outlined' : 'filled'}
 							className={twMerge(
-								'rounded-full',
-								'w-full',
+								'w-full rounded-full',
 								buttonClassName,
 								item.className
 							)}
+							disableHover={item.selected}
 							onClick={() => handleClick(item)}
 							disabled={item.disabled}
 						>

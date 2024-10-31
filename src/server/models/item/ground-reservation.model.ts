@@ -11,6 +11,11 @@ import { GroundModel } from './ground.model';
 
 const GroundReservationSchema = new Schema<GroundReservation>({
 	...RecordSchema,
+	business: {
+		type: Schema.Types.ObjectId,
+		ref: ModelName.Business,
+		required: true,
+	},
 	ground: {
 		type: Schema.Types.ObjectId,
 		ref: GroundModel.modelName,
