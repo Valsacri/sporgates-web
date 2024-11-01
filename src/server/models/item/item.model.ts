@@ -16,7 +16,7 @@ export const ItemSchema = {
 	openingHours: { type: OpeningHoursSchema, required: true },
 	business: {
 		type: Schema.Types.ObjectId,
-		ref: ModelName.Business,
+		ref: ModelName.BUSINESS,
 		required: true,
 	},
 };

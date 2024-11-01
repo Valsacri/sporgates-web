@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { fromBearerToken } from './helpers/http.helpers';
-import { DecodedIdToken } from 'firebase-admin/auth';
 import { Axios } from './client/config/axios';
-import { AUTH_PAGES, PUBLIC_ROUTES } from './constants';
-import { auth } from 'firebase-admin';
+import { PUBLIC_ROUTES } from './constants';
+import { AuthUser } from './types/user.types';
 
 const ALLOWED_ORIGINS = [
 	'http://localhost:3000',
@@ -20,10 +19,7 @@ const verifyApiAuth = async (req: NextRequest) => {
 	}
 
 	try {
-		const res = await Axios.post<{
-			decodedIdToken: DecodedIdToken;
-			token: string;
-		}>('/auth/verify', {
+		const res = await Axios.post<AuthUser>('/auth/verify', {
 			sessionCookie,
 			authorizationToken,
 		});
@@ -54,8 +50,7 @@ export async function middleware(req: NextRequest) {
 		if (result instanceof NextResponse) {
 			return result;
 		} else {
-			headers.decodedIdToken = JSON.stringify(result.decodedIdToken);
-			headers.token = result.token;
+			headers.authUser = JSON.stringify(result.authUser);
 		}
 	}
 

@@ -32,7 +32,7 @@ export async function POST(req: Request, res: Response) {
 	try {
 		await setupDbConnection();
 
-		const { userId } = HttpHelper.getContextDecodedIdToken(req);
+		const { userId } = HttpHelper.getContextAuthUser();
 
 		const data: BusinessDtoType = await req.json();
 

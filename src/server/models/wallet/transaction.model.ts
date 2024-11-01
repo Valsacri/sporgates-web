@@ -13,22 +13,22 @@ const TransactionSchema = new Schema<Transaction>({
 	},
 	sender: {
 		type: Schema.Types.ObjectId,
-		ref: ModelName.Wallet,
+		ref: ModelName.WALLET,
 	},
 	receiver: {
 		type: Schema.Types.ObjectId,
-		ref: ModelName.Wallet,
+		ref: ModelName.WALLET,
 	},
 	refundGroundReservation: {
 		type: Schema.Types.ObjectId,
-		ref: ModelName.GroundReservation,
+		ref: ModelName.GROUND_RESERVATION,
 	},
 	refundClubSubscription: {
 		type: Schema.Types.ObjectId,
-		ref: ModelName.ClubSubscription,
+		ref: ModelName.CLUB_SUBSCRIPTION,
 	},
 });
 
 export const TransactionModel =
 	(mongoose.models.Transaction as Model<Transaction>) ||
-	mongoose.model<Transaction>(ModelName.Transaction, TransactionSchema);
+	mongoose.model<Transaction>(ModelName.TRANSACTION, TransactionSchema);

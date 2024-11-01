@@ -27,27 +27,32 @@ interface Props {
 
 const statusMap = {
 	ongoing: {
-		className: 'text-info',
+		textClassName: 'text-info',
+		bgClassName: 'bg-info',
 		text: 'Ongoing',
 		icon: <TbPlayFootball className='size-5' />,
 	},
 	[GroundRerservationStatus.PENDING]: {
-		className: 'text-text-secondary',
+		textClassName: 'text-text-secondary',
+		bgClassName: 'bg-text-secondary',
 		text: 'Pending',
 		icon: <LuClock className='size-4' />,
 	},
 	[GroundRerservationStatus.ACCEPTED]: {
-		className: 'text-success',
+		textClassName: 'text-success',
+		bgClassName: 'bg-success',
 		text: 'Accepted',
 		icon: <HiCheck className='size-5' />,
 	},
 	[GroundRerservationStatus.REJECTED]: {
-		className: 'text-warning',
+		textClassName: 'text-warning',
+		bgClassName: 'bg-warning',
 		text: 'Rejected',
 		icon: <HiX className='size-5' />,
 	},
 	[GroundRerservationStatus.CANCELLED]: {
-		className: 'text-danger',
+		textClassName: 'text-danger',
+		bgClassName: 'bg-danger',
 		text: 'Cancelled',
 		icon: <HiMiniNoSymbol className='size-4' />,
 	},
@@ -118,15 +123,23 @@ export default function ReservationsTable({ businessId }: Props) {
 							row.status === GroundRerservationStatus.ACCEPTED &&
 							TimeframeHelper.isNow(row.timeframe);
 						const status = isOngoing ? 'ongoing' : row.status;
+						const statusData = statusMap[status];
 
 						return (
 							<div
 								className={twMerge(
-									'capitalize flex items-center gap-1',
-									statusMap[status].className
+									'capitalize flex items-center gap-1.5',
+									statusMap[status].textClassName
 								)}
 							>
-								{statusMap[status].icon} {statusMap[status].text}
+								{/* {statusMap[status].icon}  */}
+								<div
+									className={twMerge(
+										'rounded-full size-2',
+										statusData.bgClassName
+									)}
+								/>
+								{statusData.text}
 							</div>
 						);
 					},

@@ -47,4 +47,4 @@ const ClubSchema = new Schema<Club>({
 
 export const ClubModel =
 	(mongoose.models.Club as Model<Club>) ||
-	mongoose.model<Club>(ModelName.Club, ClubSchema);
+	mongoose.model<Club>(ModelName.CLUB, ClubSchema);

@@ -3,7 +3,7 @@ import { Post, PostSubject } from '@/types/post.types';
 export const POSTS: any[] = [
 	{
 		title: 'Post',
-		subject: PostSubject.NewProduct,
+		subject: PostSubject.NEW_PRODUCT,
 		date: '5 w',
 		body: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
 		isPromoted: false,
@@ -17,7 +17,7 @@ export const POSTS: any[] = [
 	},
 	{
 		title: 'Post',
-		subject: PostSubject.NewOffer,
+		subject: PostSubject.NEW_OFFER,
 		date: '5 w',
 		body: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
 		isPromoted: false,
@@ -44,7 +44,7 @@ export const POSTS: any[] = [
 	},
 	{
 		title: 'Post',
-		subject: PostSubject.DonationRequest,
+		subject: PostSubject.DONATION_REQUEST,
 		date: '5 w',
 		body: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
 		isPromoted: true,
@@ -60,7 +60,7 @@ export const POSTS: any[] = [
 
 	{
 		title: 'Post',
-		subject: PostSubject.UpdateProfilePhoto,
+		subject: PostSubject.UPDATE_PROFILE_PHOTO,
 		date: '5 w',
 		body: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
 		isPromoted: false,
@@ -74,7 +74,7 @@ export const POSTS: any[] = [
 	},
 	{
 		title: 'Post',
-		subject: PostSubject.NewPost,
+		subject: PostSubject.NEW_POST,
 		date: '5 w',
 		body: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
 		isPromoted: false,
@@ -88,7 +88,7 @@ export const POSTS: any[] = [
 	},
 	{
 		title: 'Post',
-		subject: PostSubject.NewOffer,
+		subject: PostSubject.NEW_OFFER,
 		date: '5 w',
 		body: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat maxime in fugiat ipsam, nostrum quod accusamus explicabo sapiente eligendi rem, vel natus velit, odio delectus modi et veniam consequatur? Quidem?',
 		isPromoted: false,

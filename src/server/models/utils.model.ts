@@ -10,14 +10,14 @@ export const RecordSchema = {
 
 	createdBy: {
 		type: Schema.Types.ObjectId,
-		ref: ModelName.User,
+		ref: ModelName.USER,
 	},
 	updatedBy: {
 		type: Schema.Types.ObjectId,
-		ref: ModelName.User,
+		ref: ModelName.USER,
 	},
 	deletedBy: {
 		type: Schema.Types.ObjectId,
-		ref: ModelName.User,
+		ref: ModelName.USER,
 	},
 };

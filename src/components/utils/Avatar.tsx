@@ -9,13 +9,18 @@ interface Props {
 
 function Avatar({ src, size, className }: Props) {
 	return (
-		<Image
-			src={src}
-			width={size}
-			height={size}
-			alt='avatar'
-			className={twMerge('rounded-full', className)}
-		/>
+		<div
+			className={twMerge('relative overflow-hidden rounded-full', className)}
+			style={{ width: size, height: size }}
+		>
+			<Image
+				src={src}
+				layout='fill'
+				objectFit='cover'
+				objectPosition='center'
+				alt='avatar'
+			/>
+		</div>
 	);
 }
 

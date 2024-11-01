@@ -13,4 +13,4 @@ const CitySchema = new Schema<City>({
 
 export const CityModel =
 	(mongoose.models.City as Model<City>) ||
-	mongoose.model<City>(ModelName.City, CitySchema);
+	mongoose.model<City>(ModelName.CITY, CitySchema);

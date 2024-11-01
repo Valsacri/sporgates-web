@@ -26,13 +26,13 @@ export const AddressSchema = new Schema<Address>(
 	{
 		city: {
 			type: Schema.Types.ObjectId,
-			ref: ModelName.City,
+			ref: ModelName.CITY,
 
 			required: true,
 		},
 		town: {
 			type: Schema.Types.ObjectId,
-			ref: ModelName.Town,
+			ref: ModelName.TOWN,
 
 			required: true,
 		},
@@ -52,7 +52,7 @@ export const ReviewSchema = new Schema<Review>({
 	...RecordSchema,
 	user: {
 		type: Schema.Types.ObjectId,
-		ref: ModelName.User,
+		ref: ModelName.USER,
 
 		required: true,
 	},

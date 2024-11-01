@@ -13,7 +13,7 @@ const GroundReservationSchema = new Schema<GroundReservation>({
 	...RecordSchema,
 	business: {
 		type: Schema.Types.ObjectId,
-		ref: ModelName.Business,
+		ref: ModelName.BUSINESS,
 		required: true,
 	},
 	ground: {
@@ -23,7 +23,7 @@ const GroundReservationSchema = new Schema<GroundReservation>({
 	},
 	user: {
 		type: Schema.Types.ObjectId,
-		ref: ModelName.User,
+		ref: ModelName.USER,
 		required: true,
 	},
 	date: { type: Number, required: true },
@@ -39,6 +39,6 @@ const GroundReservationSchema = new Schema<GroundReservation>({
 export const GroundReservationModel =
 	(mongoose.models.GroundReservation as Model<GroundReservation>) ||
 	mongoose.model<GroundReservation>(
-		ModelName.GroundReservation,
+		ModelName.GROUND_RESERVATION,
 		GroundReservationSchema
 	);

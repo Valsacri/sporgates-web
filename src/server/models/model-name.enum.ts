@@ -1,16 +1,18 @@
 export enum ModelName {
-	User = 'User',
-	Club = 'Club',
-	ClubSubscription = 'ClubSubscription',
-	Ground = 'Ground',
-	GroundReservation = 'GroundReservation',
-	Wallet = 'Wallet',
-	Transaction = 'Transaction',
-	Order = 'Order',
-	Sport = 'Sport',
+	USER = 'User',
+	CLUB = 'Club',
+	CLUB_SUBSCRIPTION = 'ClubSubscription',
+	GROUND = 'Ground',
+	GROUND_RESERVATION = 'GroundReservation',
+	WALLET = 'Wallet',
+	TRANSACTION = 'Transaction',
+	ORDER = 'Order',
+	SPORT = 'Sport',
 
-	City = 'City',
-	Town = 'Town',
+	CITY = 'City',
+	TOWN = 'Town',
 
-	Business = 'Business',
+	BUSINESS = 'Business',
+
+	NOTIFICATION = 'Notification',
 }

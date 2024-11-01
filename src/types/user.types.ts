@@ -1,3 +1,4 @@
+import { DecodedIdToken } from 'firebase-admin/auth';
 import { Socials } from './general.types';
 import { Address } from './geo.types';
 import { Record } from './utils.types';
@@ -10,6 +11,8 @@ export enum Role {
 	COACH = 'coach',
 	BUSINESS = 'business',
 }
+
+export type AuthUser = DecodedIdToken & { userId: string };
 
 export interface User extends Record {
 	uid: string;

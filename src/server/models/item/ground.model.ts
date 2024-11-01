@@ -12,9 +12,9 @@ const GroundSchema = new Schema<Ground>({
 	minReservationTime: { type: Number, required: true },
 	price: { type: Number, required: true },
 	subscriptions: { type: [SubscriptionSchema], required: true },
-	sports: [{ type: Schema.Types.ObjectId, ref: ModelName.Sport }],
+	sports: [{ type: Schema.Types.ObjectId, ref: ModelName.SPORT }],
 });
 
 export const GroundModel =
 	(mongoose.models.Ground as Model<Ground>) ||
-	mongoose.model<Ground>(ModelName.Ground, GroundSchema);
+	mongoose.model<Ground>(ModelName.GROUND, GroundSchema);

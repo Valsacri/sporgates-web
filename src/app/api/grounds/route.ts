@@ -44,7 +44,7 @@ export async function POST(req: Request, res: Response) {
 	try {
 		await setupDbConnection();
 
-		const { userId } = HttpHelper.getContextDecodedIdToken(req);
+		const { userId } = HttpHelper.getContextAuthUser();
 
 		const data: GroundDtoType = await req.json();
 

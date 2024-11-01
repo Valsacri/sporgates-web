@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
 	try {
 		await setupDbConnection();
 
-		const { userId } = HttpHelper.getContextDecodedIdToken(req);
+		const { userId } = HttpHelper.getContextAuthUser();
 
 		const data: GroundReservationDtoType = await req.json();
 

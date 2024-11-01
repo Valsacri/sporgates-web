@@ -1,4 +1,4 @@
-import { DateTimeframes, Timeframe } from '../general.types';
+import { Timeframe } from '../general.types';
 import { Item } from './item.types';
 import { ClubSubscription } from './club.types';
 import { User } from '../user.types';

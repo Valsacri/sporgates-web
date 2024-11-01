@@ -8,10 +8,10 @@ const TownSchema = new Schema<Town>({
 	name: { type: String, required: true },
 	city: {
 		type: Schema.Types.ObjectId,
-		ref: ModelName.City,
+		ref: ModelName.CITY,
 	},
 });
 
 export const TownModel =
 	(mongoose.models.Town as Model<Town>) ||
-	mongoose.model<Town>(ModelName.Town, TownSchema);
+	mongoose.model<Town>(ModelName.TOWN, TownSchema);

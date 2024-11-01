@@ -5,9 +5,9 @@ import { UserServerService } from './user.server-service';
 import { cookies, headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { Axios } from '@/client/config/axios';
-import { DecodedIdToken } from 'firebase-admin/auth';
 import { fromBearerToken } from '@/helpers/http.helpers';
 import { redirect } from 'next/navigation';
+import { AuthUser } from '@/types/user.types';
 
 export class AuthServerService {
 	static async signUp(data: SignUpDtoType) {
@@ -31,7 +31,7 @@ export class AuthServerService {
 		}
 
 		try {
-			const res = await Axios.post<DecodedIdToken>('auth/verify', {
+			const res = await Axios.post<AuthUser>('auth/verify', {
 				sessionCookie,
 				authorizationToken,
 			});
@@ -52,15 +52,15 @@ export class AuthServerService {
 		}
 
 		let shouldRedirect = false;
-		let decodedIdToken: DecodedIdToken | null = null;
+		let authUser: AuthUser | null = null;
 
 		try {
-			const res = await Axios.post<DecodedIdToken>('auth/verify', {
+			const res = await Axios.post<AuthUser>('auth/verify', {
 				sessionCookie,
 				authorizationToken,
 			});
 
-			decodedIdToken = res.data;
+			authUser = res.data;
 		} catch (error) {
 			console.error('Authentication verification failed:', error);
 			shouldRedirect = true;
@@ -70,6 +70,6 @@ export class AuthServerService {
 			redirect('/sign-in');
 		}
 
-		return decodedIdToken as DecodedIdToken;
+		return authUser as AuthUser;
 	}
 }

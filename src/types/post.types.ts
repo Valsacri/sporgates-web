@@ -2,13 +2,13 @@ import { Offer } from './item/item.types';
 import { Record } from './utils.types';
 
 export enum PostSubject {
-	NewPost = 'new-post',
-	SharePost = 'share-post',
-	NewOffer = 'new-offer',
-	NewProduct = 'new-product',
-	NewEvent = 'new-event',
-	DonationRequest = 'donation-request',
-	UpdateProfilePhoto = 'update-profile-photo',
+	NEW_POST = 'new_post',
+	SHARE_POST = 'share_post',
+	NEW_OFFER = 'new_offer',
+	NEW_PRODUCT = 'new_product',
+	NEW_EVENT = 'new_event',
+	DONATION_REQUEST = 'donation_request',
+	UPDATE_PROFILE_PHOTO = 'update_profile_photo',
 }
 
 export interface Post extends Record {

@@ -9,8 +9,8 @@ export async function POST(req: Request, res: Response) {
 		initFirebaseAdminApp();
 
 		try {
-			const token = HttpHelper.getContextToken(req);
-			const decodedIdToken = HttpHelper.getContextDecodedIdToken(req);
+			const token = HttpHelper.getContextToken();
+			const authUser = HttpHelper.getContextAuthUser();
 
 			const sessionCookie = await auth().createSessionCookie(token, {
 				expiresIn: SESSION_EXPIRATION,
@@ -23,7 +23,7 @@ export async function POST(req: Request, res: Response) {
 				sameSite: 'lax',
 			});
 
-			return Response.json(decodedIdToken, {
+			return Response.json(authUser, {
 				status: 200,
 			});
 		} catch (error) {

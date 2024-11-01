@@ -1,7 +1,6 @@
 import { CreateUserDto, CreateUserDtoType } from '@/dtos/user.dto';
 import { initFirebaseAdminApp } from '@/server/config/firebase-admin.config';
 import { setupDbConnection } from '@/server/config/mongodb.config';
-import { HttpHelper } from '@/server/helpers/http.helper';
 import { UserServerService } from '@/server/services/user.server-service';
 import { auth } from 'firebase-admin';
 

@@ -12,4 +12,4 @@ export const SportSchema = new Schema<Sport>({
 
 export const SportModel =
 	(mongoose.models.Sport as Model<Sport>) ||
-	mongoose.model<Sport>(ModelName.Sport, SportSchema);
+	mongoose.model<Sport>(ModelName.SPORT, SportSchema);

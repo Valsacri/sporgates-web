@@ -1,4 +1,4 @@
-import { DecodedIdToken } from 'firebase-admin/auth';
+import { AuthUser } from '@/types/user.types';
 import { headers } from 'next/headers';
 
 export class HttpHelper {
@@ -6,15 +6,19 @@ export class HttpHelper {
 		return headers().get('x-pathname')! as string;
 	}
 
-	static getContextToken(req: Request) {
-		return req.headers.get('token')! as string;
+	static getContextToken() {
+		return this.fromBearerToken(headers().get('Authorization'));
 	}
 
-	static getContextDecodedIdToken2() {
-		return JSON.parse(headers().get('decodedIdToken')!) as DecodedIdToken;
+	static getContextAuthUser() {
+		return JSON.parse(headers().get('authUser')!) as AuthUser;
 	}
 
-	static getContextDecodedIdToken(req: Request) {
-		return JSON.parse(req.headers.get('decodedIdToken')!) as DecodedIdToken;
+	static toBearerToken(token?: string | null) {
+		return !token ? '' : `Bearer ${token}`;
+	}
+
+	static fromBearerToken(bearerToken?: string | null) {
+		return bearerToken?.split('Bearer ')[1] || '';
 	}
 }

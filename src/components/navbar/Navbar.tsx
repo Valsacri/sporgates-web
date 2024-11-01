@@ -10,6 +10,7 @@ import { Input } from '../utils/form/Input';
 import NavbarNavigation from './NavbarNavigation';
 import { useContext } from 'react';
 import { UserContext } from '@/client/contexts/user.context';
+import NotificationsList from './notification/NotificationsList';
 
 function Navbar() {
 	const [user] = useContext(UserContext);
@@ -27,6 +28,7 @@ function Navbar() {
 					>
 						<HomeNavigation />
 					</Dropdown>
+
 					<Link className='hidden lg:block' href='/'>
 						<Logo />
 					</Link>
@@ -60,24 +62,38 @@ function Navbar() {
 										<span className='hidden lg:block'>Home</span>
 									</Button>
 								</Link>
+
 								<Button icon='menu' color='secondary'></Button>
 							</div>
+
 							<Input
 								name='dfa'
 								placeholder='Search for champs, grounds, clubs and more...'
 								suffix={<Icon name='search' />}
 								className='hidden lg:block py-3 w-96'
 							/>
+
 							<div className='flex gap-0 lg:gap-3'>
 								<Button
 									icon='two-user'
 									className='h-full rounded-none'
 								></Button>
+
 								<Button icon='message' className='h-full rounded-none'></Button>
-								<Button
-									icon='notification'
-									className='h-full rounded-none'
-								></Button>
+
+								<Dropdown
+									className='fixed top-16 lg:absolute right-0 left-1/2 transform -translate-x-1/2 lg:left-auto lg:transform-none'
+									triggerClassName='h-full'
+									closeOnClick
+									trigger={
+										<Button
+											icon='notification'
+											className='h-full rounded-none'
+										></Button>
+									}
+								>
+									<NotificationsList />
+								</Dropdown>
 							</div>
 						</>
 					)}

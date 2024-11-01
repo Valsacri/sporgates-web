@@ -15,8 +15,8 @@ const BusinessSchema = new Schema<Business>({
 	cover: { type: String, required: true },
 	socials: { type: SocialsSchema, required: true },
 
-	owner: { type: Schema.Types.ObjectId, ref: ModelName.User, required: true },
-	staff: [{ type: Schema.Types.ObjectId, ref: ModelName.User }],
+	owner: { type: Schema.Types.ObjectId, ref: ModelName.USER, required: true },
+	staff: [{ type: Schema.Types.ObjectId, ref: ModelName.USER }],
 
 	email: { type: String, required: true },
 	phoneNumber: { type: String, required: true },
@@ -25,4 +25,4 @@ const BusinessSchema = new Schema<Business>({
 
 export const BusinessModel =
 	(mongoose.models.Business as Model<Business>) ||
-	mongoose.model<Business>(ModelName.Business, BusinessSchema);
+	mongoose.model<Business>(ModelName.BUSINESS, BusinessSchema);

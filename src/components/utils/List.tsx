@@ -8,6 +8,7 @@ export interface ListItem {
 	prefix?: React.ReactNode;
 	suffix?: React.ReactNode;
 	className?: string;
+	itemClassName?: string;
 	onClick?: () => any;
 	href?: string;
 }
@@ -15,9 +16,10 @@ export interface ListItem {
 interface Props {
 	items: (ListItem | null)[];
 	className?: string;
+	itemClassName?: string;
 }
 
-function List({ items, className }: Props) {
+function List({ items, className, itemClassName }: Props) {
 	const handleClick = (e: any, onClick?: () => any) => {
 		e.stopPropagation();
 		onClick?.();
@@ -34,10 +36,11 @@ function List({ items, className }: Props) {
 						aria-disabled
 						key={i}
 						className={twMerge(
-							'px-6 block',
+							'px-5 block',
 							item && 'hover:bg-secondary cursor-pointer',
 							i === 0 && 'rounded-t-xl',
 							i === items.length - 1 && 'rounded-b-xl',
+							itemClassName,
 							item?.className
 						)}
 						onClick={(e) => handleClick(e, item?.onClick)}

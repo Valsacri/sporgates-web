@@ -1,16 +1,14 @@
-import { initFirebaseAdminApp } from '@/server/config/firebase-admin.config';
 import { setupDbConnection } from '@/server/config/mongodb.config';
 import { HttpHelper } from '@/server/helpers/http.helper';
 import { UserServerService } from '@/server/services/user.server-service';
-import { auth } from 'firebase-admin';
 
 export async function GET(req: Request, res: Response) {
 	try {
 		await setupDbConnection();
 
-		const decodedIdToken = HttpHelper.getContextDecodedIdToken(req);
+		const authUser = HttpHelper.getContextAuthUser();
 
-		const user = await UserServerService.getOneByUid(decodedIdToken.uid);
+		const user = await UserServerService.getOneByUid(authUser.uid);
 
 		return Response.json(user, {
 			status: 200,

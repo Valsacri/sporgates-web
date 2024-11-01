@@ -13,7 +13,7 @@ export async function GET(req: NextRequest, res: Response) {
 		initFirebaseAdminApp();
 		await setupDbConnection();
 
-		const { userId } = HttpHelper.getContextDecodedIdToken(req);
+		const { userId } = HttpHelper.getContextAuthUser();
 
 		const balance = await WalletServerService.getBalance(userId);
 
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest, res: Response) {
 	try {
 		await setupDbConnection();
 
-		const { userId } = HttpHelper.getContextDecodedIdToken(req);
+		const { userId } = HttpHelper.getContextAuthUser();
 
 		const data: WalletDepositeDtoType = await req.json();
 

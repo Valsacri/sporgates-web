@@ -1,4 +1,5 @@
 import { initFirebaseAdminApp } from '@/server/config/firebase-admin.config';
+import { AuthUser } from '@/types/user.types';
 import { auth } from 'firebase-admin';
 import { DecodedIdToken } from 'firebase-admin/auth';
 
@@ -8,7 +9,7 @@ export async function POST(req: Request, res: Response) {
 
 		const { sessionCookie, authorizationToken } = await req.json();
 
-		let decodedIdToken: DecodedIdToken | null = null;
+		let decodedIdToken: DecodedIdToken = {} as DecodedIdToken;
 		let token: string = '';
 
 		try {
@@ -22,13 +23,16 @@ export async function POST(req: Request, res: Response) {
 			return Response.json(error, { status: 401 });
 		}
 
-		const user = await auth().getUser(decodedIdToken!.uid);
+		const user = await auth().getUser(decodedIdToken.uid);
 		const customClaims = user.customClaims || {};
 
-		decodedIdToken = { ...decodedIdToken, ...customClaims } as DecodedIdToken;
+		const authUser: AuthUser = {
+			...decodedIdToken as any,
+			...customClaims,
+		};
 
 		return Response.json(
-			{ decodedIdToken, token },
+			{ authUser, token },
 			{
 				status: 200,
 			}
