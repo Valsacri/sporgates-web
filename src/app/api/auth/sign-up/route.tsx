@@ -1,13 +1,16 @@
 import { CreateUserDto, CreateUserDtoType } from '@/dtos/user.dto';
 import { initFirebaseAdminApp } from '@/server/config/firebase-admin.config';
 import { setupDbConnection } from '@/server/config/mongodb.config';
+import { HttpHelper } from '@/server/helpers/http.helper';
 import { UserServerService } from '@/server/services/user.server-service';
 import { auth } from 'firebase-admin';
 
-export async function GET(req: Request, res: Response) {
+export async function POST(req: Request, res: Response) {
 	try {
 		initFirebaseAdminApp();
 		await setupDbConnection();
+
+		const { uid } = HttpHelper.getContextAuthUser();
 
 		const body: CreateUserDtoType = await req.json();
 
@@ -19,9 +22,9 @@ export async function GET(req: Request, res: Response) {
 			});
 		}
 
-		const user = await UserServerService.create(body);
+		const user = await UserServerService.create({ ...body, uid });
 
-		await auth().setCustomUserClaims(body.uid, {
+		await auth().setCustomUserClaims(uid, {
 			userId: user.id,
 		});
 

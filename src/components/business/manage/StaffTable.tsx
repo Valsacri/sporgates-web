@@ -1,140 +1,182 @@
 'use client';
 
 import { Table } from '@/components/utils/table/Table';
-import { TableAction } from '@/components/utils/table/table.types';
-import Loader from '@/components/utils/Loader';
-import { twMerge } from 'tailwind-merge';
-import { HiCheck, HiMiniNoSymbol } from 'react-icons/hi2';
-import { HiX } from 'react-icons/hi';
-import { LuClock } from 'react-icons/lu';
-import { TbPlayFootball } from 'react-icons/tb';
+import { useFetch } from '@/client/hooks/utils/useFetch';
+import { useContext, useState } from 'react';
+import { AlertContext } from '@/client/contexts/alert.context';
+import { UserClientService } from '@/client/services/user.client-service';
 import { User } from '@/types/user.types';
+import { GENERIC_ERROR_MESSAGE } from '@/constants';
+import { BusinessClientService } from '@/client/services/business.client-service';
+import Avatar from '@/components/utils/Avatar';
+import { Input } from '@/components/utils/form/Input';
+import { useForm } from 'react-hook-form';
+import Dropdown from '@/components/utils/Dropdown';
+import List from '@/components/utils/List';
+import Loader from '@/components/utils/Loader';
+import Link from 'next/link';
+import { twMerge } from 'tailwind-merge';
+import ConfirmationPopup from '@/components/shared/ConfirmationPopup';
+import { usePopup } from '@/client/hooks/utils/usePopup';
 
 interface Props {
-	staff: User[];
-	loadingActionIndex: number;
-	loading: boolean;
+	businessId: string;
 }
 
-export default function StaffTable({
-	staff,
-	onUpdateStatus,
-	loadingActionIndex,
-	loading,
-}: Props) {
-	const statusMap = {
-		ongoing: {
-			className: 'text-info',
-			text: 'Ongoing',
-			icon: <TbPlayFootball className='size-5' />,
+export default function StaffTable({ businessId }: Props) {
+	const showAlert = useContext(AlertContext);
+
+	const { register, watch, reset } = useForm({
+		defaultValues: {
+			username: '',
 		},
-		[GroundRerservationStatus.PENDING]: {
-			className: 'text-text-secondary',
-			text: 'Pending',
-			icon: <LuClock className='size-4' />,
+	});
+
+	const username = watch('username');
+
+	const [selectedStaff, setSelectedStaff] = useState<User | null>(null);
+
+	const {
+		data: staff,
+		loading: loadingStaff,
+		refetch,
+	} = useFetch(
+		[],
+		{
+			async fetch() {
+				try {
+					return await BusinessClientService.getStaff(businessId);
+				} catch (error) {
+					console.error(error);
+					showAlert({
+						color: 'danger',
+						message: 'Error while fetching reservations',
+					});
+					return [];
+				}
+			},
 		},
-		[GroundRerservationStatus.ACCEPTED]: {
-			className: 'text-success',
-			text: 'Accepted',
-			icon: <HiCheck className='size-5' />,
+		[]
+	);
+
+	const { data: users, loading: loadingUsers } = useFetch(
+		[],
+		{
+			async fetch() {
+				try {
+					if (!username) return [];
+					const users = await UserClientService.getPage({ keywords: username });
+					return users;
+				} catch (error) {
+					console.error(error);
+					showAlert({
+						color: 'danger',
+						message: GENERIC_ERROR_MESSAGE,
+					});
+					return [];
+				}
+			},
 		},
-		[GroundRerservationStatus.REJECTED]: {
-			className: 'text-warning',
-			text: 'Rejected',
-			icon: <HiX className='size-5' />,
-		},
-		[GroundRerservationStatus.CANCELLED]: {
-			className: 'text-danger',
-			text: 'Cancelled',
-			icon: <HiMiniNoSymbol className='size-4' />,
-		},
-	} as any;
+		[username]
+	);
+
+	const handleAdd = async (userId: string) => {
+		try {
+			reset();
+			await BusinessClientService.addStaff(businessId, userId);
+			refetch();
+		} catch (error) {
+			console.error(error);
+			showAlert({
+				color: 'danger',
+				message: GENERIC_ERROR_MESSAGE,
+			});
+		}
+	};
+
+	const handleRemove = async () => {
+		try {
+			await BusinessClientService.removeStaff(businessId, selectedStaff!.id);
+			refetch();
+		} catch (error) {
+			console.error(error);
+			showAlert({
+				color: 'danger',
+				message: GENERIC_ERROR_MESSAGE,
+			});
+		}
+	};
 
 	return (
-		<Table
-			headers={[
-				{
-					field: (row) => (row.ground as Ground).name,
-					display: 'Ground',
-					minWidth: 150,
-				},
-				{
-					field: (row) => {
-						const isOngoing =
-							row.status === GroundRerservationStatus.ACCEPTED &&
-							TimeframeHelper.isNow(row.timeframe);
-						const status = isOngoing ? 'ongoing' : row.status;
+		<>
+			<div className='mb-3'>
+				<Input
+					{...register('username')}
+					placeholder='Add staff by username'
+					suffix={loadingUsers && <Loader />}
+				/>
 
-						return (
-							<div
-								className={twMerge(
-									'capitalize flex items-center gap-1',
-									statusMap[status].className
-								)}
-							>
-								{statusMap[status].icon} {statusMap[status].text}
-							</div>
-						);
+				{users.length > 0 && username && (
+					<Dropdown open={true}>
+						<List
+							items={users.map((user) => {
+								const isSelected = staff.some((s) => s.id === user.id);
+								return {
+									className: isSelected ? 'opacity-75' : '',
+									prefix: <Avatar src={'/images/avatar.png'} size={35} />,
+									item: (
+										<div>
+											<div className='text-sm text-text-secondary-dark'>{`${user.firstName} ${user.lastName}`}</div>
+											<div className='text-xs text-text-secondary'>
+												@{user.username}
+											</div>
+										</div>
+									),
+									onClick: () => !isSelected && handleAdd(user.id),
+								};
+							})}
+						/>
+					</Dropdown>
+				)}
+			</div>
+
+			<Table
+				headers={[
+					{
+						field: (row) => <Avatar src={row.avatar || ''} size={30} />,
+						display: 'Avatar',
 					},
-					display: 'Status',
-				},
-				{ field: (row) => `${row.totalPrice} DH`, display: 'Price' },
-				{
-					field: (row) => new Date(row.date).toLocaleString('fr-FR'),
-					display: 'Reserved on',
-				},
-				{
-					field: (row) => TimeframeHelper.format(row.timeframe),
-					display: 'Reserved for',
-				},
-				{
-					field: (row) =>
-						TimeHelper.formatDuration(
-							TimeframeHelper.toDuration(row.timeframe)
+					{
+						field: (row) => `${row.firstName} ${row.lastName}`,
+						display: 'Name',
+					},
+				]}
+				data={staff}
+				actions={[
+					{
+						name: (row) => (
+							<Link href={`/users/${row.id}`} className='underline'>
+								View
+							</Link>
 						),
-					display: 'Duration',
-				},
-			]}
-			data={staff}
-			actions={(row, index) => {
-				if (loadingActionIndex === index) {
-					return [{ name: <Loader /> }];
-				}
+					},
+					{
+						name: 'Remove',
+						callback: setSelectedStaff,
+					},
+				]}
+				loading={loadingStaff}
+			/>
 
-				const actions: TableAction<GroundStaff>[] = [];
-				if (row.status === GroundRerservationStatus.PENDING) {
-					actions.push(
-						{
-							name: 'Accept',
-							callback: () =>
-								onUpdateStatus(row, GroundRerservationStatus.ACCEPTED, index),
-						},
-						{
-							name: 'Reject',
-							callback: () =>
-								onUpdateStatus(row, GroundRerservationStatus.REJECTED, index),
-						}
-					);
-				} else if (row.status === GroundRerservationStatus.ACCEPTED) {
-					actions.push({
-						name: 'Cancel',
-						callback: () =>
-							onUpdateStatus(row, GroundRerservationStatus.CANCELLED, index),
-					});
-				} else if (
-					row.status === GroundRerservationStatus.REJECTED ||
-					row.status === GroundRerservationStatus.CANCELLED
-				) {
-					actions.push({
-						name: 'Accept',
-						callback: () =>
-							onUpdateStatus(row, GroundRerservationStatus.ACCEPTED, index),
-					});
-				}
-
-				return actions;
-			}}
-			loading={loading}
-		/>
+			{selectedStaff && (
+				<ConfirmationPopup
+					open={true}
+					setOpen={(open) => setSelectedStaff(open ? selectedStaff : null)}
+					title='Remove staff'
+					description='Are you sure you want to remove this staff?'
+					onConfirm={handleRemove}
+				/>
+			)}
+		</>
 	);
 }

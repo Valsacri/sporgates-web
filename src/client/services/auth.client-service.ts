@@ -1,12 +1,6 @@
 import { User } from '@/types/user.types';
 import { Axios } from '../config/axios';
-import {
-	createUserWithEmailAndPassword,
-	getAuth,
-	signInWithEmailAndPassword,
-	signOut,
-	UserCredential,
-} from 'firebase/auth';
+import { getAuth, signOut, UserCredential } from 'firebase/auth';
 import { CreateUserDtoType } from '@/dtos/user.dto';
 import { toBearerToken } from '@/helpers/http.helpers';
 
@@ -19,19 +13,7 @@ export class AuthClientService {
 		return res.data;
 	}
 
-	static async signUp(
-		credentials: UserCredential,
-		email: string,
-		firstName: string,
-		lastName: string
-	) {
-		const uid = credentials.user.uid;
-		const user: CreateUserDtoType = {
-			uid,
-			email,
-			firstName,
-			lastName,
-		};
+	static async signUp(credentials: UserCredential, user: CreateUserDtoType) {
 		await this.signIn(credentials);
 		const res = await Axios.post<User>('/auth/sign-up', user);
 		return res.data;

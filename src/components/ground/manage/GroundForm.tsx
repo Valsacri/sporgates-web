@@ -56,6 +56,7 @@ function GroundForm({ ground }: Props) {
 	} = useForm({
 		resolver: zodResolver(GroundDto),
 		defaultValues: {
+			business: '',
 			name: '',
 			description: '',
 			images: [],

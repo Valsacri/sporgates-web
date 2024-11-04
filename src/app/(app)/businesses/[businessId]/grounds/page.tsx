@@ -8,7 +8,7 @@ interface Props {
 }
 
 async function Page({ params }: Props) {
-	const business = await GroundServerService.getAll({
+	const business = await GroundServerService.getPage({
 		business: params.businessId,
 	});
 	if (!business) redirect('/not-found');

@@ -4,6 +4,7 @@ import { useOutsideClick } from '@/client/hooks/utils/useOutsideClick';
 import { useRef, useState } from 'react';
 import { HiX } from 'react-icons/hi';
 import { twMerge } from 'tailwind-merge';
+import Button from './Button';
 
 interface Props {
 	children?: React.ReactNode;
@@ -77,18 +78,26 @@ export const Popup = ({
 						className
 					)}
 				>
-					<div className='flex justify-between'>
-						<div className='h3 mb-2'>{title}</div>
+					<div className='flex justify-between mb-5'>
+						<div className='space-y-1'>
+							<div className='h3'>{title}</div>
+							{description && (
+								<p className='text-sm mb-3 text-text-secondary-dark'>
+									{description}
+								</p>
+							)}
+						</div>
 						<div className='flex gap-3'>
 							{topRightSection}
 							{showCloseButton && (
-								<HiX className='size-5 cursor-pointer' onClick={onClose} />
+								<Button
+									icon={<HiX className='size-5 cursor-pointer' />}
+									className='bg-opacity-0 p-1 h-min w-min'
+									onClick={onClose}
+								/>
 							)}
 						</div>
 					</div>
-					{description && (
-						<p className='t1 mb-7 text-text-secondary-dark'>{description}</p>
-					)}
 					{children}
 				</div>
 			</div>

@@ -11,8 +11,6 @@ import Button from '../utils/Button';
 import { useFetch } from '@/client/hooks/utils/useFetch';
 import { CityClientService } from '@/client/services/geo/city.client-service';
 import { TownClientService } from '@/client/services/geo/town.client-service';
-import { UserContext } from '@/client/contexts/user.context';
-import { useContext } from 'react';
 
 interface GeoFiltersPopupProps {
 	showRadiusPicker: boolean;
@@ -24,7 +22,6 @@ export function GeoFilters({
 	toggleRadiusPicker,
 }: GeoFiltersPopupProps) {
 	const { register, watch, setValue } = useFormContext();
-	const [user] = useContext(UserContext);
 
 	const selectedCity = watch('city');
 	const lat = watch('geolocation.lat');
@@ -71,8 +68,8 @@ export function GeoFilters({
 	};
 
 	return (
-		<div className='space-y-4'>
-			<div className='flex gap-4'>
+		<div className='space-y-3'>
+			<div className='flex gap-3'>
 				<Select
 					{...register('city')}
 					value={watch('city')}

@@ -20,16 +20,20 @@ export class GroundServerService {
 		return formatDocument<Ground>(ground);
 	}
 
-	static async getAll(filters: {
-		keywords?: string;
-		sport?: string;
-		business?: string;
-		city?: string;
-		town?: string;
-		lat?: number;
-		lng?: number;
-		radius?: number;
-	}) {
+	static async getPage(
+		filters: {
+			keywords?: string;
+			sport?: string;
+			business?: string;
+			city?: string;
+			town?: string;
+			lat?: number;
+			lng?: number;
+			radius?: number;
+		},
+		page = 1,
+		limit = 10
+	) {
 		const query = {} as FilterQuery<Ground>;
 
 		if (filters.keywords) {
@@ -53,18 +57,8 @@ export class GroundServerService {
 
 		const grounds = await GroundModel.find(query)
 			.collation({ locale: 'en', strength: 1 })
-			.populate('address.city')
-			.populate('address.town')
-			.populate('sports');
-
-		return formatDocument<Ground[]>(grounds);
-	}
-
-	static async getPage(page = 1, limit = 10, query: FilterQuery<Ground> = {}) {
-		const grounds = await GroundModel.find(query, null, {
-			limit,
-			skip: (page - 1) * limit,
-		})
+			.limit(10)
+			.skip((page - 1) * limit)
 			.populate('address.city')
 			.populate('address.town')
 			.populate('sports');

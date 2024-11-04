@@ -18,7 +18,7 @@ export async function GET(req: NextRequest, res: Response) {
 		const lng = Number(searchParams.get('lng')) || undefined;
 		const radius = Number(searchParams.get('radius')) || undefined;
 
-		const grounds = await GroundServerService.getAll({
+		const grounds = await GroundServerService.getPage({
 			keywords,
 			sport,
 			business,

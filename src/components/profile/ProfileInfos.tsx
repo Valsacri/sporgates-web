@@ -1,6 +1,7 @@
 import { twMerge } from 'tailwind-merge';
 import Card from '../utils/Card';
 import Button from '../utils/Button';
+import ManageStaffPopup from '../business/manage/ManageStaffPopup';
 
 interface Props {
 	type: 'user' | 'business';
@@ -56,9 +57,11 @@ function ProfileInfos({ type, infos }: Props) {
 					<Button icon='edit' color='white' className='rounded-full'>
 						Edit profile
 					</Button>
-					<Button icon='two-user' color='white' className='rounded-full'>
-						Staff
-					</Button>
+					<ManageStaffPopup businessId={infos.id}>
+						<Button icon='two-user' color='white' className='rounded-full'>
+							Staff
+						</Button>
+					</ManageStaffPopup>
 				</div>
 			</div>
 		</Card>

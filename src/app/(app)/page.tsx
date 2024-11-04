@@ -4,7 +4,7 @@ import CreatePost from '@/components/feed/post/CreatePost';
 import FeedFriendsSuggestions from '@/components/feed/post/FeedFriendsSuggestions';
 import PostsFeed from '@/components/feed/post/PostsFeed';
 import Statuses from '@/components/feed/status/Statuses';
-import { AuthServerService } from '@/server/services/auth.server-service';
+import { AuthServerService } from '@/server/services/auth/auth.server-service';
 import { redirect } from 'next/navigation';
 
 export default async function Home() {

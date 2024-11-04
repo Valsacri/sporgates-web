@@ -1,9 +1,13 @@
 import { User } from '@/types/user.types';
-import { Update } from '@/types/utils.types';
+import { Create, Update } from '@/types/utils.types';
 import { UserModel } from '../models/user.model';
 import { CreateUserDtoType } from '@/dtos/user.dto';
-import { formatDocument } from '../helpers/database.helper';
+import {
+	formatDocument,
+	getGeoLocationQuery,
+} from '../helpers/database.helper';
 import { HttpHelper } from '../helpers/http.helper';
+import { FilterQuery } from 'mongoose';
 
 export class UserServerService {
 	static async getOne(id: string) {
@@ -24,18 +28,48 @@ export class UserServerService {
 	}
 
 	static async getPage(
-		page: number,
-		limit: number,
-		query: Record<string, unknown>
+		filters: {
+			keywords?: string;
+			sport?: string;
+			city?: string;
+			town?: string;
+			lat?: number;
+			lng?: number;
+			radius?: number;
+		},
+		page = 1,
+		limit = 10
 	) {
-		const users = await UserModel.find(query, null, {
-			limit,
-			skip: page * limit,
-		});
+		const query = {} as FilterQuery<User>;
+
+		if (filters.keywords) {
+			query.username = { $regex: filters.keywords, $options: 'i' };
+		}
+		if (filters.sport) {
+			query.sports = filters.sport;
+		}
+		if (filters.city) {
+			query['address.city'] = filters.city;
+		}
+		if (filters.town) {
+			query['address.town'] = filters.town;
+		}
+		if (filters.lat && filters.lng && filters.radius) {
+			query['address.geoLocation'] = getGeoLocationQuery(filters);
+		}
+
+		const users = await UserModel.find(query)
+			.collation({ locale: 'en', strength: 1 })
+			.limit(10)
+			.skip((page - 1) * limit)
+			.populate('address.city')
+			.populate('address.town')
+			.populate('sports');
+
 		return formatDocument<User[]>(users);
 	}
 
-	static async create(data: CreateUserDtoType) {
+	static async create(data: Create<User>) {
 		const user = await UserModel.create(data);
 		return formatDocument<User>(user);
 	}

@@ -13,3 +13,12 @@ export const PUBLIC_PAGES = [
 ];
 export const AUTH_PAGES = ['/sign-in', '/sign-up'];
 export const PUBLIC_ROUTES = ['/api/auth/sign-out'];
+
+export const UNAUTHORIZED_RESPONSE = Response.json(
+	{ message: 'Unauthorized' },
+	{ status: 401 }
+);
+export const FORBIDDEN_RESPONSE = Response.json(
+	{ message: 'Forbidden' },
+	{ status: 401 }
+);

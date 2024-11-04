@@ -4,15 +4,6 @@ import { Address } from './geo.types';
 import { Record } from './utils.types';
 import { Sport } from './sport.types';
 
-export enum Role {
-	SUPER_ADMIN = 'super_admin',
-	ADMIN = 'admin',
-	CHAMPION = 'champion',
-	ATHLETE = 'athlete',
-	COACH = 'coach',
-	BUSINESS = 'business',
-}
-
 export type AuthUser = DecodedIdToken & { userId: string };
 
 export interface User extends Record {
@@ -21,7 +12,6 @@ export interface User extends Record {
 	firstName: string;
 	lastName: string;
 	email: string;
-	roles: Role[];
 	sports?: string[] | Sport[];
 
 	avatar?: string;

@@ -1,10 +1,12 @@
 'use client';
 
 import { AlertContext } from '@/client/contexts/alert.context';
+import withAuth from '@/client/hocs/withAuth.hoc';
 import { useFetch } from '@/client/hooks/utils/useFetch';
 import { usePopup } from '@/client/hooks/utils/usePopup';
 import { GroundClientService } from '@/client/services/ground.client-service';
 import { SportClientService } from '@/client/services/sport.client-service';
+import { UserClientService } from '@/client/services/user.client-service';
 import { GeoFilters } from '@/components/explore/GeoFilters';
 import GroundCard from '@/components/ground/GroundCard';
 import Buttons from '@/components/profile/Buttons';
@@ -16,6 +18,8 @@ import { Select, SelectOption } from '@/components/utils/form/Select';
 import Loader from '@/components/utils/Loader';
 import { Popup } from '@/components/utils/Popup';
 import { GENERIC_ERROR_MESSAGE } from '@/constants';
+import { Ground } from '@/types/item/ground/ground.types';
+import { User } from '@/types/user.types';
 import { useContext, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { LuRadar } from 'react-icons/lu';
@@ -55,27 +59,32 @@ function Page() {
 		[],
 		{
 			async fetch() {
-				if (selectedType === 'grounds') {
-					return await GroundClientService.getAll({
-						keywords:
-							keywords === 'all' || showRadiusPicker
-								? undefined
-								: keywords.trim(),
-						sport: selectedSport === 'all' ? undefined : selectedSport,
-						city:
-							selectedCity === 'all' || showRadiusPicker
-								? undefined
-								: selectedCity,
-						town:
-							selectedTown === 'all' || showRadiusPicker
-								? undefined
-								: selectedTown,
-						lat: showRadiusPicker ? lat : undefined,
-						lng: showRadiusPicker ? lng : undefined,
-						radius: showRadiusPicker ? radius : undefined,
-					});
+				const filters = {
+					keywords:
+						keywords === 'all' || showRadiusPicker
+							? undefined
+							: keywords.trim(),
+					sport: selectedSport === 'all' ? undefined : selectedSport,
+					city:
+						selectedCity === 'all' || showRadiusPicker
+							? undefined
+							: selectedCity,
+					town:
+						selectedTown === 'all' || showRadiusPicker
+							? undefined
+							: selectedTown,
+					lat: showRadiusPicker ? lat : undefined,
+					lng: showRadiusPicker ? lng : undefined,
+					radius: showRadiusPicker ? radius : undefined,
+				};
+
+				if (selectedType === 'champs') {
+					return await UserClientService.getPage(filters);
+				} else if (selectedType === 'grounds') {
+					return await GroundClientService.getPage(filters);
+				} else {
+					return [];
 				}
-				return [];
 			},
 		},
 		[
@@ -116,27 +125,15 @@ function Page() {
 		<div className='fixed top-20 left-0 2xl:container mx-auto px-2 py-3 lg:px-16 h-[calc(100vh-64px-20px)] grid grid-cols-12 gap-5 space-y-5'>
 			<Card
 				title='Explore'
-				className='col-span-12 md:col-span-6 xl:col-span-4 space-y-5 max-h-min overflow-y-auto'
+				className='col-span-12 md:col-span-6 xl:col-span-4 space-y-3 max-h-min overflow-y-auto'
 			>
 				Search for champs, grounds and clubs
-				<div className='flex gap-4'>
-					<Input {...register('keywords')} placeholder='Search' />
-					<Select
-						{...register('sport')}
-						value={watch('sport')}
-						onChange={(value) => setValue('sport', value)}
-						placeholder='Sport'
-						options={sportsOptions}
-						loading={loadingSports}
-					/>
-				</div>
 				<Buttons
 					className='overflow-x-auto'
-					color='secondary'
 					stretch
 					items={[
 						{
-							icon: 'two-',
+							icon: 'user',
 							text: 'Champs',
 							value: 'champs',
 						},
@@ -146,7 +143,7 @@ function Page() {
 							value: 'grounds',
 						},
 						{
-							icon: 'two-',
+							icon: 'two-user',
 							text: 'Clubs',
 							value: 'clubs',
 						},
@@ -160,6 +157,17 @@ function Page() {
 							} as any)
 					)}
 				/>
+				<div className='flex gap-3'>
+					<Input {...register('keywords')} placeholder='Search' />
+					<Select
+						{...register('sport')}
+						value={watch('sport')}
+						onChange={(value) => setValue('sport', value)}
+						placeholder='Sport'
+						options={sportsOptions}
+						loading={loadingSports}
+					/>
+				</div>
 				<Button
 					color='secondary'
 					icon={<LuRadar className='size-5 mr-1' />}
@@ -200,15 +208,17 @@ function Page() {
 					</div>
 				) : selectedType === 'champs' ? (
 					<div className='grid grid-cols-1 xl:grid-cols-3 gap-5'>
-						<UserCard />
-						<UserCard />
-						<UserCard />
-						<UserCard />
-						<UserCard />
+						{(results as User[]).map((user) => (
+							<>
+								<UserCard key={user.id} user={user} />
+								<UserCard key={user.id} user={user} />
+								<UserCard key={user.id} user={user} />
+							</>
+						))}
 					</div>
 				) : (
 					<div className='grid grid-cols-1 xl:grid-cols-3 gap-5'>
-						{results.map((ground) => (
+						{(results as Ground[]).map((ground) => (
 							<>
 								<GroundCard key={ground.id} ground={ground} />
 								<GroundCard key={ground.id} ground={ground} />
@@ -222,4 +232,4 @@ function Page() {
 	);
 }
 
-export default Page;
+export default withAuth(Page);

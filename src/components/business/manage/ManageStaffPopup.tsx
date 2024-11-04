@@ -2,6 +2,7 @@
 
 import { Popup } from '@/components/utils/Popup';
 import { usePopup } from '@/client/hooks/utils/usePopup';
+import StaffTable from './StaffTable';
 
 interface Props {
 	children: React.ReactNode;
@@ -23,7 +24,7 @@ function ManageStaffPopup({ children, businessId }: Props) {
 					onClose={toggleOpen}
 					className='w-full lg:w-1/2'
 				>
-					{/* <StaffTable businessId={businessId} /> */}
+					<StaffTable businessId={businessId} />
 				</Popup>
 			)}
 		</>

@@ -1,4 +1,4 @@
-import { Role, User } from '@/types/user.types';
+import { User } from '@/types/user.types';
 import mongoose, { Model, Schema } from 'mongoose';
 import { AddressSchema, SocialsSchema } from './general.model';
 import { RecordSchema } from './utils.model';
@@ -7,11 +7,10 @@ import { ModelName } from './model-name.enum';
 export const UserSchema = new Schema<User>({
 	...RecordSchema,
 	uid: { type: String, required: true, unique: true },
-	username: { type: String, unique: true },
+	username: { type: String, required: true, unique: true },
 	firstName: { type: String, required: true },
 	lastName: { type: String, required: true },
 	email: { type: String, required: true, unique: true },
-	roles: { type: [String], enum: Object.values(Role) },
 	sports: [{ type: Schema.Types.ObjectId, ref: ModelName.SPORT }],
 
 	avatar: { type: String },

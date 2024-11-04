@@ -10,7 +10,7 @@ interface Props {
 	title?: string;
 	description?: string;
 	children?: React.ReactNode;
-	onConfirm: () => void;
+	onConfirm: Function;
 }
 
 function ConfirmationPopup({

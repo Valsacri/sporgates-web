@@ -28,6 +28,7 @@ function Page() {
 		defaultValues: {
 			firstName: '',
 			lastName: '',
+			username: '',
 			email: '',
 			password: '',
 			confirmPassword: '',
@@ -41,12 +42,12 @@ function Page() {
 			data.email,
 			data.password
 		);
-		const user = await AuthClientService.signUp(
-			credentials,
-			data.email,
-			data.firstName,
-			data.lastName
-		);
+		const user = await AuthClientService.signUp(credentials, {
+			firstName: data.firstName,
+			lastName: data.lastName,
+			username: data.username,
+			email: data.email,
+		});
 
 		setUser(user);
 		router.push('/');
@@ -61,36 +62,46 @@ function Page() {
 						{...register('firstName')}
 						label='First Name'
 						placeholder='Enter your first name'
-						containerClassName='h-[60px]'
-						inputClassName='h-[60px]'
+						containerClassName='h-[50px]'
+						inputClassName='h-[50px]'
 						error={errors.firstName?.message}
 					/>
 					<Input
 						{...register('lastName')}
 						label='Last Name'
 						placeholder='Enter your last name'
-						containerClassName='h-[60px]'
-						inputClassName='h-[60px]'
+						containerClassName='h-[50px]'
+						inputClassName='h-[50px]'
 						error={errors.lastName?.message}
 					/>
 				</div>
+				<div className='flex flex-col lg:flex-row gap-5'>
+					<Input
+						{...register('username')}
+						label='Username'
+						placeholder='Choose a username'
+						containerClassName='h-[50px]'
+						inputClassName='h-[50px]'
+						error={errors.username?.message}
+					/>
+					<Input
+						{...register('email')}
+						label='Email'
+						placeholder='Enter your email'
+						containerClassName='h-[50px]'
+						inputClassName='h-[50px]'
+						error={errors.email?.message}
+					/>
+				</div>
 
-				<Input
-					{...register('email')}
-					label='Email'
-					placeholder='Enter your email'
-					containerClassName='h-[60px]'
-					inputClassName='h-[60px]'
-					error={errors.email?.message}
-				/>
 				<div className='flex flex-col lg:flex-row gap-5'>
 					<Input
 						{...register('password')}
 						type='password'
 						label='Password'
-						placeholder='Enter your password'
-						containerClassName='h-[60px]'
-						inputClassName='h-[60px]'
+						placeholder='Choose a password'
+						containerClassName='h-[50px]'
+						inputClassName='h-[50px]'
 						error={errors.password?.message}
 					/>
 					<Input
@@ -98,8 +109,8 @@ function Page() {
 						type='password'
 						label='Confirm Password'
 						placeholder='Confirm your password'
-						containerClassName='h-[60px]'
-						inputClassName='h-[60px]'
+						containerClassName='h-[50px]'
+						inputClassName='h-[50px]'
 						error={errors.confirmPassword?.message}
 					/>
 				</div>

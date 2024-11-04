@@ -1,12 +1,11 @@
 import { FilterQuery } from 'mongoose';
 import {
-	formatDocument,
-	getGeoLocationQuery,
-	valueOrEmptyObject,
+	formatDocument, valueOrEmptyObject
 } from '../helpers/database.helper';
 import { Business } from '@/types/business.types';
 import { BusinessModel } from '../models/business.model';
 import { BusinessDtoType, BusinessUpdateDtoType } from '@/dtos/business.dto';
+import { User } from '@/types/user.types';
 
 export class BusinessServerService {
 	static async getOne(id: string) {
@@ -44,6 +43,32 @@ export class BusinessServerService {
 			.populate('address.town');
 
 		return formatDocument<Business[]>(businesses);
+	}
+
+	static async getStaff(businessId: string) {
+		const business = await BusinessModel.findById(businessId).populate('staff');
+		if (!business) return null;
+		return formatDocument<User[]>(business.staff);
+	}
+
+	static async addStaff(businessId: string, userId: string) {
+		const business = await BusinessModel.findByIdAndUpdate(
+			businessId,
+			{ $addToSet: { staff: userId } },
+			{ new: true }
+		).populate('staff');
+		if (!business) return [];
+		return formatDocument<User[]>(business.staff);
+	}
+
+	static async removeStaff(businessId: string, userId: string) {
+		const business = await BusinessModel.findByIdAndUpdate(
+			businessId,
+			{ $pull: { staff: userId } },
+			{ new: true }
+		).populate('staff');
+		if (!business) return [];
+		return formatDocument<User[]>(business.staff);
 	}
 
 	static async create(data: BusinessDtoType, createdBy?: string) {

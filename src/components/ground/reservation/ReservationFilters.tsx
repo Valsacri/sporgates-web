@@ -23,7 +23,7 @@ export default function ReservationFilters({ businessId }: Props) {
 	const { data: groundOptions } = useFetch([], {
 		async fetch() {
 			try {
-				const grounds = await GroundClientService.getAll({
+				const grounds = await GroundClientService.getPage({
 					business: businessId,
 				});
 				return [

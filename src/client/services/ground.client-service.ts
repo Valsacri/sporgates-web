@@ -8,7 +8,7 @@ import { Ground } from '@/types/item/ground/ground.types';
 export class GroundClientService {
 	static async getOne(id: string) {}
 
-	static async getAll(filters: {
+	static async getPage(filters: {
 		keywords?: string;
 		sport?: string;
 		business?: string;
@@ -23,8 +23,6 @@ export class GroundClientService {
 		});
 		return res.data;
 	}
-
-	static async getPage() {}
 
 	static async create(data: GroundDtoType) {
 		const res = await Axios.post<Ground>('/grounds', data);

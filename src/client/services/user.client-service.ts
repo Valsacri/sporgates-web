@@ -9,6 +9,7 @@ export class UserClientService {
 		const res = await Axios.get<User>(`/users/${id}`);
 		return res.data;
 	}
+	
 
 	static async getConnected() {
 		const token = await getAuth().currentUser?.getIdToken();
@@ -18,10 +19,22 @@ export class UserClientService {
 		return res.data;
 	}
 
-	static async getPage() {
-		const res = await Axios.get<User[]>('/users');
+	static async getPage(filters: {
+		keywords?: string;
+		sport?: string;
+		business?: string;
+		city?: string;
+		town?: string;
+		lat?: number;
+		lng?: number;
+		radius?: number;
+	}) {
+		const res = await Axios.get<User[]>('/users', {
+			params: filters,
+		});
 		return res.data;
 	}
+
 
 	static async create(data: Create<User>) {
 		const res = await Axios.post<User>('/users', data);

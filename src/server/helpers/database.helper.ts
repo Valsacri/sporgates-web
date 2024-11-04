@@ -1,6 +1,6 @@
-import mongoose, { Document } from 'mongoose';
+import mongoose from 'mongoose';
 
-export const documentToObject = <T>(document?: Document | null) => {
+export const documentToObject = <T>(document?: any) => {
 	if (!document) return null;
 	const obj = {
 		...document.toJSON(),
@@ -10,7 +10,7 @@ export const documentToObject = <T>(document?: Document | null) => {
 	return obj;
 };
 
-export const formatDocument = <T>(data?: Document | Document[] | null) => {
+export const formatDocument = <T>(data?: any) => {
 	if (!data) return null as T;
 
 	if (Array.isArray(data)) {
