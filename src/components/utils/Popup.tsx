@@ -73,7 +73,7 @@ export const Popup = ({
 				<div
 					ref={ref}
 					className={twMerge(
-						'max-h-full overflow-auto mx-5 bg-white rounded-lg p-5',
+						'max-h-full overflow-auto mx-5 bg-white rounded-md p-5',
 						className
 					)}
 				>
@@ -86,7 +86,9 @@ export const Popup = ({
 							)}
 						</div>
 					</div>
-					{description && <p className='t1 mb-7 text-text-secondary-dark'>{description}</p>}
+					{description && (
+						<p className='t1 mb-7 text-text-secondary-dark'>{description}</p>
+					)}
 					{children}
 				</div>
 			</div>

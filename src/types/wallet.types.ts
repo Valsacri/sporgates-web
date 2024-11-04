@@ -1,5 +1,5 @@
 import { ClubSubscription } from './item/club.types';
-import { GroundReservation } from './item/ground.types';
+import { GroundReservation } from './item/ground/ground.types';
 import { User } from './user.types';
 import { Record } from './utils.types';
 

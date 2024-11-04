@@ -30,7 +30,7 @@ function ProfileCompletion() {
 								key={i}
 								icon={step.icon}
 								className={twMerge(
-									'w-full lg:w-max rounded-lg border',
+									'w-full lg:w-max rounded-md border',
 									step.completed
 										? 'border-success-light bg-success-light text-success hover:bg-success-light line-through cursor-default'
 										: 'bg-opacity-50 text-text-secondary'

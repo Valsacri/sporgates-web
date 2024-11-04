@@ -59,7 +59,7 @@ export const Dropdown = ({
 			{open && (
 				<Card
 					className={twMerge(
-						'absolute p-0 z-10 min-w-max text-medium text-left mt-1 m-0 bg-clip-padding border-none',
+						'absolute p-1 z-10 min-w-max text-medium text-left mt-1 m-0 bg-clip-padding border-none shadow-lg',
 						position === 'left' ? 'left-0' : 'right-0',
 						className
 					)}

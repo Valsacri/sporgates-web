@@ -1,7 +1,10 @@
-import { GroundReservationStatusDto } from '@/dtos/item/ground.dto';
+import { GroundReservationStatusDto } from '@/dtos/item/ground/ground-reservation.dto';
 import { setupDbConnection } from '@/server/config/mongodb.config';
+import { HttpHelper } from '@/server/helpers/http.helper';
 import { GroundReservationServerService } from '@/server/services/ground-reservation.server-service';
-import { GroundRerservationStatus } from '@/types/item/ground.types';
+import { GroundReservationNotificationServerService } from '@/server/services/notification/ground-reservation-notification.server-service';
+import { NotificationServerService } from '@/server/services/notification/notification.server-service';
+import { GroundRerservationStatus } from '@/types/item/ground/ground-reservation.types';
 
 export async function PATCH(
 	req: Request,
@@ -17,6 +20,8 @@ export async function PATCH(
 	try {
 		await setupDbConnection();
 
+		const { userId } = HttpHelper.getContextAuthUser();
+
 		const validation = GroundReservationStatusDto.safeParse(reservationStatus);
 
 		if (!validation.success) {
@@ -30,6 +35,10 @@ export async function PATCH(
 			{
 				status: reservationStatus,
 			}
+		);
+		await GroundReservationNotificationServerService.sendReservationStatusChange(
+			userId,
+			reservation
 		);
 
 		return Response.json(reservation, {

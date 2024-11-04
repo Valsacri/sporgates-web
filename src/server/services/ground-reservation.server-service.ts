@@ -3,12 +3,14 @@ import { GroundReservationModel } from '../models/item/ground-reservation.model'
 import {
 	GroundReservationDtoType,
 	GroundReservationUpdateDtoType,
-} from '@/dtos/item/ground.dto';
+} from '@/dtos/item/ground/ground-reservation.dto';
 import {
 	GroundRerservationStatus,
 	GroundReservation,
-} from '@/types/item/ground.types';
+} from '@/types/item/ground/ground-reservation.types';
 import { formatDocument } from '../helpers/database.helper';
+import { TimeframeHelper } from '@/helpers/datetime/timeframe.helpers';
+import { uniqueRef } from '@/config/unique-ref.config';
 
 export class GroundReservationServerService {
 	static async getOne(id: string) {
@@ -17,11 +19,15 @@ export class GroundReservationServerService {
 		return formatDocument<GroundReservation>(reservation);
 	}
 
-	static async getAll(filters: {
-		business: string;
-		ground?: string;
-		status: GroundRerservationStatus;
-	}) {
+	static async getPage(
+		filters: {
+			business: string;
+			ground?: string;
+			status: GroundRerservationStatus;
+		},
+		page = 1,
+		limit = 10
+	) {
 		const query = {
 			business: filters.business,
 		} as FilterQuery<GroundReservation>;
@@ -35,26 +41,27 @@ export class GroundReservationServerService {
 
 		const reservations = await GroundReservationModel.find(query)
 			.sort({ createdAt: -1 })
-			.populate('ground');
+			.limit(limit)
+			.skip((page - 1) * limit)
+			.populate('ground')
+			.populate('user');
 
 		return formatDocument<GroundReservation[]>(reservations);
 	}
 
-	static async getPage(
-		page = 1,
-		limit = 10,
-		query: FilterQuery<GroundReservation> = {}
-	) {
-		const reservations = await GroundReservationModel.find(query, null, {
-			limit,
-			skip: (page - 1) * limit,
-		});
-		return formatDocument<GroundReservation[]>(reservations);
-	}
+	static async create(data: GroundReservationDtoType) {
+		const ref = uniqueRef();
 
-	static async create(data: GroundReservationDtoType, createdBy?: string) {
+		const totalPrice = TimeframeHelper.getPrice(
+			data.timeframe,
+			data.groundMinReservationTime,
+			data.groundPrice
+		);
+
 		const reservation = await GroundReservationModel.create({
-			createdBy,
+			ref,
+			totalPrice,
+
 			...data,
 		});
 		return formatDocument<GroundReservation>(reservation);

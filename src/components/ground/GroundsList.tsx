@@ -2,7 +2,7 @@ import Button from '../utils/Button';
 import GroundCard from './GroundCard';
 import GroundFormPopup from './manage/GroundFormPopup';
 import { GroundServerService } from '@/server/services/ground.server-service';
-import { Ground } from '@/types/item/ground.types';
+import { Ground } from '@/types/item/ground/ground.types';
 
 async function GroundsList() {
 	let grounds: Ground[];

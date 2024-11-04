@@ -8,6 +8,7 @@ import { SportClientService } from '@/client/services/sport.client-service';
 import { GeoFilters } from '@/components/explore/GeoFilters';
 import GroundCard from '@/components/ground/GroundCard';
 import Buttons from '@/components/profile/Buttons';
+import UserCard from '@/components/user/UserCard';
 import Button from '@/components/utils/Button';
 import Card from '@/components/utils/Card';
 import { Input } from '@/components/utils/form/Input';
@@ -31,7 +32,7 @@ function Page() {
 			sport: 'all',
 			city: 'all',
 			town: 'all',
-			type: 'grounds',
+			type: 'champs',
 			radius: 1,
 			geolocation: {
 				lat: 33.5731,
@@ -197,8 +198,16 @@ function Page() {
 					<div className='h-full flex justify-center items-center '>
 						<Loader className='size-20 mx-auto' />
 					</div>
+				) : selectedType === 'champs' ? (
+					<div className='grid grid-cols-1 xl:grid-cols-3 gap-5'>
+						<UserCard />
+						<UserCard />
+						<UserCard />
+						<UserCard />
+						<UserCard />
+					</div>
 				) : (
-					<div className='grid grid-cols-1 xl:grid-cols-2 gap-5'>
+					<div className='grid grid-cols-1 xl:grid-cols-3 gap-5'>
 						{results.map((ground) => (
 							<>
 								<GroundCard key={ground.id} ground={ground} />

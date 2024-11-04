@@ -1,4 +1,3 @@
-import HomeNavigation from '@/components/home/HomeNavigation';
 import ProfileNavigation from '@/components/profile/ProfileNavigation';
 import ProfileInfos from '@/components/profile/ProfileInfos';
 import { redirect } from 'next/navigation';
@@ -17,63 +16,57 @@ export default async function Layout({
 	if (!business) redirect('/not-found');
 
 	return (
-		<div className='flex gap-5'>
-			<div className='hidden lg:block w-1/4'>
-				<HomeNavigation />
-			</div>
+		<div className='w-full space-y-5'>
+			<ProfileInfos
+				type='business'
+				infos={{ ...business, avatar: business.logo }}
+			/>
 
-			<div className='w-full lg:w-4/5 space-y-5'>
-				<ProfileInfos
-					type='business'
-					infos={{ ...business, avatar: business.logo }}
-				/>
+			<ProfileNavigation
+				items={[
+					{
+						icon: 'gallery',
+						text: 'Gallery',
+						href: `/businesses/${businessId}/gallery`,
+					},
+					{
+						icon: 'location',
+						text: 'Grounds',
+						href: `/businesses/${businessId}/grounds`,
+						subItems: [
+							{
+								icon: 'document',
+								text: 'List',
+								href: `/businesses/${businessId}/grounds`,
+							},
+							{
+								icon: 'todo',
+								text: 'Reservations',
+								href: `/businesses/${businessId}/grounds/reservations`,
+							},
+						],
+					},
+					{
+						icon: 'two-user',
+						text: 'Clubs',
+						href: `/businesses/${businessId}/clubs`,
+						subItems: [
+							{
+								icon: 'document',
+								text: 'List',
+								href: `/businesses/${businessId}/clubs`,
+							},
+							{
+								icon: 'todo',
+								text: 'Subscriptions',
+								href: `/businesses/${businessId}/clubs/subscriptions`,
+							},
+						],
+					},
+				]}
+			/>
 
-				<ProfileNavigation
-					items={[
-						{
-							icon: 'gallery',
-							text: 'Gallery',
-							href: `/businesses/${businessId}/gallery`,
-						},
-						{
-							icon: 'location',
-							text: 'Grounds',
-							href: `/businesses/${businessId}/grounds`,
-							subItems: [
-								{
-									icon: 'document',
-									text: 'List',
-									href: `/businesses/${businessId}/grounds`,
-								},
-								{
-									icon: 'todo',
-									text: 'Reservations',
-									href: `/businesses/${businessId}/grounds/reservations`,
-								},
-							],
-						},
-						{
-							icon: 'two-user',
-							text: 'Clubs',
-							href: `/businesses/${businessId}/clubs`,
-							subItems: [
-								{
-									icon: 'document',
-									text: 'List',
-									href: `/businesses/${businessId}/clubs`,
-								},
-								{
-									icon: 'todo',
-									text: 'Subscriptions',
-									href: `/businesses/${businessId}/clubs/subscriptions`,
-								},
-							],
-						},
-					]}
-				/>
-
-				{children}
-			</div>
+			{children}
 		</div>
 	);
 }

@@ -9,7 +9,7 @@ interface Props {
 	params: { businessId: string };
 }
 
-export default function ReservationsPage({ params }: Props) {
+export default function Page({ params }: Props) {
 	const methods = useForm({ defaultValues: { ground: 'all', status: 'all' } });
 
 	return (

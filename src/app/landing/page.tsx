@@ -12,7 +12,7 @@ export default function Home() {
 			<section className="mt-16 bg-cover bg-center h-[calc(100vh-64px)] bg-[url('/images/hero.jpg')]">
 				<div className='w-full h-full p-5 flex items-center justify-center gap-20 bg-black bg-opacity-50'>
 					<div className='flex flex-col md:flex-row items-center md:items-end gap-20'>
-						<div className='rounded-lg'>
+						<div className='rounded-md'>
 							<h1 className='text-4xl md:text-6xl font-bold text-white mb-4'>
 								Connect with Athletes, <br /> Anytime, Anywhere
 							</h1>

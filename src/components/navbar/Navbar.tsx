@@ -52,7 +52,7 @@ function Navbar() {
 				<div className='flex gap-5'>
 					{user && (
 						<>
-							<div className='flex gap-3 py-3'>
+							{/* <div className='flex gap-3 py-3'>
 								<Link href='\'>
 									<Button
 										icon='home'
@@ -64,7 +64,7 @@ function Navbar() {
 								</Link>
 
 								<Button icon='menu' color='secondary'></Button>
-							</div>
+							</div> */}
 
 							<Input
 								name='dfa'
@@ -73,7 +73,7 @@ function Navbar() {
 								className='hidden lg:block py-3 w-96'
 							/>
 
-							<div className='flex gap-0 lg:gap-3'>
+							<div className='flex gap-0'>
 								<Button
 									icon='two-user'
 									className='h-full rounded-none'

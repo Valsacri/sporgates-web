@@ -31,7 +31,7 @@ export const Alert = ({ alert, onClick, className }: Props) => {
 	return (
 		<div
 			className={twMerge(
-				'fixed bottom-5 right-5 rounded-lg ml-5 px-5 py-3 text-white flex items-center gap-3 shadow-lg font-mono',
+				'fixed bottom-5 right-5 rounded-md ml-5 px-5 py-3 text-white flex items-center gap-3 shadow-lg font-mono',
 				className,
 				bgColor,
 				`${alert?.position}-5`,

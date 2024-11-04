@@ -10,7 +10,7 @@ interface Props {
 
 function GroundImages({ images }: Props) {
 	return (
-		<Card className='grid grid-cols-4 grid-rows-2 gap-2 h-96'>
+		<Card className='grid grid-cols-4 grid-rows-2 gap-1 h-[120px] lg:h-[350px] p-1'>
 			<GalleryImage
 				image={images[0]}
 				className={twMerge(
@@ -27,8 +27,8 @@ function GroundImages({ images }: Props) {
 			)}
 
 			{images.length > 2 && (
-				<div className='col-span-2 grid row-span-2 grid-rows-2 gap-2'>
-					<div className='grid grid-cols-2 gap-2'>
+				<div className='col-span-2 grid row-span-2 grid-rows-2 gap-1'>
+					<div className='grid grid-cols-2 gap-1'>
 						{(images.length === 3 || images.length === 4) && (
 							<GalleryImage image={images[1]} className='col-span-2' />
 						)}
@@ -40,7 +40,7 @@ function GroundImages({ images }: Props) {
 						)}
 					</div>
 
-					<div className='grid grid-cols-2 gap-2'>
+					<div className='grid grid-cols-2 gap-1'>
 						{images.length === 3 && (
 							<GalleryImage image={images[2]} className='col-span-2' />
 						)}

@@ -16,6 +16,7 @@ export const ItemDto = z.object({
 			sunday: z.array(TimeframeDto),
 		})
 		.optional(),
+	business: z.string().min(1, 'Business is required'),
 });
 
 export type ItemDtoType = z.infer<typeof ItemDto>;

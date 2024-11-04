@@ -1,7 +1,7 @@
 import {
 	GroundReservationUpdateDto,
 	GroundReservationUpdateDtoType,
-} from '@/dtos/item/ground.dto';
+} from '@/dtos/item/ground/ground.dto';
 import { setupDbConnection } from '@/server/config/mongodb.config';
 import { GroundReservationServerService } from '@/server/services/ground-reservation.server-service';
 

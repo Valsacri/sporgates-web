@@ -2,7 +2,7 @@
 
 import { Select, SelectOption } from '@/components/utils/form/Select';
 import Buttons, { ButtonItem } from '@/components/profile/Buttons';
-import { GroundRerservationStatus } from '@/types/item/ground.types';
+import { GroundRerservationStatus } from '@/types/item/ground/ground.types';
 import { useFormContext } from 'react-hook-form';
 import { useFetch } from '@/client/hooks/utils/useFetch';
 import { GroundClientService } from '@/client/services/ground.client-service';

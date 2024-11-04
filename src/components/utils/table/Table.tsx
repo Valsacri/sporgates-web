@@ -72,7 +72,7 @@ export const Table = <T,>({
 
 	return (
 		<div
-			className={twMerge('overflow-x-auto w-full h-full text-sm', className)}
+			className={twMerge('overflow-x-auto w-full h-full text-sm text-text-secondary-dark', className)}
 			style={{ height, maxHeight }}
 		>
 			<table className='w-full'>

@@ -14,14 +14,21 @@ function HomeNavigation() {
 	if (!user) return null;
 
 	return (
-		<Card className='p-0'>
+		<Card className='p-1'>
 			<List
 				items={[
+					// {
+					// 	prefix: <Icon name='home' />,
+					// 	item: 'Home',
+					// 	onClick() {
+					// 		router.push('/');
+					// 	},
+					// },
 					{
-						prefix: <Icon name='home' />,
-						item: 'Home',
+						prefix: <Icon name='discover' />,
+						item: 'Explore',
 						onClick() {
-							router.push('/');
+							router.push('/explore');
 						},
 					},
 					{
@@ -32,16 +39,9 @@ function HomeNavigation() {
 					// { prefix: <Icon name='saved' />, item: 'Saved posts' },
 					// { prefix: <Icon name='report' />, item: 'My page' },
 					// { prefix: <Icon name='bag' />, item: 'Market' },
-					{
-						prefix: <Icon name='discover' />,
-						item: 'Explore',
-						onClick() {
-							router.push('/explore');
-						},
-					},
 					// { prefix: <Icon name='calendar' />, item: 'Events' },
 					// { prefix: <Icon name='star' />, item: 'Offers' },
-					{ prefix: <Icon name='user-plus' />, item: 'Find friends' },
+					// { prefix: <Icon name='user-plus' />, item: 'Find friends' },
 					{
 						prefix: <Icon name='document' />,
 						item: 'Reservations',

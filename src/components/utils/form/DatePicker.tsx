@@ -7,8 +7,8 @@ import Dropdown from '../Dropdown';
 import { usePopup } from '@/client/hooks/utils/usePopup';
 import Calendar from 'react-calendar';
 import Card from '../Card';
-import { formatDate, parseDate } from '@/helpers/datetime.helpers';
 import { HiOutlineCalendar } from 'react-icons/hi2';
+import { DateHelper } from '@/helpers/datetime/date.helpers';
 
 export type DatePickerType =
 	| 'checkbox'
@@ -85,7 +85,7 @@ export const DatePicker = forwardRef<
 		const errorClassName = error && 'text-danger';
 
 		const handleChange = (date: Date) => {
-			const formattedDate = formatDate(date);
+			const formattedDate = DateHelper.format(date);
 			onChange?.(formattedDate);
 			setOpenDatePicker(false);
 		};
@@ -130,7 +130,7 @@ export const DatePicker = forwardRef<
 					<Card className='border'>
 						<Calendar
 							minDate={new Date()}
-							value={parseDate(value)}
+							value={DateHelper.parse(value)}
 							showFixedNumberOfWeeks
 							onChange={(date) => handleChange(date as Date)}
 						/>

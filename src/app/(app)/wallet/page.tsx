@@ -6,7 +6,8 @@ import Balance from '@/components/shared/Balance';
 import Card from '@/components/utils/Card';
 import { Table } from '@/components/utils/table/Table';
 import { Club, ClubSubscription } from '@/types/item/club.types';
-import { Ground, GroundReservation } from '@/types/item/ground.types';
+import { GroundReservation } from '@/types/item/ground/ground-reservation.types';
+import { Ground } from '@/types/item/ground/ground.types';
 import { Transaction, TransactionSubject } from '@/types/wallet.types';
 
 function Page() {

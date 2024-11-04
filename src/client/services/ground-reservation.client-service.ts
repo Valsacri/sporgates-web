@@ -1,13 +1,13 @@
 import {
 	GroundReservationDtoType,
 	GroundReservationUpdateDtoType,
-} from '@/dtos/item/ground.dto';
+} from '@/dtos/item/ground/ground-reservation.dto';
 import { Axios } from '../config/axios';
+import { Timeframe } from '@/types/general.types';
 import {
 	GroundRerservationStatus,
 	GroundReservation,
-} from '@/types/item/ground.types';
-import { Timeframe } from '@/types/general.types';
+} from '@/types/item/ground/ground-reservation.types';
 
 export class GroundReservationClientService {
 	static async getOne(id: string) {}

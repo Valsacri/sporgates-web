@@ -2,7 +2,7 @@
 
 import { Popup } from '@/components/utils/Popup';
 import { usePopup } from '@/client/hooks/utils/usePopup';
-import { Ground } from '@/types/item/ground.types';
+import { Ground } from '@/types/item/ground/ground.types';
 import GroundForm from './GroundForm';
 
 interface Props {

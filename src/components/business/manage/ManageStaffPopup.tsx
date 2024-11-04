@@ -23,7 +23,7 @@ function ManageStaffPopup({ children, businessId }: Props) {
 					onClose={toggleOpen}
 					className='w-full lg:w-1/2'
 				>
-					<StaffTable businessId={businessId} />
+					{/* <StaffTable businessId={businessId} /> */}
 				</Popup>
 			)}
 		</>

@@ -1,4 +1,4 @@
-import { GroundDto, GroundDtoType } from '@/dtos/item/ground.dto';
+import { GroundDto, GroundDtoType } from '@/dtos/item/ground/ground.dto';
 import { setupDbConnection } from '@/server/config/mongodb.config';
 import { HttpHelper } from '@/server/helpers/http.helper';
 import { GroundServerService } from '@/server/services/ground.server-service';

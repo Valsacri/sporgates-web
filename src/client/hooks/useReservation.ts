@@ -5,8 +5,7 @@ import { UserContext } from '../contexts/user.context';
 import { GroundReservationContext } from '../contexts/ground-reservation.context';
 import { GroundReservationClientService } from '../services/ground-reservation.client-service';
 import { Timeframe } from '@/types/general.types';
-import { GroundRerservationStatus } from '@/types/item/ground.types';
-import { WalletClientService } from '../services/wallet.client-service';
+import { GroundRerservationStatus } from '@/types/item/ground/ground-reservation.types';
 import { AlertContext } from '../contexts/alert.context';
 import { GENERIC_ERROR_MESSAGE } from '@/constants';
 
@@ -27,20 +26,27 @@ export const useReservation = () => {
 	const [loading, setLoading] = useState(false);
 
 	const handleReserve = async () => {
+		if (!selectedDate || !selectedTimeframe) {
+			return;
+		}
+
 		setLoading(true);
 
 		try {
-			const balance = await WalletClientService.getBalance();
+			// const balance = await WalletClientService.getBalance();
 
-			if (totalPrice > balance) {
+			if (false) {
+				// if (totalPrice > balance) {
 				toggleBalancePopup();
 			} else {
 				await GroundReservationClientService.create({
+					business: ground.business as string,
 					ground: ground.id,
 					date: selectedDate.getTime(),
 					timeframe: selectedTimeframe as Timeframe,
 					user: user!.id,
-					totalPrice,
+					groundMinReservationTime: ground.minReservationTime,
+					groundPrice: ground.price,
 					status: GroundRerservationStatus.PENDING,
 				});
 				setSelectedDate(new Date());

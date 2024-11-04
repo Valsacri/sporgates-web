@@ -28,6 +28,7 @@ function NavbarNavigation() {
 			closeOnClick
 			containerClassName='h-full'
 			triggerClassName='h-full'
+			className='w-60'
 			trigger={
 				<Button className='h-full rounded-none space-x-1'>
 					<Avatar
@@ -49,7 +50,7 @@ function NavbarNavigation() {
 						prefix: (
 							<Avatar
 								src='https://sporgates.com/upload/photos/d-avatar.jpg?cache=0'
-								size={30}
+								size={24}
 							/>
 						),
 						item: 'Oussama Khalfi',
@@ -59,7 +60,7 @@ function NavbarNavigation() {
 						prefix: (
 							<Avatar
 								src={business.logo || '/images/avatar-placeholder.png'}
-								size={30}
+								size={24}
 							/>
 						),
 						item: business.name,
@@ -77,23 +78,23 @@ function NavbarNavigation() {
 					// 	prefix: <Icon name='report' />,
 					// 	item: 'Boosted pages',
 					// },
-					null,
+					{ separator: true },
 					// {
 					// 	prefix: <Icon name='status' />,
 					// 	item: 'Advertising',
 					// },
-					{
-						prefix: <Icon name='dollar' />,
-						item: 'Wallet: 530 DH',
-						onClick: () => router.push('/wallet'),
-					},
-					null,
+					// {
+					// 	prefix: <Icon name='dollar' />,
+					// 	item: 'Wallet: 530 DH',
+					// 	onClick: () => router.push('/wallet'),
+					// },
+					// { separator: true },
 					// { prefix: <Icon name='edit' />, item: 'Edit' },
 					{
 						prefix: <Icon name='settings' />,
-						item: 'General setting',
+						item: 'General settings',
 					},
-					null,
+					{ separator: true },
 					// {
 					// 	prefix: <Icon name='menu' />,
 					// 	item: 'Admin area',
@@ -107,7 +108,7 @@ function NavbarNavigation() {
 							router.push('/sign-in');
 						},
 					},
-					null,
+					{ separator: true },
 					{
 						item: 'Night mode',
 						suffix: (

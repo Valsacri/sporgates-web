@@ -118,7 +118,9 @@ export class TimeframeHelper {
 		};
 	}
 
-	static toMinutes(timeframe: Timeframe) {
+	static toMinutes(timeframe: Timeframe | null) {
+		if (!timeframe) return 0;
+
 		const { start, end } = timeframe;
 
 		let duration =
@@ -131,12 +133,10 @@ export class TimeframeHelper {
 		return duration;
 	}
 
-	static toDuration(timeframe: Timeframe) {
+	static toDuration(timeframe: Timeframe | null) {
+		if (!timeframe) return { hours: 0, minutes: 0 };
 		const minutes = this.toMinutes(timeframe);
-		const hours = Math.floor(minutes / 60);
-		const remainingMinutes = minutes % 60;
-
-		return { hours, minutes: remainingMinutes } as Time;
+		return TimeHelper.fromMinutes(minutes);
 	}
 
 	static isNow(timeframe: Timeframe) {
@@ -145,5 +145,13 @@ export class TimeframeHelper {
 		const minutes = now.getMinutes();
 
 		return this.includesTime(timeframe, { hours, minutes });
+	}
+
+	static getPrice(
+		timeframe: Timeframe | null,
+		minReservationTime: number,
+		price: number
+	) {
+		return (this.toMinutes(timeframe) / minReservationTime) * price;
 	}
 }

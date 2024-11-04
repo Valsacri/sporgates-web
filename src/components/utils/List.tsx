@@ -2,9 +2,12 @@
 
 import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
+import Separator from './Separator';
 
 export interface ListItem {
-	item: React.ReactNode;
+	item?: React.ReactNode;
+	title?: string;
+	separator?: boolean;
 	prefix?: React.ReactNode;
 	suffix?: React.ReactNode;
 	className?: string;
@@ -14,7 +17,7 @@ export interface ListItem {
 }
 
 interface Props {
-	items: (ListItem | null)[];
+	items: ListItem[];
 	className?: string;
 	itemClassName?: string;
 }
@@ -28,7 +31,7 @@ function List({ items, className, itemClassName }: Props) {
 	return (
 		<div className={twMerge(className)}>
 			{items.map((item, i) => {
-				const Component = item?.href ? Link : 'div';
+				const Component = item.href ? Link : 'div';
 
 				return (
 					<Component
@@ -36,28 +39,31 @@ function List({ items, className, itemClassName }: Props) {
 						aria-disabled
 						key={i}
 						className={twMerge(
-							'px-5 block',
-							item && 'hover:bg-secondary cursor-pointer',
-							i === 0 && 'rounded-t-xl',
-							i === items.length - 1 && 'rounded-b-xl',
+							'w-full px-3 block',
+							item.item && 'hover:bg-secondary cursor-pointer',
+							'rounded-md',
 							itemClassName,
-							item?.className
+							item.className
 						)}
 						onClick={(e) => handleClick(e, item?.onClick)}
 					>
-						{item?.item ? (
+						{item.item ? (
 							<div
-								className={twMerge('flex items-center justify-between py-4')}
+								className={twMerge(
+									'w-full flex items-center justify-between py-3'
+								)}
 							>
-								<div className='flex items-center gap-3'>
+								<div className='w-full flex items-center gap-3'>
 									{item.prefix}
 									{item.item}
 								</div>
 								{item.suffix}
 							</div>
-						) : (
-							<hr />
-						)}
+						) : item.separator ? (
+							<Separator />
+						) : item.title ? (
+							<span className='text-xs font-medium text-text-secondary uppercase'>{item.title}</span>
+						) : null}
 					</Component>
 				);
 			})}

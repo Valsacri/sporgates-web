@@ -21,7 +21,7 @@ function Card({
 }: Props) {
 	return (
 		<div
-			className={twMerge('bg-white rounded-xl p-5', className)}
+			className={twMerge('bg-white rounded-md p-4', className)}
 			style={style}
 			onClick={onClick}
 		>

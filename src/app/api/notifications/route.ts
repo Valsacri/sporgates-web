@@ -1,6 +1,6 @@
 import { setupDbConnection } from '@/server/config/mongodb.config';
 import { HttpHelper } from '@/server/helpers/http.helper';
-import { NotificationServerService } from '@/server/services/alert.server-service';
+import { NotificationServerService } from '@/server/services/notification/notification.server-service';
 import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {

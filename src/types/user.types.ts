@@ -2,6 +2,7 @@ import { DecodedIdToken } from 'firebase-admin/auth';
 import { Socials } from './general.types';
 import { Address } from './geo.types';
 import { Record } from './utils.types';
+import { Sport } from './sport.types';
 
 export enum Role {
 	SUPER_ADMIN = 'super_admin',
@@ -21,11 +22,13 @@ export interface User extends Record {
 	lastName: string;
 	email: string;
 	roles: Role[];
+	sports?: string[] | Sport[];
 
-	phoneNumber?: string;
 	avatar?: string;
 	cover?: string;
 	bio?: string;
+
+	phoneNumber?: string;
 	birthday?: string;
 	address?: Address;
 	socials?: Socials;

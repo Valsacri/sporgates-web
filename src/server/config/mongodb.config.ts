@@ -11,6 +11,7 @@ import { CityModel } from '../models/geo/city.model';
 import { TownModel } from '../models/geo/town.model';
 import { SportModel } from '../models/sport.model';
 import { BusinessModel } from '../models/business.model';
+import { NotificationModel } from '../models/notification.model';
 
 UserModel;
 ClubModel;
@@ -22,6 +23,7 @@ CityModel;
 TownModel;
 SportModel;
 BusinessModel;
+NotificationModel;
 
 // Declaring a variable to store the cached database connection
 let cachedConnection: Connection | null = null;

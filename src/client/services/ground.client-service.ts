@@ -1,6 +1,9 @@
-import { GroundDtoType, GroundUpdateDtoType } from '@/dtos/item/ground.dto';
+import {
+	GroundDtoType,
+	GroundUpdateDtoType,
+} from '@/dtos/item/ground/ground.dto';
 import { Axios } from '../config/axios';
-import { Ground } from '@/types/item/ground.types';
+import { Ground } from '@/types/item/ground/ground.types';
 
 export class GroundClientService {
 	static async getOne(id: string) {}

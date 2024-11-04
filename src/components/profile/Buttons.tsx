@@ -33,7 +33,7 @@ function Buttons({
 	className,
 	stretch,
 	color = 'transparent',
-	selectedColor = 'primary',
+	selectedColor = 'secondary',
 }: Props) {
 	const router = useRouter();
 
@@ -48,7 +48,7 @@ function Buttons({
 	return (
 		<div
 			className={twMerge(
-				'flex gap-3',
+				'flex gap-1',
 				stretch && 'justify-between',
 				className
 			)}
@@ -64,7 +64,7 @@ function Buttons({
 							key={index}
 							icon={item.icon as CocoIcon}
 							color={item.selected ? selectedColor : item.color || color}
-							variant={item.selected ? 'outlined' : 'filled'}
+							variant='filled'
 							className={twMerge(
 								'w-full rounded-full',
 								buttonClassName,

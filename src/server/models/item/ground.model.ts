@@ -1,4 +1,4 @@
-import { Ground } from '@/types/item/ground.types';
+import { Ground } from '@/types/item/ground/ground.types';
 import mongoose, { Model, Schema } from 'mongoose';
 import { RecordSchema } from '../utils.model';
 import { SubscriptionSchema } from './club.model';

@@ -1,5 +1,5 @@
 import { Time, Timeframe } from '@/types/general.types';
-import { Ground } from '@/types/item/ground.types';
+import { Ground } from '@/types/item/ground/ground.types';
 import { createContext } from 'react';
 
 export type GroundReservationContextType = {
@@ -17,8 +17,6 @@ export type GroundReservationContextType = {
 
 	handleDateChange: (date: Date) => void;
 	handleTimeframeChange: (timeframe: Timeframe) => void;
-
-	getTileClassName: (data: any) => any;
 
 	duration: Time;
 
@@ -44,7 +42,6 @@ export const GroundReservationContext =
 		setSelectedTimeframe: () => {},
 		handleDateChange: () => {},
 		handleTimeframeChange: () => {},
-		getTileClassName: () => {},
 		duration: { hours: 0, minutes: 0 },
 		reservedTimeframes: [],
 		loadingReservedTimeframes: false,

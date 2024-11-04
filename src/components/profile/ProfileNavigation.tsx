@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import Card from '../utils/Card';
 import Buttons, { ButtonItem } from './Buttons';
+import Separator from '../utils/Separator';
 
 interface Props {
 	items: (ButtonItem & { subItems?: ButtonItem[] })[];
@@ -24,12 +25,12 @@ function ProfileNavigation({ items }: Props) {
 		})) || [];
 
 	return (
-		<Card className='overflow-x-auto p-3'>
-			<Buttons stretch items={_items} />
+		<Card className='overflow-x-auto p-1'>
+			<Buttons stretch items={_items} buttonClassName='rounded-md' />
 
-			{subItems.length > 0 && <hr className='my-3' />}
+			{subItems.length > 0 && <Separator />}
 
-			<Buttons stretch items={subItems} />
+			<Buttons stretch items={subItems} buttonClassName='rounded-md' />
 		</Card>
 	);
 }

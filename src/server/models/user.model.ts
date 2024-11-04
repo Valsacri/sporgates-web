@@ -7,16 +7,18 @@ import { ModelName } from './model-name.enum';
 export const UserSchema = new Schema<User>({
 	...RecordSchema,
 	uid: { type: String, required: true, unique: true },
+	username: { type: String, unique: true },
 	firstName: { type: String, required: true },
 	lastName: { type: String, required: true },
 	email: { type: String, required: true, unique: true },
 	roles: { type: [String], enum: Object.values(Role) },
+	sports: [{ type: Schema.Types.ObjectId, ref: ModelName.SPORT }],
 
-	username: { type: String, unique: true },
-	phoneNumber: { type: String },
 	avatar: { type: String },
 	cover: { type: String },
 	bio: { type: String, default: '' },
+
+	phoneNumber: { type: String },
 	birthday: { type: String },
 	address: { type: AddressSchema },
 	socials: { type: SocialsSchema },

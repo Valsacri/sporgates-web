@@ -29,6 +29,10 @@ const replaceObjectIdsWithStrings = (obj: any) => {
 	for (const key in obj) {
 		if (mongoose.isValidObjectId(obj[key]?.toString())) {
 			obj[key] = obj[key].toString(); // Convert ObjectId to string
+			if (key === '_id') {
+				obj.id = obj[key]; // Convert _id to id
+				delete obj._id;
+			}
 		} else if (Array.isArray(obj[key])) {
 			// If it's an array, recursively apply the function to each item
 			obj[key] = obj[key].map((item: any) => replaceObjectIdsWithStrings(item));

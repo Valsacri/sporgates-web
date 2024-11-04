@@ -1,12 +1,11 @@
 import GroundImages from '@/components/ground/details/GroundImages';
 import GroundInfo from '@/components/ground/details/GroundInfo';
-import GroundPricing from '@/components/ground/details/GroundPricing';
 import GroundAddress from '@/components/ground/details/GroundAddress';
 import GroundReviews from '@/components/ground/details/GroundReviews';
 import GroundOpeningHours from '@/components/ground/details/GroundOpeningHours';
 import GroundReservation from '@/components/ground/details/GroundReservation';
 import { GroundServerService } from '@/server/services/ground.server-service';
-import { Ground } from '@/types/item/ground.types';
+import { Ground } from '@/types/item/ground/ground.types';
 import { Review } from '@/types/general.types';
 import GroundFormPopup from '@/components/ground/manage/GroundFormPopup';
 import Button from '@/components/utils/Button';
@@ -34,15 +33,15 @@ async function GroundDetails({ params: { id } }: Props) {
 	}
 
 	return (
-		<>
+		<div className='space-y-3'>
 			<GroundImages images={ground.images} />
 
-			<div className='grid grid-cols-1 lg:grid-cols-3 gap-0 lg:gap-5'>
-				<div className='space-y-5 col-span-2 pt-5'>
+			<div className='grid grid-cols-1 lg:grid-cols-3 gap-0 lg:gap-3'>
+				<div className='space-y-3 col-span-2'>
 					<GroundInfo ground={ground} />
-					<GroundPricing subscriptions={ground.subscriptions} />
+					{/* <GroundPricing subscriptions={ground.subscriptions} /> */}
 					<GroundAddress address={ground.address} />
-					<div className='grid grid-cols-1 lg:grid-cols-2 gap-5'>
+					<div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
 						<GroundReviews
 							reviews={ground.reviews as Review[]}
 							avgRating={ground.avgRating}
@@ -62,7 +61,7 @@ async function GroundDetails({ params: { id } }: Props) {
 					iconClassName='!size-8'
 				></Button>
 			</GroundFormPopup>
-		</>
+		</div>
 	);
 }
 

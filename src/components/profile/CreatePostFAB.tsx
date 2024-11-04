@@ -98,7 +98,7 @@ function CreatePostFab() {
 						onDragOver={handleDragOver}
 						onDragLeave={handleDragLeave}
 						className={twMerge(
-							'w-full h-full flex flex-col justify-center items-center border-2 border-dotted rounded-lg p-10 transition-all duration-200',
+							'w-full h-full flex flex-col justify-center items-center border-2 border-dotted rounded-md p-10 transition-all duration-200',
 							isDragging ? 'bg-success-light' : 'border-gray-300'
 						)}
 					>

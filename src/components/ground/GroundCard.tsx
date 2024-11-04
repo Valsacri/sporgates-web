@@ -1,25 +1,15 @@
 import Card from '../utils/Card';
-import Icon from '../utils/Icon';
+import Icon, { SPORTS_ICONS } from '../utils/Icon';
 import { twMerge } from 'tailwind-merge';
 import Link from 'next/link';
 import Rating from '../shared/Rating';
-import { Ground } from '@/types/item/ground.types';
+import { Ground } from '@/types/item/ground/ground.types';
 import { City, Town } from '@/types/geo.types';
 import { Sport } from '@/types/sport.types';
-import {
-	IoBasketballOutline, IoFootballOutline,
-	IoTennisballOutline
-} from 'react-icons/io5';
 
 interface Props {
 	ground: Ground;
 }
-
-const SPORTS_ICONS = {
-	football: <IoFootballOutline className='size-5' />,
-	basketball: <IoBasketballOutline className='size-5' />,
-	tennis: <IoTennisballOutline className='size-5' />,
-} as any;
 
 function GroundCard({ ground }: Props) {
 	return (

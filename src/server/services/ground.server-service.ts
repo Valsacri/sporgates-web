@@ -1,7 +1,10 @@
 import mongoose, { FilterQuery } from 'mongoose';
 import { GroundModel } from '../models/item/ground.model';
-import { GroundDtoType, GroundUpdateDtoType } from '@/dtos/item/ground.dto';
-import { Ground } from '@/types/item/ground.types';
+import {
+	GroundDtoType,
+	GroundUpdateDtoType,
+} from '@/dtos/item/ground/ground.dto';
+import { Ground } from '@/types/item/ground/ground.types';
 import {
 	formatDocument,
 	getGeoLocationQuery,

@@ -1,6 +1,6 @@
 import { formatDocument } from '@/server/helpers/database.helper';
 import { Notification } from '@/types/notification.types';
-import { NotificationModel } from '../models/geo/notification.model';
+import { NotificationModel } from '../../models/notification.model';
 import { Create } from '@/types/utils.types';
 
 export class NotificationServerService {
@@ -16,19 +16,22 @@ export class NotificationServerService {
 		const notifications = await NotificationModel.find({ user: userId }, null, {
 			limit,
 			skip: (page - 1) * limit,
-		})
-			.populate('payload.new_ground_reservation.groundReservation')
-			.populate('payload.reservation_status_change.groundReservation')
-			.sort({
-				createdAt: -1,
-			});
+		}).sort({
+			createdAt: -1,
+		});
 
 		return formatDocument<Notification[]>(notifications);
 	}
 
-	static async create(data: Create<Notification>) {
-		const notification = await NotificationModel.create(data);
-		if (!notification) return null;
-		return formatDocument<Notification>(notification);
+	static async create(notification: Create<Notification>) {
+		const created = await NotificationModel.create(notification);
+		if (!created) return null;
+		return formatDocument<Notification>(created);
+	}
+
+	static async createAll(notifications: Create<Notification>[]) {
+		const created = await NotificationModel.insertMany(notifications);
+		if (created.length === 0) return [];
+		return formatDocument<Notification[]>(created);
 	}
 }
