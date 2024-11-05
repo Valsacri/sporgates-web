@@ -15,7 +15,8 @@ export class GroundReservationClientService {
 	static async getPage() {}
 
 	static async getAll(filters: {
-		business: string;
+		business?: string;
+		user?: string;
 		ground?: string;
 		status?: GroundRerservationStatus | null;
 	}) {

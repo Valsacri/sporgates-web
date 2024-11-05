@@ -6,6 +6,7 @@ interface Props {
 	description?: string;
 	children?: React.ReactNode;
 	className?: string;
+	bodyClassName?: string;
 	style?: React.CSSProperties;
 	onClick?: () => any;
 }
@@ -16,6 +17,7 @@ function Card({
 	titleSuffix,
 	description,
 	className,
+	bodyClassName,
 	style,
 	onClick,
 }: Props) {
@@ -25,18 +27,21 @@ function Card({
 			style={style}
 			onClick={onClick}
 		>
-			{(title || titleSuffix) && (
-				<div className='flex justify-between items-center'>
-					<h2>{title}</h2>
-					{titleSuffix}
+			{(title || titleSuffix || description) && (
+				<div className='space-y-1 mb-3'>
+					{(title || titleSuffix) && (
+						<div className='flex justify-between items-center'>
+							<h2>{title}</h2>
+							{titleSuffix}
+						</div>
+					)}
+					{description && (
+						<p className='text-sm text-text-secondary-dark'>{description}</p>
+					)}
 				</div>
 			)}
 
-			{description && (
-				<p className='text-text-secondary mt-2 mb-3'>{description}</p>
-			)}
-
-			{children}
+			<div className={bodyClassName}>{children}</div>
 		</div>
 	);
 }

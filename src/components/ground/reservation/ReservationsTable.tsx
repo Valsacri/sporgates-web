@@ -9,11 +9,6 @@ import {
 import { TimeHelper } from '@/helpers/datetime/time.helpers';
 import { TimeframeHelper } from '@/helpers/datetime/timeframe.helpers';
 import Loader from '@/components/utils/Loader';
-import { twMerge } from 'tailwind-merge';
-import { HiCheck, HiMiniNoSymbol } from 'react-icons/hi2';
-import { HiX } from 'react-icons/hi';
-import { LuClock } from 'react-icons/lu';
-import { TbPlayFootball } from 'react-icons/tb';
 import { useContext, useState } from 'react';
 import { GroundReservationClientService } from '@/client/services/ground-reservation.client-service';
 import { useFetch } from '@/client/hooks/utils/useFetch';
@@ -22,45 +17,20 @@ import { AlertContext } from '@/client/contexts/alert.context';
 import { Ground } from '@/types/item/ground/ground.types';
 import { User } from '@/types/user.types';
 import Link from 'next/link';
+import Status from '@/components/utils/Status';
+import { Business } from '@/types/business.types';
 
 interface Props {
-	businessId: string;
+	userId?: string;
+	businessId?: string;
+	reload: boolean;
 }
 
-const statusMap = {
-	ongoing: {
-		textClassName: 'text-info',
-		bgClassName: 'bg-info',
-		text: 'Ongoing',
-		icon: <TbPlayFootball className='size-5' />,
-	},
-	[GroundRerservationStatus.PENDING]: {
-		textClassName: 'text-text-secondary',
-		bgClassName: 'bg-text-secondary',
-		text: 'Pending',
-		icon: <LuClock className='size-4' />,
-	},
-	[GroundRerservationStatus.ACCEPTED]: {
-		textClassName: 'text-success',
-		bgClassName: 'bg-success',
-		text: 'Accepted',
-		icon: <HiCheck className='size-5' />,
-	},
-	[GroundRerservationStatus.REJECTED]: {
-		textClassName: 'text-warning',
-		bgClassName: 'bg-warning',
-		text: 'Rejected',
-		icon: <HiX className='size-5' />,
-	},
-	[GroundRerservationStatus.CANCELLED]: {
-		textClassName: 'text-danger',
-		bgClassName: 'bg-danger',
-		text: 'Cancelled',
-		icon: <HiMiniNoSymbol className='size-4' />,
-	},
-} as any;
-
-export default function ReservationsTable({ businessId }: Props) {
+export default function ReservationsTable({
+	userId,
+	businessId,
+	reload,
+}: Props) {
 	const showAlert = useContext(AlertContext);
 
 	const { watch } = useFormContext();
@@ -80,6 +50,7 @@ export default function ReservationsTable({ businessId }: Props) {
 			async fetch() {
 				try {
 					return await GroundReservationClientService.getAll({
+						user: userId,
 						business: businessId,
 						ground: selectedGround === 'all' ? undefined : selectedGround,
 						status: selectedStatus === 'all' ? undefined : selectedStatus,
@@ -94,7 +65,7 @@ export default function ReservationsTable({ businessId }: Props) {
 				}
 			},
 		},
-		[selectedGround, selectedStatus]
+		[selectedGround, selectedStatus, reload]
 	);
 
 	const handleUpdateStatus = async (
@@ -129,42 +100,37 @@ export default function ReservationsTable({ businessId }: Props) {
 					),
 					display: 'Ground',
 				},
-				{
-					field: (row) => (
-						<Link
-							href={`/users/${(row.user as User).id}`}
-							className='underline'
-						>
-							{(row.user as User).firstName} {(row.user as User).lastName}
-						</Link>
-					),
-					display: 'User',
-				},
+				businessId
+					? {
+							field: (row) => (
+								<Link
+									href={`/users/${(row.user as User).id}`}
+									className='underline'
+								>
+									{(row.user as User).firstName} {(row.user as User).lastName}
+								</Link>
+							),
+							display: 'User',
+					  }
+					: {
+							field: (row) => (
+								<Link
+									href={`/businesses/${(row.business as Business).id}`}
+									className='underline'
+								>
+									{(row.business as Business).name}
+								</Link>
+							),
+							display: 'Business',
+					  },
 				{
 					field: (row) => {
 						const isOngoing =
 							row.status === GroundRerservationStatus.ACCEPTED &&
 							TimeframeHelper.isNow(row.timeframe);
 						const status = isOngoing ? 'ongoing' : row.status;
-						const statusData = statusMap[status];
 
-						return (
-							<div
-								className={twMerge(
-									'capitalize flex items-center gap-1.5',
-									statusMap[status].textClassName
-								)}
-							>
-								{/* {statusMap[status].icon}  */}
-								<div
-									className={twMerge(
-										'rounded-full size-2',
-										statusData.bgClassName
-									)}
-								/>
-								{statusData.text}
-							</div>
-						);
+						return <Status status={status} />;
 					},
 					display: 'Status',
 				},
@@ -192,7 +158,7 @@ export default function ReservationsTable({ businessId }: Props) {
 			data={reservations}
 			actions={(row, index) => {
 				if (loadingActionIndex === index) {
-					return [{ name: <Loader /> }];
+					return [{ name: <Loader className='ml-auto' /> }];
 				}
 
 				const actions: TableAction<GroundReservation>[] = [];

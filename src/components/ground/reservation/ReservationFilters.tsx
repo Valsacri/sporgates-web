@@ -1,16 +1,16 @@
 'use client';
 
-import { Select, SelectOption } from '@/components/utils/form/Select';
+import { Select } from '@/components/utils/form/Select';
 import Buttons, { ButtonItem } from '@/components/profile/Buttons';
-import { GroundRerservationStatus } from '@/types/item/ground/ground.types';
 import { useFormContext } from 'react-hook-form';
 import { useFetch } from '@/client/hooks/utils/useFetch';
 import { GroundClientService } from '@/client/services/ground.client-service';
 import { AlertContext } from '@/client/contexts/alert.context';
 import { useContext } from 'react';
+import { GroundRerservationStatus } from '@/types/item/ground/ground-reservation.types';
 
 interface Props {
-	businessId: string;
+	businessId?: string;
 }
 
 export default function ReservationFilters({ businessId }: Props) {
@@ -23,6 +23,8 @@ export default function ReservationFilters({ businessId }: Props) {
 	const { data: groundOptions } = useFetch([], {
 		async fetch() {
 			try {
+				if (!businessId) return [];
+
 				const grounds = await GroundClientService.getPage({
 					business: businessId,
 				});
@@ -40,19 +42,21 @@ export default function ReservationFilters({ businessId }: Props) {
 
 	return (
 		<>
-			<Select
-				{...register('ground')}
-				value={selectedGround}
-				onChange={(value) => setValue('ground', value)}
-				placeholder='Select a ground'
-				options={groundOptions}
-			/>
+			{businessId && (
+				<Select
+					{...register('ground')}
+					value={selectedGround}
+					onChange={(value) => setValue('ground', value)}
+					placeholder='Select a ground'
+					options={groundOptions}
+				/>
+			)}
 			<Buttons
-				className='overflow-x-auto space-y-5'
+				className='overflow-x-auto'
 				color='secondary'
 				items={(
 					[
-						'all',
+						// 'all',
 						'pending',
 						'accepted',
 						'rejected',

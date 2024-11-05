@@ -91,8 +91,9 @@ function NavbarNavigation() {
 					// { separator: true },
 					// { prefix: <Icon name='edit' />, item: 'Edit' },
 					{
-						prefix: <Icon name='settings' />,
-						item: 'General settings',
+						prefix: <Icon name='settings2' />,
+						item: 'Settings',
+						href: '/settings',
 					},
 					{ separator: true },
 					// {

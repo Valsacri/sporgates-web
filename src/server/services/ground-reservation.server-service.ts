@@ -21,7 +21,8 @@ export class GroundReservationServerService {
 
 	static async getPage(
 		filters: {
-			business: string;
+			business?: string;
+			user?: string;
 			ground?: string;
 			status: GroundRerservationStatus;
 		},
@@ -29,9 +30,14 @@ export class GroundReservationServerService {
 		limit = 10
 	) {
 		const query = {
-			business: filters.business,
 		} as FilterQuery<GroundReservation>;
 
+		if (filters.business) {
+			query.business = filters.business;
+		}
+		if (filters.user) {
+			query.user = filters.user;
+		}
 		if (filters.ground) {
 			query.ground = filters.ground;
 		}
@@ -44,6 +50,7 @@ export class GroundReservationServerService {
 			.limit(limit)
 			.skip((page - 1) * limit)
 			.populate('ground')
+			.populate('business')
 			.populate('user');
 
 		return formatDocument<GroundReservation[]>(reservations);

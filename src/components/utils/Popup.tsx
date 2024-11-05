@@ -80,13 +80,14 @@ export const Popup = ({
 				>
 					<div className='flex justify-between mb-5'>
 						<div className='space-y-1'>
-							<div className='h3'>{title}</div>
+							<h2>{title}</h2>
 							{description && (
 								<p className='text-sm mb-3 text-text-secondary-dark'>
 									{description}
 								</p>
 							)}
 						</div>
+
 						<div className='flex gap-3'>
 							{topRightSection}
 							{showCloseButton && (

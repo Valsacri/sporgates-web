@@ -1,31 +1,18 @@
-import FeedGreetings from '@/components/feed/FeedGreetings';
-import FeedMetrics from '@/components/feed/FeedMetrics';
-import CreatePost from '@/components/feed/post/CreatePost';
-import FeedFriendsSuggestions from '@/components/feed/post/FeedFriendsSuggestions';
-import PostFilters from '@/components/feed/post/PostFilters';
-import PostsFeed from '@/components/feed/post/PostsFeed';
-import Statuses from '@/components/feed/status/Statuses';
 import SettingsNavigation from '@/components/settings/SettingsNavigation';
+import Card from '@/components/utils/Card';
 
-export default function Settings() {
+interface Props {
+	children: React.ReactNode;
+}
+
+export default function Settings({ children }: Props) {
 	return (
 		<div className='flex gap-5'>
-			<div className='hidden lg:block w-1/4'>
+			<div className='hidden lg:block w-1/5'>
 				<SettingsNavigation />
 			</div>
 
-			<div className='w-full lg:w-1/2 space-y-5'>
-				<Statuses />
-				<CreatePost />
-				<FeedGreetings />
-				{/* <PostFilters /> */}
-				<PostsFeed />
-			</div>
-
-			<div className='hidden lg:block w-1/4 space-y-5'>
-				<FeedMetrics />
-				<FeedFriendsSuggestions />
-			</div>
+			<Card className='w-full lg:w-4/5'>{children}</Card>
 		</div>
 	);
 }

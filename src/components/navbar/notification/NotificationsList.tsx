@@ -18,9 +18,9 @@ function NotificationsList() {
 
 	return (
 		<Card className='p-0 w-[350px]'>
-			<h4 className='px-5 py-2'>Notifications</h4>
+			<h4 className='px-5 pt-2'>Notifications</h4>
 
-			{(loading || notifications.length > 0) && <hr className='mb-1' />}
+			{(loading || notifications.length > 0) && <hr />}
 
 			{loading ? (
 				<div className='flex justify-center p-5'>
@@ -28,6 +28,7 @@ function NotificationsList() {
 				</div>
 			) : (
 				<List
+					className='h-96 overflow-y-autox'
 					items={notifications.map((notification) => ({
 						item: (
 							<div className='w-full flex justify-between gap-3'>

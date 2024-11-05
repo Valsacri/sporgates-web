@@ -20,16 +20,12 @@ function HomeNavigation() {
 					// {
 					// 	prefix: <Icon name='home' />,
 					// 	item: 'Home',
-					// 	onClick() {
-					// 		router.push('/');
-					// 	},
+					// 	href: '/'
 					// },
 					{
 						prefix: <Icon name='discover' />,
 						item: 'Explore',
-						onClick() {
-							router.push('/explore');
-						},
+						href: '/explore',
 					},
 					{
 						prefix: <Icon name='gallery' />,
@@ -45,9 +41,7 @@ function HomeNavigation() {
 					{
 						prefix: <Icon name='document' />,
 						item: 'Reservations',
-						onClick() {
-							router.push('/reservations');
-						},
+						href: '/reservations',
 					},
 				]}
 			/>

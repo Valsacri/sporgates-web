@@ -57,11 +57,13 @@ function ProfileInfos({ type, infos }: Props) {
 					<Button icon='edit' color='white' className='rounded-full'>
 						Edit profile
 					</Button>
-					<ManageStaffPopup businessId={infos.id}>
-						<Button icon='two-user' color='white' className='rounded-full'>
-							Staff
-						</Button>
-					</ManageStaffPopup>
+					{type === 'business' && (
+						<ManageStaffPopup businessId={infos.id}>
+							<Button icon='two-user' color='white' className='rounded-full'>
+								Staff
+							</Button>
+						</ManageStaffPopup>
+					)}
 				</div>
 			</div>
 		</Card>

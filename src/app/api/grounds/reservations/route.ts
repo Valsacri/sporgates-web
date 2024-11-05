@@ -3,8 +3,6 @@ import {
 	GroundReservationDtoType,
 } from '@/dtos/item/ground/ground-reservation.dto';
 import { setupDbConnection } from '@/server/config/mongodb.config';
-import { HttpHelper } from '@/server/helpers/http.helper';
-import { NotificationServerService } from '@/server/services/notification/notification.server-service';
 import { GroundReservationServerService } from '@/server/services/ground-reservation.server-service';
 import { GroundRerservationStatus } from '@/types/item/ground/ground-reservation.types';
 import { NextRequest } from 'next/server';
@@ -15,10 +13,11 @@ export async function GET(req: NextRequest) {
 		await setupDbConnection();
 
 		const searchParams = req.nextUrl.searchParams;
-		const business = searchParams.get('business');
+		const business = searchParams.get('business') || undefined;
+		const user = searchParams.get('user') || undefined;
 
-		if (!business) {
-			return Response.json('Business is required', {
+		if (!business && !user) {
+			return Response.json('Business or user is required', {
 				status: 400,
 			});
 		}
@@ -28,6 +27,7 @@ export async function GET(req: NextRequest) {
 
 		const grounds = await GroundReservationServerService.getPage({
 			business,
+			user,
 			ground,
 			status: status as GroundRerservationStatus,
 		});
@@ -45,7 +45,6 @@ export async function POST(req: NextRequest) {
 	try {
 		await setupDbConnection();
 
-		const { userId } = HttpHelper.getContextAuthUser();
 		const data: GroundReservationDtoType = await req.json();
 
 		const validation = GroundReservationDto.safeParse(data);

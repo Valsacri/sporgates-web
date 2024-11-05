@@ -4,22 +4,29 @@ import { useForm, FormProvider } from 'react-hook-form';
 import Card from '@/components/utils/Card';
 import ReservationFilters from '@/components/ground/reservation/ReservationFilters';
 import ReservationsTable from '@/components/ground/reservation/ReservationsTable';
+import { useContext } from 'react';
+import { UserContext } from '@/client/contexts/user.context';
+import withAuth from '@/client/hocs/withAuth.hoc';
+import Button from '@/components/utils/Button';
+import { useToggler } from '@/client/hooks/utils/useToggler';
 
-interface Props {
-	params: { businessId: string };
-}
-
-export default function ReservationsPage({ params }: Props) {
+function ReservationsPage() {
+	const [user] = useContext(UserContext);
 	const methods = useForm({ defaultValues: { ground: 'all', status: 'all' } });
+	const [reload, toggleReload] = useToggler();
 
 	return (
-		<div className='space-y-5'>
-			<Card title='Reservations' className='space-y-5'>
-				<FormProvider {...methods}>
-					<ReservationFilters businessId={params.businessId} />
-					<ReservationsTable businessId={params.businessId} />
-				</FormProvider>
-			</Card>
-		</div>
+		<Card
+			title='Reservations'
+			titleSuffix={<Button icon='reload' onClick={toggleReload} />}
+			bodyClassName='space-y-3'
+		>
+			<FormProvider {...methods}>
+				<ReservationFilters />
+				<ReservationsTable userId={user!.id} reload={reload} />
+			</FormProvider>
+		</Card>
 	);
 }
+
+export default withAuth(ReservationsPage);

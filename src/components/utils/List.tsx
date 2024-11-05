@@ -14,6 +14,7 @@ export interface ListItem {
 	itemClassName?: string;
 	onClick?: () => any;
 	href?: string;
+	selected?: boolean;
 }
 
 interface Props {
@@ -29,7 +30,7 @@ function List({ items, className, itemClassName }: Props) {
 	};
 
 	return (
-		<div className={twMerge(className)}>
+		<div className={twMerge('space-y-1', className)}>
 			{items.map((item, i) => {
 				const Component = item.href ? Link : 'div';
 
@@ -39,9 +40,9 @@ function List({ items, className, itemClassName }: Props) {
 						aria-disabled
 						key={i}
 						className={twMerge(
-							'w-full px-3 block',
+							'w-full px-3 block rounded-md',
 							item.item && 'hover:bg-secondary cursor-pointer',
-							'rounded-md',
+							item.selected && 'bg-secondary',
 							itemClassName,
 							item.className
 						)}
@@ -62,7 +63,9 @@ function List({ items, className, itemClassName }: Props) {
 						) : item.separator ? (
 							<Separator />
 						) : item.title ? (
-							<span className='text-xs font-medium text-text-secondary uppercase'>{item.title}</span>
+							<span className='text-xs font-medium text-text-secondary uppercase'>
+								{item.title}
+							</span>
 						) : null}
 					</Component>
 				);

@@ -15,9 +15,7 @@ import Dropdown from '@/components/utils/Dropdown';
 import List from '@/components/utils/List';
 import Loader from '@/components/utils/Loader';
 import Link from 'next/link';
-import { twMerge } from 'tailwind-merge';
 import ConfirmationPopup from '@/components/shared/ConfirmationPopup';
-import { usePopup } from '@/client/hooks/utils/usePopup';
 
 interface Props {
 	businessId: string;
