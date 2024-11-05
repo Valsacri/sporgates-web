@@ -22,7 +22,11 @@ export async function POST(req: Request, res: Response) {
 			});
 		}
 
-		const user = await UserServerService.create({ ...body, uid });
+		const user = await UserServerService.create({
+			...body,
+			name: `${body.firstName} ${body.lastName}`,
+			uid,
+		});
 
 		await auth().setCustomUserClaims(uid, {
 			userId: user.id,

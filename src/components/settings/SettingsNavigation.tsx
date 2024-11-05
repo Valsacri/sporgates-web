@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Card from '../utils/Card';
 import Icon from '../utils/Icon';
 import List from '../utils/List';
@@ -11,37 +11,40 @@ function SettingsNavigation() {
 	const pathname = usePathname();
 	const [user] = useContext(UserContext);
 
-	if (!user) return null;
-
 	return (
 		<Card className='p-1'>
 			<List
+				disable={!user}
 				items={[
 					{
 						prefix: <Icon name='settings' />,
 						item: 'General',
 						href: '/settings/general',
-						selected: pathname === '/settings/general',
 					},
 					{
 						prefix: <Icon name='user-scan' />,
 						item: 'Profile',
 						href: '/settings/profile',
-						selected: pathname === '/settings/profile',
 					},
 					{
 						prefix: <Icon name='location' />,
-						item: 'Addresses',
-						href: '/settings/addresses',
-						selected: pathname === '/settings/addresses',
+						item: 'Address',
+						href: '/settings/address',
 					},
 					{
 						prefix: <Icon name='shield-check' />,
 						item: 'Security',
 						href: '/settings/security',
-						selected: pathname === '/settings/security',
 					},
-				]}
+					// {
+					// 	prefix: <Icon name='wallet' />,
+					// 	item: 'Wallet',
+					// 	// href: '/settings/wallet',
+					// },
+				].map((item) => ({
+					...item,
+					selected: pathname === item.href,
+				}))}
 			/>
 		</Card>
 	);

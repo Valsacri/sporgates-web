@@ -17,8 +17,8 @@ export interface Business extends Record {
 	name: string;
 	username: string;
 	description: string;
-	slogan: string;
-	logo: string;
+	bio: string;
+	avatar: string;
 	cover: string;
 	socials: Socials;
 

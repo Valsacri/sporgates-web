@@ -107,7 +107,7 @@ export default function ReservationsTable({
 									href={`/users/${(row.user as User).id}`}
 									className='underline'
 								>
-									{(row.user as User).firstName} {(row.user as User).lastName}
+									{(row.user as User).name}
 								</Link>
 							),
 							display: 'User',

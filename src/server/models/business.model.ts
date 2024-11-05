@@ -10,8 +10,8 @@ const BusinessSchema = new Schema<Business>({
 	name: { type: String, required: true },
 	username: { type: String, required: true, unique: true },
 	description: { type: String, required: true },
-	slogan: { type: String, required: true },
-	logo: { type: String, required: true },
+	bio: { type: String, required: true },
+	avatar: { type: String, required: true },
 	cover: { type: String, required: true },
 	socials: { type: SocialsSchema, required: true },
 

@@ -12,7 +12,7 @@ export async function GET(req: NextRequest, res: Response) {
 		const keywords = searchParams.get('keywords') || undefined;
 		const user = searchParams.get('user') || undefined;
 
-		const grounds = await BusinessServerService.getAll({
+		const grounds = await BusinessServerService.getPage({
 			keywords,
 			user,
 		});

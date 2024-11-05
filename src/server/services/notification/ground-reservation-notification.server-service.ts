@@ -49,7 +49,7 @@ export class GroundReservationNotificationServerService {
 			title: 'New ground reservation',
 			description: `${ground.name} has a new reservation #${reservation.ref} of ${duration} on ${date} at ${timeframe} for ${reservation.totalPrice}DH`,
 			url: `/businesses/${business.id}/grounds/reservations`,
-			image: business.logo,
+			image: business.avatar,
 			infos: [business.name],
 		}));
 
@@ -73,7 +73,7 @@ export class GroundReservationNotificationServerService {
 			title: `Ground reservation ${reservation.status}`,
 			description: `${ground?.name} reservation #${reservation.ref} of ${duration} on ${date} at ${timeframe} has been ${reservation.status}`,
 			url: `/businesses/${business?.id}/grounds/reservations`,
-			image: business!.logo,
+			image: business!.avatar,
 			infos: [business!.name],
 		});
 	}

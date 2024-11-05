@@ -43,7 +43,10 @@ export class UserServerService {
 		const query = {} as FilterQuery<User>;
 
 		if (filters.keywords) {
-			query.username = { $regex: filters.keywords, $options: 'i' };
+			query.$or = [
+				{ name: { $regex: filters.keywords, $options: 'i' } },
+				{ username: { $regex: filters.keywords, $options: 'i' } },
+			];
 		}
 		if (filters.sport) {
 			query.sports = filters.sport;
@@ -60,7 +63,7 @@ export class UserServerService {
 
 		const users = await UserModel.find(query)
 			.collation({ locale: 'en', strength: 1 })
-			.limit(10)
+			.limit(limit)
 			.skip((page - 1) * limit)
 			.populate('address.city')
 			.populate('address.town')

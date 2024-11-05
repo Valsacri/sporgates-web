@@ -36,9 +36,7 @@ function NavbarNavigation() {
 						size={30}
 					/>
 					<div className='hidden lg:flex items-center gap-1'>
-						<div>
-							{user?.firstName} {user?.lastName}
-						</div>
+						<div>{user?.name}</div>
 						<Icon name='arrow-bottom' />
 					</div>
 				</Button>
@@ -59,7 +57,7 @@ function NavbarNavigation() {
 					...businesses.map((business) => ({
 						prefix: (
 							<Avatar
-								src={business.logo || '/images/avatar-placeholder.png'}
+								src={business.avatar || '/images/avatar-placeholder.png'}
 								size={24}
 							/>
 						),

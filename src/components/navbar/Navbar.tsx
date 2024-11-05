@@ -11,6 +11,7 @@ import NavbarNavigation from './NavbarNavigation';
 import { useContext } from 'react';
 import { UserContext } from '@/client/contexts/user.context';
 import NotificationsList from './notification/NotificationsList';
+import Search from '../shared/Search';
 
 function Navbar() {
 	const [user] = useContext(UserContext);
@@ -66,12 +67,7 @@ function Navbar() {
 								<Button icon='menu' color='secondary'></Button>
 							</div> */}
 
-							<Input
-								name='dfa'
-								placeholder='Search for champs, grounds, clubs and more...'
-								suffix={<Icon name='search' />}
-								className='hidden lg:block py-3 w-96'
-							/>
+							<Search />
 
 							<div className='flex gap-0'>
 								<Button

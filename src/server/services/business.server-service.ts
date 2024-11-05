@@ -1,7 +1,5 @@
 import { FilterQuery } from 'mongoose';
-import {
-	formatDocument, valueOrEmptyObject
-} from '../helpers/database.helper';
+import { formatDocument, valueOrEmptyObject } from '../helpers/database.helper';
 import { Business } from '@/types/business.types';
 import { BusinessModel } from '../models/business.model';
 import { BusinessDtoType, BusinessUpdateDtoType } from '@/dtos/business.dto';
@@ -16,29 +14,27 @@ export class BusinessServerService {
 		return formatDocument<Business>(business);
 	}
 
-	static async getAll(filters: { keywords?: string; user?: string }) {
-		const businesses = await BusinessModel.find({
-			...valueOrEmptyObject(filters.keywords, {
-				name: { $regex: filters.keywords, $options: 'i' },
-			}),
-			...valueOrEmptyObject(filters.user, { staff: filters.user }),
-		})
-			.collation({ locale: 'en', strength: 1 })
-			.populate('address.city')
-			.populate('address.town');
-
-		return formatDocument<Business[]>(businesses);
-	}
-
 	static async getPage(
+		filters: { keywords?: string; user?: string },
 		page = 1,
-		limit = 10,
-		query: FilterQuery<Business> = {}
+		limit = 10
 	) {
-		const businesses = await BusinessModel.find(query, null, {
-			limit,
-			skip: (page - 1) * limit,
-		})
+		const query = {} as FilterQuery<Business>;
+
+		if (filters.keywords) {
+			query.$or = [
+				{ name: { $regex: filters.keywords, $options: 'i' } },
+				{ username: { $regex: filters.keywords, $options: 'i' } },
+			];
+		}
+		if (filters.user) {
+			query.staff = filters.user;
+		}
+
+		const businesses = await BusinessModel.find(query)
+			.collation({ locale: 'en', strength: 1 })
+			.limit(limit)
+			.skip((page - 1) * limit)
 			.populate('address.city')
 			.populate('address.town');
 

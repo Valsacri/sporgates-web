@@ -17,10 +17,7 @@ export default async function Layout({
 
 	return (
 		<div className='w-full space-y-5'>
-			<ProfileInfos
-				type='business'
-				infos={{ ...business, avatar: business.logo }}
-			/>
+			<ProfileInfos type='business' infos={business} />
 
 			<ProfileNavigation
 				items={[

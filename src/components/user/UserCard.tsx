@@ -33,7 +33,7 @@ function UserCard({ user }: Props) {
 
 				<div className='text-center mt-3 px-5'>
 					<h2>
-						{user.firstName} {user.lastName}
+						{user.name}
 					</h2>
 					<span className='text-sm text-text-secondary'>@{user.username}</span>
 					<p className='text-sm mt-2 text-text-secondary-dark'>{user.bio}</p>

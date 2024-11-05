@@ -18,10 +18,7 @@ export default async function Layout({ children, params: { userId } }: Props) {
 
 	return (
 		<div className='w-full space-y-5'>
-			<ProfileInfos
-				type='user'
-				infos={{ ...user, name: `${user.firstName} ${user.lastName}` }}
-			/>
+			<ProfileInfos type='user' infos={user} />
 
 			<ProfileNavigation
 				items={[

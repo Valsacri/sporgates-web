@@ -17,12 +17,15 @@ export default function RootLayout({
 	return (
 		<>
 			<Navbar />
-			<div className='2xl:container mx-auto flex gap-3 mt-16 px-2 py-3 lg:px-16'>
+			<div className='2xl:container mx-auto mt-16 px-2 py-3 lg:px-16'>
+				{children}
+			</div>
+			{/* <div className='2xl:container mx-auto flex gap-3 mt-16 px-2 py-3 lg:px-16'>
 				<div className='hidden lg:block w-1/5'>
 					<HomeNavigation />
 				</div>
 				<div className='w-full lg:w-4/5'>{children}</div>
-			</div>
+			</div> */}
 		</>
 	);
 }

@@ -2,16 +2,12 @@ import { twMerge } from 'tailwind-merge';
 import Card from '../utils/Card';
 import Button from '../utils/Button';
 import ManageStaffPopup from '../business/manage/ManageStaffPopup';
+import { User } from '@/types/user.types';
+import { Business } from '@/types/business.types';
 
 interface Props {
 	type: 'user' | 'business';
-	infos: {
-		id: string;
-		name: string;
-		username: string;
-		avatar?: string;
-		cover?: string;
-	};
+	infos: User | Business;
 }
 
 function ProfileInfos({ type, infos }: Props) {

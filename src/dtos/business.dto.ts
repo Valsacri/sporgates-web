@@ -4,8 +4,8 @@ import { AddressDto, SocialsDto } from './item/general.dto';
 export const BusinessDto = z.object({
 	name: z.string().min(1),
 	description: z.string().min(1),
-	slogan: z.string().min(1),
-	logo: z.string().min(1),
+	bio: z.string().min(1),
+	avatar: z.string().min(1),
 	cover: z.string().min(1),
 	socials: SocialsDto,
 

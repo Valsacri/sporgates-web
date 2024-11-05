@@ -21,11 +21,13 @@ interface Props {
 	items: ListItem[];
 	className?: string;
 	itemClassName?: string;
+	disable?: boolean;
 }
 
-function List({ items, className, itemClassName }: Props) {
+function List({ items, className, itemClassName, disable }: Props) {
 	const handleClick = (e: any, onClick?: () => any) => {
 		e.stopPropagation();
+		if (disable) return;
 		onClick?.();
 	};
 
@@ -36,7 +38,7 @@ function List({ items, className, itemClassName }: Props) {
 
 				return (
 					<Component
-						href={item?.href as any}
+						href={disable ? '#' : item.href || '#'}
 						aria-disabled
 						key={i}
 						className={twMerge(

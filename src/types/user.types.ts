@@ -11,6 +11,7 @@ export interface User extends Record {
 	username: string;
 	firstName: string;
 	lastName: string;
+	name: string;
 	email: string;
 	sports?: string[] | Sport[];
 

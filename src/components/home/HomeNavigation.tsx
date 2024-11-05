@@ -1,21 +1,20 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import Card from '../utils/Card';
 import Icon from '../utils/Icon';
 import List from '../utils/List';
 import { useContext } from 'react';
 import { UserContext } from '@/client/contexts/user.context';
+import { usePathname } from 'next/navigation';
 
 function HomeNavigation() {
-	const router = useRouter();
+	const pathname = usePathname();
 	const [user] = useContext(UserContext);
-
-	if (!user) return null;
 
 	return (
 		<Card className='p-1'>
 			<List
+				disable={!user}
 				items={[
 					// {
 					// 	prefix: <Icon name='home' />,
@@ -27,11 +26,11 @@ function HomeNavigation() {
 						item: 'Explore',
 						href: '/explore',
 					},
-					{
-						prefix: <Icon name='gallery' />,
-						item: 'Gallery',
-						href: `/users/${user.id}/gallery`,
-					},
+					// {
+					// 	prefix: <Icon name='gallery' />,
+					// 	item: 'Gallery',
+					// 	href: `/users/${user?.id}/gallery`,
+					// },
 					// { prefix: <Icon name='saved' />, item: 'Saved posts' },
 					// { prefix: <Icon name='report' />, item: 'My page' },
 					// { prefix: <Icon name='bag' />, item: 'Market' },
@@ -43,7 +42,10 @@ function HomeNavigation() {
 						item: 'Reservations',
 						href: '/reservations',
 					},
-				]}
+				].map((item) => ({
+					...item,
+					selected: pathname === item.href,
+				}))}
 			/>
 		</Card>
 	);
