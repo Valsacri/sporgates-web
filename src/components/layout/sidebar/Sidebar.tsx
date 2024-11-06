@@ -18,6 +18,7 @@ import { useToggler } from '@/client/hooks/utils/useToggler';
 import SidebarExtension from './SidebarExtension';
 import { twMerge } from 'tailwind-merge';
 import { useOutsideClick } from '@/client/hooks/utils/useOutsideClick';
+import MenuButton from '../MenuButton';
 
 function Sidebar() {
 	const router = useRouter();
@@ -115,48 +116,8 @@ function Sidebar() {
 							))}
 						</List2>
 					</div>
-					<Dropdown
-						closeOnClick
-						xPosition='left'
-						yPosition='top'
-						trigger={
-							<ListItem
-								prefix={<Icon name='menu2' className='scale-x-[-1]' />}
-								allowEventPropagation
-							>
-								{!extension && 'More'}
-							</ListItem>
-						}
-					>
-						<List2>
-							<ListItem prefix={<Icon name='settings2' />} href='/settings'>
-								{!extension && 'Settings'}
-							</ListItem>
-							<ListItem
-								suffix={
-									<div className='rounded-full bg-secondary p-1 flex gap-1'>
-										<Icon
-											name='sun'
-											className='bg-white p-1 rounded-full text-sm'
-										/>
-										<Icon name='moon' className='p-1 rounded-full text-sm' />
-									</div>
-								}
-							>
-								{!extension && 'Night mode'}
-							</ListItem>
-							<Separator />
-							<ListItem
-								prefix={<Icon name='turn-off' />}
-								onClick={async () => {
-									await AuthClientService.signOut();
-									router.push('/sign-in');
-								}}
-							>
-								{!extension && 'Logout'}
-							</ListItem>
-						</List2>
-					</Dropdown>
+
+					<MenuButton showText={!extension} />
 				</div>
 
 				{extension && (

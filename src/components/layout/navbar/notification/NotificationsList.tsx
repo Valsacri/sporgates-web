@@ -31,16 +31,13 @@ function NotificationsList() {
 									size={60}
 									className='flex-shrink-0'
 								/>
-
-								<div className='space-y-1'>
+								<div className='space-y-1 max-w-full'>
 									<h5 className='truncate break-words text-text-secondary-dark'>
 										{notification.title}
 									</h5>
-
-									<p className='text-sm line-clamp-3 text-text-secondary-dark'>
+									<p className='text-sm break-words whitespace-normal text-text-secondary-dark'>
 										{notification.description}
 									</p>
-
 									<div className='flex justify-between items-center text-xs text-text-secondary'>
 										<div className='flex items-center gap-1.5'>
 											{DateHelper.toElapsedTime(

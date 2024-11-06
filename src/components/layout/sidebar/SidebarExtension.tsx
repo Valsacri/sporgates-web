@@ -2,10 +2,10 @@
 
 import Card from '@/components/utils/Card';
 import NotificationsList from '../navbar/notification/NotificationsList';
-import Separator from '@/components/utils/Separator';
 import { useRef } from 'react';
 import { useOutsideClick } from '@/client/hooks/utils/useOutsideClick';
 import Search from '@/components/shared/Search';
+import Separator from '@/components/utils/Separator';
 
 interface Props {
 	extension: string;
@@ -21,9 +21,10 @@ function SidebarExtension({ extension, onOutsideClick }: Props) {
 		<div ref={ref}>
 			<Card
 				title={<span className='uppercase ml-4'>{extension}</span>}
-				className='h-full min-w-[400px] border-x bg-white px-2 py-6 rounded-none overflow-y-auto z-50'
-        bodyClassName='pt-2'
+				className='h-full w-[400px] border-x bg-white px-2 py-6 rounded-none overflow-y-auto z-50'
+				bodyClassName='pt-2'
 			>
+				<Separator />
 				{extension === 'notifications' ? (
 					<NotificationsList />
 				) : extension === 'search' ? (

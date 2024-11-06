@@ -18,6 +18,7 @@ const breakpoints = Object.keys(breakpointsSize) as Breakpoint[];
 const useBreakpoint = () => {
 	const innerWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
 	const [windowWidth, setWindowWidth] = useState<number>(innerWidth);
+	const [isDesktop, setIsDesktop] = useState(false);
 
 	useEffect(() => {
 		const handleResize = () => {
@@ -30,6 +31,12 @@ const useBreakpoint = () => {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (windowWidth >= breakpointsSize.lg) {
+			setIsDesktop(true);
+		}
+	}, [windowWidth]);
+
 	const breakpoint = useMemo(() => {
 		for (const breakpoint of breakpoints.reverse()) {
 			if (windowWidth >= breakpointsSize[breakpoint]) {
@@ -39,7 +46,7 @@ const useBreakpoint = () => {
 		return 'xs';
 	}, [windowWidth]);
 
-	return { windowWidth, breakpoint, breakpointsSize };
+	return { windowWidth, breakpoint, breakpointsSize, isDesktop };
 };
 
 export default useBreakpoint;

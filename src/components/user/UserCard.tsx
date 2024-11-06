@@ -18,8 +18,8 @@ function UserCard({ user }: Props) {
 				src={user.cover || '/images/placeholder.png'}
 				width={1000}
 				height={300}
-				alt=''
-				className='rounded-t-lg'
+				alt='cover'
+				className='rounded-t-md'
 			/>
 
 			<div className='-mt-12'>

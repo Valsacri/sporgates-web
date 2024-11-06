@@ -55,7 +55,11 @@ function Page() {
 	const lng = watch('geolocation.lng');
 	const radius = watch('radius');
 
-	const { data: results, loading: loadingResults } = useFetch(
+	const {
+		data: results,
+		loading: loadingResults,
+		setData: setResults,
+	} = useFetch(
 		[],
 		{
 			async fetch() {
@@ -121,6 +125,11 @@ function Page() {
 		},
 	});
 
+	const handleTypeChange = (value: string) => () => {
+		setResults([]);
+		setValue('type', value);
+	};
+
 	return (
 		<div className='grid grid-cols-12 gap-3 space-y-3'>
 			<Card
@@ -143,17 +152,17 @@ function Page() {
 							text: 'Grounds',
 							value: 'grounds',
 						},
-						{
-							icon: 'two-user',
-							text: 'Clubs',
-							value: 'clubs',
-						},
+						// {
+						// 	icon: 'two-user',
+						// 	text: 'Clubs',
+						// 	value: 'clubs',
+						// },
 					].map(
 						(item) =>
 							({
 								icon: item.icon,
 								text: item.text,
-								onClick: () => setValue('type', item.value),
+								onClick: handleTypeChange(item.value),
 								selected: selectedType === item.value,
 							} as any)
 					)}

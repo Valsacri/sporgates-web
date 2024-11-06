@@ -2,7 +2,7 @@
 
 import Calendar from 'react-calendar';
 import Dropdown from '../utils/Dropdown';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { GroundReservationContext } from '@/client/contexts/ground-reservation.context';
 import TimeFramePicker from './TimeframePicker';
 import { TimeHelper } from '@/helpers/datetime/time.helpers';
@@ -12,8 +12,7 @@ import { Popup } from '../utils/Popup';
 import useBreakpoint from '@/client/hooks/utils/useBreakpoint';
 
 function ReservationPicker() {
-	const { breakpointsSize, windowWidth } = useBreakpoint();
-	const [isDesktop, setIsDesktop] = useState(false);
+	const { isDesktop } = useBreakpoint();
 
 	const {
 		openDatePicker,
@@ -30,12 +29,6 @@ function ReservationPicker() {
 	} = useContext(GroundReservationContext);
 
 	const formattedDuration = TimeHelper.formatDuration(duration);
-
-	useEffect(() => {
-		if (windowWidth >= breakpointsSize.lg) {
-			setIsDesktop(true);
-		}
-	}, [windowWidth]);
 
 	const getTileClassName = ({ date, view }: { date: Date; view: string }) => {
 		if (view === 'month') {

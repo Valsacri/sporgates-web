@@ -2,97 +2,53 @@
 
 import Link from 'next/link';
 import Logo from '../../Logo';
-import HomeNavigation from '../../home/HomeNavigation';
-import Button from '../../utils/Button';
-import Dropdown from '../../utils/Dropdown';
-import NavbarNavigation from './NavbarNavigation';
-import { useContext } from 'react';
-import { UserContext } from '@/client/contexts/user.context';
-import NotificationsList from './notification/NotificationsList';
-import Search from '../../shared/Search';
+import Card from '@/components/utils/Card';
+import MenuButton from '../MenuButton';
+import ListItem from '@/components/utils/ListItem';
+import Icon from '@/components/utils/Icon';
+import { usePathname, useRouter } from 'next/navigation';
+import Button from '@/components/utils/Button';
 
 function Navbar() {
-	const [user] = useContext(UserContext);
+	const pathname = usePathname();
+	const router = useRouter();
+	// const [user] = useContext(UserContext);
+	const showBackButton = pathname === '/notifications';
 
 	return (
-		<div className='bg-white fixed top-0 w-full z-40'>
+		<Card className='fixed top-0 w-full z-40 p-0 rounded-none'>
 			<div className='h-16 2xl:container mx-auto px-2 lg:px-16 flex justify-between items-center'>
-				<div>
-					<Dropdown
-						closeOnClick
-						trigger={
-							<Button icon='burger' className='lg:hidden scale-x-[-1]'></Button>
-						}
-						xPosition='left'
-					>
-						<HomeNavigation />
-					</Dropdown>
-
-					<Link className='hidden lg:block' href='/'>
+				{showBackButton ? (
+					<Button icon='arrow-left' iconClassName='size-8' onClick={() => router.back()} />
+				) : (
+					<Link href='/' className='ml-2'>
 						<Logo />
 					</Link>
-				</div>
+				)}
 
-				{/* <ul className='flex gap-3 font-medium'>
-					<li>
-						<Link href='#'>Athletes</Link>
-					</li>
-					<li>
-						<Link href='#'>Grounds</Link>
-					</li>
-					<li>
-						<Link href='#'>Clubs</Link>
-					</li>
-					<li>
-						<Link href='#'>Contact us</Link>
-					</li>
-				</ul> */}
+				<div className='flex'>
+					{/* <Dropdown
+						className='w-screen mt-1 fixed top-16 right-0 mx-2'
+						closeOnClick
+						trigger={
+							<ListItem
+								prefix={<Icon name='notification' />}
+								allowEventPropagation
+							/>
+						}
+					>
+						<NotificationsList />
+					</Dropdown> */}
 
-				<div className='flex gap-3'>
-					{user && (
-						<>
-							{/* <div className='flex gap-3 py-3'>
-								<Link href='\'>
-									<Button
-										icon='home'
-										color='primary'
-										className='w-[40px] lg:w-max justify-center '
-									>
-										<span className='hidden lg:block'>Home</span>
-									</Button>
-								</Link>
+					<ListItem
+						prefix={<Icon name='notification' />}
+						href='/notifications'
+						selected={pathname === '/notifications'}
+					/>
 
-								<Button icon='menu' color='secondary'></Button>
-							</div> */}
+					<MenuButton />
 
-							<Search />
-
-							<div className='flex gap-0'>
-								<Button
-									icon='two-user'
-									className='h-full rounded-none'
-								></Button>
-
-								<Button icon='message' className='h-full rounded-none'></Button>
-
-								<Dropdown
-									className='fixed top-16 lg:absolute right-0 left-1/2 transform -translate-x-1/2 lg:left-auto lg:transform-none'
-									triggerClassName='h-full'
-									closeOnClick
-									trigger={
-										<Button
-											icon='notification'
-											className='h-full rounded-none'
-										></Button>
-									}
-								>
-									<NotificationsList />
-								</Dropdown>
-							</div>
-						</>
-					)}
-
-					<div>
+					{/* <div>
 						{user === undefined ? null : user === null ? (
 							<Link href='/sign-up'>
 								<Button color='primary' className='uppercase font-semibold'>
@@ -102,10 +58,10 @@ function Navbar() {
 						) : (
 							<NavbarNavigation />
 						)}
-					</div>
+					</div> */}
 				</div>
 			</div>
-		</div>
+		</Card>
 	);
 }
 

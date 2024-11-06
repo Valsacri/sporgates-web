@@ -32,17 +32,17 @@ function GroundCard({ ground }: Props) {
 						{/* <h5 className='w-max bg-success text-white rounded-tl-lg rounded-br-2xl px-3 py-1.5'>
 							-{defaultPrice.discount}%
 						</h5> */}
-						<div className='flex gap-1 w-max bg-black bg-opacity-50 text-white rounded-tl-lg rounded-br-2xl px-3 py-1.5'>
+						<div className='flex gap-1 w-max bg-black bg-opacity-50 text-white rounded-tl-md rounded-br-2xl px-3 py-1.5'>
 							{(ground.sports as Sport[]).map(
 								(sport) => SPORTS_ICONS[sport.code]
 							)}
 						</div>
-						<h5 className='w-max bg-primary text-white rounded-tr-lg rounded-bl-2xl px-3 py-1.5 ml-auto'>
+						<h5 className='w-max bg-primary text-white rounded-tr-md rounded-bl-2xl px-3 py-1.5 ml-auto'>
 							{ground.price}dh / {ground.minReservationTime}min
 						</h5>
 					</div>
 
-					<div className='w-max flex items-center gap-1 mt-3 p-2 pr-3 bg-black bg-opacity-50 rounded-tl-lg rounded-tr-2xl'>
+					<div className='w-max flex items-center gap-1 mt-3 p-2 pr-3 bg-black bg-opacity-50 rounded-tl-md rounded-tr-2xl'>
 						<Rating rating={ground.avgRating} />
 						<span className='text-xs font-light text-white'>
 							{' '}
