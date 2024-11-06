@@ -6,9 +6,9 @@ import ReservationFilters from '@/components/ground/reservation/ReservationFilte
 import ReservationsTable from '@/components/ground/reservation/ReservationsTable';
 import { useContext } from 'react';
 import { UserContext } from '@/client/contexts/user.context';
-import withAuth from '@/client/hocs/withAuth.hoc';
 import Button from '@/components/utils/Button';
 import { useToggler } from '@/client/hooks/utils/useToggler';
+import withAuth from '@/client/hocs/withAuth.hoc';
 
 function ReservationsPage() {
 	const [user] = useContext(UserContext);

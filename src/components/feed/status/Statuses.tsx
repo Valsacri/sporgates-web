@@ -7,7 +7,7 @@ function Statuses() {
 
 	return (
 		<Card className='p-0 pt-5'>
-			<div className='flex gap-5 overflow-x-auto pb-5'>
+			<div className='flex gap-3 overflow-x-auto pb-5'>
 				{statuses.map((status, i) => (
 					<Status
 						key={i}

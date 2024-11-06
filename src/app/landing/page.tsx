@@ -1,5 +1,5 @@
 import CallToAction from '@/components/landing-page/CallToAction';
-import Navbar from '@/components/navbar/Navbar';
+import Navbar from '@/components/layout/navbar/Navbar';
 import Image from 'next/image';
 import Link from 'next/link';
 

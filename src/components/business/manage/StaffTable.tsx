@@ -16,6 +16,8 @@ import List from '@/components/utils/List';
 import Loader from '@/components/utils/Loader';
 import Link from 'next/link';
 import ConfirmationPopup from '@/components/shared/ConfirmationPopup';
+import List2 from '@/components/utils/List2';
+import ListItem from '@/components/utils/ListItem';
 
 interface Props {
 	businessId: string;
@@ -124,7 +126,9 @@ export default function StaffTable({ businessId }: Props) {
 									prefix: <Avatar src={'/images/avatar.png'} size={35} />,
 									item: (
 										<div>
-											<div className='text-sm text-text-secondary-dark'>{user.name}</div>
+											<div className='text-sm text-text-secondary-dark'>
+												{user.name}
+											</div>
 											<div className='text-xs text-text-secondary'>
 												@{user.username}
 											</div>
@@ -134,6 +138,28 @@ export default function StaffTable({ businessId }: Props) {
 								};
 							})}
 						/>
+						<List2>
+							{users.map((user) => {
+								const isSelected = staff.some((s) => s.id === user.id);
+								return (
+									<ListItem
+										key={user.id}
+										className={isSelected ? 'opacity-75' : ''}
+										prefix={<Avatar src={'/images/avatar.png'} size={35} />}
+										onClick={() => !isSelected && handleAdd(user.id)}
+									>
+										<div>
+											<div className='text-sm text-text-secondary-dark'>
+												{user.name}
+											</div>
+											<div className='text-xs text-text-secondary'>
+												@{user.username}
+											</div>
+										</div>
+									</ListItem>
+								);
+							})}
+						</List2>
 					</Dropdown>
 				)}
 			</div>

@@ -1,10 +1,10 @@
 'use client';
 
-import Button from '../utils/Button';
-import Dropdown from '../utils/Dropdown';
-import Avatar from '../utils/Avatar';
-import Icon from '../utils/Icon';
-import List from '../utils/List';
+import Button from '../../utils/Button';
+import Dropdown from '../../utils/Dropdown';
+import Avatar from '../../utils/Avatar';
+import Icon from '../../utils/Icon';
+import List from '../../utils/List';
 import { useRouter } from 'next/navigation';
 import { useContext } from 'react';
 import { UserContext } from '@/client/contexts/user.context';

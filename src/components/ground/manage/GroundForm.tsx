@@ -282,7 +282,7 @@ function GroundForm({ ground }: Props) {
 					</div>
 				</div>
 
-				<div className='space-y-3'>
+				{/* <div className='space-y-3'>
 					<div className='flex justify-between items-center'>
 						<h3 className='text-lg font-medium text-gray-900'>Subscriptions</h3>
 						<Button
@@ -317,7 +317,7 @@ function GroundForm({ ground }: Props) {
 							},
 						]}
 					/>
-				</div>
+				</div> */}
 
 				<div className='space-y-3'>
 					<h3 className='text-lg font-medium text-gray-900'>Address</h3>
@@ -381,7 +381,7 @@ function GroundForm({ ground }: Props) {
 				</div>
 			</form>
 
-			{openSubscriptionPopup && (
+			{/* {openSubscriptionPopup && (
 				<ClubSubscriptionFormPopup
 					subscription={currentSubscription}
 					onClose={toggleSubscriptionPopup}
@@ -397,7 +397,7 @@ function GroundForm({ ground }: Props) {
 					description='Are you sure you want to remove this subscription?'
 					onConfirm={handleRemoveSubscription}
 				/>
-			)}
+			)} */}
 		</>
 	);
 }

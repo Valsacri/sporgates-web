@@ -9,7 +9,7 @@ interface Props {
 function GroundPricing({ subscriptions }: Props) {
 	return (
 		<Card title='Pricing'>
-			<Card className='flex overflow-x-auto gap-5'>
+			<Card className='flex overflow-x-auto gap-3'>
 				{subscriptions.map((subscription, index) => (
 					<Pricing key={index} subscription={subscription} />
 				))}

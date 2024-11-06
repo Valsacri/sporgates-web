@@ -23,12 +23,12 @@ function Card({
 }: Props) {
 	return (
 		<div
-			className={twMerge('bg-white rounded-md p-4', className)}
+			className={twMerge('bg-white rounded-md p-4 space-y-3', className)}
 			style={style}
 			onClick={onClick}
 		>
 			{(title || titleSuffix || description) && (
-				<div className='space-y-1 mb-3'>
+				<div className='space-y-1'>
 					{(title || titleSuffix) && (
 						<div className='flex justify-between items-center'>
 							<h2>{title}</h2>
@@ -41,7 +41,7 @@ function Card({
 				</div>
 			)}
 
-			<div className={bodyClassName}>{children}</div>
+			{children && <div className={bodyClassName}>{children}</div>}
 		</div>
 	);
 }

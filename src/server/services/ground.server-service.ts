@@ -1,4 +1,4 @@
-import mongoose, { FilterQuery } from 'mongoose';
+import { FilterQuery } from 'mongoose';
 import { GroundModel } from '../models/item/ground.model';
 import {
 	GroundDtoType,
@@ -7,8 +7,7 @@ import {
 import { Ground } from '@/types/item/ground/ground.types';
 import {
 	formatDocument,
-	getGeoLocationQuery,
-	valueOrEmptyObject,
+	getGeoLocationQuery
 } from '../helpers/database.helper';
 
 export class GroundServerService {

@@ -20,7 +20,7 @@ export default function Page({ params }: Props) {
 	return (
 		<Card
 			title='Reservations'
-			className='space-y-5'
+			bodyClassName='space-y-3'
 			titleSuffix={<Button icon='reload' onClick={toggleReload} />}
 		>
 			<FormProvider {...methods}>

@@ -18,12 +18,12 @@ function ProfileCompletion() {
 
 	return (
 		<Card title='Profile completion'>
-			<div className='space-y-5'>
+			<div className='space-y-3'>
 				<p className='text-sm'>
 					Complete your profile to let others find you easily !
 				</p>
 
-				<div className='flex flex-col lg:flex-row justify-between items-start lg:items-end gap-5'>
+				<div className='flex flex-col lg:flex-row justify-between items-start lg:items-end gap-3'>
 					<div className='w-full flex flex-col lg:flex-row gap-3'>
 						{steps.map((step, i) => (
 							<Button

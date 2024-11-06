@@ -56,8 +56,8 @@ function Page() {
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<h1 className='text-3xl font-semibold'>Welcome to SporGates 👋</h1>
 
-			<div className='space-y-5 my-7 mb-10'>
-				<div className='flex flex-col lg:flex-row gap-5'>
+			<div className='space-y-3 my-7 mb-10'>
+				<div className='flex flex-col lg:flex-row gap-3'>
 					<Input
 						{...register('firstName')}
 						label='First Name'
@@ -75,7 +75,7 @@ function Page() {
 						error={errors.lastName?.message}
 					/>
 				</div>
-				<div className='flex flex-col lg:flex-row gap-5'>
+				<div className='flex flex-col lg:flex-row gap-3'>
 					<Input
 						{...register('username')}
 						label='Username'
@@ -94,7 +94,7 @@ function Page() {
 					/>
 				</div>
 
-				<div className='flex flex-col lg:flex-row gap-5'>
+				<div className='flex flex-col lg:flex-row gap-3'>
 					<Input
 						{...register('password')}
 						type='password'

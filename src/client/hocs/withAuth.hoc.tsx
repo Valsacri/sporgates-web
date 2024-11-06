@@ -19,7 +19,7 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
 
 		if (user === undefined) {
 			return (
-				<div className='fixed top-0 left-0 w-screen h-screen flex justify-center items-center'>
+				<div className='size-full flex justify-center items-center'>
 					<Loader className='size-20'/>
 				</div>
 			); // Optional: Show a loading state

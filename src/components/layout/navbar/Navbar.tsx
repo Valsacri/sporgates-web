@@ -1,17 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import Logo from '../Logo';
-import HomeNavigation from '../home/HomeNavigation';
-import Button from '../utils/Button';
-import Dropdown from '../utils/Dropdown';
-import Icon from '../utils/Icon';
-import { Input } from '../utils/form/Input';
+import Logo from '../../Logo';
+import HomeNavigation from '../../home/HomeNavigation';
+import Button from '../../utils/Button';
+import Dropdown from '../../utils/Dropdown';
 import NavbarNavigation from './NavbarNavigation';
 import { useContext } from 'react';
 import { UserContext } from '@/client/contexts/user.context';
 import NotificationsList from './notification/NotificationsList';
-import Search from '../shared/Search';
+import Search from '../../shared/Search';
 
 function Navbar() {
 	const [user] = useContext(UserContext);
@@ -25,7 +23,7 @@ function Navbar() {
 						trigger={
 							<Button icon='burger' className='lg:hidden scale-x-[-1]'></Button>
 						}
-						position='left'
+						xPosition='left'
 					>
 						<HomeNavigation />
 					</Dropdown>
@@ -35,7 +33,7 @@ function Navbar() {
 					</Link>
 				</div>
 
-				{/* <ul className='flex gap-5 font-medium'>
+				{/* <ul className='flex gap-3 font-medium'>
 					<li>
 						<Link href='#'>Athletes</Link>
 					</li>
@@ -50,7 +48,7 @@ function Navbar() {
 					</li>
 				</ul> */}
 
-				<div className='flex gap-5'>
+				<div className='flex gap-3'>
 					{user && (
 						<>
 							{/* <div className='flex gap-3 py-3'>

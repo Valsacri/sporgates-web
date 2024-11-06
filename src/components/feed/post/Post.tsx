@@ -15,9 +15,9 @@ function PostCard({ post }: Props) {
 	const funds = 50;
 
 	return (
-		<Card key={post.id} className='space-y-5'>
+		<Card key={post.id} className='space-y-3'>
 			<div className='flex justify-between'>
-				<div className='flex gap-5'>
+				<div className='flex gap-3'>
 					<div className='relative'>
 						<Avatar
 							src='https://sporgates.com/upload/photos/d-avatar.jpg?cache=0'

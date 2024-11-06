@@ -21,7 +21,7 @@ function FeedFriendsSuggestions() {
 	];
 
 	return (
-		<Card className='space-y-5' title='People you may know'>
+		<Card className='space-y-3' title='People you may know'>
 			{suggestions.map((suggestion) => (
 				<div className='flex justify-between' key={suggestion.id}>
 					<div className='flex gap-3 items-center'>

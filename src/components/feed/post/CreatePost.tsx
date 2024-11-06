@@ -6,7 +6,7 @@ import { Input } from '@/components/utils/form/Input';
 
 function CreatePost() {
 	return (
-		<Card className='space-y-5'>
+		<Card className='space-y-3'>
 			<div className='flex flex-col lg:flex-row gap-3'>
 				<div className='w-full flex gap-3'>
 					<Avatar

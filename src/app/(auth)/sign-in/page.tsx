@@ -42,7 +42,7 @@ function Page() {
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<h1 className='text-3xl font-semibold'>Welcome back 👋</h1>
 
-			<div className='space-y-5 my-7 mb-10'>
+			<div className='space-y-3 my-7 mb-10'>
 				<Input
 					{...register('email')}
 					label='Email'

@@ -29,7 +29,7 @@ function Layout({ children }: Props) {
 
 	return (
 		<div className='lg:w-screen lg:h-screen flex justify-center items-center p-5 lg:p-32'>
-			<div className='w-full flex flex-col lg:flex-row gap-5 lg:gap-40'>
+			<div className='w-full flex flex-col lg:flex-row gap-3 lg:gap-40'>
 				<div className='w-full lg:w-1/2 space-y-10'>
 					<Logo width={50} height={50} />
 

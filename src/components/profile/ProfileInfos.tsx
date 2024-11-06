@@ -4,6 +4,7 @@ import Button from '../utils/Button';
 import ManageStaffPopup from '../business/manage/ManageStaffPopup';
 import { User } from '@/types/user.types';
 import { Business } from '@/types/business.types';
+import Link from 'next/link';
 
 interface Props {
 	type: 'user' | 'business';
@@ -26,7 +27,7 @@ function ProfileInfos({ type, infos }: Props) {
 			</div>
 
 			<div className='bg-black bg-opacity-40 flex flex-col lg:flex-row justify-between items-end p-5 rounded-b-xl'>
-				<div className='flex items-center gap-5 text-white'>
+				<div className='flex items-center gap-3 text-white'>
 					<div
 						className={twMerge(
 							'group/avatar size-[120px] rounded-full bg-cover bg-center'
@@ -50,9 +51,11 @@ function ProfileInfos({ type, infos }: Props) {
 				</div>
 
 				<div className='flex gap-3'>
-					<Button icon='edit' color='white' className='rounded-full'>
-						Edit profile
-					</Button>
+					<Link href='/settings/profile'>
+						<Button icon='edit' color='white' className='rounded-full'>
+							Edit profile
+						</Button>
+					</Link>
 					{type === 'business' && (
 						<ManageStaffPopup businessId={infos.id}>
 							<Button icon='two-user' color='white' className='rounded-full'>

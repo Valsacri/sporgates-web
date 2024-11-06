@@ -5,7 +5,7 @@ interface Props {
 }
 
 function Separator({ className }: Props) {
-	return <hr className={twMerge('border-secondary my-1', className)} />;
+	return <hr className={twMerge('my-1', className)} />;
 }
 
 export default Separator;

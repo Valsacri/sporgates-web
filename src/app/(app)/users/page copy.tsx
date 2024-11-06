@@ -10,7 +10,7 @@
 
 // export default function Page() {
 // 	return (
-// 		<div className='space-y-5'>
+// 		<div className='space-y-3'>
 // 			<ProfileInfos type='user' />
 // 			<Card className='overflow-x-auto'>
 // 				<Buttons
@@ -26,13 +26,13 @@
 // 			</Card>
 // 			<ProfileCompletion />
 
-// 			<div className='flex gap-5'>
-// 				<div className='w-full lg:w-2/3 space-y-5'>
+// 			<div className='flex gap-3'>
+// 				<div className='w-full lg:w-2/3 space-y-3'>
 // 					<CreatePost />
 // 					{/* <PostFilters /> */}
 // 					<PostsFeed />
 // 				</div>
-// 				<div className='hidden lg:block w-1/3 space-y-5'>
+// 				<div className='hidden lg:block w-1/3 space-y-3'>
 // 					<ProfileFriends />
 // 					<ProfileAlbums />
 // 					<ProfileLikes />

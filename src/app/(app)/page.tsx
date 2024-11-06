@@ -14,7 +14,7 @@ export default async function Home() {
 
 	return (
 		<>
-			<div className='space-y-5'>
+			<div className='space-y-3'>
 				<Statuses />
 				<CreatePost />
 				<FeedGreetings />
@@ -22,7 +22,7 @@ export default async function Home() {
 				<PostsFeed />
 			</div>
 
-			<div className='hidden lg:block w-1/4 space-y-5'>
+			<div className='hidden lg:block w-1/4 space-y-3'>
 				<FeedMetrics />
 				<FeedFriendsSuggestions />
 			</div>

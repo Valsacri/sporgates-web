@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
-import Navbar from '@/components/navbar/Navbar';
-import HomeNavigation from '@/components/home/HomeNavigation';
+import Sidebar from '@/components/layout/sidebar/Sidebar';
 
 export const metadata: Metadata = {
 	title: 'Sporgates',
@@ -16,9 +15,13 @@ export default function RootLayout({
 }>) {
 	return (
 		<>
-			<Navbar />
-			<div className='2xl:container mx-auto mt-16 px-2 py-3 lg:px-16'>
-				{children}
+			{/* <Navbar /> */}
+			{/* <div className='2xl:container mx-auto mt-16 px-2 py-3 lg:px-16'> */}
+			<div className='flex w-screen h-screen'>
+				<Sidebar />
+				<div className='w-full h-full 2xl:container mx-auto p-3 overflow-y-auto'>
+					{children}
+				</div>
 			</div>
 			{/* <div className='2xl:container mx-auto flex gap-3 mt-16 px-2 py-3 lg:px-16'>
 				<div className='hidden lg:block w-1/5'>

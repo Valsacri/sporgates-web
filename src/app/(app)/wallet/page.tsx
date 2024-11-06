@@ -42,7 +42,7 @@ function Page() {
 	};
 
 	return (
-		<div className='grid grid-cols-12 gap-5'>
+		<div className='grid grid-cols-12 gap-3'>
 			<Card title='Wallet transactions' className='col-span-8'>
 				<Table
 					headers={[

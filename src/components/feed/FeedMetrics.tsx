@@ -25,7 +25,7 @@ function FeedMetrics() {
 				<div className='text-center mt-5'>
 					<h2>Oussama Khalfi</h2>
 					<p className='text-sm'>@oussamakhalfi</p>
-					<div className='flex justify-center gap-5 mt-5'>
+					<div className='flex justify-center gap-3 mt-5'>
 						<div>
 							<p className='text-sm'>Following</p>
 							<p className='text-lg font-bold'>63</p>

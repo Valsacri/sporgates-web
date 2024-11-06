@@ -17,7 +17,7 @@ export default async function Layout({ children, params: { userId } }: Props) {
 	if (!user) redirect('/not-found');
 
 	return (
-		<div className='w-full space-y-5'>
+		<div className='w-full space-y-3'>
 			<ProfileInfos type='user' infos={user} />
 
 			<ProfileNavigation

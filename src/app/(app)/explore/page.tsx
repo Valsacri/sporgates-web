@@ -122,12 +122,13 @@ function Page() {
 	});
 
 	return (
-		<div className='fixed top-20 left-0 2xl:container mx-auto px-2 py-3 lg:px-16 h-[calc(100vh-64px-20px)] grid grid-cols-12 gap-5 space-y-5'>
+		<div className='grid grid-cols-12 gap-3 space-y-3'>
 			<Card
 				title='Explore'
-				className='col-span-12 md:col-span-6 xl:col-span-4 space-y-3 max-h-min overflow-y-auto'
+				description='Search for champs, grounds and clubs'
+				className='col-span-12 md:col-span-6 xl:col-span-4 max-h-min overflow-y-auto'
+				bodyClassName='space-y-3'
 			>
-				Search for champs, grounds and clubs
 				<Buttons
 					className='overflow-x-auto'
 					stretch
@@ -188,7 +189,7 @@ function Page() {
 							title='Find by location'
 							open={true}
 							onClose={toggleGeoFiltersPopup}
-							className='space-y-5'
+							className='space-y-3'
 						>
 							<GeoFilters
 								showRadiusPicker={showRadiusPicker}
@@ -207,7 +208,7 @@ function Page() {
 						<Loader className='size-20 mx-auto' />
 					</div>
 				) : selectedType === 'champs' ? (
-					<div className='grid grid-cols-1 xl:grid-cols-3 gap-5'>
+					<div className='grid grid-cols-1 xl:grid-cols-3 gap-3'>
 						{(results as User[]).map((user) => (
 							<>
 								<UserCard key={user.id} user={user} />
@@ -217,7 +218,7 @@ function Page() {
 						))}
 					</div>
 				) : (
-					<div className='grid grid-cols-1 xl:grid-cols-3 gap-5'>
+					<div className='grid grid-cols-1 xl:grid-cols-3 gap-3'>
 						{(results as Ground[]).map((ground) => (
 							<>
 								<GroundCard key={ground.id} ground={ground} />

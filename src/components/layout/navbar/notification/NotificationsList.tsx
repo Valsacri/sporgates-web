@@ -3,11 +3,10 @@
 import { useFetch } from '@/client/hooks/utils/useFetch';
 import { NotificationClientService } from '@/client/services/notification.client-service';
 import Avatar from '@/components/utils/Avatar';
-import Card from '@/components/utils/Card';
-import List from '@/components/utils/List';
+import List2 from '@/components/utils/List2';
+import ListItem from '@/components/utils/ListItem';
 import Loader from '@/components/utils/Loader';
 import { DateHelper } from '@/helpers/datetime/date.helpers';
-import Link from 'next/link';
 
 function NotificationsList() {
 	const { data: notifications, loading } = useFetch([], {
@@ -17,20 +16,15 @@ function NotificationsList() {
 	});
 
 	return (
-		<Card className='p-0 w-[350px]'>
-			<h4 className='px-5 pt-2'>Notifications</h4>
-
-			{(loading || notifications.length > 0) && <hr />}
-
+		<>
 			{loading ? (
-				<div className='flex justify-center p-5'>
+				<div className='flex justify-center items-center p-5'>
 					<Loader className='size-10' />
 				</div>
 			) : (
-				<List
-					className='h-96 overflow-y-autox'
-					items={notifications.map((notification) => ({
-						item: (
+				<List2>
+					{notifications.map((notification) => (
+						<ListItem key={notification.id} href={notification.url!}>
 							<div className='w-full flex justify-between gap-3'>
 								<Avatar
 									src={notification.image!}
@@ -59,15 +53,11 @@ function NotificationsList() {
 									</div>
 								</div>
 							</div>
-						),
-						href: notification.url!,
-						onClick() {
-							console.log('All notifications');
-						},
-					}))}
-				/>
+						</ListItem>
+					))}
+				</List2>
 			)}
-		</Card>
+		</>
 	);
 }
 

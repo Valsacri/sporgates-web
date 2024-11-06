@@ -12,11 +12,11 @@ function Pricing({ subscription }: Props) {
 	return (
 		<Card
 			className={twMerge(
-				'max-w-96 flex flex-col justify-between gap-5 rounded-3xl py-7 shadow-xl shadow-gray-200',
+				'max-w-96 flex flex-col justify-between gap-3 rounded-3xl py-7 shadow-xl shadow-gray-200',
 				subscription.isHighlighted && 'bg-primary-dark text-white'
 			)}
 		>
-			<div className='space-y-5'>
+			<div className='space-y-3'>
 				<div>
 					<span
 						className={twMerge(

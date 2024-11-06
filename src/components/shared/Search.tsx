@@ -50,12 +50,11 @@ function Search() {
 	);
 
 	return (
-		<div>
+		<div className='space-y-1'>
 			<Input
 				{...register('keywords')}
 				placeholder='Search for champs, grounds, clubs and more...'
 				suffix={loading ? <Loader /> : <Icon name='search' />}
-				className='hidden lg:block py-3 w-96'
 			/>
 
 			{results.length > 0 && keywords && (

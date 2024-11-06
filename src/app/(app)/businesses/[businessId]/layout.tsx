@@ -16,7 +16,7 @@ export default async function Layout({
 	if (!business) redirect('/not-found');
 
 	return (
-		<div className='w-full space-y-5'>
+		<div className='w-full space-y-3'>
 			<ProfileInfos type='business' infos={business} />
 
 			<ProfileNavigation
