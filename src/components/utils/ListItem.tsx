@@ -11,9 +11,10 @@ export interface ListItemProps {
 	separator?: boolean;
 	prefix?: React.ReactNode;
 	suffix?: React.ReactNode;
+	containerClassName?: string;
 	className?: string;
 	onClick?: () => any;
-	href?: string;
+	href?: string | null;
 	selected?: boolean;
 	disabled?: boolean;
 	allowEventPropagation?: boolean;
@@ -25,6 +26,7 @@ function ListItem({
 	separator,
 	prefix,
 	suffix,
+	containerClassName,
 	className,
 	onClick,
 	href,
@@ -49,13 +51,13 @@ function ListItem({
 			className={twMerge(
 				'w-full px-3 block rounded-md hover:bg-secondary cursor-pointer',
 				selected && 'bg-secondary',
-				className
+				containerClassName
 			)}
 			onClick={(e) => handleClick(e)}
 		>
 			{children || prefix || suffix ? (
 				<div className='w-full flex items-center justify-between py-3'>
-					<div className='w-full flex items-center gap-3'>
+					<div className={twMerge('w-full flex items-center gap-3', className)}>
 						{prefix}
 						{children}
 					</div>

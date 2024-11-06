@@ -1,34 +1,30 @@
 'use client';
 
-import { AlertContext } from '@/client/contexts/alert.context';
+import { useContext } from 'react';
 import withAuth from '@/client/hocs/withAuth.hoc';
 import { useFetch } from '@/client/hooks/utils/useFetch';
 import { usePopup } from '@/client/hooks/utils/usePopup';
-import { GroundClientService } from '@/client/services/ground.client-service';
+import { FormProvider, useForm } from 'react-hook-form';
+import { AlertContext } from '@/client/contexts/alert.context';
+import Card from '@/components/utils/Card';
+import UserCard from '@/components/user/UserCard';
+import GroundCard from '@/components/ground/GroundCard';
+import Loader from '@/components/utils/Loader';
+import { GENERIC_ERROR_MESSAGE } from '@/constants';
+import ExploreFilters from '@/components/explore/ExploreFilters';
 import { SportClientService } from '@/client/services/sport.client-service';
 import { UserClientService } from '@/client/services/user.client-service';
-import { GeoFilters } from '@/components/explore/GeoFilters';
-import GroundCard from '@/components/ground/GroundCard';
-import Buttons from '@/components/profile/Buttons';
-import UserCard from '@/components/user/UserCard';
-import Button from '@/components/utils/Button';
-import Card from '@/components/utils/Card';
-import { Input } from '@/components/utils/form/Input';
-import { Select, SelectOption } from '@/components/utils/form/Select';
-import Loader from '@/components/utils/Loader';
-import { Popup } from '@/components/utils/Popup';
-import { GENERIC_ERROR_MESSAGE } from '@/constants';
-import { Ground } from '@/types/item/ground/ground.types';
+import { GroundClientService } from '@/client/services/ground.client-service';
+import { SelectOption } from '@/components/utils/form/Select';
 import { User } from '@/types/user.types';
-import { useContext, useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
-import { LuRadar } from 'react-icons/lu';
+import { Ground } from '@/types/item/ground/ground.types';
+import { Popup } from '@/components/utils/Popup';
+import { BreakpointContext } from '@/client/contexts/breakpoint.context';
+import Button from '@/components/utils/Button';
 
 function Page() {
 	const showAlert = useContext(AlertContext);
-
-	const [showRadiusPicker, setShowRadiusPicker] = useState(false);
-	const [openGeoFiltersPopup, toggleGeoFiltersPopup] = usePopup();
+	const breakpoint = useContext(BreakpointContext)!;
 
 	const form = useForm({
 		defaultValues: {
@@ -38,22 +34,23 @@ function Page() {
 			town: 'all',
 			type: 'champs',
 			radius: 1,
-			geolocation: {
-				lat: 33.5731,
-				lng: -7.5898,
-			},
+			geolocation: { lat: 33.5731, lng: -7.5898 },
+			shouldUseRadiusPicker: false,
 		},
 	});
-	const { handleSubmit, register, reset, watch, setValue } = form;
 
+	const { watch, setValue } = form;
+	const selectedType = watch('type');
 	const keywords = watch('keywords');
 	const selectedSport = watch('sport');
 	const selectedCity = watch('city');
 	const selectedTown = watch('town');
-	const selectedType = watch('type');
 	const lat = watch('geolocation.lat');
 	const lng = watch('geolocation.lng');
 	const radius = watch('radius');
+	const shouldUseRadiusPicker = watch('shouldUseRadiusPicker');
+
+	const [showFiltersPopup, toggleFiltersPopup] = usePopup();
 
 	const {
 		data: results,
@@ -65,21 +62,21 @@ function Page() {
 			async fetch() {
 				const filters = {
 					keywords:
-						keywords === 'all' || showRadiusPicker
+						keywords === 'all' || shouldUseRadiusPicker
 							? undefined
 							: keywords.trim(),
 					sport: selectedSport === 'all' ? undefined : selectedSport,
 					city:
-						selectedCity === 'all' || showRadiusPicker
+						selectedCity === 'all' || shouldUseRadiusPicker
 							? undefined
 							: selectedCity,
 					town:
-						selectedTown === 'all' || showRadiusPicker
+						selectedTown === 'all' || shouldUseRadiusPicker
 							? undefined
 							: selectedTown,
-					lat: showRadiusPicker ? lat : undefined,
-					lng: showRadiusPicker ? lng : undefined,
-					radius: showRadiusPicker ? radius : undefined,
+					lat: shouldUseRadiusPicker ? lat : undefined,
+					lng: shouldUseRadiusPicker ? lng : undefined,
+					radius: shouldUseRadiusPicker ? radius : undefined,
 				};
 
 				if (selectedType === 'champs') {
@@ -97,7 +94,7 @@ function Page() {
 			selectedCity,
 			selectedTown,
 			selectedType,
-			showRadiusPicker,
+			shouldUseRadiusPicker,
 			lat,
 			lng,
 			radius,
@@ -132,108 +129,65 @@ function Page() {
 
 	return (
 		<div className='grid grid-cols-12 gap-3 space-y-3'>
-			<Card
-				title='Explore'
-				description='Search for champs, grounds and clubs'
-				className='col-span-12 md:col-span-6 xl:col-span-4 max-h-min overflow-y-auto'
-				bodyClassName='space-y-3'
-			>
-				<Buttons
-					className='overflow-x-auto'
-					stretch
-					items={[
-						{
-							icon: 'user',
-							text: 'Champs',
-							value: 'champs',
-						},
-						{
-							icon: 'location',
-							text: 'Grounds',
-							value: 'grounds',
-						},
-						// {
-						// 	icon: 'two-user',
-						// 	text: 'Clubs',
-						// 	value: 'clubs',
-						// },
-					].map(
-						(item) =>
-							({
-								icon: item.icon,
-								text: item.text,
-								onClick: handleTypeChange(item.value),
-								selected: selectedType === item.value,
-							} as any)
-					)}
-				/>
-				<div className='flex gap-3'>
-					<Input {...register('keywords')} placeholder='Search' />
-					<Select
-						{...register('sport')}
-						value={watch('sport')}
-						onChange={(value) => setValue('sport', value)}
-						placeholder='Sport'
-						options={sportsOptions}
-						loading={loadingSports}
-					/>
-				</div>
-				<Button
-					color='secondary'
-					icon={<LuRadar className='size-5 mr-1' />}
-					className='w-full lg:hidden'
-					onClick={() => toggleGeoFiltersPopup()}
-				>
-					Find by location
-				</Button>
-				<FormProvider {...form}>
-					<div className='hidden lg:block'>
-						<GeoFilters
-							showRadiusPicker={showRadiusPicker}
-							toggleRadiusPicker={() => setShowRadiusPicker(!showRadiusPicker)}
+			<FormProvider {...form}>
+				{breakpoint?.isDesktop && (
+					<Card
+						title='Filters'
+						description='Filter the results by sport, town, and more'
+						className='col-span-12 md:col-span-6 xl:col-span-4 h-min'
+					>
+						<ExploreFilters
+							sportsOptions={sportsOptions}
+							loadingSports={loadingSports}
+							onTypeChange={handleTypeChange}
 						/>
-					</div>
-					{openGeoFiltersPopup && (
-						<Popup
-							title='Find by location'
-							open={true}
-							onClose={toggleGeoFiltersPopup}
-							className='space-y-3'
-						>
-							<GeoFilters
-								showRadiusPicker={showRadiusPicker}
-								toggleRadiusPicker={() =>
-									setShowRadiusPicker(!showRadiusPicker)
-								}
-							/>
-						</Popup>
-					)}
-				</FormProvider>
-			</Card>
+					</Card>
+				)}
+
+				{!breakpoint?.isDesktop && (
+					<Card
+						title='Filters'
+						titleSuffix={
+							!breakpoint?.isDesktop && (
+								<Button icon='filter' onClick={toggleFiltersPopup} />
+							)
+						}
+						className='col-span-12'
+						description='Filter the results by sport, town, and more'
+					></Card>
+				)}
+
+				{showFiltersPopup && (
+					<Popup
+						title='Filters'
+						description='Filter the results by sport, town, and more'
+						open={true}
+						onClose={toggleFiltersPopup}
+					>
+						<ExploreFilters
+							sportsOptions={sportsOptions}
+							loadingSports={loadingSports}
+							onTypeChange={handleTypeChange}
+						/>
+					</Popup>
+				)}
+			</FormProvider>
 
 			<div className='col-span-12 md:col-span-6 xl:col-span-8 overflow-y-auto !mt-0'>
 				{loadingResults ? (
-					<div className='h-full flex justify-center items-center '>
-						<Loader className='size-20 mx-auto' />
+					<div className='h-full flex justify-center items-center'>
+						<Loader className='size-20' />
 					</div>
 				) : selectedType === 'champs' ? (
 					<div className='grid grid-cols-1 xl:grid-cols-3 gap-3'>
-						{(results as User[]).map((user) => (
-							<>
-								<UserCard key={user.id} user={user} />
-								<UserCard key={user.id} user={user} />
-								<UserCard key={user.id} user={user} />
-							</>
+						{((results as User[]) || []).map((user) => (
+							<UserCard key={user.id} user={user} />
 						))}
 					</div>
 				) : (
 					<div className='grid grid-cols-1 xl:grid-cols-3 gap-3'>
-						{(results as Ground[]).map((ground) => (
-							<>
-								<GroundCard key={ground.id} ground={ground} />
-								<GroundCard key={ground.id} ground={ground} />
-								<GroundCard key={ground.id} ground={ground} />
-							</>
+						{((results as Ground[]) || []).map((ground) => (
+							<GroundCard key={ground.id} ground={ground} />
 						))}
 					</div>
 				)}

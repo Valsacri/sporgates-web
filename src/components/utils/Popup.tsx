@@ -16,7 +16,7 @@ interface Props {
 	showCloseButton?: boolean;
 	onClose?: any;
 	outsideClick?: boolean;
-	topRightSection?: React.ReactNode;
+	titleSuffix?: React.ReactNode;
 	trigger?: React.ReactNode;
 	backdropClassName?: string;
 	triggerClassName?: string;
@@ -32,7 +32,7 @@ export const Popup = ({
 	showCloseButton = true,
 	onClose,
 	outsideClick = true,
-	topRightSection,
+	titleSuffix,
 	trigger,
 	backdropClassName,
 	triggerClassName,
@@ -74,30 +74,31 @@ export const Popup = ({
 				<div
 					ref={ref}
 					className={twMerge(
-						'max-h-full overflow-auto mx-5 bg-white rounded-md p-5',
+						'max-h-full overflow-auto mx-3 bg-white rounded-md p-4 space-y-3 border',
 						className
 					)}
 				>
-					<div className='flex justify-between mb-5'>
-						<div className='space-y-1'>
+					<div className='space-y-1'>
+						<div className='flex justify-between'>
 							<h2>{title}</h2>
-							{description && (
-								<p className='text-sm mb-3 text-text-secondary-dark'>
-									{description}
-								</p>
-							)}
+
+							<div className='flex gap-3'>
+								{titleSuffix}
+								{showCloseButton && (
+									<Button
+										icon={<HiX className='size-5 cursor-pointer' />}
+										className='bg-opacity-0 p-1 h-min w-min'
+										onClick={onClose}
+									/>
+								)}
+							</div>
 						</div>
 
-						<div className='flex gap-3'>
-							{topRightSection}
-							{showCloseButton && (
-								<Button
-									icon={<HiX className='size-5 cursor-pointer' />}
-									className='bg-opacity-0 p-1 h-min w-min'
-									onClick={onClose}
-								/>
-							)}
-						</div>
+						{description && (
+							<p className='text-sm mb-3 text-text-secondary-dark'>
+								{description}
+							</p>
+						)}
 					</div>
 					{children}
 				</div>

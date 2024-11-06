@@ -14,11 +14,11 @@ interface Props {
 function ProfileInfos({ type, infos }: Props) {
 	return (
 		<Card
-			className={twMerge(
-				'group/cover p-0 flex flex-col justify-between h-[300px] bg-cover bg-center'
-			)}
+			className='h-[300px] w-full bg-cover bg-center p-0'
+			bodyClassName={twMerge('group/cover h-full flex flex-col justify-between')}
 			style={{
-				backgroundImage: `url('${infos.cover || '/images/placeholder.png'}')`,
+				// backgroundImage: `url('${infos.cover || '/images/placeholder.png'}')`,
+				backgroundImage: `url('/images/placeholder.png')`,
 			}}
 		>
 			<div className='opacity-0 group-hover/cover:opacity-100 transition-all duration-50 space-y-2 p-5'>
@@ -26,7 +26,7 @@ function ProfileInfos({ type, infos }: Props) {
 				<Button icon='crop' color='white' className='bg-opacity-80 ' />
 			</div>
 
-			<div className='bg-black bg-opacity-40 flex flex-col lg:flex-row justify-between items-end p-5 rounded-b-xl'>
+			<div className='bg-black bg-opacity-40 flex flex-col lg:flex-row justify-between items-end p-5 rounded-b-md'>
 				<div className='flex items-center gap-3 text-white'>
 					<div
 						className={twMerge(
@@ -34,7 +34,8 @@ function ProfileInfos({ type, infos }: Props) {
 						)}
 						style={{
 							backgroundImage: `url(${
-								infos.avatar || '/images/avatar-placeholder.png'
+								// infos.avatar || '/images/avatar-placeholder.png'
+								'/images/avatar-placeholder.png'
 							})`,
 						}}
 					>

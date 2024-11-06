@@ -15,12 +15,21 @@ type Breakpoint = keyof typeof breakpointsSize;
 
 const breakpoints = Object.keys(breakpointsSize) as Breakpoint[];
 
+export interface UseBreakpointReturnType {
+	windowWidth: number;
+	breakpoint: Breakpoint;
+	breakpointsSize: typeof breakpointsSize;
+	isDesktop: boolean;
+	isLaptop: boolean;
+	isTablet: boolean;
+	isMobile: boolean;
+}
+
 const useBreakpoint = () => {
-	const innerWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
-	const [windowWidth, setWindowWidth] = useState<number>(innerWidth);
-	const [isDesktop, setIsDesktop] = useState(false);
+	const [windowWidth, setWindowWidth] = useState(0);
 
 	useEffect(() => {
+		setWindowWidth(window.innerWidth);
 		const handleResize = () => {
 			setWindowWidth(window.innerWidth);
 		};
@@ -31,12 +40,6 @@ const useBreakpoint = () => {
 		};
 	}, []);
 
-	useEffect(() => {
-		if (windowWidth >= breakpointsSize.lg) {
-			setIsDesktop(true);
-		}
-	}, [windowWidth]);
-
 	const breakpoint = useMemo(() => {
 		for (const breakpoint of breakpoints.reverse()) {
 			if (windowWidth >= breakpointsSize[breakpoint]) {
@@ -46,7 +49,26 @@ const useBreakpoint = () => {
 		return 'xs';
 	}, [windowWidth]);
 
-	return { windowWidth, breakpoint, breakpointsSize, isDesktop };
+	const [isDesktop, isLaptop, isTablet, isMobile] = useMemo(() => {
+		return [
+			windowWidth >= breakpointsSize.xl,
+			windowWidth < breakpointsSize.xl,
+			windowWidth < breakpointsSize.lg,
+			windowWidth < breakpointsSize.md,
+		];
+	}, [breakpoint]);
+
+	if (!windowWidth) return null;
+
+	return {
+		windowWidth,
+		breakpoint,
+		breakpointsSize,
+		isDesktop,
+		isLaptop,
+		isTablet,
+		isMobile,
+	} as UseBreakpointReturnType;
 };
 
 export default useBreakpoint;

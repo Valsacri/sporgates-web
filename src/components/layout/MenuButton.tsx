@@ -8,24 +8,25 @@ import Separator from '../utils/Separator';
 import { AuthClientService } from '@/client/services/auth.client-service';
 import { useRouter } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
-import useBreakpoint from '@/client/hooks/utils/useBreakpoint';
+import { BreakpointContext } from '../../client/contexts/breakpoint.context';
+import { useContext } from 'react';
 
 function MenuButton({ showText = false }) {
 	const router = useRouter();
-	const { isDesktop } = useBreakpoint();
+	const breakpoint = useContext(BreakpointContext);
 
 	return (
 		<Dropdown
 			closeOnClick
-			xPosition={isDesktop ? 'left' : 'right'}
-			yPosition={isDesktop ? 'top' : 'bottom'}
-			className={twMerge('w-full', !isDesktop && 'mt-3')}
+			xPosition={breakpoint?.isDesktop ? 'left' : 'right'}
+			yPosition={breakpoint?.isDesktop ? 'top' : 'bottom'}
+			className={twMerge('w-full', !breakpoint?.isDesktop && 'mt-3')}
 			trigger={
 				<ListItem
 					prefix={
 						<Icon
 							name='menu2'
-							className={twMerge(isDesktop && 'scale-x-[-1]')}
+							className={twMerge(breakpoint?.isDesktop && 'scale-x-[-1]')}
 						/>
 					}
 					allowEventPropagation

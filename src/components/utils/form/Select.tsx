@@ -117,7 +117,7 @@ export const Select = forwardRef<HTMLInputElement | HTMLTextAreaElement, Props>(
 					}
 					disabled={disabled}
 				>
-					<List items={listItems} className='border rounded-xl' />
+					<List items={listItems} className='rounded-xl' />
 				</Dropdown>
 
 				{error && (

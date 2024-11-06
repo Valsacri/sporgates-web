@@ -3,7 +3,6 @@
 import { useContext, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { UserContext } from '../contexts/user.context';
-import Loader from '@/components/utils/Loader';
 
 const withAuth = (WrappedComponent: React.ComponentType) => {
 	const WithAuth = (props: any) => {
@@ -18,11 +17,7 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
 		}, [user]);
 
 		if (user === undefined) {
-			return (
-				<div className='size-full flex justify-center items-center'>
-					<Loader className='size-20'/>
-				</div>
-			); // Optional: Show a loading state
+			return null
 		}
 
 		return user ? <WrappedComponent {...props} /> : null; // Render wrapped component if authenticated

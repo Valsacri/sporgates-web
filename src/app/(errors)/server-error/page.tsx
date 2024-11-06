@@ -6,7 +6,7 @@ export default function ServerError() {
 				Oops! Something went wrong.
 			</h2>
 			<p className='text-lg text-gray-600 mb-8 text-center max-w-md'>
-				We’re experiencing some server issues. Please try refreshing the page or
+				We're experiencing some server issues. Please try refreshing the page or
 				come back later.
 			</p>
 			<button className='bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-6 rounded-md transition duration-200'>

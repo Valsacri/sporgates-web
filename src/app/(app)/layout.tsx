@@ -1,10 +1,12 @@
 'use client';
 
-import type { Metadata } from 'next';
 import Sidebar from '@/components/layout/sidebar/Sidebar';
-import useBreakpoint from '@/client/hooks/utils/useBreakpoint';
 import Navbar from '@/components/layout/navbar/Navbar';
 import { twMerge } from 'tailwind-merge';
+import { useContext } from 'react';
+import { BreakpointContext } from '@/client/contexts/breakpoint.context';
+import Splash from '@/components/layout/Splash';
+import Bottombar from '@/components/layout/bottombar/Bottombar';
 
 // export const metadata: Metadata = {
 // 	title: 'Sporgates',
@@ -18,17 +20,27 @@ export default function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const { isDesktop } = useBreakpoint();
+	const breakpoint = useContext(BreakpointContext);
+
+	if (!breakpoint) {
+		return <Splash />;
+	}
 
 	return (
 		<>
-			{!isDesktop && <Navbar />}
-			<div className={twMerge('flex w-screen h-screen', !isDesktop && 'mt-16')}>
-				{isDesktop && <Sidebar />}
+			{breakpoint.isMobile && <Navbar />}
+			<div
+				className={twMerge(
+					'flex w-screen h-screen',
+					breakpoint.isMobile && 'my-16'
+				)}
+				>
+				{!breakpoint.isMobile && <Sidebar />}
 				<div className='w-full h-full 2xl:container mx-auto p-3 overflow-y-auto'>
 					{children}
 				</div>
 			</div>
+			{breakpoint.isMobile && <Bottombar />}
 		</>
 	);
 }

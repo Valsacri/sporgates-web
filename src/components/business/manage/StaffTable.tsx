@@ -144,7 +144,7 @@ export default function StaffTable({ businessId }: Props) {
 								return (
 									<ListItem
 										key={user.id}
-										className={isSelected ? 'opacity-75' : ''}
+										containerClassName={isSelected ? 'opacity-75' : ''}
 										prefix={<Avatar src={'/images/avatar.png'} size={35} />}
 										onClick={() => !isSelected && handleAdd(user.id)}
 									>

@@ -5,16 +5,23 @@ import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface ListProps {
-  children?: ReactNode;
-  className?: string;
+	children?: ReactNode;
+	className?: string;
+	horizontal?: boolean;
 }
 
-function List2({ children, className }: ListProps) {
-  return (
-    <div className={twMerge('space-y-1', className)}>
-      {children}
-    </div>
-  );
+function List2({ children, className, horizontal = false }: ListProps) {
+	return (
+		<div
+			className={twMerge(
+				horizontal ? 'space-x-1' : 'space-y-1',
+				horizontal && 'flex flex-row',
+				className
+			)}
+		>
+			{children}
+		</div>
+	);
 }
 
 export default List2;

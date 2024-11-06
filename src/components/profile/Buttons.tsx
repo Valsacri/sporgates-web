@@ -48,7 +48,7 @@ function Buttons({
 	return (
 		<div
 			className={twMerge(
-				'flex gap-1',
+				'flex gap-3',
 				stretch && 'justify-between',
 				className
 			)}
