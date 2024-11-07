@@ -1,50 +1,22 @@
+import { statusMap } from '@/constants';
+import { GroundRerservationStatus } from '@/types/item/ground/ground-reservation.types';
 import { twMerge } from 'tailwind-merge';
 
 interface Props {
-	status: string;
+	status?: GroundRerservationStatus | null;
+	className?: string;
+	children?: React.ReactNode;
 }
 
-function Status({ status }: Props) {
-	const statusMap = {
-		ongoing: {
-			textClassName: 'text-info-dark',
-			bulletClassName: 'bg-info-dark',
-			bgClassName: 'bg-info-light',
-			text: 'Ongoing',
-		},
-		pending: {
-			textClassName: 'text-text-secondary-dark',
-			bulletClassName: 'bg-text-secondary-dark',
-			bgClassName: 'bg-secondary',
-			text: 'Pending',
-		},
-		accepted: {
-			textClassName: 'text-success-dark',
-			bulletClassName: 'bg-success-dark',
-			bgClassName: 'bg-success-light',
-			text: 'Accepted',
-		},
-		rejected: {
-			textClassName: 'text-warning-dark',
-			bulletClassName: 'bg-warning-dark',
-			bgClassName: 'bg-warning-light',
-			text: 'Rejected',
-		},
-		cancelled: {
-			textClassName: 'text-danger-dark',
-			bulletClassName: 'bg-danger-dark',
-			bgClassName: 'bg-danger-light',
-			text: 'Cancelled',
-		},
-	} as any;
-
-	const currentStatus = statusMap[status];
+function Status({ status, className, children }: Props) {
+	const currentStatus = status ? statusMap[status] : null;
 
 	return (
 		<div
 			className={twMerge(
-				'capitalize flex items-center justify-center gap-1.5 rounded-full w-min px-2.5',
-				currentStatus?.bgClassName
+				'capitalize flex items-center justify-center gap-1.5 rounded-md w-min px-2.5',
+				currentStatus?.bgClassName,
+				className
 			)}
 		>
 			<span
@@ -54,7 +26,7 @@ function Status({ status }: Props) {
 				)}
 			/>
 			<span className={twMerge('text-[13px]', currentStatus?.textClassName)}>
-				{currentStatus?.text}
+				{children || currentStatus?.text}
 			</span>
 		</div>
 	);

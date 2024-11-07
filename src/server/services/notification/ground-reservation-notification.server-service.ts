@@ -22,7 +22,7 @@ export class GroundReservationNotificationServerService {
 			TimeframeHelper.toDuration(reservation.timeframe)
 		);
 
-		const date = DateHelper.format(new Date(reservation.date));
+		const date = DateHelper.formatDate(new Date(reservation.date));
 
 		const timeframe = TimeframeHelper.format(reservation.timeframe);
 
@@ -35,9 +35,7 @@ export class GroundReservationNotificationServerService {
 		};
 	}
 
-	static async sendNewReservation(
-		reservation: GroundReservation
-	) {
+	static async sendNewReservation(reservation: GroundReservation) {
 		const { business, ground, duration, date, timeframe } =
 			await this.getGroundReservationNotificationData(reservation);
 

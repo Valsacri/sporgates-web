@@ -18,9 +18,9 @@ function MenuButton({ showText = false }) {
 	return (
 		<Dropdown
 			closeOnClick
-			xPosition={breakpoint?.isDesktop ? 'left' : 'right'}
-			yPosition={breakpoint?.isDesktop ? 'top' : 'bottom'}
-			className={twMerge('w-full', !breakpoint?.isDesktop && 'mt-3')}
+			xPosition={breakpoint?.isTablet ? 'right' : 'left'}
+			yPosition={breakpoint?.isTablet ? 'bottom' : 'top'}
+			className={twMerge('w-full', breakpoint?.isTablet && 'mt-3')}
 			trigger={
 				<ListItem
 					prefix={

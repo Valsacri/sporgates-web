@@ -9,10 +9,10 @@ import { TimeHelper } from '@/helpers/datetime/time.helpers';
 import { TimeframeHelper } from '@/helpers/datetime/timeframe.helpers';
 import Loader from '../utils/Loader';
 import { Popup } from '../utils/Popup';
-import useBreakpoint from '@/client/hooks/utils/useBreakpoint';
+import { BreakpointContext } from '@/client/contexts/breakpoint.context';
 
 function ReservationPicker() {
-	const { isDesktop } = useBreakpoint();
+	const breakpoint = useContext(BreakpointContext);
 
 	const {
 		openDatePicker,
@@ -70,38 +70,7 @@ function ReservationPicker() {
 				</div>
 			</div>
 
-			{isDesktop ? (
-				<>
-					<Dropdown
-						open={openDatePicker}
-						setOpen={setOpenDatePicker}
-						containerClassName='w-1/2'
-					>
-						<Calendar
-							minDate={new Date()}
-							showFixedNumberOfWeeks
-							tileClassName={getTileClassName}
-							onChange={(date) => handleDateChange(date as Date)}
-						/>
-					</Dropdown>
-
-					<Dropdown
-						open={openTimesPicker}
-						setOpen={setOpenTimesPicker}
-						containerClassName='w-1/2'
-					>
-						<TimeFramePicker
-							containerClassName='flex-1 grid grid-cols-2 lg:grid-cols-4 gap-1'
-							startTime={{ hours: 8, minutes: 0 }}
-							endTime={{ hours: 20, minutes: 0 }}
-							interval={30}
-							disabledTimeframes={reservedTimeframes}
-							value={selectedTimeframe}
-							onChange={handleTimeframeChange}
-						/>
-					</Dropdown>
-				</>
-			) : (
+			{breakpoint?.isTablet ? (
 				<>
 					<Popup
 						title='Choose a date'
@@ -133,6 +102,37 @@ function ReservationPicker() {
 							onChange={handleTimeframeChange}
 						/>
 					</Popup>
+				</>
+			) : (
+				<>
+					<Dropdown
+						open={openDatePicker}
+						setOpen={setOpenDatePicker}
+						containerClassName='w-1/2'
+					>
+						<Calendar
+							minDate={new Date()}
+							showFixedNumberOfWeeks
+							tileClassName={getTileClassName}
+							onChange={(date) => handleDateChange(date as Date)}
+						/>
+					</Dropdown>
+
+					<Dropdown
+						open={openTimesPicker}
+						setOpen={setOpenTimesPicker}
+						containerClassName='w-1/2'
+					>
+						<TimeFramePicker
+							containerClassName='flex-1 grid grid-cols-2 lg:grid-cols-4 gap-1'
+							startTime={{ hours: 8, minutes: 0 }}
+							endTime={{ hours: 20, minutes: 0 }}
+							interval={30}
+							disabledTimeframes={reservedTimeframes}
+							value={selectedTimeframe}
+							onChange={handleTimeframeChange}
+						/>
+					</Dropdown>
 				</>
 			)}
 		</>

@@ -1,6 +1,14 @@
 export class DateHelper {
-	static format(date: Date) {
+	static formatDate(date: Date) {
 		return date.toLocaleDateString('fr-FR');
+	}
+
+	static formatTime(date: Date) {
+		return date.toLocaleTimeString('fr-FR');
+	}
+
+	static format(date: Date) {
+		return date.toLocaleString('fr-FR');
 	}
 
 	static parse(date?: string) {

@@ -5,6 +5,7 @@ import { Business } from '../../business.types';
 import { Ground } from './ground.types';
 
 export enum GroundRerservationStatus {
+	ONGOING = 'ongoing',
 	PENDING = 'pending',
 	ACCEPTED = 'accepted',
 	REJECTED = 'rejected',

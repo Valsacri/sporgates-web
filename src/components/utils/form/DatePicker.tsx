@@ -85,7 +85,7 @@ export const DatePicker = forwardRef<
 		const errorClassName = error && 'text-danger';
 
 		const handleChange = (date: Date) => {
-			const formattedDate = DateHelper.format(date);
+			const formattedDate = DateHelper.formatDate(date);
 			onChange?.(formattedDate);
 			setOpenDatePicker(false);
 		};

@@ -144,7 +144,7 @@ function Page() {
 					</Card>
 				)}
 
-				{!breakpoint?.isDesktop && (
+				{breakpoint?.isTablet && (
 					<Card
 						title='Filters'
 						titleSuffix={
@@ -173,13 +173,13 @@ function Page() {
 				)}
 			</FormProvider>
 
-			<div className='col-span-12 md:col-span-6 xl:col-span-8 overflow-y-auto !mt-0'>
+			<div className='col-span-12 xl:col-span-8 overflow-y-auto !mt-0'>
 				{loadingResults ? (
 					<div className='h-full flex justify-center items-center'>
 						<Loader className='size-20' />
 					</div>
 				) : selectedType === 'champs' ? (
-					<div className='grid grid-cols-1 xl:grid-cols-3 gap-3'>
+					<div className='grid grid-cols-1 md:grid-cols-3 gap-3'>
 						{((results as User[]) || []).map((user) => (
 							<UserCard key={user.id} user={user} />
 						))}

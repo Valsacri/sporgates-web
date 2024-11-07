@@ -50,13 +50,14 @@ function ListItem({
 			aria-disabled={disabled}
 			className={twMerge(
 				'w-full px-3 block rounded-md hover:bg-secondary cursor-pointer',
+				children && 'py-3',
 				selected && 'bg-secondary',
 				containerClassName
 			)}
 			onClick={(e) => handleClick(e)}
 		>
 			{children || prefix || suffix ? (
-				<div className='w-full flex items-center justify-between py-3'>
+				<div className='w-full flex items-center justify-between'>
 					<div className={twMerge('w-full flex items-center gap-3', className)}>
 						{prefix}
 						{children}

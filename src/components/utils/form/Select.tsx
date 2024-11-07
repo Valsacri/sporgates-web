@@ -109,7 +109,9 @@ export const Select = forwardRef<HTMLInputElement | HTMLTextAreaElement, Props>(
 							/>
 
 							{loading ? (
-								<Loader className='size-4' />
+								<div className='size-max'>
+									<Loader />
+								</div>
 							) : (
 								suffix || <HiChevronDown className='size-5' />
 							)}

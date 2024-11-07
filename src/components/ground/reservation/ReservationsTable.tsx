@@ -19,6 +19,7 @@ import { User } from '@/types/user.types';
 import Link from 'next/link';
 import Status from '@/components/utils/Status';
 import { Business } from '@/types/business.types';
+import ReservationCard from './ReservationCard';
 
 interface Props {
 	userId?: string;
@@ -26,7 +27,7 @@ interface Props {
 	reload: boolean;
 }
 
-export default function ReservationsTable({
+export default function ReservationsList({
 	userId,
 	businessId,
 	reload,
@@ -81,6 +82,16 @@ export default function ReservationsTable({
 			setLoadingActionIndex(-1);
 		}
 	};
+
+	if (loading) return <Loader className='size-10 mx-auto' />;
+
+	return (
+		<div className='space-y-3'>
+			{reservations.map((row) => (
+				<ReservationCard key={row.ref} reservation={row} />
+			))}
+		</div>
+	);
 
 	return (
 		<Table

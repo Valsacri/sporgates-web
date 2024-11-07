@@ -30,7 +30,7 @@ function Card({
 			{(title || titleSuffix || description) && (
 				<div className='space-y-1'>
 					{(title || titleSuffix) && (
-						<div className='flex justify-between items-center'>
+						<div className='flex justify-between'>
 							<h2>{title}</h2>
 							{titleSuffix}
 						</div>

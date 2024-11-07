@@ -12,6 +12,8 @@ interface Props {
 	trigger?: React.ReactNode;
 	xPosition?: 'left' | 'right';
 	yPosition?: 'top' | 'bottom';
+	xInside?: boolean;
+	yInside?: boolean;
 	closeOnClick?: boolean;
 	className?: string;
 	containerClassName?: string;
@@ -26,6 +28,8 @@ export const Dropdown = ({
 	trigger,
 	xPosition = 'right',
 	yPosition = 'bottom',
+	xInside = false,
+	yInside = false,
 	closeOnClick,
 	className,
 	containerClassName,
@@ -61,9 +65,14 @@ export const Dropdown = ({
 			{open && (
 				<Card
 					className={twMerge(
-						'absolute p-1 z-10 min-w-max text-medium text-left m-0 bg-clip-padding border',
+						'absolute p-1 z-10 min-w-max text-medium text-left m-0 bg-clip-padding',
 						xPosition === 'left' ? 'left-0' : 'right-0',
-						yPosition === 'top' ? 'bottom-full mb-1' : 'top-full mt-1',
+						yPosition === 'top'
+							? yInside
+								? 'top-0'
+								: 'bottom-full mb-1'
+							: 'top-full mt-1',
+
 						className
 					)}
 					onClick={handleClick}
