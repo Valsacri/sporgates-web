@@ -58,7 +58,7 @@ function ReservationCard({ reservation, businessId }: CardProps) {
 	}, [reservation.status]);
 
 	const actions: ListItemProps[] = useMemo(() => {
-		if (reservation.status === GroundRerservationStatus.PENDING) {
+		if (status === GroundRerservationStatus.PENDING) {
 			return [
 				{
 					children: 'Accept',
@@ -72,7 +72,7 @@ function ReservationCard({ reservation, businessId }: CardProps) {
 				},
 			];
 		}
-		if (reservation.status === GroundRerservationStatus.ACCEPTED) {
+		if (status === GroundRerservationStatus.ACCEPTED) {
 			return [
 				{
 					children: 'Cancel',
@@ -82,8 +82,20 @@ function ReservationCard({ reservation, businessId }: CardProps) {
 				},
 			];
 		}
+		if (
+			status === GroundRerservationStatus.REJECTED ||
+			status === GroundRerservationStatus.CANCELLED
+		) {
+			return [
+				{
+					children: 'Accept',
+					onClick: () => handleUpdateStatus(GroundRerservationStatus.ACCEPTED),
+					className: statusMap[GroundRerservationStatus.ACCEPTED].textClassName,
+				},
+			];
+		}
 		return [];
-	}, [reservation]);
+	}, [status]);
 
 	return (
 		<Dropdown
