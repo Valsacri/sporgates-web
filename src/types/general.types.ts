@@ -1,6 +1,11 @@
 import { User } from './user.types';
 import { Record } from './utils.types';
 
+export enum ProfileType {
+	USER = 'user',
+	BUSINESS = 'business',
+}
+
 export interface Review extends Record {
 	rating: number;
 	comment: string;

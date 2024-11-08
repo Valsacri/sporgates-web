@@ -40,6 +40,10 @@ function MenuButton({ showText = false }) {
 					Settings
 				</ListItem>
 
+				<ListItem prefix={<Icon name='flag' />} href='/businesses'>
+					Businesses
+				</ListItem>
+
 				<ListItem
 					suffix={
 						<div className='rounded-full bg-secondary p-1 flex gap-1'>

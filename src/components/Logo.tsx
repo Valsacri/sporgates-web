@@ -1,6 +1,12 @@
 import Image from 'next/image';
 
-function Logo({ size = 24, showText = false, hideLogo = false }) {
+function Logo({
+	size = 24,
+	showText = false,
+	hideLogo = false,
+	textHeight = 24,
+	textWidth = 150,
+}) {
 	return (
 		<div className='flex items-center gap-3'>
 			{!hideLogo && (
@@ -15,8 +21,8 @@ function Logo({ size = 24, showText = false, hideLogo = false }) {
 				<Image
 					src='/images/logo-text.png'
 					alt='Logo text'
-					height={24}
-					width={150}
+					height={textHeight}
+					width={textWidth}
 				/>
 			)}
 		</div>

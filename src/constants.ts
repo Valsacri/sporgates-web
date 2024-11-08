@@ -22,7 +22,7 @@ export const UNAUTHORIZED_RESPONSE = Response.json(
 );
 export const FORBIDDEN_RESPONSE = Response.json(
 	{ message: 'Forbidden' },
-	{ status: 401 }
+	{ status: 403 }
 );
 
 export const statusMap = {

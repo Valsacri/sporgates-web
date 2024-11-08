@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+// create user
 export const CreateUserDto = z.object({
 	firstName: z.string().min(2),
 	lastName: z.string().min(2),
@@ -8,18 +9,10 @@ export const CreateUserDto = z.object({
 });
 export type CreateUserDtoType = z.infer<typeof CreateUserDto>;
 
-export const SignUpDto = CreateUserDto.merge(
-	z.object({
-		password: z.string().min(6),
-		confirmPassword: z.string().min(6),
-	})
-).refine((data) => data.password === data.confirmPassword, {
-	message: 'Passwords do not match',
-	path: ['confirmPassword'],
+// update profile
+export const UpdateUserProfileDto = z.object({
+	firstName: z.string().optional(),
+	lastName: z.string().optional(),
+	username: z.string().optional(),
 });
-export type SignUpDtoType = z.infer<typeof SignUpDto>;
-
-export const SignInDto = z.object({
-	email: z.string().email(),
-	password: z.string().min(6),
-});
+export type UpdateUserProfileDtoType = z.infer<typeof UpdateUserProfileDto>;

@@ -2,6 +2,7 @@ import ProfileNavigation from '@/components/profile/ProfileNavigation';
 import ProfileInfos from '@/components/profile/ProfileInfos';
 import { redirect } from 'next/navigation';
 import { BusinessServerService } from '@/server/services/business.server-service';
+import { ProfileType } from '@/types/general.types';
 
 interface Props {
 	children: React.ReactNode;
@@ -17,7 +18,7 @@ export default async function Layout({
 
 	return (
 		<div className='w-full lg:w-[900px] space-y-3 mx-auto'>
-			<ProfileInfos type='business' infos={business} />
+			<ProfileInfos type={ProfileType.BUSINESS} infos={business} />
 
 			<ProfileNavigation
 				items={[

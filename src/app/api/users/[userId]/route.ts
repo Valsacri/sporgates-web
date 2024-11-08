@@ -21,3 +21,25 @@ export async function GET(
 		});
 	}
 }
+
+export async function PATCH(
+	req: NextRequest,
+	{ params }: { params: { userId: string } }
+) {
+	try {
+		await setupDbConnection();
+
+		const body = await req.json();
+
+		const user = await UserServerService.update(params.userId, body);
+
+		return Response.json(user, {
+			status: 200,
+		});
+	} catch (error) {
+		console.error(error);
+		return Response.json(error, {
+			status: 500,
+		});
+	}
+}

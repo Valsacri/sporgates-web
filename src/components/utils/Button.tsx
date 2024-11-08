@@ -18,6 +18,7 @@ type Props = {
 	loading?: boolean;
 	onMouseEnter?: () => void;
 	onMouseLeave?: () => void;
+	rounded?: boolean;
 };
 
 function Button({
@@ -34,11 +35,8 @@ function Button({
 	loading,
 	onMouseEnter,
 	onMouseLeave,
+	rounded,
 }: Props) {
-	const baseStyles =
-		'h-[40px] text-nowrap flex justify-center items-center gap-1 text-sm transition-colors duration-150 py-2.5 rounded-md';
-	const paddingStyles = children ? 'px-4' : 'w-[40px] justify-center';
-
 	// Adjust color maps to conditionally exclude hover effects if disableHover is true
 	const colorsMap = {
 		primary: `bg-primary text-white ${
@@ -98,8 +96,9 @@ function Button({
 			type={type}
 			onClick={onClick}
 			className={twMerge(
-				baseStyles,
-				paddingStyles,
+				'h-[40px] text-nowrap flex justify-center items-center gap-1 text-sm transition-colors duration-150 p-2.5 rounded-md',
+				!children && 'w-[40px] justify-center',
+				rounded && 'rounded-full px-4',
 				disabled ? 'opacity-50 cursor-not-allowed' : variantStyles,
 				className
 			)}

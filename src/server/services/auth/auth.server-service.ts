@@ -1,6 +1,6 @@
 import { auth } from 'firebase-admin';
 import { UserModel } from '../../models/user.model';
-import { SignUpDtoType } from '@/dtos/user.dto';
+import { SignUpDtoType } from '@/dtos/auth.dto';
 import { UserServerService } from '../user.server-service';
 import { cookies, headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';

@@ -3,11 +3,11 @@ import { twMerge } from 'tailwind-merge';
 
 interface Props {
 	src?: string;
-	size: number;
+	size?: number;
 	className?: string;
 }
 
-function Avatar({ src, size, className }: Props) {
+function Avatar({ src, size = 24, className }: Props) {
 	return (
 		<div
 			className={twMerge('relative overflow-hidden rounded-full', className)}

@@ -63,7 +63,7 @@ function Sidebar() {
 	return (
 		<Card
 			className={twMerge(
-				'h-full w-[300px] bg-white rounded-none p-0',
+				'h-full w-[300px] bg-white rounded-none p-0 border-y-transparent border-l-transparent',
 				breakpoint?.isTablet && 'w-[72px]'
 			)}
 			bodyClassName={twMerge('relative size-full')}

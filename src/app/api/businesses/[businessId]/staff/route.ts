@@ -20,11 +20,11 @@ export async function GET(
 
 		const { userId } = HttpHelper.getContextAuthUser();
 
-		const isAuthorized = await PermissionServerService.isBusinessOwner(
+		const isBusinessOwner = await PermissionServerService.isBusinessOwner(
 			params.businessId,
 			userId
 		);
-		if (!isAuthorized) return FORBIDDEN_RESPONSE;
+		if (!isBusinessOwner) return FORBIDDEN_RESPONSE;
 
 		const staff = await BusinessServerService.getStaff(params.businessId);
 
@@ -54,11 +54,11 @@ export async function POST(
 
 		const { userId } = HttpHelper.getContextAuthUser();
 
-		const isAuthorized = await PermissionServerService.isBusinessOwner(
+		const isBusinessOwner = await PermissionServerService.isBusinessOwner(
 			params.businessId,
 			userId
 		);
-		if (!isAuthorized) return FORBIDDEN_RESPONSE;
+		if (!isBusinessOwner) return FORBIDDEN_RESPONSE;
 
 		const body = await req.json();
 

@@ -34,7 +34,7 @@ export default function RootLayout({
 					'flex w-screen h-screen',
 					breakpoint.isMobile && 'my-16'
 				)}
-				>
+			>
 				{!breakpoint.isMobile && <Sidebar />}
 				<div className='w-full h-full 2xl:container mx-auto p-3 overflow-y-auto'>
 					{children}

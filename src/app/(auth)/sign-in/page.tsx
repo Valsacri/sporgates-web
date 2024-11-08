@@ -5,7 +5,7 @@ import AuthProviders from '@/components/auth/AuthProviders';
 import Button from '@/components/utils/Button';
 import { Checkbox } from '@/components/utils/form/Checkbox';
 import { Input } from '@/components/utils/form/Input';
-import { SignInDto } from '@/dtos/user.dto';
+import { SignInDto } from '@/dtos/auth.dto';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import Link from 'next/link';

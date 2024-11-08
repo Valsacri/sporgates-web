@@ -4,6 +4,7 @@ import { HttpHelper } from '@/server/helpers/http.helper';
 import { UserServerService } from '@/server/services/user.server-service';
 import { redirect } from 'next/navigation';
 import React from 'react';
+import { ProfileType } from '@/types/general.types';
 
 interface Props {
 	children: React.ReactNode;
@@ -18,9 +19,9 @@ export default async function Layout({ children, params: { userId } }: Props) {
 
 	return (
 		<div className='w-full lg:w-[900px] space-y-3 mx-auto'>
-			<ProfileInfos type='user' infos={user} />
+			<ProfileInfos type={ProfileType.USER} infos={user} />
 
-			<ProfileNavigation
+			{/* <ProfileNavigation
 				items={[
 					{
 						icon: 'gallery',
@@ -29,7 +30,7 @@ export default async function Layout({ children, params: { userId } }: Props) {
 						selected: pathname?.endsWith('/gallery'),
 					},
 				]}
-			/>
+			/> */}
 
 			{children}
 		</div>
