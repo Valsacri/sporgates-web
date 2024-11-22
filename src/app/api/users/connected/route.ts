@@ -1,3 +1,4 @@
+import { UserProfileDto, UserProfileDtoType } from '@/dtos/user.dto';
 import { setupDbConnection } from '@/server/config/mongodb.config';
 import { HttpHelper } from '@/server/helpers/http.helper';
 import { UserServerService } from '@/server/services/user.server-service';
@@ -20,3 +21,4 @@ export async function GET(req: Request, res: Response) {
 		});
 	}
 }
+

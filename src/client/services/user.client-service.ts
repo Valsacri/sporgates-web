@@ -3,13 +3,13 @@ import { Create, Update } from '@/types/utils.types';
 import { Axios } from '../config/axios';
 import { getAuth } from 'firebase/auth';
 import { toBearerToken } from '@/helpers/http.helpers';
+import { UserProfileDtoType } from '@/dtos/user.dto';
 
 export class UserClientService {
 	static async getOne(id: string) {
 		const res = await Axios.get<User>(`/users/${id}`);
 		return res.data;
 	}
-	
 
 	static async getConnected() {
 		const token = await getAuth().currentUser?.getIdToken();
@@ -35,7 +35,6 @@ export class UserClientService {
 		return res.data;
 	}
 
-
 	static async create(data: Create<User>) {
 		const res = await Axios.post<User>('/users', data);
 		return res.data;
@@ -48,6 +47,16 @@ export class UserClientService {
 
 	static async delete(id: string) {
 		const res = await Axios.delete<User>(`/users/${id}`);
+		return res.data;
+	}
+
+	static async updateProfile(data: UserProfileDtoType) {
+		const res = await Axios.patch<User>('/users/connected/profile', data);
+		return res.data;
+	}
+
+	static async updateUsername(data: { username: string }) {
+		const res = await Axios.patch<User>('/users/connected/username', data);
 		return res.data;
 	}
 }

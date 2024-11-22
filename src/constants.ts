@@ -1,6 +1,7 @@
 import { GroundRerservationStatus } from './types/item/ground/ground-reservation.types';
 
 export const SESSION_EXPIRATION = 14 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
+export const USERNAME_CHANGE_INTERVAL = 15 * 24 * 60 * 60 * 1000; // 15 days in milliseconds
 export const MIN_DEPOSIT_AMOUNT = 50;
 export const GENERIC_ERROR_MESSAGE = 'An error happened, please try later..';
 export const PUBLIC_PAGES = [

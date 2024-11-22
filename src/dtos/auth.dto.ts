@@ -1,6 +1,10 @@
 import { z } from 'zod';
 import { CreateUserDto } from './user.dto';
 
+export const EmailDto = z.object({
+	email: z.string().email(),
+});
+
 // sign up
 export const SignUpDto = CreateUserDto.merge(
 	z.object({

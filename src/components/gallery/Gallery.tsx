@@ -7,7 +7,7 @@ interface GalleryProps {
 
 const Gallery: React.FC<GalleryProps> = ({ images }) => {
 	return (
-		<div className='grid grid-cols-3 gap-4'>
+		<div className='grid grid-cols-3 gap-2 lg:gap-3'>
 			{images.map((image, index) => (
 				<div key={index} className='col-span-1 aspect-square'>
 					<Card className='p-0'>

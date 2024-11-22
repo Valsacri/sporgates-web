@@ -10,6 +10,10 @@ import {
 	TableHeader,
 } from '@/components/utils/table/table.types';
 import Loader from '../Loader';
+import Dropdown from '../Dropdown';
+import Button from '../Button';
+import List2 from '../List2';
+import ListItem from '../ListItem';
 
 interface Props<T> {
 	headers: TableHeader<T>[];
@@ -72,12 +76,15 @@ export const Table = <T,>({
 
 	return (
 		<div
-			className={twMerge('overflow-x-auto w-full h-full text-sm text-text-secondary-dark', className)}
+			className={twMerge(
+				'overflow-x-auto w-full h-full text-sm text-text-secondary-dark',
+				className
+			)}
 			style={{ height, maxHeight }}
 		>
 			<table className='w-full'>
 				<thead
-					className={twMerge('top-0 sticky', headersClassName)}
+					className={twMerge('top-0 sticky bg-white', headersClassName)}
 					style={{ boxShadow: '0px -1px 0px 0px lightgray inset' }}
 				>
 					<tr className=''>
@@ -143,10 +150,7 @@ export const Table = <T,>({
 
 								{isActions && (
 									<td
-										className={twMerge(
-											'gap-3 align-top p-3',
-											verticalActions && 'flex'
-										)}
+										className={twMerge('gap-3 align-top pt-1')}
 										style={{
 											minWidth:
 												actionsMinWidth ||
@@ -161,26 +165,32 @@ export const Table = <T,>({
 													: minColumnWidth),
 										}}
 									>
-										{getActions(row, rowIndex).map(
-											({ name, callback, hidden }, actionIndex) =>
-												!(typeof hidden === 'function'
-													? hidden(row, rowIndex, data)
-													: hidden) && (
-													<div
-														key={actionIndex}
-														className={twMerge(
-															'underline cursor-pointer whitespace-nowrap hover:text-primary'
-														)}
-														onClick={(e) =>
-															handleClickAction(e, row, rowIndex, callback)
-														}
-													>
-														{typeof name === 'function'
-															? name(row, rowIndex, data)
-															: name}
-													</div>
-												)
-										)}
+										{/* <Button icon='more' /> */}
+										<Dropdown
+											trigger={<Button icon='more' className='rotate-90' />}
+											containerClassName='absolute ml-auto'
+										>
+											<List2>
+												{getActions(row, rowIndex).map(
+													({ name, callback, hidden }, actionIndex) =>
+														!(typeof hidden === 'function'
+															? hidden(row, rowIndex, data)
+															: hidden) && (
+															<ListItem
+																key={actionIndex}
+																className={twMerge('whitespace-nowrap')}
+																onClick={(e) =>
+																	handleClickAction(e, row, rowIndex, callback)
+																}
+															>
+																{typeof name === 'function'
+																	? name(row, rowIndex, data)
+																	: name}
+															</ListItem>
+														)
+												)}
+											</List2>
+										</Dropdown>
 									</td>
 								)}
 							</tr>

@@ -27,8 +27,7 @@ import { CityClientService } from '@/client/services/geo/city.client-service';
 import { TownClientService } from '@/client/services/geo/town.client-service';
 import { AlertContext } from '@/client/contexts/alert.context';
 import { GENERIC_ERROR_MESSAGE } from '@/constants';
-import ClubSubscriptionFeatureFormPopup from './subscription/feature/ClubSubscriptionFeatureFormPopup';
-import ClubSubscriptionFormPopup from './subscription/ClubSubscriptionFormPopup';
+import ClubSubscriptionFormPopup from '@/components/ground/manage/subscription/ClubSubscriptionFormPopup';
 
 interface Props {
 	ground?: Ground;
@@ -82,6 +81,7 @@ function GroundForm({ ground }: Props) {
 			minReservationTime: 60,
 			price: 0,
 			subscriptions: [],
+			business: '',
 		} as GroundDtoType,
 	});
 
@@ -324,7 +324,7 @@ function GroundForm({ ground }: Props) {
 						<Select
 							{...register('address.city')}
 							value={selectedCity}
-							onChange={(city) => setValue('address.city', city)}
+							onChange={(city) => setValue('address.city', city as string)}
 							options={citiesOptions}
 							label='City'
 							placeholder='Select a city'
@@ -333,7 +333,7 @@ function GroundForm({ ground }: Props) {
 						<Select
 							{...register('address.town')}
 							value={selectedTown}
-							onChange={(town) => setValue('address.town', town)}
+							onChange={(town) => setValue('address.town', town as string)}
 							options={townsOptions}
 							label='Town'
 							placeholder='Select a town'

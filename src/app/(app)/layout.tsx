@@ -7,6 +7,7 @@ import { useContext } from 'react';
 import { BreakpointContext } from '@/client/contexts/breakpoint.context';
 import Splash from '@/components/layout/Splash';
 import Bottombar from '@/components/layout/bottombar/Bottombar';
+import { UserContext } from '@/client/contexts/user.context';
 
 // export const metadata: Metadata = {
 // 	title: 'Sporgates',
@@ -20,11 +21,8 @@ export default function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const [user] = useContext(UserContext);
 	const breakpoint = useContext(BreakpointContext);
-
-	if (!breakpoint) {
-		return <Splash />;
-	}
 
 	return (
 		<>
@@ -35,7 +33,7 @@ export default function RootLayout({
 					breakpoint.isMobile && 'my-16'
 				)}
 			>
-				{!breakpoint.isMobile && <Sidebar />}
+				{!breakpoint.isMobile && !!user && <Sidebar />}
 				<div className='w-full h-full 2xl:container mx-auto p-3 overflow-y-auto'>
 					{children}
 				</div>

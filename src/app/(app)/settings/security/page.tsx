@@ -1,21 +1,42 @@
+'use client';
+
+import { AlertContext } from '@/client/contexts/alert.context';
+import { AuthClientService } from '@/client/services/auth.client-service';
 import Button from '@/components/utils/Button';
 import Card from '@/components/utils/Card';
-import { Input } from '@/components/utils/form/Input';
+import { getAuth } from 'firebase/auth';
+import { useContext, useState } from 'react';
 
 function Page() {
+	const showAlert = useContext(AlertContext);
+	const [loading, setLoading] = useState(false);
+
+	const handleSendPasswordResetEmail = async () => {
+		setLoading(true);
+		try {
+			const email = getAuth().currentUser!.email!;
+			await AuthClientService.sendPasswordResetEmail(email);
+
+			showAlert({
+				color: 'success',
+				message: 'Your reset email has been sent',
+			});
+		} catch (error) {
+			console.error(error);
+			showAlert({
+				color: 'danger',
+				message: 'An error occurred while sending the reset email',
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	return (
-		<Card title='Security settings' bodyClassName='grid grid-cols-12 gap-3 items-end'>
-			<Input
-				label='New password'
-				placeholder='Enter a new password'
-				className='col-span-12 lg:col-span-5'
-			/>
-			<Input
-				label='Password confiramtion'
-				placeholder='Confirm your password'
-				className='col-span-12 lg:col-span-5'
-			/>
-			<Button className='col-span-12 lg:col-span-2' color='primary'>Save</Button>
+		<Card title='Security settings'>
+			<Button color='primary' onClick={handleSendPasswordResetEmail}>
+				Send password reset email
+			</Button>
 		</Card>
 	);
 }

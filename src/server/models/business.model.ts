@@ -9,17 +9,15 @@ const BusinessSchema = new Schema<Business>({
 
 	name: { type: String, required: true },
 	username: { type: String, required: true, unique: true },
-	description: { type: String, required: true },
 	bio: { type: String, required: true },
 	avatar: { type: String, required: true },
 	cover: { type: String, required: true },
-	socials: { type: SocialsSchema, required: true },
 
 	owner: { type: Schema.Types.ObjectId, ref: ModelName.USER, required: true },
 	staff: [{ type: Schema.Types.ObjectId, ref: ModelName.USER }],
 
 	email: { type: String, required: true },
-	phoneNumber: { type: String, required: true },
+	phone: { type: String, required: true },
 	address: { type: AddressSchema, required: true },
 });
 

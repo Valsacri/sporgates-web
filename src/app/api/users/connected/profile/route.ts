@@ -1,21 +1,17 @@
-import {
-	UpdateUserProfileDto,
-	UpdateUserProfileDtoType,
-} from '@/dtos/user.dto';
+import { UserProfileDto, UserProfileDtoType } from '@/dtos/user.dto';
 import { setupDbConnection } from '@/server/config/mongodb.config';
 import { HttpHelper } from '@/server/helpers/http.helper';
 import { UserServerService } from '@/server/services/user.server-service';
-import { NextRequest } from 'next/server';
 
-export async function PATCH(req: NextRequest) {
+export async function PATCH(req: Request, res: Response) {
 	try {
 		await setupDbConnection();
 
-		const { userId } = HttpHelper.getContextAuthUser();
+		const authUser = HttpHelper.getContextAuthUser();
 
-		const body: UpdateUserProfileDtoType = await req.json();
+		const body: UserProfileDtoType = await req.json();
 
-		const validation = UpdateUserProfileDto.safeParse(body);
+		const validation = UserProfileDto.safeParse(body);
 
 		if (!validation.success) {
 			return Response.json(validation.error, {
@@ -23,7 +19,10 @@ export async function PATCH(req: NextRequest) {
 			});
 		}
 
-		const user = await UserServerService.update(userId, body);
+		const user = await UserServerService.update(authUser.userId, {
+			...body,
+			name: `${body.firstName} ${body.lastName}`,
+		});
 
 		return Response.json(user, {
 			status: 200,

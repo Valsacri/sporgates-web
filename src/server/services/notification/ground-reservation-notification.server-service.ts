@@ -70,9 +70,9 @@ export class GroundReservationNotificationServerService {
 
 			title: `Ground reservation ${reservation.status}`,
 			description: `${ground?.name} reservation #${reservation.ref} of ${duration} on ${date} at ${timeframe} has been ${reservation.status}`,
-			url: `/businesses/${business?.id}/grounds/reservations`,
-			image: business!.avatar,
-			infos: [business!.name],
+			url: `/businesses/${business.id}/grounds/reservations`,
+			image: business.avatar,
+			infos: [business.name],
 		});
 	}
 }

@@ -3,7 +3,7 @@ import Button from '@/components/utils/Button';
 import Card from '@/components/utils/Card';
 import { Input } from '@/components/utils/form/Input';
 import Icon from '@/components/utils/Icon';
-import { Post } from '@/types/post.types';
+import { Post, PostSubject } from '@/types/post.types';
 import Image from 'next/image';
 
 interface Props {
@@ -59,7 +59,7 @@ function PostCard({ post }: Props) {
 						className='w-full'
 					/>
 
-					{post.subject === 'donation-request' && (
+					{post.subject === PostSubject.DONATION_REQUEST && (
 						<Card className='w-full rounded-t-none absolute bottom-0 left-0 bg-primary-dark bg-opacity-9 text-white space-y-3'>
 							<div className='flex flex-col lg:flex-row justify-between'>
 								<span>Jeux olympiques</span>
@@ -82,7 +82,7 @@ function PostCard({ post }: Props) {
 				</div>
 			)}
 
-			{post.subject === 'new-offer' && post.offer && (
+			{post.subject === PostSubject.NEW_OFFER && post.offer && (
 				// display the original price, the discount, and the final price. and display a button to buy the offer
 				<Card className='flex flex-col lg:flex-row gap-2 justify-between items-center bg-secondary border-2 border-opacity-50'>
 					<span className='text-text-secondary flex items-center gap-2'>

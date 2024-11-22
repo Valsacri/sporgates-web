@@ -20,9 +20,9 @@ interface Props {
 	label?: string;
 	labelClassName?: string;
 	containerClassName?: string;
-	value?: string;
+	value?: string | string[]; // Single or multi-select
 	onBlur?: any;
-	onChange?: (value: string) => void;
+	onChange?: (value: string | string[]) => void;
 	options: SelectOption[];
 	placeholder?: string;
 	error?: string;
@@ -55,23 +55,42 @@ export const Select = forwardRef<HTMLInputElement | HTMLTextAreaElement, Props>(
 		ref
 	) => {
 		const id = useId();
-
 		const [open, setOpen] = useState(false);
 
+		// Determine if this is a multi-select
+		const isMultiSelect = Array.isArray(value);
+
+		// Handle selection
 		const handleSelect = (selectedValue: string) => {
-			onChange?.(selectedValue);
-			setOpen(false);
+			if (isMultiSelect) {
+				const currentValues = value as string[];
+				const newValues = currentValues.includes(selectedValue)
+					? currentValues.filter((v) => v !== selectedValue) // Remove if already selected
+					: [...currentValues, selectedValue]; // Add if not selected
+				onChange?.(newValues);
+			} else {
+				onChange?.(selectedValue);
+				setOpen(false);
+			}
 		};
 
+		// Prepare list items
 		const listItems: ListItem[] = options.map((option) => ({
 			item: option.label,
 			onClick: () => handleSelect(option.value),
-			className: 'text-sm',
+			selected: isMultiSelect
+				? (value as string[]).includes(option.value)
+				: value === option.value,
+			className: 'text-xs',
 		}));
 
-		const displayValue = options.find(
-			(option) => option.value === value
-		)?.label;
+		// Display value(s)
+		const displayValue = isMultiSelect
+			? options
+					.filter((option) => (value as string[]).includes(option.value))
+					.map((option) => option.label)
+					.join(', ') // Concatenate labels for display
+			: options.find((option) => option.value === value)?.label || '';
 
 		return (
 			<div className={twMerge('w-full', className, disabled && 'opacity-60')}>

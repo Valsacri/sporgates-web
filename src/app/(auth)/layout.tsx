@@ -1,11 +1,11 @@
 'use client';
 
 import { UserContext } from '@/client/contexts/user.context';
+import Splash from '@/components/layout/Splash';
 import Logo from '@/components/Logo';
 import Card from '@/components/utils/Card';
-import Loader from '@/components/utils/Loader';
 import { useRouter } from 'next/navigation';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 
 interface Props {
 	children: React.ReactNode;
@@ -16,11 +16,7 @@ function Layout({ children }: Props) {
 	const router = useRouter();
 
 	if (user === undefined) {
-		return (
-			<div className='w-screen h-screen flex justify-center items-center'>
-				<Loader className='size-36' />
-			</div>
-		);
+		return <Splash />;
 	}
 
 	if (user) {
@@ -31,7 +27,7 @@ function Layout({ children }: Props) {
 		<div className='lg:w-screen lg:h-screen flex justify-center items-center p-5 lg:p-32'>
 			<div className='w-full flex flex-col lg:flex-row gap-3 lg:gap-40'>
 				<div className='w-full lg:w-1/2 space-y-10'>
-					<Logo width={50} height={50} />
+					<Logo size={100} />
 
 					<h1 className='text-5xl'>
 						<span className='text-primary'>Connect</span> With Friends

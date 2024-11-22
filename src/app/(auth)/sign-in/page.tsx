@@ -1,5 +1,6 @@
 'use client';
 
+import { AlertContext } from '@/client/contexts/alert.context';
 import { AuthClientService } from '@/client/services/auth.client-service';
 import AuthProviders from '@/components/auth/AuthProviders';
 import Button from '@/components/utils/Button';
@@ -7,13 +8,19 @@ import { Checkbox } from '@/components/utils/form/Checkbox';
 import { Input } from '@/components/utils/form/Input';
 import { SignInDto } from '@/dtos/auth.dto';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import {
+	getAuth,
+	signInWithEmailAndPassword,
+	UserCredential,
+} from 'firebase/auth';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 
 function Page() {
 	const router = useRouter();
+	const showAlert = useContext(AlertContext);
 
 	const {
 		register,
@@ -29,11 +36,23 @@ function Page() {
 	});
 
 	const onSubmit = async (data: any) => {
-		const credentials = await signInWithEmailAndPassword(
-			getAuth(),
-			data.email,
-			data.password
-		);
+		let credentials: UserCredential;
+		try {
+			credentials = await signInWithEmailAndPassword(
+				getAuth(),
+				data.email,
+				data.password
+			);
+		} catch (error: any) {
+			console.error(error);
+			if (error.code === 'auth/invalid-credential') {
+				showAlert({
+					color: 'warning',
+					message: 'Invalid credentials',
+				});
+			}
+			return;
+		}
 		await AuthClientService.signIn(credentials);
 		router.push('/');
 	};

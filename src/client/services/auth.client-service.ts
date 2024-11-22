@@ -1,6 +1,11 @@
 import { User } from '@/types/user.types';
 import { Axios } from '../config/axios';
-import { getAuth, signOut, UserCredential } from 'firebase/auth';
+import {
+	getAuth,
+	sendPasswordResetEmail,
+	signOut,
+	UserCredential,
+} from 'firebase/auth';
 import { CreateUserDtoType } from '@/dtos/user.dto';
 import { toBearerToken } from '@/helpers/http.helpers';
 
@@ -23,5 +28,9 @@ export class AuthClientService {
 		await signOut(getAuth());
 		const res = await Axios.post<User>('/auth/sign-out');
 		return res.data;
+	}
+
+	static async sendPasswordResetEmail(email: string) {
+		await sendPasswordResetEmail(getAuth(), email);
 	}
 }

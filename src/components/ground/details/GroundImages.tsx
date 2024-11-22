@@ -1,20 +1,20 @@
 'use client';
 
-import Card from '@/components/utils/Card';
 import { twMerge } from 'tailwind-merge';
 
 interface Props {
 	images: string[];
 }
 
-
 function GroundImages({ images }: Props) {
 	return (
-		<Card className='grid grid-cols-4 grid-rows-2 gap-1 h-[120px] lg:h-[350px] p-1'>
+		<div
+			className='grid grid-cols-4 grid-rows-2 gap-1 h-[120px] lg:h-[350px]'
+		>
 			<GalleryImage
 				image={images[0]}
 				className={twMerge(
-					'row-span-2',
+					'row-span-2 col-span-4',
 					images.length === 1 ? 'col-span-4' : 'col-span-2'
 				)}
 			></GalleryImage>
@@ -59,7 +59,7 @@ function GroundImages({ images }: Props) {
 					</div>
 				</div>
 			)}
-		</Card>
+		</div>
 	);
 }
 
@@ -68,10 +68,7 @@ export default GroundImages;
 function GalleryImage({ image, className }: any) {
 	return (
 		<div
-			className={twMerge(
-				'w-full h-full rounded-md bg-cover bg-center',
-				className
-			)}
+			className={twMerge('size-full rounded-lg bg-cover bg-center', className)}
 			style={{
 				backgroundImage: `url(${image})`,
 			}}

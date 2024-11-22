@@ -117,50 +117,52 @@ export default function StaffTable({ businessId }: Props) {
 				/>
 
 				{users.length > 0 && username && (
-					<Dropdown open={true}>
-						<List
-							items={users.map((user) => {
-								const isSelected = staff.some((s) => s.id === user.id);
-								return {
-									className: isSelected ? 'opacity-75' : '',
-									prefix: <Avatar src={'/images/avatar.png'} size={35} />,
-									item: (
-										<div>
-											<div className='text-sm text-text-secondary-dark'>
-												{user.name}
+					<div className="flex justify-end">
+						<Dropdown open={true} containerClassName='absolute'>
+							<List
+								items={users.map((user) => {
+									const isSelected = staff.some((s) => s.id === user.id);
+									return {
+										className: isSelected ? 'opacity-75' : '',
+										prefix: <Avatar src={'/images/avatar.png'} size={35} />,
+										item: (
+											<div>
+												<div className='text-sm text-text-secondary-dark'>
+													{user.name}
+												</div>
+												<div className='text-xs text-text-secondary'>
+													@{user.username}
+												</div>
 											</div>
-											<div className='text-xs text-text-secondary'>
-												@{user.username}
+										),
+										onClick: () => !isSelected && handleAdd(user.id),
+									};
+								})}
+							/>
+							<List2>
+								{users.map((user) => {
+									const isSelected = staff.some((s) => s.id === user.id);
+									return (
+										<ListItem
+											key={user.id}
+											containerClassName={isSelected ? 'opacity-75' : ''}
+											prefix={<Avatar src={'/images/avatar.png'} size={35} />}
+											onClick={() => !isSelected && handleAdd(user.id)}
+										>
+											<div>
+												<div className='text-sm text-text-secondary-dark'>
+													{user.name}
+												</div>
+												<div className='text-xs text-text-secondary'>
+													@{user.username}
+												</div>
 											</div>
-										</div>
-									),
-									onClick: () => !isSelected && handleAdd(user.id),
-								};
-							})}
-						/>
-						<List2>
-							{users.map((user) => {
-								const isSelected = staff.some((s) => s.id === user.id);
-								return (
-									<ListItem
-										key={user.id}
-										containerClassName={isSelected ? 'opacity-75' : ''}
-										prefix={<Avatar src={'/images/avatar.png'} size={35} />}
-										onClick={() => !isSelected && handleAdd(user.id)}
-									>
-										<div>
-											<div className='text-sm text-text-secondary-dark'>
-												{user.name}
-											</div>
-											<div className='text-xs text-text-secondary'>
-												@{user.username}
-											</div>
-										</div>
-									</ListItem>
-								);
-							})}
-						</List2>
-					</Dropdown>
+										</ListItem>
+									);
+								})}
+							</List2>
+						</Dropdown>
+					</div>
 				)}
 			</div>
 

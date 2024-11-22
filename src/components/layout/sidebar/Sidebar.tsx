@@ -90,12 +90,7 @@ function Sidebar() {
 									<Separator />
 
 									<ListItem
-										prefix={
-											<Avatar
-												src='https://sporgates.com/upload/photos/d-avatar.jpg?cache=0'
-												size={24}
-											/>
-										}
+										prefix={<Avatar src={user.avatar} size={24} />}
 										href={`/users/${user.id}`}
 										selected={pathname === `/users/${user.id}`}
 									>

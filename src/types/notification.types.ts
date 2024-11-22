@@ -10,7 +10,7 @@ export interface Notification extends Record {
 	subject: NotificationSubject;
 	title: string;
 	description: string;
-	image: string;
+	image?: string;
 	user: string | User;
 	infos: string[];
 	read: boolean;

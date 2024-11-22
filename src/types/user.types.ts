@@ -1,5 +1,4 @@
 import { DecodedIdToken } from 'firebase-admin/auth';
-import { Socials } from './general.types';
 import { Address } from './geo.types';
 import { Record } from './utils.types';
 import { Sport } from './sport.types';
@@ -13,15 +12,18 @@ export interface User extends Record {
 	lastName: string;
 	name: string;
 	email: string;
-	sports?: string[] | Sport[];
-
+	
 	avatar?: string;
 	cover?: string;
 	bio?: string;
+	sports?: string[] | Sport[];
 
-	phoneNumber?: string;
-	birthday?: string;
+	phone?: string;
 	address?: Address;
-	socials?: Socials;
+	birthday?: string;
+
 	verifiedAt?: number;
+	lastUsernameChangeAt?: number;
+
+	// socials?: Socials;
 }

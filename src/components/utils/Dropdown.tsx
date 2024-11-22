@@ -52,7 +52,10 @@ export const Dropdown = ({
 	};
 
 	return (
-		<div ref={ref} className={twMerge('relative', containerClassName)}>
+		<div
+			ref={ref}
+			className={twMerge('relative overflow-visible z-50', containerClassName)}
+		>
 			{trigger && (
 				<div
 					onClick={() => !disabled && setOpen(!open)}
@@ -65,7 +68,7 @@ export const Dropdown = ({
 			{open && (
 				<Card
 					className={twMerge(
-						'absolute p-1 z-10 min-w-max text-medium text-left m-0 bg-clip-padding',
+						'absolute p-1 min-w-max text-medium text-left m-0 bg-clip-padding',
 						xPosition === 'left' ? 'left-0' : 'right-0',
 						yPosition === 'top'
 							? yInside

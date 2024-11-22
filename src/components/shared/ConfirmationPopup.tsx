@@ -46,8 +46,12 @@ function ConfirmationPopup({
 					onClose={onClose}
 				>
 					<div className='flex justify-end space-x-3'>
-						<Button onClick={onClose} color='secondary'>Cancel</Button>
-						<Button onClick={onConfirm} color='danger'>Confirm</Button>
+						<Button onClick={onConfirm} color='danger'>
+							Confirm
+						</Button>
+						<Button onClick={onClose} color='secondary'>
+							Cancel
+						</Button>
 					</div>
 				</Popup>
 			)}

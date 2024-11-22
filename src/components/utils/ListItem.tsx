@@ -13,7 +13,7 @@ export interface ListItemProps {
 	suffix?: React.ReactNode;
 	containerClassName?: string;
 	className?: string;
-	onClick?: () => any;
+	onClick?: (e?: any) => any;
 	href?: string | null;
 	selected?: boolean;
 	disabled?: boolean;
@@ -49,8 +49,7 @@ function ListItem({
 			href={disabled ? '#' : href || '#'}
 			aria-disabled={disabled}
 			className={twMerge(
-				'w-full px-3 block rounded-md hover:bg-secondary cursor-pointer',
-				children && 'py-3',
+				'w-full px-3 block rounded-md hover:bg-secondary cursor-pointer py-3',
 				selected && 'bg-secondary',
 				containerClassName
 			)}

@@ -18,12 +18,12 @@ export const UserSchema = new Schema<User>({
 	cover: { type: String },
 	bio: { type: String, default: '' },
 
-	phoneNumber: { type: String },
+	phone: { type: String },
 	birthday: { type: String },
 	address: { type: AddressSchema },
-	socials: { type: SocialsSchema },
 
 	verifiedAt: { type: Number },
+	lastUsernameChangeAt: { type: Number },
 });
 
 export const UserModel =

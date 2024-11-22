@@ -7,14 +7,17 @@ import StaffTable from './StaffTable';
 interface Props {
 	children: React.ReactNode;
 	businessId: string;
+	className?: string;
 }
 
-function ManageStaffPopup({ children, businessId }: Props) {
+function ManageStaffPopup({ children, businessId, className }: Props) {
 	const [open, toggleOpen] = usePopup();
 
 	return (
 		<>
-			<div onClick={toggleOpen}>{children}</div>
+			<div onClick={toggleOpen} className={className}>
+				{children}
+			</div>
 
 			{open && (
 				<Popup

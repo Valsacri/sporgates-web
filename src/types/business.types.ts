@@ -13,19 +13,30 @@ export interface OpeningHours {
 	sunday: Timeframe[];
 }
 
+export interface Contact {
+	email?: string;
+	phone?: string;
+}
+
 export interface Business extends Record {
 	name: string;
 	username: string;
-	description: string;
-	bio: string;
-	avatar: string;
-	cover: string;
-	socials: Socials;
+	email: string;
+	phone: string;
+	address: string | Address;
 
 	owner: string | User;
 	staff: string[] | User[];
+	
+	avatar?: string;
+	cover?: string;
+	bio?: string;
+	
+	contact?: Contact;
+	
+	openingHours: OpeningHours;
+	
+	verifiedAt?: number;
 
-	email: string;
-	phoneNumber: string;
-	address: string | Address;
+	// socials?: Socials;
 }

@@ -325,7 +325,7 @@ function GroundForm({ ground }: Props) {
 						<Select
 							{...register('address.city')}
 							value={selectedCity}
-							onChange={(city) => setValue('address.city', city)}
+							onChange={(city) => setValue('address.city', city as string)}
 							options={citiesOptions}
 							label='City'
 							placeholder='Select a city'
@@ -334,7 +334,7 @@ function GroundForm({ ground }: Props) {
 						<Select
 							{...register('address.town')}
 							value={selectedTown}
-							onChange={(town) => setValue('address.town', town)}
+							onChange={(town) => setValue('address.town', town as string)}
 							options={townsOptions}
 							label='Town'
 							placeholder='Select a town'

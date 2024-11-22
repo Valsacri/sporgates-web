@@ -23,6 +23,7 @@ export interface UseBreakpointReturnType {
 	isLaptop: boolean;
 	isTablet: boolean;
 	isMobile: boolean;
+	loading: boolean;
 }
 
 const useBreakpoint = () => {
@@ -58,7 +59,9 @@ const useBreakpoint = () => {
 		];
 	}, [breakpoint]);
 
-	if (!windowWidth) return null;
+	if (!windowWidth) {
+		return { loading: true } as UseBreakpointReturnType;
+	}
 
 	return {
 		windowWidth,
@@ -68,6 +71,7 @@ const useBreakpoint = () => {
 		isLaptop,
 		isTablet,
 		isMobile,
+		loading: false,
 	} as UseBreakpointReturnType;
 };
 

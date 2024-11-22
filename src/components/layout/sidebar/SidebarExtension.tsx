@@ -18,10 +18,10 @@ function SidebarExtension({ extension, onOutsideClick }: Props) {
 	useOutsideClick(ref, onOutsideClick);
 
 	return (
-		<div ref={ref}>
+		<div ref={ref} className='z-50'>
 			<Card
 				title={<span className='uppercase ml-4'>{extension}</span>}
-				className='h-full w-[400px] border-x bg-white px-2 py-6 rounded-none overflow-y-auto z-50'
+				className='h-full w-[400px] border-x bg-white px-2 py-6 rounded-none overflow-y-auto'
 				bodyClassName='pt-2'
 			>
 				<Separator />
