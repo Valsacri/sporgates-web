@@ -34,7 +34,7 @@ export default function ReservationFilters({ businessId }: Props) {
 				];
 			} catch (error) {
 				console.error(error);
-				showAlert({ color: 'danger', message: 'Error while fetching grounds' });
+				showAlert({ type: 'danger', message: 'Error while fetching grounds' });
 				return [];
 			}
 		},

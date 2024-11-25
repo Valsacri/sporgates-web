@@ -1,4 +1,4 @@
-import { BusinessDto, BusinessDtoType } from '@/dtos/business.dto';
+import { CreateBusinessDto, CreateBusinessDtoType } from '@/dtos/business.dto';
 import { setupDbConnection } from '@/server/config/mongodb.config';
 import { HttpHelper } from '@/server/helpers/http.helper';
 import { BusinessServerService } from '@/server/services/business.server-service';
@@ -10,11 +10,13 @@ export async function GET(req: NextRequest, res: Response) {
 
 		const { searchParams } = req.nextUrl;
 		const keywords = searchParams.get('keywords') || undefined;
-		const user = searchParams.get('user') || undefined;
+		const owner = searchParams.get('owner') || undefined;
+		const staff = searchParams.get('staff') || undefined;
 
 		const grounds = await BusinessServerService.getPage({
 			keywords,
-			user,
+			owner,
+			staff,
 		});
 
 		return Response.json(grounds, {
@@ -34,10 +36,10 @@ export async function POST(req: Request, res: Response) {
 
 		const { userId } = HttpHelper.getContextAuthUser();
 
-		const data: BusinessDtoType = await req.json();
+		const data: CreateBusinessDtoType = await req.json();
 
 		// validate data with zod schema
-		const validation = BusinessDto.safeParse(data);
+		const validation = CreateBusinessDto.safeParse(data);
 
 		if (!validation.success) {
 			return Response.json(validation.error, {
@@ -45,7 +47,11 @@ export async function POST(req: Request, res: Response) {
 			});
 		}
 
-		const business = await BusinessServerService.create(data, userId);
+		const business = await BusinessServerService.create({
+			...data,
+			owner: userId,
+			staff: [userId],
+		});
 
 		return Response.json(business, {
 			status: 201,

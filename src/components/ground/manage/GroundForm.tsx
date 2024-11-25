@@ -7,8 +7,6 @@ import { useForm } from 'react-hook-form';
 import { GroundDto, GroundDtoType } from '@/dtos/item/ground/ground.dto';
 import { useImages } from '@/client/hooks/utils/useImages';
 import { Input } from '../../utils/form/Input';
-import { HiOutlinePlusCircle } from 'react-icons/hi2';
-import { Table } from '../../utils/table/Table';
 import MapboxMap from '../../utils/Map';
 import { ImagePicker } from '../../utils/form/ImagePicker';
 import OpeningHoursPicker from '../../shared/OpeningHoursPicker';
@@ -19,16 +17,13 @@ import { Ground } from '@/types/item/ground/ground.types';
 import { Select, SelectOption } from '../../utils/form/Select';
 import { SubscriptionDtoType } from '@/dtos/item/club.dto';
 import { useRouter } from 'next/navigation';
-import ConfirmationPopup from '../../shared/ConfirmationPopup';
-import { deleteFile, uploadFile } from '@/client/helpers/storage.helper';
+import { StorageHelper } from '@/client/helpers/storage.helper';
 import { City, GeoLocation, Town } from '@/types/geo.types';
 import { useFetch } from '@/client/hooks/utils/useFetch';
 import { CityClientService } from '@/client/services/geo/city.client-service';
 import { TownClientService } from '@/client/services/geo/town.client-service';
 import { AlertContext } from '@/client/contexts/alert.context';
 import { GENERIC_ERROR_MESSAGE } from '@/constants';
-import ClubSubscriptionFeatureFormPopup from './subscription/feature/ClubSubscriptionFeatureFormPopup';
-import ClubSubscriptionFormPopup from './subscription/ClubSubscriptionFormPopup';
 
 interface Props {
 	ground?: Ground;
@@ -138,7 +133,7 @@ function GroundForm({ ground }: Props) {
 
 	const handleUploadImage = async (image: File) => {
 		try {
-			const url = await uploadFile('/images/grounds', image);
+			const url = await StorageHelper.uploadFile('/images/grounds', image);
 			return url;
 		} catch (error) {
 			console.error(error);
@@ -147,7 +142,7 @@ function GroundForm({ ground }: Props) {
 
 	const handleDeleteImage = async (imageUrl: string) => {
 		try {
-			await deleteFile(imageUrl);
+			await StorageHelper.deleteFile(imageUrl);
 		} catch (error) {
 			console.error(error);
 		}
@@ -181,8 +176,7 @@ function GroundForm({ ground }: Props) {
 			} catch (error) {
 				console.log(error);
 				showAlert({
-					color: 'danger',
-					message: GENERIC_ERROR_MESSAGE,
+					type: 'danger',
 				});
 				return [];
 			}

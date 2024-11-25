@@ -47,14 +47,13 @@ function Page() {
 		try {
 			await UserClientService.updateProfile(data);
 			showAlert({
-				color: 'success',
+				type: 'success',
 				message: 'Profile updated',
 			});
 		} catch (error) {
 			console.error(error);
 			showAlert({
-				color: 'danger',
-				message: GENERIC_ERROR_MESSAGE,
+				type: 'danger',
 			});
 		}
 	};
@@ -67,7 +66,7 @@ function Page() {
 
 			if (canChangeUsername) {
 				showAlert({
-					color: 'warning',
+					type: 'warning',
 					message: `Can only change username once every ${
 						USERNAME_CHANGE_INTERVAL / (24 * 60 * 60 * 1000)
 					} days`,
@@ -77,14 +76,13 @@ function Page() {
 
 			await UserClientService.updateUsername(data);
 			showAlert({
-				color: 'success',
+				type: 'success',
 				message: 'Username updated',
 			});
 		} catch (error) {
 			console.error(error);
 			showAlert({
-				color: 'danger',
-				message: GENERIC_ERROR_MESSAGE,
+				type: 'danger',
 			});
 		}
 	};

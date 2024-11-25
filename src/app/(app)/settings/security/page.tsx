@@ -18,13 +18,13 @@ function Page() {
 			await AuthClientService.sendPasswordResetEmail(email);
 
 			showAlert({
-				color: 'success',
+				type: 'success',
 				message: 'Your reset email has been sent',
 			});
 		} catch (error) {
 			console.error(error);
 			showAlert({
-				color: 'danger',
+				type: 'danger',
 				message: 'An error occurred while sending the reset email',
 			});
 		} finally {

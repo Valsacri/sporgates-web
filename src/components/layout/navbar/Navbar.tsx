@@ -5,7 +5,6 @@ import Logo from '../../Logo';
 import Card from '@/components/utils/Card';
 import MenuButton from '../MenuButton';
 import ListItem from '@/components/utils/ListItem';
-import Icon from '@/components/utils/Icon';
 import { usePathname, useRouter } from 'next/navigation';
 import Button from '@/components/utils/Button';
 import Avatar from '@/components/utils/Avatar';

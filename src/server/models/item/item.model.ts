@@ -1,10 +1,10 @@
 import { Schema } from 'mongoose';
 import {
 	AddressSchema,
-	OpeningHoursSchema,
 	ReviewSchema,
 } from '../general.model';
 import { ModelName } from '../model-name.enum';
+import { OpeningHoursSchema } from '../business.model';
 
 export const ItemSchema = {
 	name: { type: String, required: true },

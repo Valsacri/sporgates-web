@@ -24,7 +24,30 @@ export async function DELETE(
 			params.businessId,
 			userId
 		);
-		if (!isBusinessOwner) return FORBIDDEN_RESPONSE;
+		const canRemoveStaff = isBusinessOwner && userId === params.staffId;
+		if (canRemoveStaff) {
+			return Response.json(
+				{ message: 'You cannot remove yourself from the business' },
+				{
+					status: 400,
+				}
+			);
+		}
+
+		const isStaff = await PermissionServerService.isBusinessStaff(
+			params.businessId,
+			userId
+		);
+		const canRemoveItself =
+			!isBusinessOwner && isStaff && userId === params.staffId;
+		if (!canRemoveItself) {
+			return Response.json(
+				{ message: 'You can only remove yourself from the business' },
+				{
+					status: 400,
+				}
+			);
+		}
 
 		const staff = await BusinessServerService.removeStaff(
 			params.businessId,

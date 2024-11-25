@@ -53,15 +53,14 @@ export const useReservation = () => {
 				setSelectedTimeframe(null);
 
 				showAlert({
-					color: 'success',
+					type: 'success',
 					message: "Reservation request sent! You'll be notified soon!",
 				});
 			}
 		} catch (error) {
 			console.log(error);
 			showAlert({
-				color: 'danger',
-				message: GENERIC_ERROR_MESSAGE,
+				type: 'danger',
 			});
 		} finally {
 			setLoading(false);

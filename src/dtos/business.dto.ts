@@ -1,26 +1,19 @@
 import { z } from 'zod';
-import { AddressDto, SocialsDto } from './item/general.dto';
 
 // create business
-export const BusinessDto = z.object({
+export const CreateBusinessDto = z.object({
 	name: z.string().min(1),
 	bio: z.string().min(1),
-	avatar: z.string().min(1),
-	cover: z.string().min(1),
-	socials: SocialsDto,
-
-	owner: z.string().min(1),
-	staff: z.array(z.string()).optional(),
-
-	email: z.string().min(1),
-	phone: z.string().min(1),
-	address: AddressDto,
+	username: z.string().min(1),
 });
-export type BusinessDtoType = z.infer<typeof BusinessDto>;
+export type CreateBusinessDtoType = z.infer<typeof CreateBusinessDto>;
 
 // update business
-export const BusinessUpdateDto = BusinessDto.partial();
-export type BusinessUpdateDtoType = z.infer<typeof BusinessUpdateDto>;
+export const UpdateBusinessDto = z.object({
+	name: z.string().optional(),
+	bio: z.string().optional(),
+});
+export type UpdateBusinessDtoType = z.infer<typeof UpdateBusinessDto>;
 
 // update profile
 export const UpdateBusinessProfileDto = z.object({

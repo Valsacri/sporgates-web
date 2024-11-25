@@ -24,9 +24,9 @@ const alerts = {
 };
 
 export const Alert = ({ alert, onClick, className }: Props) => {
-	const bgColor = alerts[alert!.color].bgColor;
+	const bgColor = alerts[alert!.type].bgColor;
 
-	const Icon = alert && alerts[alert.color].icon;
+	const Icon = alert && alerts[alert.type].icon;
 
 	return (
 		<div

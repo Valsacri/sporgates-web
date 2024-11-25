@@ -1,11 +1,16 @@
+'use client';
+
 import Button from '../utils/Button';
-import ManageStaffPopup from '../business/manage/ManageStaffPopup';
 import { User } from '@/types/user.types';
 import { Business } from '@/types/business.types';
 import { ProfileType } from '@/types/general.types';
 import Avatar from '../utils/Avatar';
 import Card from '../utils/Card';
 import Link from 'next/link';
+import ImageUploadPopup from './ImageUploadPopup';
+import { usePopup } from '@/client/hooks/utils/usePopup';
+import { StorageHelper } from '@/client/helpers/storage.helper';
+import BusinessFormPopup from '../business/BusinessFormPopup';
 
 interface Props {
 	type: ProfileType;
@@ -13,6 +18,12 @@ interface Props {
 }
 
 function ProfileInfos({ type, infos }: Props) {
+	const [open, toggleOpen] = usePopup();
+
+	const handleUpload = async (file: File) => {
+		await StorageHelper.uploadFile('/images/cover-photos', file);
+	};
+
 	return (
 		<Card className='p-0'>
 			<div className='relative aspect-[3] w-full'>
@@ -26,13 +37,13 @@ function ProfileInfos({ type, infos }: Props) {
 				></div>
 
 				<div className='absolute bottom-0 right-0 flex gap-3 ml-auto mt-auto p-3'>
-					<Button icon='insta' color='white'>
+					<Button icon='insta' color='white' onClick={toggleOpen}>
 						<span className='hidden md:inline'>Edit cover photo</span>
 					</Button>
 				</div>
 			</div>
 
-			<div className='flex flex-col md:flex-row justify-center md:justify-between md:items-end px-3 pb-3'>
+			<div className='flex flex-col md:flex-row justify-center md:justify-between px-3 pb-3'>
 				<div className='flex flex-col md:flex-row md:text-start items-center gap-5 -mt-20 md:-mt-8'>
 					<div className='relative'>
 						<Avatar
@@ -52,26 +63,39 @@ function ProfileInfos({ type, infos }: Props) {
 					</div>
 				</div>
 
-				<div className='flex md:flex-col items-end gap-2 mt-5 md:mt-0'>
-					<Link href='/settings/profile'>
-						<Button icon='edit' color='white' rounded className='w-full border'>
-							Edit profile
-						</Button>
-					</Link>
-					{type === ProfileType.BUSINESS && (
-						<ManageStaffPopup businessId={infos.id} className='w-full'>
+				<div className='flex md:flex-col items-end gap-2 mt-5'>
+					{type === ProfileType.USER ? (
+						<Link href='/settings/profile'>
 							<Button
-								icon='two-user'
+								icon='edit'
 								color='white'
 								rounded
 								className='w-full border'
 							>
-								Manage staff
+								Edit profile
 							</Button>
-						</ManageStaffPopup>
+						</Link>
+					) : (
+						<BusinessFormPopup business={infos as Business}>
+							<Button
+								icon='edit'
+								color='white'
+								rounded
+								className='w-full border'
+							>
+								Manage
+							</Button>
+						</BusinessFormPopup>
 					)}
 				</div>
 			</div>
+
+			<ImageUploadPopup
+				title='Edit cover photo'
+				open={open}
+				onClose={toggleOpen}
+				onUpload={handleUpload}
+			/>
 		</Card>
 	);
 }

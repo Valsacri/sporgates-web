@@ -20,7 +20,7 @@ function GroundFormPopup({ children, ground }: Props) {
 			{open && (
 				<Popup
 					open={true}
-					title={ground ? 'Update Ground' : 'Create a Ground'}
+					title={ground ? 'Update ground' : 'Create a ground'}
 					description={
 						ground
 							? 'Update the details of the ground.'

@@ -27,7 +27,7 @@ function Sidebar() {
 
 	const { data: businesses } = useFetch([], {
 		async fetch() {
-			return await BusinessClientService.getAll({ user: user?.id });
+			return await BusinessClientService.getAll({ staff: user?.id });
 		},
 	});
 

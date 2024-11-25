@@ -6,5 +6,5 @@ interface Props {
 
 export default function Page({ params }: Props) {
 	const businessId = params.businessId;
-	return redirect(`/businesses/${businessId}/gallery`);
+	return redirect(`/businesses/${businessId}/grounds`);
 }

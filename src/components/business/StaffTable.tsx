@@ -6,7 +6,6 @@ import { useContext, useState } from 'react';
 import { AlertContext } from '@/client/contexts/alert.context';
 import { UserClientService } from '@/client/services/user.client-service';
 import { User } from '@/types/user.types';
-import { GENERIC_ERROR_MESSAGE } from '@/constants';
 import { BusinessClientService } from '@/client/services/business.client-service';
 import Avatar from '@/components/utils/Avatar';
 import { Input } from '@/components/utils/form/Input';
@@ -39,24 +38,25 @@ export default function StaffTable({ businessId }: Props) {
 	const {
 		data: staff,
 		loading: loadingStaff,
-		refetch,
+		refetch: refetchStaff,
 	} = useFetch(
 		[],
 		{
 			async fetch() {
+				if (!businessId) return [];
 				try {
 					return await BusinessClientService.getStaff(businessId);
 				} catch (error) {
 					console.error(error);
 					showAlert({
-						color: 'danger',
+						type: 'danger',
 						message: 'Error while fetching reservations',
 					});
 					return [];
 				}
 			},
 		},
-		[]
+		[businessId]
 	);
 
 	const { data: users, loading: loadingUsers } = useFetch(
@@ -70,8 +70,7 @@ export default function StaffTable({ businessId }: Props) {
 				} catch (error) {
 					console.error(error);
 					showAlert({
-						color: 'danger',
-						message: GENERIC_ERROR_MESSAGE,
+						type: 'danger',
 					});
 					return [];
 				}
@@ -84,12 +83,11 @@ export default function StaffTable({ businessId }: Props) {
 		try {
 			reset();
 			await BusinessClientService.addStaff(businessId, userId);
-			refetch();
+			refetchStaff();
 		} catch (error) {
 			console.error(error);
 			showAlert({
-				color: 'danger',
-				message: GENERIC_ERROR_MESSAGE,
+				type: 'danger',
 			});
 		}
 	};
@@ -97,12 +95,11 @@ export default function StaffTable({ businessId }: Props) {
 	const handleRemove = async () => {
 		try {
 			await BusinessClientService.removeStaff(businessId, selectedStaff!.id);
-			refetch();
+			refetchStaff();
 		} catch (error) {
 			console.error(error);
 			showAlert({
-				color: 'danger',
-				message: GENERIC_ERROR_MESSAGE,
+				type: 'danger',
 			});
 		}
 	};
@@ -117,7 +114,7 @@ export default function StaffTable({ businessId }: Props) {
 				/>
 
 				{users.length > 0 && username && (
-					<div className="flex justify-end">
+					<div className='flex justify-end'>
 						<Dropdown open={true} containerClassName='absolute'>
 							<List
 								items={users.map((user) => {
@@ -173,19 +170,16 @@ export default function StaffTable({ businessId }: Props) {
 						display: 'Avatar',
 					},
 					{
-						field: (row) => row.name,
+						field: (row) => (
+							<Link href={`/users/${row.id}`} className='underline'>
+								{row.name}
+							</Link>
+						),
 						display: 'Name',
 					},
 				]}
 				data={staff}
 				actions={[
-					{
-						name: (row) => (
-							<Link href={`/users/${row.id}`} className='underline'>
-								View
-							</Link>
-						),
-					},
 					{
 						name: 'Remove',
 						callback: setSelectedStaff,

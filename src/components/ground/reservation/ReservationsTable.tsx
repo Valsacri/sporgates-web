@@ -1,8 +1,6 @@
 'use client';
 
-import {
-	GroundRerservationStatus
-} from '@/types/item/ground/ground-reservation.types';
+import { GroundRerservationStatus } from '@/types/item/ground/ground-reservation.types';
 import Loader from '@/components/utils/Loader';
 import { useContext } from 'react';
 import { GroundReservationClientService } from '@/client/services/ground-reservation.client-service';
@@ -29,10 +27,7 @@ export default function ReservationsList({
 	const selectedGround = watch('ground');
 	const selectedStatus = watch('status') as 'all' | GroundRerservationStatus;
 
-	const {
-		data: reservations,
-		loading,
-	} = useFetch(
+	const { data: reservations, loading } = useFetch(
 		[],
 		{
 			async fetch() {
@@ -46,7 +41,7 @@ export default function ReservationsList({
 				} catch (error) {
 					console.error(error);
 					showAlert({
-						color: 'danger',
+						type: 'danger',
 						message: 'Error while fetching reservations',
 					});
 					return [];

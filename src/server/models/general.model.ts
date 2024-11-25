@@ -83,16 +83,3 @@ export const DateTimeframesSchema = new Schema<DateTimeframes>(
 	},
 	{ _id: false }
 );
-
-export const OpeningHoursSchema = new Schema<OpeningHours>(
-	{
-		monday: { type: [TimeframeSchema], required: true },
-		tuesday: { type: [TimeframeSchema], required: true },
-		wednesday: { type: [TimeframeSchema], required: true },
-		thursday: { type: [TimeframeSchema], required: true },
-		friday: { type: [TimeframeSchema], required: true },
-		saturday: { type: [TimeframeSchema], required: true },
-		sunday: { type: [TimeframeSchema], required: true },
-	},
-	{ _id: false }
-);

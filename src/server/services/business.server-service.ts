@@ -1,21 +1,19 @@
 import { FilterQuery } from 'mongoose';
-import { formatDocument, valueOrEmptyObject } from '../helpers/database.helper';
+import { formatDocument } from '../helpers/database.helper';
 import { Business } from '@/types/business.types';
 import { BusinessModel } from '../models/business.model';
-import { BusinessDtoType, BusinessUpdateDtoType } from '@/dtos/business.dto';
 import { User } from '@/types/user.types';
+import { Create, Update } from '@/types/utils.types';
 
 export class BusinessServerService {
 	static async getOne(id: string) {
-		const business = await BusinessModel.findById(id)
-			.populate('address.city')
-			.populate('address.town');
+		const business = await BusinessModel.findById(id);
 		if (!business) return null;
 		return formatDocument<Business>(business);
 	}
 
 	static async getPage(
-		filters: { keywords?: string; user?: string },
+		filters: { keywords?: string; owner?: string; staff?: string },
 		page = 1,
 		limit = 10
 	) {
@@ -27,16 +25,18 @@ export class BusinessServerService {
 				{ username: { $regex: filters.keywords, $options: 'i' } },
 			];
 		}
-		if (filters.user) {
-			query.staff = filters.user;
+		if (filters.owner) {
+			query.owner = filters.owner;
+		}
+		if (filters.staff) {
+			query.staff = filters.staff;
 		}
 
 		const businesses = await BusinessModel.find(query)
 			.collation({ locale: 'en', strength: 1 })
 			.limit(limit)
 			.skip((page - 1) * limit)
-			.populate('address.city')
-			.populate('address.town');
+			.populate('owner');
 
 		return formatDocument<Business[]>(businesses);
 	}
@@ -67,17 +67,13 @@ export class BusinessServerService {
 		return formatDocument<User[]>(business.staff);
 	}
 
-	static async create(data: BusinessDtoType, createdBy?: string) {
-		const business = await BusinessModel.create({ createdBy, ...data });
+	static async create(data: Create<Business>) {
+		const business = await BusinessModel.create(data);
 
 		return formatDocument<Business>(business);
 	}
 
-	static async update(
-		id: string,
-		data: BusinessUpdateDtoType,
-		updatedBy?: string
-	) {
+	static async update(id: string, data: Update<Business>, updatedBy?: string) {
 		const business = await BusinessModel.findByIdAndUpdate(
 			id,
 			{ updatedBy, ...data },

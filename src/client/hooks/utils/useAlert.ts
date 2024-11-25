@@ -1,4 +1,5 @@
 import { AlertMessage } from '@/client/contexts/alert.context';
+import { GENERIC_ERROR_MESSAGE } from '@/constants';
 import { useCallback, useState } from 'react';
 
 export const useAlert = () => {
@@ -9,7 +10,10 @@ export const useAlert = () => {
 			setAlert(null);
 			return;
 		}
-		setAlert(alert);
+		setAlert({
+			...alert,
+			message: alert.message || GENERIC_ERROR_MESSAGE,
+		});
 		setTimeout(() => {
 			setAlert(null);
 		}, 3000);

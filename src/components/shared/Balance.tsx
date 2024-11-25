@@ -43,8 +43,7 @@ function Balance({ onDeposit, purchasePrice = 0 }: Props) {
 		} catch (error) {
 			console.log(error);
 			showAlert({
-				color: 'danger',
-				message: GENERIC_ERROR_MESSAGE,
+				type: 'danger',
 			});
 			return [];
 		}

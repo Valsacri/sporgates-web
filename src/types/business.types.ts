@@ -14,29 +14,24 @@ export interface OpeningHours {
 }
 
 export interface Contact {
-	email?: string;
-	phone?: string;
+	emails?: string[];
+	phones?: string[];
+	address: string | Address;
 }
 
 export interface Business extends Record {
 	name: string;
 	username: string;
-	email: string;
-	phone: string;
-	address: string | Address;
 
 	owner: string | User;
 	staff: string[] | User[];
-	
+
+	bio?: string;
 	avatar?: string;
 	cover?: string;
-	bio?: string;
-	
-	contact?: Contact;
-	
-	openingHours: OpeningHours;
-	
-	verifiedAt?: number;
 
-	// socials?: Socials;
+	contact?: Contact;
+
+	verifiedAt?: number;
+	lastUsernameChangeAt?: number;
 }

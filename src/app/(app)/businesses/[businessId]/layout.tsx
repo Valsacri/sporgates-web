@@ -20,7 +20,7 @@ export default async function Layout({
 		<div className='w-full lg:w-[900px] space-y-3 mx-auto'>
 			<ProfileInfos type={ProfileType.BUSINESS} infos={business} />
 
-			<ProfileNavigation
+			{/* <ProfileNavigation
 				items={[
 					{
 						icon: 'gallery',
@@ -62,7 +62,7 @@ export default async function Layout({
 						],
 					},
 				]}
-			/>
+			/> */}
 
 			{children}
 		</div>

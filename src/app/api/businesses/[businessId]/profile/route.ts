@@ -40,7 +40,7 @@ export async function PATCH(
 			});
 		}
 
-		const user = await BusinessServerService.update(userId, body);
+		const user = await BusinessServerService.update(params.businessId, body);
 
 		return Response.json(user, {
 			status: 200,

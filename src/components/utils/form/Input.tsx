@@ -74,6 +74,7 @@ export const Input = React.forwardRef<
 			label,
 			suffix,
 			suffixClassName,
+			required = false,
 			multiline,
 			min = 0,
 			max,
@@ -116,7 +117,7 @@ export const Input = React.forwardRef<
 			<div className={twMerge('w-full', className)}>
 				{label && (
 					<label htmlFor={id} className={twMerge('text-sm', labelClassName)}>
-						{label}
+						{label} {required && '*'}
 					</label>
 				)}
 

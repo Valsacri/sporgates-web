@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 
 export interface AlertMessage {
-	color: 'success' | 'warning' | 'danger';
+	type: 'success' | 'warning' | 'danger';
 	message?: string;
 	position?: 'left' | 'right';
 }

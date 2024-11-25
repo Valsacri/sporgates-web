@@ -1,7 +1,11 @@
 import { Business } from '@/types/business.types';
 import { Axios } from '../config/axios';
-import { BusinessDtoType, BusinessUpdateDtoType } from '@/dtos/business.dto';
+import {
+	CreateBusinessDtoType,
+	UpdateBusinessDtoType,
+} from '@/dtos/business.dto';
 import { User } from '@/types/user.types';
+import { UsernameDtoType } from '@/dtos/user.dto';
 
 export class BusinessClientService {
 	static async getOne(id: string) {
@@ -9,7 +13,11 @@ export class BusinessClientService {
 		return res.data;
 	}
 
-	static async getAll(filters: { keywords?: string; user?: string }) {
+	static async getAll(filters: {
+		keywords?: string;
+		owner?: string;
+		staff?: string;
+	}) {
 		const res = await Axios.get<Business[]>('/businesses', {
 			params: filters,
 		});
@@ -37,18 +45,37 @@ export class BusinessClientService {
 		return res.data;
 	}
 
-	static async create(data: BusinessDtoType) {
+	static async create(data: CreateBusinessDtoType) {
 		const res = await Axios.post<Business>('/businesses', data);
 		return res.data;
 	}
 
-	static async update(id: string, data: BusinessUpdateDtoType) {
+	static async update(id: string, data: UpdateBusinessDtoType) {
 		const res = await Axios.patch<Business>(`/businesses/${id}`, data);
 		return res.data;
 	}
 
 	static async delete(id: string) {
 		const res = await Axios.delete<Business>(`/businesses/${id}`);
+		return res.data;
+	}
+
+	static async updateProfile(businessId: string, data: UpdateBusinessDtoType) {
+		const res = await Axios.patch<Business>(
+			`/businesses/${businessId}/profile`,
+			data
+		);
+		return res.data;
+	}
+
+	static async updateUsername(
+		businessId: string,
+		data: UsernameDtoType
+	) {
+		const res = await Axios.patch<Business>(
+			`/businesses/${businessId}/username`,
+			data
+		);
 		return res.data;
 	}
 }

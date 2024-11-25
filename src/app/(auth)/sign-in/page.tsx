@@ -47,7 +47,7 @@ function Page() {
 			console.error(error);
 			if (error.code === 'auth/invalid-credential') {
 				showAlert({
-					color: 'warning',
+					type: 'warning',
 					message: 'Invalid credentials',
 				});
 			}

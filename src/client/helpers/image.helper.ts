@@ -2,7 +2,7 @@ export class ImageHelper {
 	static getCroppedImg(
 		imageSrc: string,
 		pixelCrop: { x: number; y: number; width: number; height: number }
-	): Promise<string> {
+	): Promise<File> {
 		return new Promise((resolve, reject) => {
 			const image = new window.Image();
 			image.src = imageSrc;
@@ -38,7 +38,7 @@ export class ImageHelper {
 					const file = new File([blob], 'croppedImage.png', {
 						type: 'image/png',
 					});
-					resolve(URL.createObjectURL(file));
+					resolve(file);
 				}, 'image/png');
 			};
 			image.onerror = () => {

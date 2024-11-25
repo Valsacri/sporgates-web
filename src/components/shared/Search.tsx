@@ -39,8 +39,7 @@ function Search() {
 				} catch (error) {
 					console.error(error);
 					showAlert({
-						color: 'danger',
-						message: GENERIC_ERROR_MESSAGE,
+						type: 'danger',
 					});
 					return [];
 				}
