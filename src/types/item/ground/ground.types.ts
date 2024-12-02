@@ -4,7 +4,7 @@ import { Address } from '../../geo.types';
 import { Sport } from '../../sport.types';
 
 export interface Ground extends Item {
-	address: Address;
+	address: string | Address;
 	minReservationTime: number;
 	price: number;
 

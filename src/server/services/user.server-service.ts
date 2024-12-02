@@ -40,34 +40,71 @@ export class UserServerService {
 		page = 1,
 		limit = 10
 	) {
-		const query = {} as FilterQuery<User>;
+		const match: Record<string, any> = {};
 
 		if (filters.keywords) {
-			query.$or = [
+			match.$or = [
 				{ name: { $regex: filters.keywords, $options: 'i' } },
 				{ username: { $regex: filters.keywords, $options: 'i' } },
 			];
 		}
 		if (filters.sport) {
-			query.sports = filters.sport;
-		}
-		if (filters.city) {
-			query['address.city'] = filters.city;
-		}
-		if (filters.town) {
-			query['address.town'] = filters.town;
-		}
-		if (filters.lat && filters.lng && filters.radius) {
-			query['address.geoLocation'] = getGeoLocationQuery(filters);
+			match.sports = filters.sport;
 		}
 
-		const users = await UserModel.find(query)
-			.collation({ locale: 'en', strength: 1 })
-			.limit(limit)
-			.skip((page - 1) * limit)
-			.populate('address.city')
-			.populate('address.town')
-			.populate('sports');
+		const addressFilters: Record<string, any> = {};
+		if (filters.city) {
+			addressFilters.city = filters.city;
+		}
+		if (filters.town) {
+			addressFilters.town = filters.town;
+		}
+		if (filters.lat && filters.lng && filters.radius) {
+			addressFilters.geoLocation = getGeoLocationQuery(filters);
+		}
+
+		const pipeline: any[] = [
+			{ $match: match },
+			{
+				$lookup: {
+					from: 'addresses', // Address collection name
+					localField: 'address',
+					foreignField: '_id',
+					as: 'address',
+				},
+			},
+			{ $unwind: { path: '$address', preserveNullAndEmptyArrays: true } },
+			{
+				$lookup: {
+					from: 'cities', // City collection name
+					localField: 'address.city',
+					foreignField: '_id',
+					as: 'address.city',
+				},
+			},
+			{ $unwind: { path: '$address.city', preserveNullAndEmptyArrays: true } },
+			{
+				$lookup: {
+					from: 'towns', // Town collection name
+					localField: 'address.town',
+					foreignField: '_id',
+					as: 'address.town',
+				},
+			},
+			{ $unwind: { path: '$address.town', preserveNullAndEmptyArrays: true } },
+		];
+
+		if (Object.keys(addressFilters).length > 0) {
+			pipeline.push({ $match: { address: addressFilters } });
+		}
+
+		pipeline.push(
+			{ $sort: { name: 1 } }, // Example sort, adjust as needed
+			{ $skip: (page - 1) * limit },
+			{ $limit: limit }
+		);
+
+		const users = await UserModel.aggregate(pipeline);
 
 		return formatDocument<User[]>(users);
 	}

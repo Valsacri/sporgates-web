@@ -8,7 +8,7 @@ import { BusinessClientService } from '@/client/services/business.client-service
 import { useContext } from 'react';
 import { UserContext } from '@/client/contexts/user.context';
 import Icon from '@/components/utils/Icon';
-import BusinessFormPopup from '@/components/business/BusinessFormPopup';
+import CreateBusinessFormPopup from '@/components/business/CreateBusinessFormPopup';
 import Button from '@/components/utils/Button';
 import { AlertContext } from '@/client/contexts/alert.context';
 import { User } from '@/types/user.types';
@@ -19,17 +19,29 @@ function Page() {
 	const [user] = useContext(UserContext);
 	const showAlert = useContext(AlertContext);
 
-	const { data: businesses, loading } = useFetch([], {
+	const {
+		data: [ownedBusinesses, otherBusinesses],
+		loading,
+	} = useFetch([], {
 		async fetch() {
 			try {
-				return await BusinessClientService.getAll({ owner: user?.id });
+				const businesses = await BusinessClientService.getAll({
+					staff: user?.id,
+				});
+				const ownedBusinesses = businesses.filter(
+					(b) => (b.owner as User).id === user!.id
+				);
+				const otherBusinesses = businesses.filter(
+					(b) => (b.owner as User).id !== user!.id
+				);
+				return [ownedBusinesses, otherBusinesses];
 			} catch (error) {
 				console.error(error);
 				showAlert({
 					type: 'danger',
 					message: 'Failed to fetch businesses',
 				});
-				return [];
+				return [[], []];
 			}
 		},
 	});
@@ -71,9 +83,9 @@ function Page() {
 			<Card
 				title='Owned businesses'
 				titleSuffix={
-					<BusinessFormPopup>
+					<CreateBusinessFormPopup>
 						<Button icon='add'></Button>
-					</BusinessFormPopup>
+					</CreateBusinessFormPopup>
 				}
 				bodyClassName='space-y-3 overflow-visible'
 			>
@@ -81,7 +93,11 @@ function Page() {
 					headers={[
 						{
 							display: 'Name',
-							field: 'name',
+							field: (row) => (
+								<Link className='underline' href={`/businesses/${row.id}`}>
+									{row.name}
+								</Link>
+							),
 						},
 						{
 							display: 'Username',
@@ -92,16 +108,16 @@ function Page() {
 							field: (row) => row.staff.length,
 						},
 					]}
-					data={businesses}
+					data={ownedBusinesses}
 					loading={loading}
 					actions={[
 						{
 							name: (row) => (
-								<BusinessFormPopup business={row}>
+								<CreateBusinessFormPopup business={row}>
 									<div className='flex items-center gap-2'>
 										<Icon name='edit' /> Edit
 									</div>
-								</BusinessFormPopup>
+								</CreateBusinessFormPopup>
 							),
 						},
 						{
@@ -112,7 +128,6 @@ function Page() {
 									</div>
 								</ConfirmationPopup>
 							),
-							callback: (business) => handleDelete(business),
 						},
 					]}
 				/>
@@ -123,7 +138,11 @@ function Page() {
 					headers={[
 						{
 							display: 'Name',
-							field: 'name',
+							field: (row) => (
+								<Link className='underline' href={`/businesses/${row.id}`}>
+									{row.name}
+								</Link>
+							),
 						},
 						{
 							display: 'Username',
@@ -132,13 +151,16 @@ function Page() {
 						{
 							display: 'Owner',
 							field: (row) => (
-								<Link className='underline' href={(row.owner as User).id}>
+								<Link
+									className='underline'
+									href={`/users/${(row.owner as User).id}`}
+								>
 									{(row.owner as User).name}
 								</Link>
 							),
 						},
 					]}
-					data={businesses}
+					data={otherBusinesses}
 					loading={loading}
 					actions={[
 						{

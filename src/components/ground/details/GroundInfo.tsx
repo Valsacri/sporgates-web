@@ -13,7 +13,7 @@ function GroundInfo({ ground }: Props) {
 				<div>
 					<h1>{ground.name}</h1>
 					<div className='flex items-center gap-1 mt-1'>
-						<Rating rating={ground.avgRating} />
+						<Rating value={ground.avgRating} />
 						<span className='text-xs font-light'>
 							| {ground.reviews.length} reviews
 						</span>

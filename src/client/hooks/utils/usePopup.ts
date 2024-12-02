@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
+import { useState } from 'react';
 
 export const usePopup = (init = false) => {
-  const [open, setOpen] = useState(init)
+	const [open, setOpen] = useState(init);
 
-  const toggle = () => {
-    setOpen((open) => !open)
-  }
+	const toggle = () => {
+		setOpen((open) => !open);
+	};
 
-  return [open, toggle, setOpen] as const
-}
+	return [open, toggle, setOpen] as const;
+};

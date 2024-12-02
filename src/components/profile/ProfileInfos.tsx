@@ -6,11 +6,9 @@ import { Business } from '@/types/business.types';
 import { ProfileType } from '@/types/general.types';
 import Avatar from '../utils/Avatar';
 import Card from '../utils/Card';
-import Link from 'next/link';
 import ImageUploadPopup from './ImageUploadPopup';
 import { usePopup } from '@/client/hooks/utils/usePopup';
 import { StorageHelper } from '@/client/helpers/storage.helper';
-import BusinessFormPopup from '../business/BusinessFormPopup';
 
 interface Props {
 	type: ProfileType;
@@ -63,31 +61,19 @@ function ProfileInfos({ type, infos }: Props) {
 					</div>
 				</div>
 
-				<div className='flex md:flex-col items-end gap-2 mt-5'>
-					{type === ProfileType.USER ? (
-						<Link href='/settings/profile'>
-							<Button
-								icon='edit'
-								color='white'
-								rounded
-								className='w-full border'
-							>
-								Edit profile
-							</Button>
-						</Link>
-					) : (
-						<BusinessFormPopup business={infos as Business}>
-							<Button
-								icon='edit'
-								color='white'
-								rounded
-								className='w-full border'
-							>
-								Manage
-							</Button>
-						</BusinessFormPopup>
-					)}
-				</div>
+				{/* <div className='flex md:flex-col items-end gap-2 mt-5'>
+					<Link
+						href={
+							type === ProfileType.USER
+								? '/settings/profile'
+								: `/businesses/${infos.id}`
+						}
+					>
+						<Button icon='edit' color='white' rounded className='w-full border'>
+							{type === ProfileType.USER ? 'Edit profile' : 'Manage'}
+						</Button>
+					</Link>
+				</div> */}
 			</div>
 
 			<ImageUploadPopup

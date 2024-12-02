@@ -4,11 +4,9 @@ import {
 	Socials,
 	Timeframe,
 } from '@/types/general.types';
-import { Schema } from 'mongoose';
+import { HydratedDocument, Schema } from 'mongoose';
 import { RecordSchema } from './utils.model';
 import { ModelName } from './model-name.enum';
-import { Address } from '@/types/geo.types';
-import { OpeningHours } from '@/types/business.types';
 
 export const SocialsSchema = new Schema<Socials>(
 	{
@@ -22,42 +20,32 @@ export const SocialsSchema = new Schema<Socials>(
 	{ _id: false }
 );
 
-export const AddressSchema = new Schema<Address>(
-	{
-		city: {
-			type: Schema.Types.ObjectId,
-			ref: ModelName.CITY,
-
-			required: true,
-		},
-		town: {
-			type: Schema.Types.ObjectId,
-			ref: ModelName.TOWN,
-
-			required: true,
-		},
-		street: { type: String },
-		zip: { type: String },
-		geoLocation: {
-			lat: { type: Number, required: true },
-			lng: { type: Number, required: true },
-		},
+const validate = {
+	validator(this: HydratedDocument<Review>) {
+		return !!(this.user || this.ground || this.club);
 	},
-	{ _id: false, toObject: { getters: true }, toJSON: { getters: true } }
-);
-
-AddressSchema.index({ geoLocation: '2dsphere' });
+	message: "At least one of 'user', 'ground', or 'club' must be provided.",
+};
 
 export const ReviewSchema = new Schema<Review>({
 	...RecordSchema,
+	rating: { type: Number, required: true },
+	comment: { type: String, required: true },
 	user: {
 		type: Schema.Types.ObjectId,
 		ref: ModelName.USER,
-
-		required: true,
+		validate,
 	},
-	rating: { type: Number, required: true },
-	comment: { type: String, required: true },
+	ground: {
+		type: Schema.Types.ObjectId,
+		ref: ModelName.GROUND,
+		validate,
+	},
+	club: {
+		type: Schema.Types.ObjectId,
+		ref: ModelName.CLUB,
+		validate,
+	},
 });
 
 const TimeSchema = new Schema(

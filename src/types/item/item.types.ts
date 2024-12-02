@@ -1,6 +1,6 @@
 import { Business, OpeningHours } from '../business.types';
 import { Review } from '../general.types';
-import { Record, Ref } from '../utils.types';
+import { Record } from '../utils.types';
 
 export interface Item extends Record {
 	name: string;
@@ -8,7 +8,7 @@ export interface Item extends Record {
 	images: string[];
 	openingHours: OpeningHours;
 	avgRating: number;
-	reviews: Ref<Review>[];
+	reviews: string[] | Review[];
 	business: string | Business;
 }
 

@@ -10,6 +10,8 @@ import { Review } from '@/types/general.types';
 import GroundFormPopup from '@/components/ground/manage/GroundFormPopup';
 import Button from '@/components/utils/Button';
 import { redirect } from 'next/navigation';
+import { Address } from '@/types/geo.types';
+import { User } from '@/types/user.types';
 
 interface Props {
 	params: {
@@ -30,7 +32,7 @@ async function GroundDetails({ params: { groundId } }: Props) {
 		ground = _ground;
 	} catch (error) {
 		console.error(error);
-		return redirect('server-error')
+		return redirect('server-error');
 	}
 
 	return (
@@ -41,10 +43,32 @@ async function GroundDetails({ params: { groundId } }: Props) {
 				<div className='space-y-3 col-span-2'>
 					<GroundInfo ground={ground} />
 					{/* <GroundPricing subscriptions={ground.subscriptions} /> */}
-					<GroundAddress address={ground.address} />
+					<GroundAddress address={ground.address as Address} />
 					<div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
 						<GroundReviews
-							reviews={ground.reviews as Review[]}
+							// reviews={ground.reviews as Review[]}
+							reviews={[
+								{
+									id: '',
+									createdAt: new Date().getTime(),
+									createdBy: {
+										username: 'John Doe',
+										name: 'John Doe',
+									} as User,
+									rating: 5,
+									comment: 'Great place to play football',
+								},
+								{
+									id: '',
+									createdAt: new Date().getTime(),
+									createdBy: {
+										username: 'John Doe',
+										name: 'John Doe',
+									} as User,
+									rating: 4,
+									comment: 'Nice place',
+								},
+							]}
 							avgRating={ground.avgRating}
 						/>
 						<GroundOpeningHours openingHours={ground.openingHours} />

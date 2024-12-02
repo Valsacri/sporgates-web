@@ -1,6 +1,5 @@
 import { User } from '@/types/user.types';
 import mongoose, { Model, Schema } from 'mongoose';
-import { AddressSchema, SocialsSchema } from './general.model';
 import { RecordSchema } from './utils.model';
 import { ModelName } from './model-name.enum';
 
@@ -20,7 +19,7 @@ export const UserSchema = new Schema<User>({
 
 	phone: { type: String },
 	birthday: { type: String },
-	address: { type: AddressSchema },
+	addresses: [{ type: Schema.Types.ObjectId, ref: ModelName.ADDRESS }],
 
 	verifiedAt: { type: Number },
 	lastUsernameChangeAt: { type: Number },

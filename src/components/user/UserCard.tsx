@@ -53,7 +53,7 @@ function UserCard({ user }: Props) {
 							))}
 						</div>
 
-						<Rating rating={4} />
+						<Rating value={4} />
 					</div>
 				</div>
 			</div>

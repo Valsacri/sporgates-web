@@ -17,6 +17,7 @@ import Link from 'next/link';
 import ConfirmationPopup from '@/components/shared/ConfirmationPopup';
 import List2 from '@/components/utils/List2';
 import ListItem from '@/components/utils/ListItem';
+import { UserContext } from '@/client/contexts/user.context';
 
 interface Props {
 	businessId: string;
@@ -24,6 +25,7 @@ interface Props {
 
 export default function StaffTable({ businessId }: Props) {
 	const showAlert = useContext(AlertContext);
+	const [user] = useContext(UserContext);
 
 	const { register, watch, reset } = useForm({
 		defaultValues: {
@@ -45,7 +47,8 @@ export default function StaffTable({ businessId }: Props) {
 			async fetch() {
 				if (!businessId) return [];
 				try {
-					return await BusinessClientService.getStaff(businessId);
+					const staff = await BusinessClientService.getStaff(businessId);
+					return staff.filter((s) => s.id !== user?.id);
 				} catch (error) {
 					console.error(error);
 					showAlert({
@@ -83,6 +86,12 @@ export default function StaffTable({ businessId }: Props) {
 		try {
 			reset();
 			await BusinessClientService.addStaff(businessId, userId);
+
+			showAlert({
+				type: 'success',
+				message: 'Staff added',
+			});
+
 			refetchStaff();
 		} catch (error) {
 			console.error(error);
@@ -95,6 +104,12 @@ export default function StaffTable({ businessId }: Props) {
 	const handleRemove = async () => {
 		try {
 			await BusinessClientService.removeStaff(businessId, selectedStaff!.id);
+
+			showAlert({
+				type: 'success',
+				message: 'Staff removed',
+			});
+
 			refetchStaff();
 		} catch (error) {
 			console.error(error);
@@ -116,26 +131,6 @@ export default function StaffTable({ businessId }: Props) {
 				{users.length > 0 && username && (
 					<div className='flex justify-end'>
 						<Dropdown open={true} containerClassName='absolute'>
-							<List
-								items={users.map((user) => {
-									const isSelected = staff.some((s) => s.id === user.id);
-									return {
-										className: isSelected ? 'opacity-75' : '',
-										prefix: <Avatar src={'/images/avatar.png'} size={35} />,
-										item: (
-											<div>
-												<div className='text-sm text-text-secondary-dark'>
-													{user.name}
-												</div>
-												<div className='text-xs text-text-secondary'>
-													@{user.username}
-												</div>
-											</div>
-										),
-										onClick: () => !isSelected && handleAdd(user.id),
-									};
-								})}
-							/>
 							<List2>
 								{users.map((user) => {
 									const isSelected = staff.some((s) => s.id === user.id);

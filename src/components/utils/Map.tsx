@@ -10,8 +10,8 @@ mapboxgl.accessToken =
 	'pk.eyJ1IjoiZGV2ZWxvb3BwZXIiLCJhIjoiY2t4aXpoNDJqMzdiaDJ1bzFpOXUzdnVuZCJ9.XHjgHN796_6zo7_NnN0rQw';
 
 interface MapboxMapProps {
-	lat: number;
-	lng: number;
+	lat?: number;
+	lng?: number;
 	radius?: number;
 	onCoordinatesChange?: (geoLocation: GeoLocation) => void;
 }

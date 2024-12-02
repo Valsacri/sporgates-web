@@ -51,12 +51,10 @@ export const Table = <T,>({
 	const isActions = !!actions.length;
 
 	const handleClickAction = (
-		e: React.MouseEvent<HTMLSpanElement, MouseEvent>,
 		row: T,
 		index: number,
 		callback?: (row: T, index: number, data: T[]) => void
 	) => {
-		e.stopPropagation();
 		callback?.(row, index, data);
 	};
 
@@ -179,8 +177,8 @@ export const Table = <T,>({
 															<ListItem
 																key={actionIndex}
 																className={twMerge('whitespace-nowrap')}
-																onClick={(e) =>
-																	handleClickAction(e, row, rowIndex, callback)
+																onClick={() =>
+																	handleClickAction(row, rowIndex, callback)
 																}
 															>
 																{typeof name === 'function'

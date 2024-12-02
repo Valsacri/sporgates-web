@@ -16,11 +16,11 @@ function SettingsNavigation() {
 			<List
 				disable={!user}
 				items={[
-					{
-						prefix: <Icon name='settings' />,
-						item: 'General',
-						href: '/settings/general',
-					},
+					// {
+					// 	prefix: <Icon name='settings' />,
+					// 	item: 'General',
+					// 	href: '/settings/general',
+					// },
 					{
 						prefix: <Icon name='user-scan' />,
 						item: 'Profile',

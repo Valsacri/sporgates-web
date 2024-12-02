@@ -11,6 +11,7 @@ export enum ModelName {
 
 	CITY = 'City',
 	TOWN = 'Town',
+	ADDRESS = 'Address',
 
 	BUSINESS = 'Business',
 

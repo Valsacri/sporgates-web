@@ -14,11 +14,14 @@ export interface GeoLocation {
 	lng: number;
 }
 
-export interface Address {
+export interface Address extends Record {
+	label?: string;
 	city: string | City;
 	town: string | Town;
-	street: string;
-	zip: string;
+	street?: string;
+	zip?: string;
 	geoLocation: GeoLocation;
-	isHighlighted?: boolean;
+
+	user?: string;
+	business?: string;
 }

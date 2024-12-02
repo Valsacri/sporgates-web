@@ -4,6 +4,8 @@ import { usePathname } from 'next/navigation';
 import Card from '../utils/Card';
 import Buttons, { ButtonItem } from './Buttons';
 import Separator from '../utils/Separator';
+import { useContext } from 'react';
+import { UserContext } from '@/client/contexts/user.context';
 
 interface Props {
 	items: (ButtonItem & { subItems?: ButtonItem[] })[];
@@ -11,6 +13,9 @@ interface Props {
 
 function ProfileNavigation({ items }: Props) {
 	const pathname = usePathname();
+	const [user] = useContext(UserContext);
+
+	
 
 	const _items = items.map((item) => ({
 		...item,
@@ -23,6 +28,7 @@ function ProfileNavigation({ items }: Props) {
 			...item,
 			selected: pathname === item.href,
 		})) || [];
+
 
 	return (
 		<Card className='overflow-x-auto p-1'>

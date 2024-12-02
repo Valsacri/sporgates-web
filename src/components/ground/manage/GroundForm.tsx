@@ -15,7 +15,6 @@ import { OpeningHours } from '@/types/business.types';
 import { GroundClientService } from '@/client/services/ground.client-service';
 import { Ground } from '@/types/item/ground/ground.types';
 import { Select, SelectOption } from '../../utils/form/Select';
-import { SubscriptionDtoType } from '@/dtos/item/club.dto';
 import { useRouter } from 'next/navigation';
 import { StorageHelper } from '@/client/helpers/storage.helper';
 import { City, GeoLocation, Town } from '@/types/geo.types';
@@ -23,14 +22,15 @@ import { useFetch } from '@/client/hooks/utils/useFetch';
 import { CityClientService } from '@/client/services/geo/city.client-service';
 import { TownClientService } from '@/client/services/geo/town.client-service';
 import { AlertContext } from '@/client/contexts/alert.context';
-import { GENERIC_ERROR_MESSAGE } from '@/constants';
+import { SportClientService } from '@/client/services/sport.client-service';
 
 interface Props {
+	businessId?: string;
 	ground?: Ground;
+	onClose: () => void;
 }
 
-function GroundForm({ ground }: Props) {
-	const [open, toggleOpen] = usePopup();
+function GroundForm({ businessId, ground, onClose }: Props) {
 	const [openSubscriptionPopup, toggleSubscriptionPopup] = usePopup();
 	const [
 		openSubscriptionRemoveConfirmationPopup,
@@ -51,7 +51,7 @@ function GroundForm({ ground }: Props) {
 	} = useForm({
 		resolver: zodResolver(GroundDto),
 		defaultValues: {
-			business: '',
+			business: businessId,
 			name: '',
 			description: '',
 			images: [],
@@ -78,16 +78,20 @@ function GroundForm({ ground }: Props) {
 			minReservationTime: 60,
 			price: 0,
 			subscriptions: [],
+			sports: [],
 		} as GroundDtoType,
 	});
 
+	console.log(errors);
+
 	const openingHours = watch('openingHours') as OpeningHours;
-	const subscriptions = watch('subscriptions') || [];
+	// const subscriptions = watch('subscriptions') || [];
 	const selectedCity = watch('address.city');
 	const selectedTown = watch('address.town');
+	const selectedSports = watch('sports');
 
 	const [currentSubscriptionIndex, setCurrentSubscriptionIndex] = useState(-1);
-	const currentSubscription = subscriptions[currentSubscriptionIndex];
+	// const currentSubscription = subscriptions[currentSubscriptionIndex];
 
 	const onSubmit = async (data: GroundDtoType) => {
 		const [uploadedImages] = await Promise.all([
@@ -104,13 +108,33 @@ function GroundForm({ ground }: Props) {
 
 		if (ground) {
 			await GroundClientService.update(ground.id as string, newGround);
-			router.refresh();
 		} else {
 			await GroundClientService.create(newGround);
 		}
+		router.refresh();
 		reset();
-		toggleOpen();
+		onClose();
 	};
+
+	const { data: sportsOptions, loading: loadingSports } = useFetch([], {
+		async fetch() {
+			try {
+				const sports = await SportClientService.getAll();
+				return [
+					{ value: 'all', label: 'All sports' },
+					...sports.map(
+						(sport) => ({ value: sport.id, label: sport.name } as SelectOption)
+					),
+				];
+			} catch (error) {
+				console.error(error);
+				showAlert({
+					type: 'danger',
+				});
+				return [];
+			}
+		},
+	});
 
 	useEffect(() => {
 		if (!open) {
@@ -209,34 +233,34 @@ function GroundForm({ ground }: Props) {
 		setValue('address.geoLocation', geoLocation);
 	};
 
-	const handleSubmitSubscription = (subscription: SubscriptionDtoType) => {
-		if (currentSubscriptionIndex === -1) {
-			setValue('subscriptions', [...subscriptions, subscription]);
-		} else {
-			subscriptions?.splice(currentSubscriptionIndex, 1, subscription);
-			setValue('subscriptions', subscriptions);
-		}
-	};
+	// const handleSubmitSubscription = (subscription: SubscriptionDtoType) => {
+	// 	if (currentSubscriptionIndex === -1) {
+	// 		setValue('subscriptions', [...subscriptions, subscription]);
+	// 	} else {
+	// 		subscriptions?.splice(currentSubscriptionIndex, 1, subscription);
+	// 		setValue('subscriptions', subscriptions);
+	// 	}
+	// };
 
-	const handleAddSubscription = () => {
-		setCurrentSubscriptionIndex(-1);
-		toggleSubscriptionPopup();
-	};
+	// const handleAddSubscription = () => {
+	// 	setCurrentSubscriptionIndex(-1);
+	// 	toggleSubscriptionPopup();
+	// };
 
-	const handleEditSubscription = (index: number) => {
-		setCurrentSubscriptionIndex(index);
-		toggleSubscriptionPopup();
-	};
+	// const handleEditSubscription = (index: number) => {
+	// 	setCurrentSubscriptionIndex(index);
+	// 	toggleSubscriptionPopup();
+	// };
 
-	const handleRemoveSubscription = () => {
-		subscriptions?.splice(currentSubscriptionIndex, 1);
-		setValue('subscriptions', subscriptions);
-	};
+	// const handleRemoveSubscription = () => {
+	// 	subscriptions?.splice(currentSubscriptionIndex, 1);
+	// 	setValue('subscriptions', subscriptions);
+	// };
 
-	const handleConfirmRemoveSubscription = (index: number) => {
-		setCurrentSubscriptionIndex(index);
-		setOpenSubscriptionRemoveConfirmationPopup(true);
-	};
+	// const handleConfirmRemoveSubscription = (index: number) => {
+	// 	setCurrentSubscriptionIndex(index);
+	// 	setOpenSubscriptionRemoveConfirmationPopup(true);
+	// };
 
 	return (
 		<>
@@ -246,14 +270,25 @@ function GroundForm({ ground }: Props) {
 					<div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
 						<Input
 							label='Name'
+							placeholder='Ground name'
 							{...register('name')}
 							error={errors.name?.message}
 						/>
 						<Input
 							label='Description'
+							placeholder='Ground description'
 							{...register('description')}
 							multiline
 							error={errors.description?.message}
+						/>
+						<Select
+							{...register('sports')}
+							value={selectedSports}
+							onChange={(value) => setValue('sports', value as string[])}
+							placeholder='Sports'
+							options={sportsOptions}
+							loading={loadingSports}
+							className='col-span-2'
 						/>
 					</div>
 				</div>
@@ -339,8 +374,8 @@ function GroundForm({ ground }: Props) {
 						<div className='col-span-2 space-y-1'>
 							<label className='text-sm'>Location</label>
 							<MapboxMap
-								lat={33.5731}
-								lng={-7.5898}
+								lat={ground?.address.geoLocation.lat}
+								lng={ground?.address.geoLocation.lat}
 								onCoordinatesChange={handleCoordinatesChange}
 							/>
 						</div>
@@ -366,7 +401,7 @@ function GroundForm({ ground }: Props) {
 				</div>
 
 				<div className='flex justify-end gap-3'>
-					<Button color='secondary' onClick={toggleOpen}>
+					<Button color='secondary' onClick={onClose}>
 						Close
 					</Button>
 					<Button color='primary' type='submit' loading={isSubmitting}>

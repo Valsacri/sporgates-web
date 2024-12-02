@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge';
 import Link from 'next/link';
 import Rating from '../shared/Rating';
 import { Ground } from '@/types/item/ground/ground.types';
-import { City, Town } from '@/types/geo.types';
+import { Address, City, Town } from '@/types/geo.types';
 import { Sport } from '@/types/sport.types';
 
 interface Props {
@@ -43,7 +43,7 @@ function GroundCard({ ground }: Props) {
 					</div>
 
 					<div className='w-max flex items-center gap-1 mt-3 p-2 pr-3 bg-black bg-opacity-50 rounded-tl-md rounded-tr-2xl'>
-						<Rating rating={ground.avgRating} />
+						<Rating value={ground.avgRating} />
 						<span className='text-xs font-light text-white'>
 							{' '}
 							| {ground.reviews.length} reviews
@@ -62,8 +62,8 @@ function GroundCard({ ground }: Props) {
 							</p>
 							<div className='flex gap-1 items-center text-xs mt-3'>
 								<Icon name='location' className='!size-5' />{' '}
-								{(ground.address.town as Town).name},{' '}
-								{(ground.address.city as City).name}
+								{((ground.address as Address).town as Town).name},{' '}
+								{((ground.address as Address).city as City).name}
 							</div>
 						</div>
 					</div>

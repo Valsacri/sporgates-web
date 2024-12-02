@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
 function page() {
-	return redirect('/settings/general');
+	return redirect('/settings/profile');
 }
 
 export default page;

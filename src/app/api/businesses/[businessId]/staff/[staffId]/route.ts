@@ -1,8 +1,9 @@
-import { FORBIDDEN_RESPONSE } from '@/constants';
+import { BAD_REQUEST_RESPONSE, FORBIDDEN_RESPONSE } from '@/constants';
 import { setupDbConnection } from '@/server/config/mongodb.config';
 import { HttpHelper } from '@/server/helpers/http.helper';
 import { PermissionServerService } from '@/server/services/auth/permission.server-service';
 import { BusinessServerService } from '@/server/services/business.server-service';
+import { User } from '@/types/user.types';
 
 export async function DELETE(
 	req: Request,
@@ -20,41 +21,35 @@ export async function DELETE(
 
 		const { userId } = HttpHelper.getContextAuthUser();
 
-		const isBusinessOwner = await PermissionServerService.isBusinessOwner(
-			params.businessId,
-			userId
-		);
-		const canRemoveStaff = isBusinessOwner && userId === params.staffId;
-		if (canRemoveStaff) {
-			return Response.json(
-				{ message: 'You cannot remove yourself from the business' },
-				{
-					status: 400,
-				}
-			);
+		const business = await BusinessServerService.getOne(params.businessId);
+
+		if (!params.businessId || !params.staffId || !business) {
+			return BAD_REQUEST_RESPONSE;
 		}
 
-		const isStaff = await PermissionServerService.isBusinessStaff(
-			params.businessId,
-			userId
-		);
-		const canRemoveItself =
-			!isBusinessOwner && isStaff && userId === params.staffId;
-		if (!canRemoveItself) {
-			return Response.json(
-				{ message: 'You can only remove yourself from the business' },
-				{
-					status: 400,
-				}
-			);
+		const owner = business.owner as string;
+		const staff = business.staff as string[];
+
+		if (owner === userId) {
+			if (owner === params.staffId) {
+				return FORBIDDEN_RESPONSE;
+			} else if (!staff.includes(params.staffId)) {
+				return BAD_REQUEST_RESPONSE;
+			}
+		} else {
+			if (!(staff as string[]).includes(userId)) {
+				return BAD_REQUEST_RESPONSE;
+			} else if (userId !== params.staffId) {
+				return FORBIDDEN_RESPONSE;
+			}
 		}
 
-		const staff = await BusinessServerService.removeStaff(
+		const newStaff = await BusinessServerService.removeStaff(
 			params.businessId,
 			params.staffId
 		);
 
-		return Response.json(staff, {
+		return Response.json(newStaff, {
 			status: 200,
 		});
 	} catch (error) {

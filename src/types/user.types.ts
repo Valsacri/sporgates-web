@@ -19,7 +19,7 @@ export interface User extends Record {
 	sports?: string[] | Sport[];
 
 	phone?: string;
-	address?: Address;
+	addresses?: Address[];
 	birthday?: string;
 
 	verifiedAt?: number;

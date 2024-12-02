@@ -41,9 +41,10 @@ function ConfirmationPopup({
 			{open && (
 				<Popup
 					open={true}
-					title={title}
-					description={description}
+					title={title || 'Are you sure?'}
+					description={description || 'Click confirm to proceed.'}
 					onClose={onClose}
+					className='min-w-full lg:min-w-[400px]'
 				>
 					<div className='flex justify-end space-x-3'>
 						<Button onClick={onConfirm} color='danger'>

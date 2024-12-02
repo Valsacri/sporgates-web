@@ -1,7 +1,7 @@
 import mongoose, { Model, Schema } from 'mongoose';
 import { RecordSchema } from './utils.model';
 import { ModelName } from './model-name.enum';
-import { AddressSchema, TimeframeSchema } from './general.model';
+import { TimeframeSchema } from './general.model';
 import { Business, OpeningHours } from '@/types/business.types';
 
 export const OpeningHoursSchema = new Schema<OpeningHours>(
@@ -20,7 +20,7 @@ export const OpeningHoursSchema = new Schema<OpeningHours>(
 const ContactSchema = new Schema({
 	emails: [{ type: String, required: true }],
 	phones: [{ type: String, required: true }],
-	address: { type: AddressSchema },
+	address: { type: Schema.Types.ObjectId, ref: ModelName.ADDRESS },
 });
 
 const BusinessSchema = new Schema<Business>({

@@ -12,6 +12,7 @@ import { TownModel } from '../models/geo/town.model';
 import { SportModel } from '../models/sport.model';
 import { BusinessModel } from '../models/business.model';
 import { NotificationModel } from '../models/notification.model';
+import { AddressModel } from '../models/geo/address.model';
 
 UserModel;
 ClubModel;
@@ -19,6 +20,7 @@ GroundModel;
 GroundReservationModel;
 WalletModel;
 TransactionModel;
+AddressModel;
 CityModel;
 TownModel;
 SportModel;

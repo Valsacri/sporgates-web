@@ -25,6 +25,14 @@ export const FORBIDDEN_RESPONSE = Response.json(
 	{ message: 'Forbidden' },
 	{ status: 403 }
 );
+export const NOT_FOUND_RESPONSE = Response.json(
+	{ message: 'Not found' },
+	{ status: 404 }
+);
+export const BAD_REQUEST_RESPONSE = Response.json(
+	{ message: 'Bad request' },
+	{ status: 400 }
+);
 
 export const statusMap = {
 	[GroundRerservationStatus.ONGOING]: {

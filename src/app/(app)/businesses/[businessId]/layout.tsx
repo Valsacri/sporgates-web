@@ -1,8 +1,10 @@
-import ProfileNavigation from '@/components/profile/ProfileNavigation';
 import ProfileInfos from '@/components/profile/ProfileInfos';
 import { redirect } from 'next/navigation';
 import { BusinessServerService } from '@/server/services/business.server-service';
 import { ProfileType } from '@/types/general.types';
+import ProfileNavigation from '@/components/profile/ProfileNavigation';
+import { headers } from 'next/headers';
+import { HttpHelper } from '@/server/helpers/http.helper';
 
 interface Props {
 	children: React.ReactNode;
@@ -14,19 +16,20 @@ export default async function Layout({
 	params: { businessId },
 }: Props) {
 	const business = await BusinessServerService.getOne(businessId);
+	const x = HttpHelper.getContextAuthUser();
 	if (!business) redirect('/not-found');
 
 	return (
 		<div className='w-full lg:w-[900px] space-y-3 mx-auto'>
 			<ProfileInfos type={ProfileType.BUSINESS} infos={business} />
 
-			{/* <ProfileNavigation
+			<ProfileNavigation
 				items={[
-					{
-						icon: 'gallery',
-						text: 'Gallery',
-						href: `/businesses/${businessId}/gallery`,
-					},
+					// {
+					// 	icon: 'gallery',
+					// 	text: 'Gallery',
+					// 	href: `/businesses/${businessId}/gallery`,
+					// },
 					{
 						icon: 'location',
 						text: 'Grounds',
@@ -45,24 +48,29 @@ export default async function Layout({
 						],
 					},
 					{
-						icon: 'two-user',
-						text: 'Clubs',
-						href: `/businesses/${businessId}/clubs`,
-						subItems: [
-							{
-								icon: 'document',
-								text: 'List',
-								href: `/businesses/${businessId}/clubs`,
-							},
-							{
-								icon: 'todo',
-								text: 'Subscriptions',
-								href: `/businesses/${businessId}/clubs/subscriptions`,
-							},
-						],
+						icon: 'settings2',
+						text: 'Settings',
+						href: `/businesses/${businessId}/settings`,
 					},
+					// {
+					// 	icon: 'two-user',
+					// 	text: 'Clubs',
+					// 	href: `/businesses/${businessId}/clubs`,
+					// 	subItems: [
+					// 		{
+					// 			icon: 'document',
+					// 			text: 'List',
+					// 			href: `/businesses/${businessId}/clubs`,
+					// 		},
+					// 		{
+					// 			icon: 'todo',
+					// 			text: 'Subscriptions',
+					// 			href: `/businesses/${businessId}/clubs/subscriptions`,
+					// 		},
+					// 	],
+					// },
 				]}
-			/> */}
+			/>
 
 			{children}
 		</div>

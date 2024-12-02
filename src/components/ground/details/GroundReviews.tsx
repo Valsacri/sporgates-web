@@ -1,4 +1,6 @@
 import Rating from '@/components/shared/Rating';
+import ReviewFormPopup from '@/components/shared/ReviewPopup';
+import Button from '@/components/utils/Button';
 import Card from '@/components/utils/Card';
 import { Review } from '@/types/general.types';
 import { User } from '@/types/user.types';
@@ -10,12 +12,12 @@ interface Props {
 
 function GroundReviews({ reviews, avgRating }: Props) {
 	return (
-		<Card className='order-2 lg:order-1'>
+		<Card className='order-2 lg:order-1 h-min'>
 			<div className='flex justify-between mb-5'>
 				<h2 className='mb-2'>Reviews</h2>
 				<div className='flex gap-3'>
 					<div>
-						<Rating rating={avgRating} />
+						<Rating value={avgRating} />
 						<p className='text-xs text-text-secondary text-end'>
 							{reviews.length} reviews
 						</p>
@@ -27,14 +29,20 @@ function GroundReviews({ reviews, avgRating }: Props) {
 			{reviews.map((review, i) => (
 				<div key={i} className='mb-4'>
 					<div className='flex justify-between'>
-						<h4>{(review.user as User).username}</h4>
+						<h4>{(review.createdBy as User).username}</h4>
 						<p className='text-xs text-text-secondary'>2 days ago</p>
 					</div>
-					<Rating rating={review.rating} />
+					<Rating value={review.rating} />
 					<p className='text-sm mt-2'>{review.comment}</p>
 					<hr className='mt-3' />
 				</div>
 			))}
+
+			<ReviewFormPopup >
+				<Button className='w-full' color='primary' icon='edit'>
+					Write a review
+				</Button>
+			</ReviewFormPopup>
 		</Card>
 	);
 }

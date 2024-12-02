@@ -23,7 +23,7 @@ async function Page({ params }: Props) {
 
 	return (
 		<>
-			<GroundFormPopup>
+			<GroundFormPopup businessId={params.businessId}>
 				<Button
 					icon='plus'
 					color='primary'

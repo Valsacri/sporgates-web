@@ -1,6 +1,6 @@
 import Card from '@/components/utils/Card';
 import MapboxMap from '@/components/utils/Map';
-import { Address, City, GeoLocation, Town } from '@/types/geo.types';
+import { Address, City, Town } from '@/types/geo.types';
 
 interface Props {
 	address: Address;
