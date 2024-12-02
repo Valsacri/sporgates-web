@@ -16,4 +16,6 @@ export enum ModelName {
 	BUSINESS = 'Business',
 
 	NOTIFICATION = 'Notification',
+
+	REVIEW = 'Review',
 }

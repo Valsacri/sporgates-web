@@ -1,3 +1,4 @@
+import { ReviewTopicType } from './types/review.types';
 import { GroundRerservationStatus } from './types/item/ground/ground-reservation.types';
 
 export const SESSION_EXPIRATION = 14 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
@@ -65,4 +66,10 @@ export const statusMap = {
 		bgClassName: 'bg-danger-light',
 		text: 'Cancelled',
 	},
+} as const;
+
+export const reviewTopicTypeToRoute = {
+	[ReviewTopicType.USER]: 'champs',
+	[ReviewTopicType.GROUND]: 'grounds',
+	[ReviewTopicType.CLUB]: 'clubs',
 } as const;

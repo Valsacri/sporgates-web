@@ -1,12 +1,12 @@
 import {
 	DateTimeframes,
 	Review,
+	ReviewTopicType,
 	Socials,
 	Timeframe,
 } from '@/types/general.types';
-import { HydratedDocument, Schema } from 'mongoose';
+import { Schema } from 'mongoose';
 import { RecordSchema } from './utils.model';
-import { ModelName } from './model-name.enum';
 
 export const SocialsSchema = new Schema<Socials>(
 	{
@@ -19,34 +19,6 @@ export const SocialsSchema = new Schema<Socials>(
 	},
 	{ _id: false }
 );
-
-const validate = {
-	validator(this: HydratedDocument<Review>) {
-		return !!(this.user || this.ground || this.club);
-	},
-	message: "At least one of 'user', 'ground', or 'club' must be provided.",
-};
-
-export const ReviewSchema = new Schema<Review>({
-	...RecordSchema,
-	rating: { type: Number, required: true },
-	comment: { type: String, required: true },
-	user: {
-		type: Schema.Types.ObjectId,
-		ref: ModelName.USER,
-		validate,
-	},
-	ground: {
-		type: Schema.Types.ObjectId,
-		ref: ModelName.GROUND,
-		validate,
-	},
-	club: {
-		type: Schema.Types.ObjectId,
-		ref: ModelName.CLUB,
-		validate,
-	},
-});
 
 const TimeSchema = new Schema(
 	{
