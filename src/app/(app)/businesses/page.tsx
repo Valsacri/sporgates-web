@@ -8,12 +8,13 @@ import { BusinessClientService } from '@/client/services/business.client-service
 import { useContext } from 'react';
 import { UserContext } from '@/client/contexts/user.context';
 import Icon from '@/components/utils/Icon';
-import CreateBusinessFormPopup from '@/components/business/CreateBusinessFormPopup';
+import BusinessForm from '@/components/business/BusinessForm';
 import Button from '@/components/utils/Button';
 import { AlertContext } from '@/client/contexts/alert.context';
 import { User } from '@/types/user.types';
 import ConfirmationPopup from '@/components/shared/ConfirmationPopup';
 import Link from 'next/link';
+import { Popup } from '@/components/utils/Popup';
 
 function Page() {
 	const [user] = useContext(UserContext);
@@ -83,9 +84,13 @@ function Page() {
 			<Card
 				title='Owned businesses'
 				titleSuffix={
-					<CreateBusinessFormPopup>
-						<Button icon='add'></Button>
-					</CreateBusinessFormPopup>
+					<Popup
+						title='Create a business'
+						description='Fill in the details to create a new business.'
+						trigger={<Button icon='add'></Button>}
+					>
+						<BusinessForm />
+					</Popup>
 				}
 				bodyClassName='space-y-3 overflow-visible'
 			>
@@ -113,11 +118,17 @@ function Page() {
 					actions={[
 						{
 							name: (row) => (
-								<CreateBusinessFormPopup business={row}>
-									<div className='flex items-center gap-2'>
-										<Icon name='edit' /> Edit
-									</div>
-								</CreateBusinessFormPopup>
+								<Popup
+									title='Update business'
+									description='Fill in the details to update the business.'
+									trigger={
+										<div className='flex items-center gap-2'>
+											<Icon name='edit' /> Edit
+										</div>
+									}
+								>
+									<BusinessForm business={row} />
+								</Popup>
 							),
 						},
 						{

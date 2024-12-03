@@ -38,24 +38,22 @@ function ConfirmationPopup({
 	return (
 		<>
 			<div onClick={() => setOpen(true)}>{children}</div>
-			{open && (
-				<Popup
-					open={true}
-					title={title || 'Are you sure?'}
-					description={description || 'Click confirm to proceed.'}
-					onClose={onClose}
-					className='min-w-full lg:min-w-[400px]'
-				>
-					<div className='flex justify-end space-x-3'>
-						<Button onClick={onConfirm} color='danger'>
-							Confirm
-						</Button>
-						<Button onClick={onClose} color='secondary'>
-							Cancel
-						</Button>
-					</div>
-				</Popup>
-			)}
+			<Popup
+				open={open}
+				title={title || 'Are you sure?'}
+				description={description || 'Click confirm to proceed.'}
+				onClose={onClose}
+				className='min-w-full lg:min-w-[400px]'
+			>
+				<div className='flex justify-end space-x-3'>
+					<Button onClick={onConfirm} color='danger'>
+						Confirm
+					</Button>
+					<Button onClick={onClose} color='secondary'>
+						Cancel
+					</Button>
+				</div>
+			</Popup>
 		</>
 	);
 }

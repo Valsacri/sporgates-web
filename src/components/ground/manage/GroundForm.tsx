@@ -17,17 +17,17 @@ import { Ground } from '@/types/item/ground/ground.types';
 import { Select, SelectOption } from '../../utils/form/Select';
 import { useRouter } from 'next/navigation';
 import { StorageHelper } from '@/client/helpers/storage.helper';
-import { City, GeoLocation, Town } from '@/types/geo.types';
+import { Address, City, Town } from '@/types/geo.types';
 import { useFetch } from '@/client/hooks/utils/useFetch';
-import { CityClientService } from '@/client/services/geo/city.client-service';
-import { TownClientService } from '@/client/services/geo/town.client-service';
 import { AlertContext } from '@/client/contexts/alert.context';
 import { SportClientService } from '@/client/services/sport.client-service';
+import AddressManager from '@/components/address/AddressManager';
+import { Popup } from '@/components/utils/Popup';
 
 interface Props {
 	businessId?: string;
 	ground?: Ground;
-	onClose: () => void;
+	onClose?: () => void;
 }
 
 function GroundForm({ businessId, ground, onClose }: Props) {
@@ -52,45 +52,33 @@ function GroundForm({ businessId, ground, onClose }: Props) {
 		resolver: zodResolver(GroundDto),
 		defaultValues: {
 			business: businessId,
-			name: '',
-			description: '',
-			images: [],
+			name: ground?.name || '',
+			description: ground?.description || '',
+			images: ground?.images || [],
 			openingHours: {
-				monday: [],
-				tuesday: [],
-				wednesday: [],
-				thursday: [],
-				friday: [],
-				saturday: [],
-				sunday: [],
+				monday: ground?.openingHours.monday || [],
+				tuesday: ground?.openingHours.tuesday || [],
+				wednesday: ground?.openingHours.wednesday || [],
+				thursday: ground?.openingHours.thursday || [],
+				friday: ground?.openingHours.friday || [],
+				saturday: ground?.openingHours.saturday || [],
+				sunday: ground?.openingHours.sunday || [],
 			},
-			address: {
-				city: '',
-				town: '',
-				street: '',
-				zip: '',
-				geoLocation: {
-					lat: 0,
-					lng: 0,
-				},
-				isHighlighted: false,
-			},
-			minReservationTime: 60,
-			price: 0,
-			subscriptions: [],
-			sports: [],
+			address: (ground?.address as Address)?.id || '',
+			minReservationTime: ground?.minReservationTime || 60,
+			price: ground?.price || 0,
+			sports: ground?.sports || [],
+			// subscriptions: [],
 		} as GroundDtoType,
 	});
 
-	console.log(errors);
-
+	const selectedAddress = watch('address');
 	const openingHours = watch('openingHours') as OpeningHours;
 	// const subscriptions = watch('subscriptions') || [];
-	const selectedCity = watch('address.city');
-	const selectedTown = watch('address.town');
 	const selectedSports = watch('sports');
 
-	const [currentSubscriptionIndex, setCurrentSubscriptionIndex] = useState(-1);
+	const [address, setAddress] = useState<Address>(ground?.address as Address);
+	// const [currentSubscriptionIndex, setCurrentSubscriptionIndex] = useState(-1);
 	// const currentSubscription = subscriptions[currentSubscriptionIndex];
 
 	const onSubmit = async (data: GroundDtoType) => {
@@ -113,7 +101,7 @@ function GroundForm({ businessId, ground, onClose }: Props) {
 		}
 		router.refresh();
 		reset();
-		onClose();
+		onClose?.();
 	};
 
 	const { data: sportsOptions, loading: loadingSports } = useFetch([], {
@@ -135,25 +123,6 @@ function GroundForm({ businessId, ground, onClose }: Props) {
 			}
 		},
 	});
-
-	useEffect(() => {
-		if (!open) {
-			reset();
-		}
-	}, [open]);
-
-	useEffect(() => {
-		if (ground) {
-			reset({
-				...ground,
-				address: {
-					...ground.address,
-					city: (ground.address.city as City).id,
-					town: (ground.address.town as Town).id,
-				},
-			} as GroundDtoType);
-		}
-	}, [ground]);
 
 	const handleUploadImage = async (image: File) => {
 		try {
@@ -190,47 +159,8 @@ function GroundForm({ businessId, ground, onClose }: Props) {
 		setValue('images', imagesUrls);
 	}, [imagesUrls]);
 
-	const { data: citiesOptions } = useFetch([], {
-		async fetch() {
-			try {
-				const cities = await CityClientService.getPage();
-				return cities.map(
-					(city) => ({ value: city.id, label: city.name } as SelectOption)
-				);
-			} catch (error) {
-				console.log(error);
-				showAlert({
-					type: 'danger',
-				});
-				return [];
-			}
-		},
-	});
-
-	const { data: townsOptions, loading: loadingTowns } = useFetch(
-		[],
-		{
-			async fetch() {
-				if (!selectedCity) return [];
-
-				const towns = await TownClientService.getPage(selectedCity);
-
-				setValue('address.town', towns[0].id);
-
-				return towns.map(
-					(town) => ({ value: town.id, label: town.name } as SelectOption)
-				);
-			},
-		},
-		[selectedCity]
-	);
-
 	const handleOpeningHoursChange = (openingHours: OpeningHours) => {
 		setValue('openingHours', openingHours);
-	};
-
-	const handleCoordinatesChange = (geoLocation: GeoLocation) => {
-		setValue('address.geoLocation', geoLocation);
 	};
 
 	// const handleSubmitSubscription = (subscription: SubscriptionDtoType) => {
@@ -349,36 +279,23 @@ function GroundForm({ businessId, ground, onClose }: Props) {
 				</div> */}
 
 				<div className='space-y-3'>
-					<h3 className='text-lg font-medium text-gray-900'>Address</h3>
+					<div className='flex justify-between'>
+						<h3 className='text-lg font-medium text-gray-900'>Address</h3>
+						<Popup
+							hideCloseButton
+							className='p-0 border-none'
+							trigger={<Button icon='edit' />}
+						>
+							<AddressManager />
+						</Popup>
+					</div>
 					<div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
-						<Select
-							{...register('address.city')}
-							value={selectedCity}
-							onChange={(city) => setValue('address.city', city as string)}
-							options={citiesOptions}
-							label='City'
-							placeholder='Select a city'
-							error={errors.address?.city?.message}
+						<label className='text-sm'>Location</label>
+						<MapboxMap
+							lat={address?.geoLocation.lat}
+							lng={address?.geoLocation.lng}
 						/>
-						<Select
-							{...register('address.town')}
-							value={selectedTown}
-							onChange={(town) => setValue('address.town', town as string)}
-							options={townsOptions}
-							label='Town'
-							placeholder='Select a town'
-							error={errors.address?.town?.message}
-							disabled={loadingTowns}
-						/>
-
-						<div className='col-span-2 space-y-1'>
-							<label className='text-sm'>Location</label>
-							<MapboxMap
-								lat={ground?.address.geoLocation.lat}
-								lng={ground?.address.geoLocation.lat}
-								onCoordinatesChange={handleCoordinatesChange}
-							/>
-						</div>
+						{(address?.town as Town)?.name} - {(address?.city as City)?.name}
 					</div>
 				</div>
 

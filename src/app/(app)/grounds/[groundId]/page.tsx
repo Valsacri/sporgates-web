@@ -6,13 +6,14 @@ import GroundOpeningHours from '@/components/ground/details/GroundOpeningHours';
 import GroundReservation from '@/components/ground/details/GroundReservation';
 import { GroundServerService } from '@/server/services/ground.server-service';
 import { Ground } from '@/types/item/ground/ground.types';
-import GroundFormPopup from '@/components/ground/manage/GroundFormPopup';
 import Button from '@/components/utils/Button';
 import { redirect } from 'next/navigation';
 import { Address } from '@/types/geo.types';
 import { User } from '@/types/user.types';
 import { RatingStats, ReviewTopicType } from '@/types/review.types';
 import { ReviewServerService } from '@/server/services/review.server-service';
+import GroundForm from '@/components/ground/manage/GroundForm';
+import { Popup } from '@/components/utils/Popup';
 
 interface Props {
 	params: {
@@ -91,14 +92,21 @@ async function GroundDetails({ params: { groundId } }: Props) {
 				<GroundReservation ground={ground} />
 			</div>
 
-			<GroundFormPopup ground={ground}>
-				<Button
-					icon='edit'
-					color='primary'
-					className='fixed bottom-5 right-5 p-7 rounded-full'
-					iconClassName='!size-8'
-				></Button>
-			</GroundFormPopup>
+
+			<Popup
+				title='Update ground'
+				description='Update the details of the ground.'
+				trigger={
+					<Button
+						icon='edit'
+						color='primary'
+						className='fixed bottom-5 right-5 p-7 rounded-full'
+						iconClassName='!size-8'
+					></Button>
+				}
+			>
+				<GroundForm ground={ground} businessId={ground.business as string} />
+			</Popup>
 		</div>
 	);
 }

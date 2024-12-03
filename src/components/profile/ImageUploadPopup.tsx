@@ -84,10 +84,8 @@ function ImageUploadPopup({ open, onClose, title, onUpload }: Props) {
 		}
 	};
 
-	if (!open) return null;
-
 	return (
-		<Popup open={true} title={title} onClose={onClose}>
+		<Popup open={open} title={title} onClose={onClose}>
 			{file ? (
 				<div className='relative w-full h-96'>
 					<Cropper

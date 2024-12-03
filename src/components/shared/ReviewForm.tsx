@@ -1,6 +1,5 @@
 'use client';
 
-import { Popup } from '@/components/utils/Popup';
 import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -20,13 +19,7 @@ interface Props {
 	onClose?: () => any;
 }
 
-function ReviewFormPopup({
-	review,
-	onSubmit,
-	topicType,
-	topic,
-	onClose,
-}: Props) {
+function ReviewForm({ review, onSubmit, topicType, topic, onClose }: Props) {
 	const showAlert = useContext(AlertContext);
 
 	const { register, handleSubmit, formState, watch, setValue } = useForm({
@@ -67,48 +60,36 @@ function ReviewFormPopup({
 	};
 
 	return (
-		<Popup
-			open={true}
-			title={review ? 'Edit review' : 'Post a review'}
-			description={
-				review
-					? 'Edit your the review.'
-					: 'Fill in the details to post a new review.'
-			}
-			onClose={onClose}
-			className='w-full lg:w-1/2'
-		>
-			<div className='space-y-3'>
-				<form
-					onSubmit={handleSubmit(handleReviewSubmit)}
-					className='grid grid-cols-1 lg:grid-cols-2 gap-3'
-				>
-					<Rating
-						value={rating}
-						onChange={(rating) => setValue('rating', rating)}
-					/>
-					<Input
-						{...register('comment')}
-						label='Comment'
-						placeholder='Leave a comment'
-						multiline
-						className='col-span-2'
-					/>
+		<div className='space-y-3'>
+			<form
+				onSubmit={handleSubmit(handleReviewSubmit)}
+				className='grid grid-cols-1 lg:grid-cols-2 gap-3'
+			>
+				<Rating
+					value={rating}
+					onChange={(rating) => setValue('rating', rating)}
+				/>
+				<Input
+					{...register('comment')}
+					label='Comment'
+					placeholder='Leave a comment'
+					multiline
+					className='col-span-2'
+				/>
 
-					<div className='col-span-2'>
-						<Button
-							type='submit'
-							color='primary'
-							className='min-w-full lg:min-w-48 ml-auto'
-							loading={formState.isSubmitting}
-						>
-							Save
-						</Button>
-					</div>
-				</form>
-			</div>
-		</Popup>
+				<div className='col-span-2'>
+					<Button
+						type='submit'
+						color='primary'
+						className='min-w-full lg:min-w-48 ml-auto'
+						loading={formState.isSubmitting}
+					>
+						Save
+					</Button>
+				</div>
+			</form>
+		</div>
 	);
 }
 
-export default ReviewFormPopup;
+export default ReviewForm;

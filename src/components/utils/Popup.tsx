@@ -1,19 +1,19 @@
 'use client';
 
 import { useOutsideClick } from '@/client/hooks/utils/useOutsideClick';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { HiX } from 'react-icons/hi';
 import { twMerge } from 'tailwind-merge';
 import Button from './Button';
 
 interface Props {
-	children?: React.ReactNode;
+	children?: React.ReactElement;
 	title?: React.ReactNode;
 	description?: string;
 	width?: string;
-	open?: boolean;
+	open?: any;
 	setOpen?: (open: boolean) => any;
-	showCloseButton?: boolean;
+	hideCloseButton?: boolean;
 	onClose?: any;
 	outsideClick?: boolean;
 	titleSuffix?: React.ReactNode;
@@ -29,7 +29,7 @@ export const Popup = ({
 	description,
 	open: _open,
 	setOpen: _setOpen,
-	showCloseButton = true,
+	hideCloseButton,
 	onClose,
 	outsideClick = true,
 	titleSuffix,
@@ -42,6 +42,7 @@ export const Popup = ({
 
 	const open = _open ?? __open;
 	const setOpen = _setOpen ?? __setOpen;
+	const _onClose = onClose ?? (() => setOpen(false));
 
 	const ref = useRef(null);
 
@@ -49,60 +50,62 @@ export const Popup = ({
 		if (!outsideClick) {
 			return;
 		}
-		onClose();
+		_onClose();
 	});
-
-	if (!open) {
-		return;
-	}
 
 	return (
 		<>
-			<div
-				onClick={() => setOpen(!open)}
-				className={twMerge('cursor-pointer', triggerClassName)}
-			>
-				{trigger}
-			</div>
-
-			<div
-				className={twMerge(
-					'fixed z-50 top-0 left-0 w-screen h-screen bg-black bg-opacity-50 flex justify-center items-center py-10',
-					backdropClassName
-				)}
-			>
+			{trigger && (
 				<div
-					ref={ref}
+					onClick={() => setOpen(!open)}
+					className={twMerge('cursor-pointer', triggerClassName)}
+				>
+					{trigger}
+				</div>
+			)}
+
+			{open && (
+				<div
 					className={twMerge(
-						'max-h-full overflow-auto mx-3 bg-white rounded-md p-4 space-y-3 border',
-						className
+						'fixed z-50 top-0 left-0 w-screen h-screen bg-black bg-opacity-50 flex justify-center items-center py-10',
+						backdropClassName
 					)}
 				>
-					<div className='space-y-1'>
-						<div className='flex justify-between'>
-							<h2>{title}</h2>
+					<div
+						ref={ref}
+						className={twMerge(
+							'max-h-full overflow-auto mx-3 bg-white rounded-md p-4 space-y-3 border w-full lg:w-1/2',
+							className
+						)}
+					>
+						{(title || titleSuffix || !hideCloseButton) && (
+							<div className='space-y-1'>
+								<div className='flex justify-between'>
+									<h2>{title}</h2>
 
-							<div className='flex gap-3'>
-								{titleSuffix}
-								{showCloseButton && (
-									<Button
-										icon={<HiX className='size-5 cursor-pointer' />}
-										className='bg-opacity-0 p-1 h-min w-min'
-										onClick={onClose}
-									/>
+									<div className='flex gap-3'>
+										{titleSuffix}
+										{!hideCloseButton && (
+											<Button
+												icon={<HiX className='size-5 cursor-pointer' />}
+												className='bg-opacity-0 p-1 h-min w-min'
+												onClick={_onClose}
+											/>
+										)}
+									</div>
+								</div>
+
+								{description && (
+									<p className='text-sm mb-3 text-text-secondary-dark'>
+										{description}
+									</p>
 								)}
 							</div>
-						</div>
-
-						{description && (
-							<p className='text-sm mb-3 text-text-secondary-dark'>
-								{description}
-							</p>
 						)}
+						{children && React.cloneElement(children, { onClose: _onClose })}
 					</div>
-					{children}
 				</div>
-			</div>
+			)}
 		</>
 	);
 };

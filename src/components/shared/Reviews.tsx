@@ -1,15 +1,15 @@
 'use client';
 
 import Rating from '@/components/shared/Rating';
-import ReviewFormPopup from '@/components/shared/ReviewPopup';
+import ReviewForm from '@/components/shared/ReviewForm';
 import Button from '@/components/utils/Button';
 import Card from '@/components/utils/Card';
 import { Review, ReviewTopicType } from '@/types/review.types';
 import { User } from '@/types/user.types';
-import PopupManager from '../utils/PopupManager';
 import { useFetch } from '@/client/hooks/utils/useFetch';
 import { ReviewClientService } from '@/client/services/geo/review.client-service';
 import Loader from '../utils/Loader';
+import { Popup } from '../utils/Popup';
 
 interface Props {
 	topicType: ReviewTopicType;
@@ -63,21 +63,18 @@ function Reviews({ topicType, topic }: Props) {
 				))
 			)}
 
-			<PopupManager
+			<Popup
 				trigger={
 					<Button className='w-full' color='primary'>
 						Write a review
 					</Button>
 				}
-				triggerClassName='h-min'
-				popup={
-					<ReviewFormPopup
-						topicType={topicType}
-						topic={topic}
-						onSubmit={refetch}
-					/>
-				}
-			/>
+				title='Edit review'
+				description='Edit your review.'
+			>
+				<ReviewForm topicType={topicType} topic={topic} onSubmit={refetch} />
+			</Popup>
+
 		</Card>
 	);
 }

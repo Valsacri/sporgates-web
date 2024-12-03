@@ -5,13 +5,13 @@ import Button from '@/components/utils/Button';
 import { Input } from '@/components/utils/form/Input';
 import { Select } from '@/components/utils/form/Select';
 import MapboxMap from '@/components/utils/Map';
-import { CreateAddressDto, AddressDtoType } from '@/dtos/item/general.dto';
+import { AddressDto, CreateAddressDtoType } from '@/dtos/item/general.dto';
 import { Address, City, GeoLocation, Town } from '@/types/geo.types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 interface Props {
-	onSubmit: (address: AddressDtoType) => any;
+	onSubmit: (address: CreateAddressDtoType) => any;
 	init?: Address | null;
 }
 
