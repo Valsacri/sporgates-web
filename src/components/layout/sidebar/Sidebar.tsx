@@ -17,6 +17,7 @@ import { twMerge } from 'tailwind-merge';
 import MenuButton from '../MenuButton';
 import { BreakpointContext } from '@/client/contexts/breakpoint.context';
 import Link from 'next/link';
+import SignInForm from '@/components/auth/SignInForm';
 
 function Sidebar() {
 	const pathname = usePathname();
@@ -83,45 +84,52 @@ function Sidebar() {
 							</Link>
 						</div>
 
-						<List2>
-							{...items.map((item) => (
-								<ListItem {...item}>{showText && item.children}</ListItem>
-							))}
+						{!user ? (
+							<div className='pt-10 px-2'>
+								<SignInForm compact />
+							</div>
+						) : (
+							<List2>
+								{...items.map((item) => (
+									<ListItem {...item}>{showText && item.children}</ListItem>
+								))}
 
-							{user && (
-								<>
-									<Separator />
+								{user && (
+									<>
+										<Separator />
 
-									<ListItem
-										prefix={<Avatar src={user.avatar} size={24} />}
-										href={`/users/${user.id}`}
-										selected={pathname === `/users/${user.id}`}
-									>
-										{showText && user.name}
-									</ListItem>
-
-									{...businesses.map((business) => (
 										<ListItem
-											prefix={
-												<Avatar
-													src={
-														business.avatar || '/images/avatar-placeholder.png'
-													}
-													size={24}
-												/>
-											}
-											href={`/businesses/${business?.id}`}
-											selected={pathname === `/businesses/${business?.id}`}
+											prefix={<Avatar src={user.avatar} size={24} />}
+											href={`/users/${user.id}`}
+											selected={pathname === `/users/${user.id}`}
 										>
-											{showText && business.name}
+											{showText && user.name}
 										</ListItem>
-									))}
-								</>
-							)}
-						</List2>
+
+										{...businesses.map((business) => (
+											<ListItem
+												prefix={
+													<Avatar
+														src={
+															business.avatar ||
+															'/images/avatar-placeholder.png'
+														}
+														size={24}
+													/>
+												}
+												href={`/businesses/${business?.id}`}
+												selected={pathname === `/businesses/${business?.id}`}
+											>
+												{showText && business.name}
+											</ListItem>
+										))}
+									</>
+								)}
+							</List2>
+						)}
 					</div>
 
-					<MenuButton showText={showText} />
+					{user && <MenuButton showText={showText} />}
 				</div>
 
 				{extension && (

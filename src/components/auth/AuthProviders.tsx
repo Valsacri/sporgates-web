@@ -1,9 +1,10 @@
+import { twMerge } from 'tailwind-merge';
 import Button from '../utils/Button';
 import Image from 'next/image';
 
-function AuthProviders() {
+function AuthProviders({ compact = false }) {
 	return (
-		<>
+		<div className={twMerge('flex flex-col gap-2', compact && 'flex-row')}>
 			<Button
 				icon={
 					<Image
@@ -15,10 +16,10 @@ function AuthProviders() {
 					/>
 				}
 				color='secondary'
-				className='w-full mx-auto py-6 rounded-full'
+				className={twMerge('w-full mx-auto py-6', !compact && 'rounded-full')}
 			>
 				{' '}
-				Connect with google{' '}
+				{!compact && 'Connect with google'}{' '}
 			</Button>
 
 			<Button
@@ -32,12 +33,12 @@ function AuthProviders() {
 					/>
 				}
 				color='secondary'
-				className='w-full mx-auto py-6 rounded-full'
+				className={twMerge('w-full mx-auto py-6', !compact && 'rounded-full')}
 			>
 				{' '}
-				Connect with facebook{' '}
+				{!compact && 'Connect with facebook'}{' '}
 			</Button>
-		</>
+		</div>
 	);
 }
 

@@ -15,6 +15,7 @@ import { ReviewServerService } from '@/server/services/review.server-service';
 import GroundForm from '@/components/ground/manage/GroundForm';
 import { Popup } from '@/components/utils/Popup';
 import Card from '@/components/utils/Card';
+import UserGuard from '@/components/utils/UserGuard';
 
 interface Props {
 	params: {
@@ -95,20 +96,22 @@ async function GroundDetails({ params: { groundId } }: Props) {
 				<GroundReservation ground={ground} />
 			</div>
 
-			<Popup
-				title='Update ground'
-				description='Update the details of the ground.'
-				trigger={
-					<Button
-						icon='edit'
-						color='primary'
-						className='fixed bottom-5 right-5 p-7 rounded-full hidden lg:block'
-						iconClassName='!size-8'
-					></Button>
-				}
-			>
-				<GroundForm ground={ground} businessId={ground.business as string} />
-			</Popup>
+			<UserGuard>
+				<Popup
+					title='Update ground'
+					description='Update the details of the ground.'
+					trigger={
+						<Button
+							icon='edit'
+							color='primary'
+							className='fixed bottom-5 right-5 p-7 rounded-full hidden lg:block'
+							iconClassName='!size-8'
+						></Button>
+					}
+				>
+					<GroundForm ground={ground} businessId={ground.business as string} />
+				</Popup>
+			</UserGuard>
 		</div>
 	);
 }

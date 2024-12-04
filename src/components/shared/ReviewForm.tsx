@@ -10,6 +10,7 @@ import Rating from './Rating';
 import { Review, ReviewTopicType } from '@/types/review.types';
 import { ReviewClientService } from '@/client/services/geo/review.client-service';
 import { CreateReviewDto, CreateReviewDtoType } from '@/dtos/review.dto';
+import { useRouter } from 'next/navigation';
 
 interface Props {
 	review?: Review;
@@ -21,6 +22,7 @@ interface Props {
 
 function ReviewForm({ review, onSubmit, topicType, topic, onClose }: Props) {
 	const showAlert = useContext(AlertContext);
+	const router = useRouter();
 
 	const { register, handleSubmit, formState, watch, setValue } = useForm({
 		defaultValues: {
@@ -49,7 +51,8 @@ function ReviewForm({ review, onSubmit, topicType, topic, onClose }: Props) {
 					message: 'Review created successfully',
 				});
 			}
-			onSubmit?.();
+			// onSubmit?.();
+			router.refresh();
 			onClose?.();
 		} catch (error) {
 			console.error(error);

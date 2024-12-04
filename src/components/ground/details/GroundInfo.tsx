@@ -5,6 +5,7 @@ import { RatingStats } from '@/types/review.types';
 import { Popup } from '@/components/utils/Popup';
 import Button from '@/components/utils/Button';
 import GroundForm from '../manage/GroundForm';
+import UserGuard from '@/components/utils/UserGuard';
 
 interface Props {
 	ground: Ground;
@@ -23,13 +24,18 @@ function GroundInfo({ ground, rating }: Props) {
 					</div>
 				</div>
 
-				<Popup
-					title='Update ground'
-					description='Update the details of the ground.'
-					trigger={<Button icon='edit'></Button>}
-				>
-					<GroundForm ground={ground} businessId={ground.business as string} />
-				</Popup>
+				<UserGuard>
+					<Popup
+						title='Update ground'
+						description='Update the details of the ground.'
+						trigger={<Button icon='edit'></Button>}
+					>
+						<GroundForm
+							ground={ground}
+							businessId={ground.business as string}
+						/>
+					</Popup>
+				</UserGuard>
 			</div>
 
 			<div>
