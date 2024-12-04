@@ -114,7 +114,7 @@ function AddressManager({ onSelect, hideActions }: Props) {
 
 	return (
 		<Card
-			title='Manage addresses'
+			title={onSelect ? 'Address picker' : 'Manage addresses'}
 			titleSuffix={
 				<Button
 					icon={<HiOutlinePlusCircle className='size-5' />}
@@ -126,7 +126,7 @@ function AddressManager({ onSelect, hideActions }: Props) {
 				<Table
 					headers={[
 						{ display: 'Label', field: 'label' },
-						{ display: 'Cities', field: (row) => (row.city as City).name },
+						{ display: 'City', field: (row) => (row.city as City).name },
 						{ display: 'Town', field: (row) => (row.town as Town).name },
 					]}
 					data={addresses}

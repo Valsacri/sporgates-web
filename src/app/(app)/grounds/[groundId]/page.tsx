@@ -49,10 +49,10 @@ async function GroundDetails({ params: { groundId } }: Props) {
 			<GroundImages images={ground.images} />
 
 			<div className='grid grid-cols-1 lg:grid-cols-3 gap-0 lg:gap-3'>
-				<div className='space-y-3 col-span-2'>
+				<div className='space-y-3 col-span-2 mb-[165px]'>
 					<GroundInfo ground={ground} rating={rating} />
 					{/* <GroundPricing subscriptions={ground.subscriptions} /> */}
-					<Card title='Address' >
+					<Card title='Address'>
 						<GroundAddress address={ground.address as Address} />
 					</Card>
 					<div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
@@ -102,7 +102,7 @@ async function GroundDetails({ params: { groundId } }: Props) {
 					<Button
 						icon='edit'
 						color='primary'
-						className='fixed bottom-5 right-5 p-7 rounded-full'
+						className='fixed bottom-5 right-5 p-7 rounded-full hidden lg:block'
 						iconClassName='!size-8'
 					></Button>
 				}

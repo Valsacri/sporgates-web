@@ -65,7 +65,7 @@ function ReservationPicker() {
 							`${TimeframeHelper.format(
 								selectedTimeframe!
 							)} (${formattedDuration})`
-						) : null}
+						) : '00:00 - 00:00'}
 					</p>
 				</div>
 			</div>

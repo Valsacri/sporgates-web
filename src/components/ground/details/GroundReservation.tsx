@@ -11,7 +11,6 @@ import Balance from '@/components/shared/Balance';
 import { usePopup } from '@/client/hooks/utils/usePopup';
 import { TimeframeHelper } from '@/helpers/datetime/timeframe.helpers';
 import { AlertContext } from '@/client/contexts/alert.context';
-import { GENERIC_ERROR_MESSAGE } from '@/constants';
 
 interface Props {
 	ground: Ground;
@@ -77,7 +76,7 @@ function GroundReservation({ ground }: Props) {
 	};
 
 	return (
-		<div className='sticky bottom-0 lg:top-0 left-0 w-full h-max'>
+		<div className='fixed lg:sticky bottom-[62px] lg:top-0 left-0 w-full h-max px-1 lg:px-0'>
 			<GroundReservationContext.Provider
 				value={{
 					ground,

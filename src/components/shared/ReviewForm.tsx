@@ -68,12 +68,12 @@ function ReviewForm({ review, onSubmit, topicType, topic, onClose }: Props) {
 				<Rating
 					value={rating}
 					onChange={(rating) => setValue('rating', rating)}
+					className='text-xl'
 				/>
 				<Input
 					{...register('comment')}
-					label='Comment'
+					// label='Comment'
 					placeholder='Leave a comment'
-					multiline
 					className='col-span-2'
 				/>
 

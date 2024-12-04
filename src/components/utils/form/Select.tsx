@@ -8,7 +8,7 @@ import { HiChevronDown } from 'react-icons/hi2';
 import Loader from '../Loader';
 
 export interface SelectOption {
-	value: string;
+	value: string | null;
 	label: string;
 }
 
@@ -20,9 +20,9 @@ interface Props {
 	label?: string;
 	labelClassName?: string;
 	containerClassName?: string;
-	value?: string | string[]; // Single or multi-select
+	value?: (string | null) | string[]; // Single or multi-select
 	onBlur?: any;
-	onChange?: (value: string | string[]) => void;
+	onChange?: (value: (string | null) | string[]) => void;
 	options: SelectOption[];
 	placeholder?: string;
 	error?: string;
@@ -61,12 +61,12 @@ export const Select = forwardRef<HTMLInputElement | HTMLTextAreaElement, Props>(
 		const isMultiSelect = Array.isArray(value);
 
 		// Handle selection
-		const handleSelect = (selectedValue: string) => {
+		const handleSelect = (selectedValue: string | null) => {
 			if (isMultiSelect) {
 				const currentValues = value as string[];
-				const newValues = currentValues.includes(selectedValue)
-					? currentValues.filter((v) => v !== selectedValue) // Remove if already selected
-					: [...currentValues, selectedValue]; // Add if not selected
+				const newValues = currentValues.includes(selectedValue as string)
+					? currentValues.filter((v) => v !== (selectedValue as string)) // Remove if already selected
+					: [...currentValues, selectedValue as string]; // Add if not selected
 				onChange?.(newValues);
 			} else {
 				onChange?.(selectedValue);
@@ -79,7 +79,7 @@ export const Select = forwardRef<HTMLInputElement | HTMLTextAreaElement, Props>(
 			item: option.label,
 			onClick: () => handleSelect(option.value),
 			selected: isMultiSelect
-				? (value as string[]).includes(option.value)
+				? (value as string[]).includes(option.value as string)
 				: value === option.value,
 			className: 'text-xs',
 		}));
@@ -87,7 +87,9 @@ export const Select = forwardRef<HTMLInputElement | HTMLTextAreaElement, Props>(
 		// Display value(s)
 		const displayValue = isMultiSelect
 			? options
-					.filter((option) => (value as string[]).includes(option.value))
+					.filter((option) =>
+						(value as string[]).includes(option.value as string)
+					)
 					.map((option) => option.label)
 					.join(', ') // Concatenate labels for display
 			: options.find((option) => option.value === value)?.label || '';

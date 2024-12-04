@@ -57,7 +57,7 @@ function Reviews({ topicType, topic }: Props) {
 							<p className='text-xs text-text-secondary'>2 days ago</p>
 						</div>
 						<Rating value={review.rating} />
-						<p className='text-sm mt-2'>{review.comment}</p>
+						<p className='text-sm text-text-secondary-dark mt-2'>{review.comment}</p>
 						{i < reviews.length - 1 && <hr className='mt-3' />}
 					</div>
 				))
@@ -69,8 +69,8 @@ function Reviews({ topicType, topic }: Props) {
 						Write a review
 					</Button>
 				}
-				title='Edit review'
-				description='Edit your review.'
+				title='Post a review'
+				className='lg:w-[400px]'
 			>
 				<ReviewForm topicType={topicType} topic={topic} onSubmit={refetch} />
 			</Popup>

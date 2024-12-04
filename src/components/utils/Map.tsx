@@ -26,10 +26,13 @@ const MapboxMap: React.FC<MapboxMapProps> = ({
 	const mapContainerRef = useRef<HTMLDivElement | null>(null);
 	const mapRef = useRef<mapboxgl.Map | null>(null);
 	const markerRef = useRef<mapboxgl.Marker | null>(null);
-	const [centerCoords, setCenterCoords] = useState({ lat, lng });
 
 	// Helper function to update the circle
-	const updateCircle = (map: mapboxgl.Map, center: [number, number], radius: number) => {
+	const updateCircle = (
+		map: mapboxgl.Map,
+		center: [number, number],
+		radius: number
+	) => {
 		const circle = turf.circle(center, radius, {
 			steps: 64,
 			units: 'kilometers',
@@ -74,7 +77,6 @@ const MapboxMap: React.FC<MapboxMapProps> = ({
 		map.on('load', () => {
 			setIsMapLoaded(true);
 		});
-
 		map.on('style.load', () => {
 			setIsMapLoaded(true);
 		});
@@ -82,7 +84,7 @@ const MapboxMap: React.FC<MapboxMapProps> = ({
 		// Add a marker when the radius is 0
 		if (radius === 0) {
 			const marker = new mapboxgl.Marker({
-				draggable: true,
+				draggable: !!onCoordinatesChange,
 			})
 				.setLngLat([initialCoords.lng, initialCoords.lat])
 				.addTo(map);
@@ -94,7 +96,6 @@ const MapboxMap: React.FC<MapboxMapProps> = ({
 				if (!onCoordinatesChange) return;
 				const { lng, lat } = event.lngLat;
 				marker.setLngLat([lng, lat]); // Move the marker
-				setCenterCoords({ lat, lng });
 				onCoordinatesChange({ lat, lng });
 			};
 
@@ -104,7 +105,6 @@ const MapboxMap: React.FC<MapboxMapProps> = ({
 			marker.on('dragend', () => {
 				if (!onCoordinatesChange) return;
 				const { lat, lng } = marker.getLngLat();
-				setCenterCoords({ lat, lng });
 				onCoordinatesChange({ lat, lng });
 			});
 		}
@@ -124,12 +124,11 @@ const MapboxMap: React.FC<MapboxMapProps> = ({
 			}
 
 			// Update or add the circle
-			updateCircle(map, [centerCoords.lng, centerCoords.lat], radius);
+			updateCircle(map, [lng, lat], radius);
 
 			// Handle map click to move the circle
 			const handleMapClick = (event: any) => {
 				const { lng, lat } = event.lngLat;
-				setCenterCoords({ lat, lng });
 				if (onCoordinatesChange) {
 					onCoordinatesChange({ lat, lng });
 				}
@@ -140,7 +139,7 @@ const MapboxMap: React.FC<MapboxMapProps> = ({
 			// If the radius is 0, add the marker back
 			if (!markerRef.current) {
 				const marker = new mapboxgl.Marker({
-					draggable: true,
+					draggable: !!onCoordinatesChange,
 				})
 					.setLngLat([lng, lat])
 					.addTo(map);
@@ -150,7 +149,6 @@ const MapboxMap: React.FC<MapboxMapProps> = ({
 				marker.on('dragend', () => {
 					if (!onCoordinatesChange) return;
 					const { lat, lng } = marker.getLngLat();
-					setCenterCoords({ lat, lng });
 					onCoordinatesChange({ lat, lng });
 				});
 			}
@@ -163,7 +161,20 @@ const MapboxMap: React.FC<MapboxMapProps> = ({
 				map.removeSource('circle');
 			}
 		};
-	}, [radius, centerCoords, isMapLoaded, onCoordinatesChange]);
+	}, [lat, lng, radius, isMapLoaded, onCoordinatesChange]);
+
+	useEffect(() => {
+		const map = mapRef.current;
+		if (!map || !isMapLoaded) return;
+
+		// Update marker position
+		if (markerRef.current) {
+			markerRef.current.setLngLat([lng, lat]);
+		}
+
+		// Update map center
+		map.flyTo({ center: [lng, lat], zoom: map.getZoom() });
+	}, [lat, lng, isMapLoaded]);
 
 	return <div ref={mapContainerRef} className='h-72 w-full rounded-md' />;
 };

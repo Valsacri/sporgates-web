@@ -5,16 +5,19 @@ import { AlertContext } from '../contexts/alert.context';
 import { TownClientService } from '../services/geo/town.client-service';
 import { SelectOption } from '@/components/utils/form/Select';
 
-function useCitiesAndTownsOptions(selectedCity: string) {
+function useCitiesAndTownsOptions(selectedCity: string, defaultAll = false) {
 	const showAlert = useContext(AlertContext);
 
 	const citiesFetch = useFetch([], {
 		async fetch() {
 			try {
 				const cities = await CityClientService.getPage();
-				return cities.map(
-					(city) => ({ value: city.id, label: city.name } as SelectOption)
-				);
+				return [
+					...(defaultAll ? [{ value: '', label: 'All towns' }] : []),
+					...cities.map(
+						(city) => ({ value: city.id, label: city.name } as SelectOption)
+					),
+				];
 			} catch (error) {
 				console.log(error);
 				showAlert({
@@ -29,13 +32,19 @@ function useCitiesAndTownsOptions(selectedCity: string) {
 		[],
 		{
 			async fetch() {
-				if (!selectedCity) return [];
+				if (!selectedCity) {
+					if (defaultAll) return [{ value: '', label: 'All towns' }];
+					return [];
+				}
 
 				const towns = await TownClientService.getPage(selectedCity);
 
-				return towns.map(
-					(town) => ({ value: town.id, label: town.name } as SelectOption)
-				);
+				return [
+					...(defaultAll ? [{ value: '', label: 'All towns' }] : []),
+					...towns.map(
+						(town) => ({ value: town.id, label: town.name } as SelectOption)
+					),
+				];
 			},
 		},
 		[selectedCity]

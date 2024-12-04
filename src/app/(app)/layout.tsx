@@ -33,7 +33,7 @@ export default function RootLayout({
 					breakpoint.isMobile && 'my-16'
 				)}
 			>
-				{!breakpoint.isMobile && !!user && <Sidebar />}
+				{!breakpoint.isMobile && <Sidebar />}
 				<div className='w-full h-full 2xl:container mx-auto p-3 overflow-y-auto'>
 					{children}
 				</div>

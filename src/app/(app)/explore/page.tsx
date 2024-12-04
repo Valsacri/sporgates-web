@@ -29,9 +29,9 @@ function Page() {
 	const form = useForm({
 		defaultValues: {
 			keywords: '',
-			sport: 'all',
-			city: 'all',
-			town: 'all',
+			sport: '',
+			city: '',
+			town: '',
 			type: 'champs',
 			radius: 1,
 			geolocation: { lat: 33.5731, lng: -7.5898 },
@@ -62,18 +62,12 @@ function Page() {
 			async fetch() {
 				const filters = {
 					keywords:
-						keywords === 'all' || shouldUseRadiusPicker
-							? undefined
-							: keywords.trim(),
-					sport: selectedSport === 'all' ? undefined : selectedSport,
+						keywords || shouldUseRadiusPicker ? undefined : keywords.trim(),
+					sport: selectedSport ? undefined : selectedSport,
 					city:
-						selectedCity === 'all' || shouldUseRadiusPicker
-							? undefined
-							: selectedCity,
+						selectedCity || shouldUseRadiusPicker ? undefined : selectedCity,
 					town:
-						selectedTown === 'all' || shouldUseRadiusPicker
-							? undefined
-							: selectedTown,
+						selectedTown || shouldUseRadiusPicker ? undefined : selectedTown,
 					lat: shouldUseRadiusPicker ? lat : undefined,
 					lng: shouldUseRadiusPicker ? lng : undefined,
 					radius: shouldUseRadiusPicker ? radius : undefined,

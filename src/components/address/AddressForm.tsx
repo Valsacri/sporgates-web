@@ -32,6 +32,8 @@ function AddressForm({ onSubmit, init }: Props) {
 
 	const selectedCity = watch('city');
 	const selectedTown = watch('town');
+	const lat = watch('geoLocation.lat');
+	const lng = watch('geoLocation.lng');
 
 	const [
 		{ data: citiesOptions, loading: loadingCities },
@@ -94,8 +96,8 @@ function AddressForm({ onSubmit, init }: Props) {
 			<div className='col-span-2 space-y-1'>
 				<label className='text-sm'>Location</label>
 				<MapboxMap
-					lat={33.5731}
-					lng={-7.5898}
+					lat={lat}
+					lng={lng}
 					onCoordinatesChange={handleCoordinatesChange}
 				/>
 			</div>

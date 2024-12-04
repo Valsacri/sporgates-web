@@ -8,12 +8,14 @@ import Button from '@/components/utils/Button';
 import { LuRadar } from 'react-icons/lu';
 import { CocoIcon } from '@/client/config/coco-icons';
 import { SlidePicker } from '../utils/form/SlidePicker';
-import { CityClientService } from '@/client/services/geo/city.client-service';
-import { useFetch } from '@/client/hooks/utils/useFetch';
-import { TownClientService } from '@/client/services/geo/town.client-service';
-import { GeoLocation } from '@/types/geo.types';
+import { Address, City, GeoLocation, Town } from '@/types/geo.types';
 import MapboxMap from '../utils/Map';
 import { twMerge } from 'tailwind-merge';
+import useCitiesAndTownsOptions from '@/client/hooks/useCitiesAndTownsOptions';
+import { useEffect } from 'react';
+import { Popup } from '../utils/Popup';
+import AddressManager from '../address/AddressManager';
+import { usePopup } from '@/client/hooks/utils/usePopup';
 
 interface Props {
 	sportsOptions?: SelectOption[];
@@ -26,7 +28,10 @@ function ExploreFilters({
 	loadingSports = false,
 	onTypeChange,
 }: Props) {
+	const [openAddressPopup, toggleAddressPopup] = usePopup(false);
+
 	const { register, watch, setValue } = useFormContext();
+
 	const selectedType = watch('type');
 	const selectedSport = watch('sport');
 	const selectedCity = watch('city');
@@ -35,43 +40,28 @@ function ExploreFilters({
 	const radius = watch('radius');
 	const shouldUseRadiusPicker = watch('shouldUseRadiusPicker');
 
-	const { data: citiesOptions, loading: loadingCities } = useFetch([], {
-		async fetch() {
-			const cities = await CityClientService.getPage();
-			return [
-				{ value: 'all', label: 'All cities' },
-				...cities.map(
-					(city) => ({ value: city.id, label: city.name } as SelectOption)
-				),
-			];
-		},
-	});
+	const [
+		{ data: citiesOptions, loading: loadingCities },
+		{ data: townsOptions, loading: loadingTowns },
+	] = useCitiesAndTownsOptions(selectedCity, true);
 
-	const { data: townsOptions, loading: loadingTowns } = useFetch(
-		[],
-		{
-			async fetch() {
-				if (selectedCity === 'all')
-					return [{ value: 'all', label: 'All towns' }];
-
-				const towns = await TownClientService.getPage(selectedCity);
-
-				setValue('town', 'all');
-
-				return [
-					{ value: 'all', label: 'All towns' },
-					...towns.map(
-						(town) => ({ value: town.id, label: town.name } as SelectOption)
-					),
-				];
-			},
-		},
-		[selectedCity]
-	);
+	useEffect(() => {
+		if (!citiesOptions) {
+			setValue('town', '');
+		}
+	}, [citiesOptions]);
 
 	const handleCoordinatesChange = (coordinates: GeoLocation) => {
 		setValue('geolocation.lat', coordinates.lat);
 		setValue('geolocation.lng', coordinates.lng);
+	};
+
+	const handleSelectAddress = (address: Address) => {
+		setValue('city', (address.city as City).id);
+		setValue('town', (address.town as Town).id);
+		setValue('geolocation.lat', address.geoLocation.lat);
+		setValue('geolocation.lng', address.geoLocation.lng);
+		toggleAddressPopup();
 	};
 
 	return (
@@ -101,6 +91,15 @@ function ExploreFilters({
 					loading={loadingSports}
 				/>
 			</div>
+
+			<Button
+				color='secondary'
+				icon='location'
+				className='w-full'
+				onClick={toggleAddressPopup}
+			>
+				Use existing address
+			</Button>
 
 			<div className='space-y-3'>
 				<div className='flex gap-3'>
@@ -158,6 +157,15 @@ function ExploreFilters({
 					/>
 				</div>
 			</div>
+
+			<Popup
+				open={openAddressPopup}
+				onClose={toggleAddressPopup}
+				hideCloseButton
+				className='p-0 border-none'
+			>
+				<AddressManager onSelect={handleSelectAddress} hideActions />
+			</Popup>
 		</div>
 	);
 }
