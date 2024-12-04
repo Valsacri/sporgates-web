@@ -1,6 +1,5 @@
 'use client';
 
-import { Business } from '@/types/business.types';
 import { useRouter } from 'next/navigation';
 import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
@@ -11,40 +10,27 @@ import { AlertContext } from '@/client/contexts/alert.context';
 import { Input } from '../utils/form/Input';
 import Button from '../utils/Button';
 
-interface Props {
-	business?: Business;
-}
-
-function BusinessForm({ business }: Props) {
+function CreateBusinessForm() {
 	const router = useRouter();
 	const showAlert = useContext(AlertContext);
 
 	const { register, handleSubmit, formState } = useForm({
 		defaultValues: {
-			name: business?.name || '',
-			bio: business?.bio || '',
-			username: business?.username || '',
+			name: '',
+			bio: '',
+			username: '',
 		} as CreateBusinessDtoType,
 		resolver: zodResolver(CreateBusinessDto),
 	});
 
 	const onSubmit = async (data: CreateBusinessDtoType) => {
 		try {
-			if (business) {
-				await BusinessClientService.update(business.id as string, data);
-				showAlert({
-					type: 'success',
-					message: 'Business updated successfully',
-				});
-				router.refresh();
-			} else {
-				const created = await BusinessClientService.create(data);
-				showAlert({
-					type: 'success',
-					message: 'Business created successfully',
-				});
-				router.push(`/businesses/${created.id}`);
-			}
+			const created = await BusinessClientService.create(data);
+			showAlert({
+				type: 'success',
+				message: 'Business created successfully',
+			});
+			router.push(`/businesses/${created.id}`);
 		} catch (error) {
 			console.error(error);
 			showAlert({
@@ -60,18 +46,18 @@ function BusinessForm({ business }: Props) {
 		>
 			<Input
 				{...register('name')}
-				label='First name'
-				placeholder='Enter your first name'
+				label='Name'
+				placeholder='Enter the business name'
 			/>
 			<Input
 				{...register('username')}
 				label='Username'
-				placeholder='Enter your first name'
+				placeholder='Enter the business username'
 			/>
 			<Input
 				{...register('bio')}
 				label='Bio'
-				placeholder='Enter your bio'
+				placeholder='Enter the business bio'
 				className='col-span-2'
 			/>
 			<div className='col-span-2'>
@@ -88,4 +74,4 @@ function BusinessForm({ business }: Props) {
 	);
 }
 
-export default BusinessForm;
+export default CreateBusinessForm;

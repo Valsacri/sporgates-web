@@ -1,6 +1,6 @@
 import { twMerge } from 'tailwind-merge';
 import { poppinsFont } from '@/client/config/fonts';
-import ContextProvider from '@/components/ContextProvider';
+import GlobalContextProvider from '@/components/context-providers/GlobalContextProvider';
 
 import '../client/styles/globals.css';
 import '../client/styles/calendar.css';
@@ -31,7 +31,7 @@ export default function RootLayout({
 					poppinsFont.variable
 				)}
 			>
-				<ContextProvider>{children}</ContextProvider>
+				<GlobalContextProvider>{children}</GlobalContextProvider>
 			</body>
 		</html>
 	);

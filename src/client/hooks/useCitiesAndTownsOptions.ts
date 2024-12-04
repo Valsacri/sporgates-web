@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { useFetch } from './utils/useFetch';
 import { CityClientService } from '../services/geo/city.client-service';
 import { AlertContext } from '../contexts/alert.context';

@@ -18,7 +18,9 @@ export type UpdateBusinessDtoType = z.infer<typeof UpdateBusinessDto>;
 // update profile
 export const UpdateBusinessProfileDto = z.object({
 	name: z.string().optional(),
-	username: z.string().optional(),
+	bio: z.string().optional(),
+	avatar: z.string().optional(),
+	cover: z.string().optional(),
 });
 export type UpdateBusinessProfileDtoType = z.infer<
 	typeof UpdateBusinessProfileDto

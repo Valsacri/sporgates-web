@@ -3,7 +3,7 @@ import { Create, Update } from '@/types/utils.types';
 import { Axios } from '../config/axios';
 import { getAuth } from 'firebase/auth';
 import { toBearerToken } from '@/helpers/http.helpers';
-import { UserProfileDtoType } from '@/dtos/user.dto';
+import { UpdateUserProfileDtoType } from '@/dtos/user.dto';
 
 export class UserClientService {
 	static async getOne(id: string) {
@@ -50,7 +50,7 @@ export class UserClientService {
 		return res.data;
 	}
 
-	static async updateProfile(data: UserProfileDtoType) {
+	static async updateProfile(data: UpdateUserProfileDtoType) {
 		const res = await Axios.patch<User>('/users/connected/profile', data);
 		return res.data;
 	}

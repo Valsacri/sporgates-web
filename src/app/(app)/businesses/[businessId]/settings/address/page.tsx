@@ -4,14 +4,17 @@ import { AlertContext } from '@/client/contexts/alert.context';
 import { UserContext } from '@/client/contexts/user.context';
 import { useFetch } from '@/client/hooks/utils/useFetch';
 import { AddressClientService } from '@/client/services/geo/address.client-service';
-import AddressForm from '@/components/settings/addresses/AddressForm';
+import AddressForm from '@/components/address/AddressForm';
 import ConfirmationPopup from '@/components/shared/ConfirmationPopup';
 import Button from '@/components/utils/Button';
 import Card from '@/components/utils/Card';
 import Icon from '@/components/utils/Icon';
 import { Popup } from '@/components/utils/Popup';
 import { Table } from '@/components/utils/table/Table';
-import { AddressDtoType, UpdateAddressDto } from '@/dtos/item/general.dto';
+import {
+	CreateAddressDtoType,
+	UpdateAddressDtoType,
+} from '@/dtos/item/general.dto';
 import { Address, City, Town } from '@/types/geo.types';
 import { useContext, useState } from 'react';
 import { HiOutlinePlusCircle } from 'react-icons/hi';
@@ -41,7 +44,7 @@ function Page() {
 		},
 	});
 
-	const handleCreate = async (address: AddressDtoType) => {
+	const handleCreate = async (address: CreateAddressDtoType) => {
 		try {
 			await AddressClientService.create({ ...address, user: user!.id });
 			showAlert({
@@ -58,7 +61,7 @@ function Page() {
 		}
 	};
 
-	const handleUpdate = async (_address: UpdateAddressDto) => {
+	const handleUpdate = async (_address: UpdateAddressDtoType) => {
 		try {
 			await AddressClientService.update(address!.id, _address);
 			showAlert({
@@ -96,7 +99,7 @@ function Page() {
 		setAddress(null);
 	};
 
-	const handleSubmit = async (_address: AddressDtoType) => {
+	const handleSubmit = async (_address: CreateAddressDtoType) => {
 		if (address) {
 			await handleUpdate(_address);
 		} else {

@@ -5,9 +5,13 @@ import Button from '@/components/utils/Button';
 import { Input } from '@/components/utils/form/Input';
 import { Select } from '@/components/utils/form/Select';
 import MapboxMap from '@/components/utils/Map';
-import { AddressDto, CreateAddressDtoType } from '@/dtos/item/general.dto';
+import {
+	CreateAddressDto,
+	CreateAddressDtoType,
+} from '@/dtos/item/general.dto';
 import { Address, City, GeoLocation, Town } from '@/types/geo.types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 interface Props {
@@ -17,11 +21,11 @@ interface Props {
 
 function AddressForm({ onSubmit, init }: Props) {
 	const { register, setValue, watch, formState, handleSubmit } = useForm({
-		resolver: zodResolver(AddressDto),
+		resolver: zodResolver(CreateAddressDto),
 		defaultValues: {
 			label: init?.label || '',
-			city: (init?.city as City)?.id || '',
-			town: (init?.town as Town)?.id || '',
+			city: '',
+			town: '',
 			geoLocation: init?.geoLocation || { lat: 33.5731, lng: -7.5898 },
 		},
 	});
@@ -30,13 +34,29 @@ function AddressForm({ onSubmit, init }: Props) {
 	const selectedTown = watch('town');
 
 	const [
-		{ data: citiesOptions },
+		{ data: citiesOptions, loading: loadingCities },
 		{ data: townsOptions, loading: loadingTowns },
 	] = useCitiesAndTownsOptions(selectedCity);
 
 	const handleCoordinatesChange = (geoLocation: GeoLocation) => {
 		setValue('geoLocation', geoLocation);
 	};
+
+	useEffect(() => {
+		if (!loadingCities) {
+			setValue('city', (init?.city as string) || '');
+		} else {
+			setValue('city', '');
+		}
+	}, [loadingCities]);
+
+	useEffect(() => {
+		if (!loadingTowns) {
+			setValue('town', (init?.town as string) || '');
+		} else {
+			setValue('town', '');
+		}
+	}, [loadingTowns]);
 
 	return (
 		<form
@@ -58,6 +78,7 @@ function AddressForm({ onSubmit, init }: Props) {
 				label='City'
 				placeholder='Select a city'
 				error={formState.errors.city?.message}
+				loading={loadingCities}
 			/>
 			<Select
 				{...register('town')}
@@ -67,7 +88,7 @@ function AddressForm({ onSubmit, init }: Props) {
 				label='Town'
 				placeholder='Select a town'
 				error={formState.errors.town?.message}
-				disabled={loadingTowns}
+				loading={loadingTowns}
 			/>
 
 			<div className='col-span-2 space-y-1'>

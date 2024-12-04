@@ -3,12 +3,12 @@
 import { AlertContext } from '@/client/contexts/alert.context';
 import { UserContext } from '@/client/contexts/user.context';
 import { useAlert } from '@/client/hooks/utils/useAlert';
-import { Alert } from './utils/Alert';
+import { Alert } from '../utils/Alert';
 import { initFirebaseApp } from '@/client/config/firebase.config';
 import { useUserListener } from '@/client/hooks/utils/useUserListener';
 import useBreakpoint from '@/client/hooks/utils/useBreakpoint';
 import { BreakpointContext } from '@/client/contexts/breakpoint.context';
-import Splash from './layout/Splash';
+import Splash from '../layout/Splash';
 
 interface Props {
 	children: React.ReactNode;
@@ -16,7 +16,7 @@ interface Props {
 
 initFirebaseApp();
 
-function ContextProvider({ children }: Props) {
+function GlobalContextProvider({ children }: Props) {
 	const [user, setUser] = useUserListener();
 	const { alert, showAlert } = useAlert();
 	const breakpoint = useBreakpoint();
@@ -37,4 +37,4 @@ function ContextProvider({ children }: Props) {
 	);
 }
 
-export default ContextProvider;
+export default GlobalContextProvider;

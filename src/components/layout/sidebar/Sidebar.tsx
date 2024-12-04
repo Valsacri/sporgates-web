@@ -16,6 +16,7 @@ import SidebarExtension from './SidebarExtension';
 import { twMerge } from 'tailwind-merge';
 import MenuButton from '../MenuButton';
 import { BreakpointContext } from '@/client/contexts/breakpoint.context';
+import Link from 'next/link';
 
 function Sidebar() {
 	const pathname = usePathname();
@@ -77,7 +78,9 @@ function Sidebar() {
 				>
 					<div className='space-y-7'>
 						<div className='flex items-center gap-2 px-3'>
-							<Logo showText={showText} />
+							<Link href='/'>
+								<Logo showText={showText} />
+							</Link>
 						</div>
 
 						<List2>

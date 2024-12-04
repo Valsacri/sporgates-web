@@ -12,14 +12,19 @@ import Icon from '@/components/utils/Icon';
 import { Popup } from '@/components/utils/Popup';
 import { Table } from '@/components/utils/table/Table';
 import {
-  CreateAddressDtoType,
-  UpdateAddressDtoType,
+	CreateAddressDtoType,
+	UpdateAddressDtoType,
 } from '@/dtos/item/general.dto';
 import { Address, City, Town } from '@/types/geo.types';
 import { useContext, useState } from 'react';
 import { HiOutlinePlusCircle } from 'react-icons/hi';
 
-function AddressManager() {
+interface Props {
+	onSelect?: (address: Address) => any;
+	hideActions?: boolean;
+}
+
+function AddressManager({ onSelect, hideActions }: Props) {
 	const [user] = useContext(UserContext);
 	const showAlert = useContext(AlertContext);
 
@@ -125,29 +130,34 @@ function AddressManager() {
 						{ display: 'Town', field: (row) => (row.town as Town).name },
 					]}
 					data={addresses}
-					actions={[
-						{
-							name: () => (
-								<div className='flex items-center gap-2'>
-									<Icon name='edit' /> Edit
-								</div>
-							),
-							callback: setAddress,
-						},
-						{
-							name: (row) => (
-								<ConfirmationPopup onConfirm={handleDelete}>
-									<div
-										className='flex items-center gap-2'
-										onClick={() => setAddress(row)}
-									>
-										<Icon name='trash' /> Delete
-									</div>
-								</ConfirmationPopup>
-							),
-						},
-					]}
+					actions={
+						hideActions
+							? []
+							: [
+									{
+										name: () => (
+											<div className='flex items-center gap-2'>
+												<Icon name='edit' /> Edit
+											</div>
+										),
+										callback: setAddress,
+									},
+									{
+										name: (row) => (
+											<ConfirmationPopup onConfirm={handleDelete}>
+												<div
+													className='flex items-center gap-2'
+													onClick={() => setAddress(row)}
+												>
+													<Icon name='trash' /> Delete
+												</div>
+											</ConfirmationPopup>
+										),
+									},
+							  ]
+					}
 					loading={loading}
+					onRowClick={onSelect}
 				/>
 			</div>
 

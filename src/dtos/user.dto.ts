@@ -10,16 +10,18 @@ export const CreateUserDto = z.object({
 export type CreateUserDtoType = z.infer<typeof CreateUserDto>;
 
 // update user
-export const UserProfileDto = z.object({
+export const UpdateUserProfileDto = z.object({
 	firstName: z.string().min(2).optional(),
 	lastName: z.string().min(2).optional(),
 	bio: z.string().optional(),
 	sports: z.array(z.string()).optional(),
+	avatar: z.string().optional(),
+	cover: z.string().optional(),
 });
-export type UserProfileDtoType = z.infer<typeof UserProfileDto>;
+export type UpdateUserProfileDtoType = z.infer<typeof UpdateUserProfileDto>;
 
 // username
-export const UsernameDto = z.object({
+export const UpdateUsernameDto = z.object({
 	username: z.string().min(2),
 });
-export type UsernameDtoType = z.infer<typeof UsernameDto>;
+export type UpdateUsernameDtoType = z.infer<typeof UpdateUsernameDto>;

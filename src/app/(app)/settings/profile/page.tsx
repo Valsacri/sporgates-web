@@ -11,10 +11,10 @@ import { Input } from '@/components/utils/form/Input';
 import { Select, SelectOption } from '@/components/utils/form/Select';
 import { GENERIC_ERROR_MESSAGE, USERNAME_CHANGE_INTERVAL } from '@/constants';
 import {
-	UsernameDto,
-	UsernameDtoType,
-	UserProfileDto,
-	UserProfileDtoType,
+	UpdateUsernameDto,
+	UpdateUsernameDtoType,
+	UpdateUserProfileDto,
+	UpdateUserProfileDtoType,
 } from '@/dtos/user.dto';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useContext } from 'react';
@@ -30,8 +30,8 @@ function Page() {
 			lastName: user?.lastName,
 			bio: user?.bio,
 			sports: user?.sports,
-		} as UserProfileDtoType,
-		resolver: zodResolver(UserProfileDto),
+		} as UpdateUserProfileDtoType,
+		resolver: zodResolver(UpdateUserProfileDto),
 	});
 
 	const selectedSports = profileForm.watch('sports');
@@ -39,11 +39,11 @@ function Page() {
 	const usernameForm = useForm({
 		defaultValues: {
 			username: user?.username,
-		} as UsernameDtoType,
-		resolver: zodResolver(UsernameDto),
+		} as UpdateUsernameDtoType,
+		resolver: zodResolver(UpdateUsernameDto),
 	});
 
-	const onSubmitProfile = async (data: UserProfileDtoType) => {
+	const onSubmitProfile = async (data: UpdateUserProfileDtoType) => {
 		try {
 			await UserClientService.updateProfile(data);
 			showAlert({
@@ -58,7 +58,7 @@ function Page() {
 		}
 	};
 
-	const onSubmitUsername = async (data: UsernameDtoType) => {
+	const onSubmitUsername = async (data: UpdateUsernameDtoType) => {
 		try {
 			const canChangeUsername =
 				user?.lastUsernameChangeAt &&

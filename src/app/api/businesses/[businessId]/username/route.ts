@@ -1,7 +1,8 @@
-import { USERNAME_CHANGE_INTERVAL } from '@/constants';
-import { UsernameDto, UsernameDtoType } from '@/dtos/user.dto';
+import { FORBIDDEN_RESPONSE, USERNAME_CHANGE_INTERVAL } from '@/constants';
+import { UpdateUsernameDto, UpdateUsernameDtoType } from '@/dtos/user.dto';
 import { setupDbConnection } from '@/server/config/mongodb.config';
 import { HttpHelper } from '@/server/helpers/http.helper';
+import { PermissionServerService } from '@/server/services/auth/permission.server-service';
 import { BusinessServerService } from '@/server/services/business.server-service';
 
 export async function PATCH(
@@ -17,11 +18,20 @@ export async function PATCH(
 	try {
 		await setupDbConnection();
 
-		const authUser = HttpHelper.getContextAuthUser();
+		const { userId } = HttpHelper.getContextAuthUser();
 
-		const body: UsernameDtoType = await req.json();
+		const isOwner = PermissionServerService.isBusinessOwner(
+			params.businessId,
+			userId
+		);
 
-		const validation = UsernameDto.safeParse(body);
+		if (!isOwner) {
+			return FORBIDDEN_RESPONSE;
+		}
+
+		const body: UpdateUsernameDtoType = await req.json();
+
+		const validation = UpdateUsernameDto.safeParse(body);
 
 		if (!validation.success) {
 			return Response.json(validation.error, {

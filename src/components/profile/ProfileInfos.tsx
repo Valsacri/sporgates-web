@@ -7,8 +7,11 @@ import { ProfileType } from '@/types/general.types';
 import Avatar from '../utils/Avatar';
 import Card from '../utils/Card';
 import ImageUploadPopup from './ImageUploadPopup';
-import { usePopup } from '@/client/hooks/utils/usePopup';
 import { StorageHelper } from '@/client/helpers/storage.helper';
+import { UserClientService } from '@/client/services/user.client-service';
+import { BusinessClientService } from '@/client/services/business.client-service';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 interface Props {
 	type: ProfileType;
@@ -16,10 +19,19 @@ interface Props {
 }
 
 function ProfileInfos({ type, infos }: Props) {
-	const [open, toggleOpen] = usePopup();
+	const [imageType, setImageType] = useState<'avatar' | 'cover' | null>(null);
+	const router = useRouter();
 
-	const handleUpload = async (file: File) => {
-		await StorageHelper.uploadFile('/images/cover-photos', file);
+	const handleUploadImage = async (file: File) => {
+		const url = await StorageHelper.uploadFile(`/images/${type}-photos`, file);
+		if (type === ProfileType.USER) {
+			await UserClientService.updateProfile({ [imageType!]: url });
+		} else {
+			await BusinessClientService.updateProfile(infos.id, {
+				[imageType!]: url,
+			});
+		}
+		router.refresh();
 	};
 
 	return (
@@ -35,7 +47,11 @@ function ProfileInfos({ type, infos }: Props) {
 				></div>
 
 				<div className='absolute bottom-0 right-0 flex gap-3 ml-auto mt-auto p-3'>
-					<Button icon='insta' color='white' onClick={toggleOpen}>
+					<Button
+						icon='insta'
+						color='white'
+						onClick={() => setImageType('cover')}
+					>
 						<span className='hidden md:inline'>Edit cover photo</span>
 					</Button>
 				</div>
@@ -53,6 +69,7 @@ function ProfileInfos({ type, infos }: Props) {
 							icon='insta'
 							color='white'
 							className='rounded-full absolute bottom-0 right-0'
+							onClick={() => setImageType('avatar')}
 						/>
 					</div>
 					<div className='text-center md:text-start md:pt-3'>
@@ -76,12 +93,15 @@ function ProfileInfos({ type, infos }: Props) {
 				</div> */}
 			</div>
 
-			<ImageUploadPopup
-				title='Edit cover photo'
-				open={open}
-				onClose={toggleOpen}
-				onUpload={handleUpload}
-			/>
+			{imageType && (
+				<ImageUploadPopup
+					title='Edit profile photo'
+					open={true}
+					onClose={() => setImageType(null)}
+					onUpload={handleUploadImage}
+					aspect={imageType === 'cover' ? 3 : 1}
+				/>
+			)}
 		</Card>
 	);
 }

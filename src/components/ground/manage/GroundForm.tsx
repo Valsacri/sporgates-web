@@ -23,6 +23,7 @@ import { AlertContext } from '@/client/contexts/alert.context';
 import { SportClientService } from '@/client/services/sport.client-service';
 import AddressManager from '@/components/address/AddressManager';
 import { Popup } from '@/components/utils/Popup';
+import GroundAddress from '../details/GroundAddress';
 
 interface Props {
 	businessId?: string;
@@ -37,6 +38,8 @@ function GroundForm({ businessId, ground, onClose }: Props) {
 		,
 		setOpenSubscriptionRemoveConfirmationPopup,
 	] = usePopup();
+
+	const [openAddressPopup, toggleOpenAddressPopup] = usePopup();
 
 	const router = useRouter();
 	const showAlert = useContext(AlertContext);
@@ -163,6 +166,12 @@ function GroundForm({ businessId, ground, onClose }: Props) {
 		setValue('openingHours', openingHours);
 	};
 
+	const handleSelectAddress = (address: Address) => {
+		setValue('address', address.id);
+		setAddress(address);
+		toggleOpenAddressPopup();
+	};
+
 	// const handleSubmitSubscription = (subscription: SubscriptionDtoType) => {
 	// 	if (currentSubscriptionIndex === -1) {
 	// 		setValue('subscriptions', [...subscriptions, subscription]);
@@ -279,24 +288,12 @@ function GroundForm({ businessId, ground, onClose }: Props) {
 				</div> */}
 
 				<div className='space-y-3'>
-					<div className='flex justify-between'>
+					<div className='flex justify-between items-center'>
 						<h3 className='text-lg font-medium text-gray-900'>Address</h3>
-						<Popup
-							hideCloseButton
-							className='p-0 border-none'
-							trigger={<Button icon='edit' />}
-						>
-							<AddressManager />
-						</Popup>
+						<Button icon='edit' onClick={toggleOpenAddressPopup} />
 					</div>
-					<div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
-						<label className='text-sm'>Location</label>
-						<MapboxMap
-							lat={address?.geoLocation.lat}
-							lng={address?.geoLocation.lng}
-						/>
-						{(address?.town as Town)?.name} - {(address?.city as City)?.name}
-					</div>
+
+					<GroundAddress address={address} />
 				</div>
 
 				<div className='space-y-3'>
@@ -326,6 +323,15 @@ function GroundForm({ businessId, ground, onClose }: Props) {
 					</Button>
 				</div>
 			</form>
+
+			<Popup
+				open={openAddressPopup}
+				onClose={toggleOpenAddressPopup}
+				hideCloseButton
+				className='p-0 border-none'
+			>
+				<AddressManager onSelect={handleSelectAddress} hideActions />
+			</Popup>
 
 			{/* {openSubscriptionPopup && (
 				<ClubSubscriptionFormPopup

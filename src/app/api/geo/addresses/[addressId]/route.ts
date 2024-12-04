@@ -1,5 +1,5 @@
 import { BAD_REQUEST_RESPONSE } from '@/constants';
-import { CreateAddressDto } from '@/dtos/item/general.dto';
+import { UpdateAddressDto } from '@/dtos/item/general.dto';
 import { setupDbConnection } from '@/server/config/mongodb.config';
 import { AddressServerService } from '@/server/services/geo/address.server-service';
 import { NextRequest } from 'next/server';
@@ -17,7 +17,7 @@ export async function PATCH(
 
 		const body = await req.json();
 
-		const validation = AddressDto.safeParse(body);
+		const validation = UpdateAddressDto.safeParse(body);
 
 		if (!validation.success) {
 			return Response.json(validation.error, {

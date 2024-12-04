@@ -1,4 +1,7 @@
-import { UserProfileDto, UserProfileDtoType } from '@/dtos/user.dto';
+import {
+	UpdateUserProfileDto,
+	UpdateUserProfileDtoType,
+} from '@/dtos/user.dto';
 import { setupDbConnection } from '@/server/config/mongodb.config';
 import { HttpHelper } from '@/server/helpers/http.helper';
 import { UserServerService } from '@/server/services/user.server-service';
@@ -9,9 +12,9 @@ export async function PATCH(req: Request, res: Response) {
 
 		const authUser = HttpHelper.getContextAuthUser();
 
-		const body: UserProfileDtoType = await req.json();
+		const body: UpdateUserProfileDtoType = await req.json();
 
-		const validation = UserProfileDto.safeParse(body);
+		const validation = UpdateUserProfileDto.safeParse(body);
 
 		if (!validation.success) {
 			return Response.json(validation.error, {

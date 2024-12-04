@@ -14,6 +14,7 @@ import { RatingStats, ReviewTopicType } from '@/types/review.types';
 import { ReviewServerService } from '@/server/services/review.server-service';
 import GroundForm from '@/components/ground/manage/GroundForm';
 import { Popup } from '@/components/utils/Popup';
+import Card from '@/components/utils/Card';
 
 interface Props {
 	params: {
@@ -51,7 +52,9 @@ async function GroundDetails({ params: { groundId } }: Props) {
 				<div className='space-y-3 col-span-2'>
 					<GroundInfo ground={ground} rating={rating} />
 					{/* <GroundPricing subscriptions={ground.subscriptions} /> */}
-					<GroundAddress address={ground.address as Address} />
+					<Card title='Address' >
+						<GroundAddress address={ground.address as Address} />
+					</Card>
 					<div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
 						<div className='h-min'>
 							<Reviews
@@ -91,7 +94,6 @@ async function GroundDetails({ params: { groundId } }: Props) {
 
 				<GroundReservation ground={ground} />
 			</div>
-
 
 			<Popup
 				title='Update ground'

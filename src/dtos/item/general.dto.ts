@@ -5,7 +5,7 @@ export const GeoLocationDto = z.object({
 	lng: z.coerce.number(),
 });
 
-export const AddressDto = z.object({
+export const CreateAddressDto = z.object({
 	label: z.string().optional(),
 	city: z.string().min(1, 'This field is required'),
 	town: z.string().min(1, 'This field is required'),
@@ -16,8 +16,8 @@ export const AddressDto = z.object({
 	user: z.string().optional(),
 	business: z.string().optional(),
 });
-export type CreateAddressDtoType = z.infer<typeof AddressDto>;
-export const UpdateAddressDto = AddressDto.partial();
+export type CreateAddressDtoType = z.infer<typeof CreateAddressDto>;
+export const UpdateAddressDto = CreateAddressDto.partial();
 export type UpdateAddressDtoType = z.infer<typeof UpdateAddressDto>;
 
 export const SocialsDto = z.object({

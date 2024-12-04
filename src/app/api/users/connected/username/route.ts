@@ -1,5 +1,5 @@
 import { USERNAME_CHANGE_INTERVAL } from '@/constants';
-import { UsernameDto, UsernameDtoType } from '@/dtos/user.dto';
+import { UpdateUsernameDto, UpdateUsernameDtoType } from '@/dtos/user.dto';
 import { setupDbConnection } from '@/server/config/mongodb.config';
 import { HttpHelper } from '@/server/helpers/http.helper';
 import { UserServerService } from '@/server/services/user.server-service';
@@ -10,9 +10,9 @@ export async function PATCH(req: Request, res: Response) {
 
 		const authUser = HttpHelper.getContextAuthUser();
 
-		const body: UsernameDtoType = await req.json();
+		const body: UpdateUsernameDtoType = await req.json();
 
-		const validation = UsernameDto.safeParse(body);
+		const validation = UpdateUsernameDto.safeParse(body);
 
 		if (!validation.success) {
 			return Response.json(validation.error, {

@@ -1,4 +1,4 @@
-import Card from '@/components/utils/Card';
+import Icon from '@/components/utils/Icon';
 import MapboxMap from '@/components/utils/Map';
 import { Address, City, Town } from '@/types/geo.types';
 
@@ -17,10 +17,13 @@ function GroundAddress({ address }: Props) {
 		.join(', ');
 
 	return (
-		<Card title='Address' className='space-y-3'>
-			<MapboxMap lat={address.geoLocation.lat} lng={address.geoLocation.lng} />
-			<p className='text-sm'>{formattedAddress}</p>
-		</Card>
+		<div className='space-y-3'>
+			<MapboxMap lat={address.geoLocation.lat} lng={address.geoLocation.lng}  />
+			<div className='text-sm flex items-end justify-end gap-1'>
+				<Icon name='location' />
+				{formattedAddress}
+			</div>
+		</div>
 	);
 }
 

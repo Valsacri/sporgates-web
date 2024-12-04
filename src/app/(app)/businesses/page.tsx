@@ -8,7 +8,7 @@ import { BusinessClientService } from '@/client/services/business.client-service
 import { useContext } from 'react';
 import { UserContext } from '@/client/contexts/user.context';
 import Icon from '@/components/utils/Icon';
-import BusinessForm from '@/components/business/BusinessForm';
+import CreateBusinessForm from '@/components/business/CreateBusinessForm';
 import Button from '@/components/utils/Button';
 import { AlertContext } from '@/client/contexts/alert.context';
 import { User } from '@/types/user.types';
@@ -89,7 +89,7 @@ function Page() {
 						description='Fill in the details to create a new business.'
 						trigger={<Button icon='add'></Button>}
 					>
-						<BusinessForm />
+						<CreateBusinessForm />
 					</Popup>
 				}
 				bodyClassName='space-y-3 overflow-visible'
@@ -127,7 +127,7 @@ function Page() {
 										</div>
 									}
 								>
-									<BusinessForm business={row} />
+									<CreateBusinessForm business={row} />
 								</Popup>
 							),
 						},

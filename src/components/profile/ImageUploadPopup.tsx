@@ -2,7 +2,7 @@
 
 import Button from '@/components/utils/Button';
 import { Popup } from '@/components/utils/Popup';
-import { useState, useCallback, useContext } from 'react';
+import { useState, useCallback, useContext, useMemo } from 'react';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
 import { twMerge } from 'tailwind-merge';
 import Cropper from 'react-easy-crop';
@@ -16,9 +16,16 @@ interface Props {
 	open: boolean;
 	onClose: () => void;
 	onUpload: (files: File) => any;
+	aspect?: number;
 }
 
-function ImageUploadPopup({ open, onClose, title, onUpload }: Props) {
+function ImageUploadPopup({
+	open,
+	onClose,
+	title,
+	onUpload,
+	aspect = 1,
+}: Props) {
 	const { ref, handleOpen, loading, toggleLoading } = useFilePicker();
 
 	const showAlert = useContext(AlertContext);
@@ -53,8 +60,12 @@ function ImageUploadPopup({ open, onClose, title, onUpload }: Props) {
 		}
 	};
 
-	const onCropComplete = useCallback((_: any, croppedAreaPixels: any) => {
-		setCroppedAreaPixels(croppedAreaPixels);
+	const onCropComplete = useCallback((_: any, newCroppedAreaPixels: any) => {
+		setCroppedAreaPixels((prev) =>
+			JSON.stringify(prev) === JSON.stringify(newCroppedAreaPixels)
+				? prev
+				: newCroppedAreaPixels
+		);
 	}, []);
 
 	const handleConfirm = async () => {
@@ -84,15 +95,20 @@ function ImageUploadPopup({ open, onClose, title, onUpload }: Props) {
 		}
 	};
 
+	const imageUrl = useMemo(
+		() => (file ? URL.createObjectURL(file) : ''),
+		[file]
+	);
+
 	return (
 		<Popup open={open} title={title} onClose={onClose}>
 			{file ? (
 				<div className='relative w-full h-96'>
 					<Cropper
-						image={URL.createObjectURL(file)}
+						image={imageUrl}
 						crop={crop}
 						zoom={zoom}
-						aspect={1}
+						aspect={aspect}
 						onCropChange={setCrop}
 						onZoomChange={setZoom}
 						onCropComplete={onCropComplete}

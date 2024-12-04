@@ -3,9 +3,10 @@ import { Axios } from '../config/axios';
 import {
 	CreateBusinessDtoType,
 	UpdateBusinessDtoType,
+	UpdateBusinessProfileDtoType,
 } from '@/dtos/business.dto';
 import { User } from '@/types/user.types';
-import { UsernameDtoType } from '@/dtos/user.dto';
+import { UpdateUsernameDtoType } from '@/dtos/user.dto';
 
 export class BusinessClientService {
 	static async getOne(id: string) {
@@ -60,7 +61,7 @@ export class BusinessClientService {
 		return res.data;
 	}
 
-	static async updateProfile(businessId: string, data: UpdateBusinessDtoType) {
+	static async updateProfile(businessId: string, data: UpdateBusinessProfileDtoType) {
 		const res = await Axios.patch<Business>(
 			`/businesses/${businessId}/profile`,
 			data
@@ -68,10 +69,7 @@ export class BusinessClientService {
 		return res.data;
 	}
 
-	static async updateUsername(
-		businessId: string,
-		data: UsernameDtoType
-	) {
+	static async updateUsername(businessId: string, data: UpdateUsernameDtoType) {
 		const res = await Axios.patch<Business>(
 			`/businesses/${businessId}/username`,
 			data

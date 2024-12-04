@@ -40,7 +40,7 @@ export async function POST(req: Request, res: Response) {
 
 		const body = await req.json();
 
-		const validation = AddressDto.safeParse(body);
+		const validation = CreateAddressDto.safeParse(body);
 
 		if (!validation.success) {
 			return Response.json(validation.error, {
