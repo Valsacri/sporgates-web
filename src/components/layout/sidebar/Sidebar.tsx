@@ -106,6 +106,8 @@ function Sidebar() {
 											{showText && user.name}
 										</ListItem>
 
+										{businesses.length > 0 && <Separator />}
+
 										{...businesses.map((business) => (
 											<ListItem
 												prefix={

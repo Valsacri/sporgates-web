@@ -10,8 +10,7 @@ import Button from '@/components/utils/Button';
 import { redirect } from 'next/navigation';
 import { Address } from '@/types/geo.types';
 import { User } from '@/types/user.types';
-import { RatingStats, ReviewTopicType } from '@/types/review.types';
-import { ReviewServerService } from '@/server/services/review.server-service';
+import { ReviewTopicType } from '@/types/review.types';
 import GroundForm from '@/components/ground/manage/GroundForm';
 import { Popup } from '@/components/utils/Popup';
 import Card from '@/components/utils/Card';
@@ -25,21 +24,15 @@ interface Props {
 
 async function GroundDetails({ params: { groundId } }: Props) {
 	let ground: Ground;
-	let rating: RatingStats;
 
 	try {
-		const _ground = await GroundServerService.getOne(groundId);
-		const _rating = await ReviewServerService.getRating(
-			ReviewTopicType.GROUND,
-			groundId
-		);
+		let _ground = await GroundServerService.getOne(groundId);
 
 		if (!_ground) {
 			return <div>Ground not found</div>;
 		}
 
 		ground = _ground;
-		rating = _rating;
 	} catch (error) {
 		console.error(error);
 		return redirect('server-error');
@@ -51,7 +44,7 @@ async function GroundDetails({ params: { groundId } }: Props) {
 
 			<div className='grid grid-cols-1 lg:grid-cols-3 gap-0 lg:gap-3'>
 				<div className='space-y-3 col-span-2 mb-[165px]'>
-					<GroundInfo ground={ground} rating={rating} />
+					<GroundInfo ground={ground} />
 					{/* <GroundPricing subscriptions={ground.subscriptions} /> */}
 					<Card title='Address'>
 						<GroundAddress address={ground.address as Address} />

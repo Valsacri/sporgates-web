@@ -16,6 +16,7 @@ async function Page({ params }: Props) {
 	try {
 		grounds = await GroundServerService.getPage({
 			business: params.businessId,
+			rating: true,
 		});
 	} catch (error) {
 		console.error(error);

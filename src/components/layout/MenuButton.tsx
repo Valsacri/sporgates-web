@@ -44,7 +44,7 @@ function MenuButton({ showText = false }) {
 					Businesses
 				</ListItem>
 
-				<ListItem
+				{/* <ListItem
 					suffix={
 						<div className='rounded-full bg-secondary p-1 flex gap-1'>
 							<Icon name='sun' className='bg-white p-1 rounded-full text-sm' />
@@ -53,7 +53,7 @@ function MenuButton({ showText = false }) {
 					}
 				>
 					Night mode
-				</ListItem>
+				</ListItem> */}
 
 				<Separator />
 

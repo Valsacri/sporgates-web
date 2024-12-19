@@ -9,7 +9,7 @@ import Button from '@/components/utils/Button';
 import Card from '@/components/utils/Card';
 import { Input } from '@/components/utils/form/Input';
 import { Select, SelectOption } from '@/components/utils/form/Select';
-import { GENERIC_ERROR_MESSAGE, USERNAME_CHANGE_INTERVAL } from '@/constants';
+import { USERNAME_CHANGE_INTERVAL } from '@/constants';
 import {
 	UpdateUsernameDto,
 	UpdateUsernameDtoType,

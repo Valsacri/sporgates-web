@@ -17,6 +17,7 @@ export async function GET(req: NextRequest, res: Response) {
 		const lat = Number(searchParams.get('lat')) || undefined;
 		const lng = Number(searchParams.get('lng')) || undefined;
 		const radius = Number(searchParams.get('radius')) || undefined;
+		const rating = !!searchParams.get('rating');
 
 		const grounds = await GroundServerService.getPage({
 			keywords,
@@ -27,6 +28,7 @@ export async function GET(req: NextRequest, res: Response) {
 			lat,
 			lng,
 			radius,
+			rating
 		});
 
 		return Response.json(grounds, {

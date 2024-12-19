@@ -9,7 +9,6 @@ import {
 	getGeoLocationQuery,
 } from '../helpers/database.helper';
 import mongoose, { PipelineStage } from 'mongoose';
-import { AddressServerService } from './geo/address.server-service';
 
 export class GroundServerService {
 	static async getOne(id: string) {
@@ -38,12 +37,13 @@ export class GroundServerService {
 			lat?: number;
 			lng?: number;
 			radius?: number;
+			rating?: boolean; // Added rating filter
 		},
 		page = 1,
 		limit = 10
 	) {
 		const match: Record<string, any> = {};
-
+	
 		if (filters.business) {
 			match.business = new mongoose.Types.ObjectId(filters.business);
 		}
@@ -56,7 +56,7 @@ export class GroundServerService {
 		if (filters.sport) {
 			match.sports = new mongoose.Types.ObjectId(filters.sport);
 		}
-
+	
 		const addressFilters: Record<string, any> = {};
 		if (filters.city) {
 			addressFilters.city = new mongoose.Types.ObjectId(filters.city);
@@ -67,12 +67,12 @@ export class GroundServerService {
 		if (filters.lat && filters.lng && filters.radius) {
 			addressFilters.geoLocation = getGeoLocationQuery(filters);
 		}
-
+	
 		const pipeline: PipelineStage[] = [
 			{ $match: match },
 			{
 				$lookup: {
-					from: 'addresses', // Address collection name
+					from: 'addresses',
 					localField: 'address',
 					foreignField: '_id',
 					as: 'address',
@@ -81,7 +81,15 @@ export class GroundServerService {
 			{ $unwind: { path: '$address', preserveNullAndEmptyArrays: true } },
 			{
 				$lookup: {
-					from: 'cities', // City collection name
+					from: 'sports',
+					localField: 'sports',
+					foreignField: '_id',
+					as: 'sports',
+				},
+			},
+			{
+				$lookup: {
+					from: 'cities',
 					localField: 'address.city',
 					foreignField: '_id',
 					as: 'address.city',
@@ -90,7 +98,7 @@ export class GroundServerService {
 			{ $unwind: { path: '$address.city', preserveNullAndEmptyArrays: true } },
 			{
 				$lookup: {
-					from: 'towns', // Town collection name
+					from: 'towns',
 					localField: 'address.town',
 					foreignField: '_id',
 					as: 'address.town',
@@ -98,19 +106,41 @@ export class GroundServerService {
 			},
 			{ $unwind: { path: '$address.town', preserveNullAndEmptyArrays: true } },
 		];
-
+	
 		if (Object.keys(addressFilters).length > 0) {
 			pipeline.push({ $match: { address: addressFilters } });
 		}
-
+	
+		// Add rating calculation if filters.rating is true
+		if (filters.rating) {
+			pipeline.push(
+				{
+					$lookup: {
+						from: 'reviews',
+						localField: '_id',
+						foreignField: 'topic', // Assuming 'topic' in reviews refers to the ground
+						as: 'reviews',
+					},
+				},
+				{
+					$addFields: {
+						rating: {
+							avgRating: { $avg: '$reviews.rating' },
+							count: { $size: '$reviews' },
+						},
+					},
+				}
+			);
+		}
+	
 		pipeline.push(
 			{ $sort: { name: 1 } }, // Example sort, adjust as needed
 			{ $skip: (page - 1) * limit },
 			{ $limit: limit }
 		);
-
+	
 		const grounds = await GroundModel.aggregate(pipeline);
-
+	
 		return formatDocument<Ground[]>(grounds);
 	}
 

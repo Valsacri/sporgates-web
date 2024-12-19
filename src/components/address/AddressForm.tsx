@@ -34,14 +34,15 @@ function AddressForm({ onSubmit, init }: Props) {
 	const selectedTown = watch('town');
 	const lat = watch('geoLocation.lat');
 	const lng = watch('geoLocation.lng');
-
+ 
 	const [
 		{ data: citiesOptions, loading: loadingCities },
 		{ data: townsOptions, loading: loadingTowns },
 	] = useCitiesAndTownsOptions(selectedCity);
 
 	const handleCoordinatesChange = (geoLocation: GeoLocation) => {
-		setValue('geoLocation', geoLocation);
+		setValue('geoLocation.lat', geoLocation.lat);
+		setValue('geoLocation.lng', geoLocation.lng);
 	};
 
 	useEffect(() => {

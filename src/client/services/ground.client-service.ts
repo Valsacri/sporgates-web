@@ -17,6 +17,7 @@ export class GroundClientService {
 		lat?: number;
 		lng?: number;
 		radius?: number;
+		rating?: boolean
 	}) {
 		const res = await Axios.get<Ground[]>('/grounds', {
 			params: filters,

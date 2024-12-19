@@ -145,11 +145,11 @@ export const Input = React.forwardRef<
 							disabled={disabled}
 							id={id}
 							placeholder={placeholder}
+							rows={1}
 							className={twMerge(
 								'w-full rounded-md outline-none placeholder-text-secondary bg-transparent resize-none', // Disable manual resize
 								inputClassName
 							)}
-							style={{ height: 'auto', overflowY: 'hidden' }} // Auto height for textarea
 						/>
 					) : (
 						<input

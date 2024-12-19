@@ -52,11 +52,11 @@ export default function ReservationFilters({ businessId }: Props) {
 				/>
 			)}
 			<Buttons
-				className='overflow-x-auto'
+				className='overflow-x-auto -mx-4 px-4'
 				color='secondary'
 				items={(
 					[
-						// 'all',
+						'all',
 						'pending',
 						'accepted',
 						'rejected',

@@ -10,7 +10,6 @@ import Card from '@/components/utils/Card';
 import UserCard from '@/components/user/UserCard';
 import GroundCard from '@/components/ground/GroundCard';
 import Loader from '@/components/utils/Loader';
-import { GENERIC_ERROR_MESSAGE } from '@/constants';
 import ExploreFilters from '@/components/explore/ExploreFilters';
 import { SportClientService } from '@/client/services/sport.client-service';
 import { UserClientService } from '@/client/services/user.client-service';
@@ -76,7 +75,7 @@ function Page() {
 				if (selectedType === 'champs') {
 					return await UserClientService.getPage(filters);
 				} else if (selectedType === 'grounds') {
-					return await GroundClientService.getPage(filters);
+					return await GroundClientService.getPage({...filters, rating: true});
 				} else {
 					return [];
 				}

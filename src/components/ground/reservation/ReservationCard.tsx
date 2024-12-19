@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import {
-  GroundRerservationStatus,
-  GroundReservation,
+	GroundRerservationStatus,
+	GroundReservation,
 } from '@/types/item/ground/ground-reservation.types';
 import { TimeframeHelper } from '@/helpers/datetime/timeframe.helpers';
 import { TimeHelper } from '@/helpers/datetime/time.helpers';
@@ -21,6 +21,7 @@ import { statusMap } from '@/constants';
 import { useEffect, useMemo, useState } from 'react';
 import { GroundReservationClientService } from '@/client/services/ground-reservation.client-service';
 import Loader from '@/components/utils/Loader';
+import { AiOutlineHourglass } from 'react-icons/ai';
 
 interface CardProps {
 	reservation: GroundReservation;
@@ -117,6 +118,7 @@ function ReservationCard({ reservation, businessId }: CardProps) {
 									</Link>
 								</h4>
 							</div>
+
 							<span className='ml-7'>
 								{businessId ? (
 									<Link
@@ -155,6 +157,7 @@ function ReservationCard({ reservation, businessId }: CardProps) {
 							</span>
 						</div>
 					</div>
+
 					<div className='flex flex-col items-end gap-2'>
 						{loadingAction ? (
 							<Loader className='mb-2' />
@@ -176,7 +179,7 @@ function ReservationCard({ reservation, businessId }: CardProps) {
 							{TimeHelper.formatDuration(
 								TimeframeHelper.toDuration(reservation.timeframe)
 							)}
-							<Icon name='clock' />
+							<AiOutlineHourglass className='size-6' />
 						</div>
 						<div className='flex items-center gap-1'>
 							{reservation.totalPrice} DH
